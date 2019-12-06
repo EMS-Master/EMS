@@ -866,20 +866,20 @@ namespace FTN.Common
 
 		private void InitializeTypeIdsInInsertOrder()
 		{			
-			typeIdsInInsertOrder.Add(ModelCode.BASEVOLTAGE);
-			typeIdsInInsertOrder.Add(ModelCode.LOCATION);
-			typeIdsInInsertOrder.Add(ModelCode.POWERTR);
-			typeIdsInInsertOrder.Add(ModelCode.POWERTRWINDING);
-			typeIdsInInsertOrder.Add(ModelCode.WINDINGTEST);			
+			//typeIdsInInsertOrder.Add(ModelCode.BASEVOLTAGE);
+			//typeIdsInInsertOrder.Add(ModelCode.LOCATION);
+			//typeIdsInInsertOrder.Add(ModelCode.POWERTR);
+			//typeIdsInInsertOrder.Add(ModelCode.POWERTRWINDING);
+			//typeIdsInInsertOrder.Add(ModelCode.WINDINGTEST);			
 		}
 
 		private void InitializeNotSettablePropertyIds()
 		{			
-			notSettablePropertyIds.Add(ModelCode.IDOBJ_GID);
-			notSettablePropertyIds.Add(ModelCode.BASEVOLTAGE_CONDEQS);
-			notSettablePropertyIds.Add(ModelCode.LOCATION_PSRS);
-			notSettablePropertyIds.Add(ModelCode.POWERTRWINDING_TESTS);
-            notSettablePropertyIds.Add(ModelCode.POWERTR_WINDINGS);	
+			//notSettablePropertyIds.Add(ModelCode.IDOBJ_GID);
+			//notSettablePropertyIds.Add(ModelCode.BASEVOLTAGE_CONDEQS);
+			//notSettablePropertyIds.Add(ModelCode.LOCATION_PSRS);
+			//notSettablePropertyIds.Add(ModelCode.POWERTRWINDING_TESTS);
+   //         notSettablePropertyIds.Add(ModelCode.POWERTR_WINDINGS);	
 		}
 	
 		# endregion Initialization of metadata

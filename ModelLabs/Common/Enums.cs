@@ -21,6 +21,32 @@ namespace FTN.Common
 		ABC = 0xE,
 		ABCN = 0xF
 	}
+
+    public enum Direction : short
+    {
+        Read = 1,
+        Write = 2,
+        ReadWrite = 3,
+        Unknown = 4
+    }
+
+    public enum GeneratorType : short
+    {
+        Wind = 1,
+        Sollar = 2,
+        Oil = 3,
+        Hydro = 4,
+        Gas = 4,
+        Coal = 5,
+        Unknown = 6
+    }
+
+    public enum MeasurementType: short
+    {
+        Voltage = 1,
+        ActivePower = 2,
+        Unknown = 3
+    }
 	
 	public enum TransformerFunction : short
 	{

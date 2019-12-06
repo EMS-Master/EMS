@@ -1,29 +1,29 @@
-﻿using System;
+﻿using FTN.Common;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Xml;
-using FTN.Common;
 
 namespace FTN.Services.NetworkModelService.DataModel.Core
 {
-	public class ConductingEquipment : Equipment
-	{		
-		
-			
-		public ConductingEquipment(long globalId) : base(globalId) 
-		{
-		}
-		
+    public class Substation : EquipmentContainer
+    { 
+     public Substation(long globalId) : base(globalId)
+    {
+    }
 
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
+
+
+
+
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 
         #region IAccess implementation
+
 
 
         public override bool HasProperty(ModelCode t)
@@ -44,6 +44,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                     break;
             }
         }
+
 
         #endregion IAccess implementation
 

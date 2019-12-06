@@ -1,32 +1,31 @@
-﻿using System;
+﻿using FTN.Common;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using FTN.Common;
-
-
 
 namespace FTN.Services.NetworkModelService.DataModel.Core
 {
-	public class PowerSystemResource : IdentifiedObject
-	{
-        private List<long> measurements = new List<long>();
+    public class EquipmentContainer : ConnectivityNodeContainer
+    {
+        private List<long> equpments = new List<long>();
 
-        public PowerSystemResource(long globalId)
-			: base(globalId)
-		{
-		}
+       
 
-        public List<long> Measurements { get => measurements; set => measurements = value; }
+        public EquipmentContainer(long globalId)
+            : base(globalId)
+        {
+        }
+
+
+        public List<long> Equpments { get => equpments; set => equpments = value; }
 
         public override bool Equals(object obj)
         {
             if (base.Equals(obj))
             {
-                PowerSystemResource x = (PowerSystemResource)obj;
-                return ((CompareHelper.CompareLists(x.measurements, this.measurements)));
+                EquipmentContainer x = (EquipmentContainer)obj;
+                return ((CompareHelper.CompareLists(x.equpments, this.equpments)));
             }
             else
             {
@@ -35,9 +34,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         }
 
         public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
+        {
+            return base.GetHashCode();
+        }
 
         #region IAccess implementation
 
@@ -45,7 +44,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (t)
             {
-                case ModelCode.PSR_MEASUREMENTS:
+                case ModelCode.EQUIPMENT_CONTAINER_EQUIPMENTS:
                     return true;
 
                 default:
@@ -57,8 +56,8 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (prop.Id)
             {
-                case ModelCode.PSR_MEASUREMENTS:
-                    prop.SetValue(measurements);
+                case ModelCode.EQUIPMENT_CONTAINER_EQUIPMENTS:
+                    prop.SetValue(equpments);
                     break;
             }
         }
@@ -78,9 +77,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         #region IReference implementation
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
-            if (measurements != null && measurements.Count > 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            if (equpments != null && equpments.Count > 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
             {
-                references[ModelCode.MEASUREMENT_POWER_SYS_RESOURCE] = measurements.GetRange(0, measurements.Count);
+                references[ModelCode.EQUIPMENT_EQ_CONTAINER] = equpments.GetRange(0, equpments.Count);
             }
 
             base.GetReferences(references, refType);
@@ -90,8 +89,8 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (referenceId)
             {
-                case ModelCode.MEASUREMENT_POWER_SYS_RESOURCE:
-                    measurements.Add(globalId);
+                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                    equpments.Add(globalId);
                     break;
 
                 default:
@@ -104,11 +103,11 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (referenceId)
             {
-                case ModelCode.MEASUREMENT_POWER_SYS_RESOURCE:
+                case ModelCode.EQUIPMENT_EQ_CONTAINER:
 
-                    if (measurements.Contains(globalId))
+                    if (equpments.Contains(globalId))
                     {
-                        measurements.Remove(globalId);
+                        equpments.Remove(globalId);
                     }
                     else
                     {
@@ -122,17 +121,17 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                     break;
             }
         }
-            //public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
-            //{
-            //	if (location != 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
-            //	{
-            //		references[ModelCode.PSR_LOCATION] = new List<long>();
-            //		references[ModelCode.PSR_LOCATION].Add(location);
-            //	}
+        //public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
+        //{
+        //	if (location != 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
+        //	{
+        //		references[ModelCode.PSR_LOCATION] = new List<long>();
+        //		references[ModelCode.PSR_LOCATION].Add(location);
+        //	}
 
-            //	base.GetReferences(references, refType);			
-            //}
+        //	base.GetReferences(references, refType);			
+        //}
 
-            #endregion IReference implementation		
-        }
+        #endregion IReference implementation		
+    }
 }

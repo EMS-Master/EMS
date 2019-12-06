@@ -1,30 +1,35 @@
-﻿using System;
+﻿using FTN.Common;
+using FTN.Services.NetworkModelService.DataModel.Core;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Xml;
-using FTN.Common;
 
-namespace FTN.Services.NetworkModelService.DataModel.Core
+namespace FTN.Services.NetworkModelService.DataModel.Meas
 {
-	public class Equipment : PowerSystemResource
-	{
-        private long equipmentContainer = 0;
+    public class Measurement : IdentifiedObject
+    {
+        private Direction direction;
+        private MeasurementType measurmentType;
+        private String scadaAddress;
+        private long powerSystemResource = 0;
 
-        public Equipment(long globalId) : base(globalId) 
-		{
-		}
+        public Measurement(long globalId) : base(globalId)
+        {
+        }
 
-        public long EquipmentContainer { get => equipmentContainer; set => equipmentContainer = value; }
+        public Direction Direction { get => direction; set => direction = value; }
+        public MeasurementType MeasurmentType { get => measurmentType; set => measurmentType = value; }
+        public string ScadaAddress { get => scadaAddress; set => scadaAddress = value; }
+        public long PowerSystemResource { get => powerSystemResource; set => powerSystemResource = value; }
+
 
         public override bool Equals(object obj)
         {
             if (base.Equals(obj))
             {
-                Equipment x = (Equipment)obj;
-                return ((x.EquipmentContainer == this.EquipmentContainer));
+                Measurement x = (Measurement)obj;
+                return ((x.Direction == this.Direction && x.MeasurmentType == this.MeasurmentType && x.ScadaAddress== this.ScadaAddress));
             }
             else
             {
@@ -33,9 +38,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         }
 
         public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
+        {
+            return base.GetHashCode();
+        }
 
         #region IAccess implementation
 
@@ -43,7 +48,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (t)
             {
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                case ModelCode.MEASUREMENT_DIRECTION:
+                case ModelCode.MEASUREMENT_SCADA_ADDRESS:
+                case ModelCode.MEASUREMENT_TYPE:
                     return true;
 
                 default:
@@ -54,9 +61,18 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         public override void GetProperty(Property prop)
         {
             switch (prop.Id)
-            {                
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
-                    prop.SetValue(equipmentContainer);
+            {
+                case ModelCode.MEASUREMENT_DIRECTION:
+                    prop.SetValue((short)direction);
+                    break;
+                case ModelCode.MEASUREMENT_SCADA_ADDRESS:
+                    prop.SetValue(scadaAddress);
+                    break;
+                case ModelCode.MEASUREMENT_POWER_SYS_RESOURCE:
+                    prop.SetValue(powerSystemResource);
+                    break;
+                case ModelCode.MEASUREMENT_TYPE:
+                    prop.SetValue((short)measurmentType);
                     break;
             }
         }
@@ -65,9 +81,17 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (property.Id)
             {
-                
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
-                    equipmentContainer = property.AsReference();
+                case ModelCode.MEASUREMENT_SCADA_ADDRESS:
+                    scadaAddress = property.AsString();
+                    break;
+                case ModelCode.MEASUREMENT_DIRECTION:
+                    direction = (Direction)property.AsEnum();
+                    break;
+                case ModelCode.MEASUREMENT_TYPE:
+                    measurmentType = (MeasurementType)property.AsEnum();
+                    break;
+                case ModelCode.MEASUREMENT_POWER_SYS_RESOURCE:
+                    powerSystemResource = property.AsReference();
                     break;
 
                 default:
@@ -91,10 +115,10 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
-            if (equipmentContainer != 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
+            if (powerSystemResource != 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
             {
-                references[ModelCode.EQUIPMENT_EQ_CONTAINER] = new List<long>();
-                references[ModelCode.EQUIPMENT_EQ_CONTAINER].Add(equipmentContainer);
+                references[ModelCode.MEASUREMENT_POWER_SYS_RESOURCE] = new List<long>();
+                references[ModelCode.MEASUREMENT_POWER_SYS_RESOURCE].Add(powerSystemResource);
             }
 
             base.GetReferences(references, refType);
@@ -139,3 +163,4 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         #endregion IReference implementation	
     }
 }
+

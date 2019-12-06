@@ -11,7 +11,7 @@ using FTN.Common;
 using FTN.Services.NetworkModelService.DataModel.Core;
 using FTN.Services.NetworkModelService.DataModel.Wires;
 using FTN.Services.NetworkModelService.DataModel;
-
+using FTN.Services.NetworkModelService.DataModel.Meas;
 
 namespace FTN.Services.NetworkModelService
 {		
@@ -122,21 +122,21 @@ namespace FTN.Services.NetworkModelService
 			IdentifiedObject io = null;			
 			switch ((DMSType)type)
 			{
-				case DMSType.BASEVOLTAGE:
-					io = new BaseVoltage(globalId);
+				case DMSType.ANALOG:
+					io = new Analog(globalId);
 					break;
 
-				case DMSType.LOCATION:
-					io = new Location(globalId);
+				case DMSType.DISCRETE:
+					io = new Discrete(globalId);
 					break;
-				case DMSType.POWERTR:
-					io = new PowerTransformer(globalId);
+				case DMSType.GEOGRAFICAL_REGION:
+					io = new GeographicalRegion(globalId);
 					break;
-				case DMSType.POWERTRWINDING:
-					io = new TransformerWinding(globalId);
+				case DMSType.SUBSTATION:
+					io = new Substation(globalId);
 					break;
-				case DMSType.WINDINGTEST:
-					io = new WindingTest(globalId);
+				case DMSType.BATTERY_STORAGE:
+					io = new BatteryStorage(globalId);
 					break;			
 
 				default:					
