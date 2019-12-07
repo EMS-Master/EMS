@@ -16,11 +16,11 @@ namespace FTN.Common
         GEOGRAFICAL_REGION                  = 0x0005,
         BATTERY_STORAGE                     = 0x0006,
 
-		BASEVOLTAGE							= 0x0007,
-		LOCATION							= 0x0008,
-		POWERTR								= 0x0009,
-		POWERTRWINDING						= 0x0010,
-		WINDINGTEST							= 0x0011,
+		//BASEVOLTAGE							= 0x0007,
+		//LOCATION							= 0x0008,
+		//POWERTR								= 0x0009,
+		//POWERTRWINDING						= 0x0010,
+		//WINDINGTEST							= 0x0011,
 	}
 
     [Flags]
@@ -40,7 +40,7 @@ namespace FTN.Common
         EQUIPMENT_CONTAINER                         = 0x1111000000000000,
         EQUIPMENT_CONTAINER_EQUIPMENTS              = 0x1111000000000119,
 
-        SUBSTATION                                  = 0x1111100000000000,
+        SUBSTATION                                  = 0x1111100000040000,
 
         EQUIPMENT                                   = 0x1120000000000000,
         EQUIPMENT_EQ_CONTAINER                      = 0x1120000000000109,
@@ -81,7 +81,7 @@ namespace FTN.Common
         ANALOG_MIN_VALUE                            = 0x1220000000020205,
         ANALOG_NORMAL_VALUE                         = 0x1220000000020305,
         
-        GEOGRAFICAL_REGION                          = 0x1300000000000000,
+        GEOGRAFICAL_REGION                          = 0x1300000000050000,
     }
 
     [Flags]

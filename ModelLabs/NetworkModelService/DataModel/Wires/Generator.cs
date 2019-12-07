@@ -25,7 +25,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             if (base.Equals(obj))
             {
                 Generator r = (Generator)obj;
-                return (r.MinQ == this.MinQ && r.MaxQ == this.MaxQ);
+                return (r.MinQ == this.MinQ && r.MaxQ == this.MaxQ && r.generatorType == this.generatorType);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
                     break;
 
                 case ModelCode.GENERATOR_TYPE:
-                    this.minQ = property.AsEnum();
+                    this.generatorType = (GeneratorType)property.AsEnum();
                     break;
                 default:
                     base.SetProperty(property);

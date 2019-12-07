@@ -125,7 +125,6 @@ namespace FTN.Services.NetworkModelService
 				case DMSType.ANALOG:
 					io = new Analog(globalId);
 					break;
-
 				case DMSType.DISCRETE:
 					io = new Discrete(globalId);
 					break;
@@ -137,9 +136,13 @@ namespace FTN.Services.NetworkModelService
 					break;
 				case DMSType.BATTERY_STORAGE:
 					io = new BatteryStorage(globalId);
-					break;			
+					break;
+                case DMSType.GENERATOR:
+                    io = new BatteryStorage(globalId);
+                    break;
 
-				default:					
+
+                default:					
 					string message = String.Format("Failed to create entity because specified type ({0}) is not supported.", type);
 					CommonTrace.WriteTrace(CommonTrace.TraceError, message);
 					throw new Exception(message);					

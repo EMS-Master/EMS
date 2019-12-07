@@ -67,8 +67,9 @@
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ProfileEnumClassCIMProfile_Labs">
-      <HintPath>..\bin\DLL\ProfileEnumClassCIMProfile_Labs.dll</HintPath>
+    <Reference Include="PowerTransformerCIMProfile_Labs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\bin\DLL\PowerTransformerCIMProfile_Labs.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -103,9 +104,8 @@
       <Name>NetworkModelGDAContract</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Lib\ProfileEnumClassCIMProfile_Labs.dll" />
+    <Content Include="Lib\PowerTransformerCIMProfile_Labs.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
