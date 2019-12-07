@@ -1,0 +1,1921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://langdale.com.au/2005/Message#" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<head>
+<title>Profile Documentation</title>
+<style type="text/css">
+/* typography: fonts */
+body { font-family: arial, sans-serif; }
+
+.name, .type, .cardinality, .superclass, .xsdtype, .namespace { font-family: courier, monospace; }
+
+
+/* typography: emphasis */
+h1 { color: white; background: gray;}
+
+h2, h3 { color: gray; text-decoration: none;}
+
+h2.abstract, h2.enumerated, h2.domain {font-style: italic } 
+
+p.note { background-color: #ddd }
+
+p.declaration { color: gray }
+
+:link { color: purple; }
+
+.xsdtype { color: black; font-weight: bold; }
+
+.namespace { color: black }
+
+.package { font-size: x-large; color: gray }
+
+
+/* borders */
+div.group {
+	border-style: solid;
+	border-color: gray;
+	border-width: 1px;
+	
+}
+
+th, td {
+	border-top-style : solid;
+	border-top-width : 1px;
+	border-color: gray;
+ }
+
+
+/* spacing and alignment */
+body {padding: 5px; }
+
+h1 { padding: 5px;}
+
+div.group {
+	margin-top: 10px;
+	padding: 5px;
+	position: relative;
+}
+th, td {
+	text-align : left;
+	vertical-align : top;
+}
+th, td.type { width: 15em; overflow: visible; }
+
+p.cardinality { width: 4em; }
+
+p.package { position: absolute; right: 10px; top: 0px}				
+</style>
+</head>
+<body>
+<h1>Profile Documentation</h1>
+<p/>
+<p class="declaration">
+					Profile namespace:
+					<span class="namespace">http://ftn.uns.ac.rs/esi/simes/2013/master#</span>
+</p>
+<h1>Concrete Classes</h1>
+<div id="Analog" class="group">
+<a href="#Analog">
+<h2 class="concrete">Analog</h2>
+</a>
+<p class="package">Meas</p>
+<p class="comment">Analog represents an analog Measurement.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="Analog.maxValue">maxValue</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Normal value range maximum for any of the MeasurementValue.values. Used for scaling, e.g. in bar graphs or of telemetered raw values.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Analog.minValue">minValue</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Normal value range minimum for any of the MeasurementValue.values. Used for scaling, e.g. in bar graphs or of telemetered raw values.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Analog.normalValue">normalValue</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Normal measurement value, e.g., used for percentage calculations.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">direction</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Direction">Direction</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.direction">Measurement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">measurementType</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#MeasurementType">MeasurementType</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.measurementType">Measurement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">scadaAddress</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.scadaAddress">Measurement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">PowerSystemResource</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#PowerSystemResource">PowerSystemResource</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.PowerSystemResource">Measurement</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="BatteryStorage" class="group">
+<a href="#BatteryStorage">
+<h2 class="concrete">BatteryStorage</h2>
+</a>
+<p class="package">EMS</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="BatteryStorage.maxPower">maxPower</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name" id="BatteryStorage.minCapasity">minCapasity</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td/>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">currentPower</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#EnergyConsumer.currentPower">EnergyConsumer</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">pfixed</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#EnergyConsumer.pfixed">EnergyConsumer</a>
+</p>
+</td>
+</tr>
+</table>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Equipment.EquipmentContainer">Equipment</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="Discrete" class="group">
+<a href="#Discrete">
+<h2 class="concrete">Discrete</h2>
+</a>
+<p class="package">Meas</p>
+<p class="comment">Discrete represents a discrete Measurement, i.e. a Measurement reprsenting discrete values, e.g. a Breaker position.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="Discrete.maxValue">maxValue</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">integer</p>
+</td>
+<td>
+<p class="comment">Normal value range maximum for any of the MeasurementValue.values. Used for scaling, e.g. in bar graphs or of telemetered raw values.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Discrete.minValue">minValue</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">integer</p>
+</td>
+<td>
+<p class="comment">Normal value range minimum for any of the MeasurementValue.values. Used for scaling, e.g. in bar graphs or of telemetered raw values.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Discrete.normalValue">normalValue</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">integer</p>
+</td>
+<td>
+<p class="comment">Normal measurement value, e.g., used for percentage calculations.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">direction</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Direction">Direction</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.direction">Measurement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">measurementType</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#MeasurementType">MeasurementType</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.measurementType">Measurement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">scadaAddress</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.scadaAddress">Measurement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">PowerSystemResource</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#PowerSystemResource">PowerSystemResource</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Measurement.PowerSystemResource">Measurement</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="Generator" class="group">
+<a href="#Generator">
+<h2 class="concrete">Generator</h2>
+</a>
+<p class="package">Wires</p>
+<p class="comment">An electromechanical device that operates with shaft rotating synchronously with the network. It is a single machine operating either as a generator or synchronous condenser or pump.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="Generator.generatorType">generatorType</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#GeneratorType">GeneratorType</a>
+</p>
+</td>
+<td>
+<p class="comment">Type of Synchronous Generator used in Dynamic simulation applications.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Generator.maxQ">maxQ</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Maximum reactive power limit. This is the maximum (nameplate) limit for the unit.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Generator.minQ">minQ</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Minimum reactive power limit for the unit.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">ratedS</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#RotatingMachine.ratedS">RotatingMachine</a>
+</p>
+</td>
+</tr>
+</table>
+<table/>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Equipment.EquipmentContainer">Equipment</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="GeographicalRegion" class="group">
+<a href="#GeographicalRegion">
+<h2 class="concrete">GeographicalRegion</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">A geographical region of a power system network model.</p>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="Substation" class="group">
+<a href="#Substation">
+<h2 class="concrete">Substation</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">A collection of equipment for purposes other than generation or utilization, through which electric energy in bulk is passed for the purposes of switching or modifying its characteristics.</p>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">Equipments</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Equipment">Equipment</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#EquipmentContainer.Equipments">EquipmentContainer</a>
+</p>
+</td>
+</tr>
+</table>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<h1>Abstract Classes</h1>
+<div id="ActivePower" class="group">
+<a href="#ActivePower">
+<h2 class="abstract">ActivePower</h2>
+</a>
+<p class="package">Domain</p>
+<p class="comment">Product of RMS value of the voltage and the RMS value of the in-phase component of the current.</p>
+</div>
+<div id="ApparentPower" class="group">
+<a href="#ApparentPower">
+<h2 class="abstract">ApparentPower</h2>
+</a>
+<p class="package">Domain</p>
+<p class="comment">Product of the RMS value of the voltage and the RMS value of the current.</p>
+</div>
+<div id="ConductingEquipment" class="group">
+<a href="#ConductingEquipment">
+<h2 class="abstract">ConductingEquipment</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">The parts of the power system that are designed to carry current or that are conductively connected through terminals.</p>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Equipment.EquipmentContainer">Equipment</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="ConnectivityNodeContainer" class="group">
+<a href="#ConnectivityNodeContainer">
+<h2 class="abstract">ConnectivityNodeContainer</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">A base class for all objects that may contain connectivity nodes or topological nodes.</p>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="EnergyConsumer" class="group">
+<a href="#EnergyConsumer">
+<h2 class="abstract">EnergyConsumer</h2>
+</a>
+<p class="package">Wires</p>
+<p class="comment">Generic user of energy - a  point of consumption on the power system model.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="EnergyConsumer.currentPower">currentPower</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name" id="EnergyConsumer.pfixed">pfixed</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Active power of the load that is a fixed quantity. Load sign convention is used, i.e. positive sign means flow out from a node.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Equipment.EquipmentContainer">Equipment</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="Equipment" class="group">
+<a href="#Equipment">
+<h2 class="abstract">Equipment</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">The parts of a power system that are physical devices, electronic or mechanical.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="Equipment.EquipmentContainer">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p class="comment">Container of this equipment.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="EquipmentContainer" class="group">
+<a href="#EquipmentContainer">
+<h2 class="abstract">EquipmentContainer</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">A modeling construct to provide a root class for containing equipment.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="EquipmentContainer.Equipments">Equipments</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Equipment">Equipment</a>
+</p>
+</td>
+<td>
+<p class="comment">Contained equipment.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="IdentifiedObject" class="group">
+<a href="#IdentifiedObject">
+<h2 class="abstract">IdentifiedObject</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">This is a root class to provide common identification for all classes needing identification and naming attributes.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="IdentifiedObject.mRID">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p class="comment">Master resource identifier issued by a model authority. The mRID is globally unique within an exchange context.</p>
+<p class="comment">Global uniqeness is easily achived by using a UUID for the mRID. It is strongly recommended to do this.</p>
+<p class="comment">For CIMXML data files in RDF syntax, the mRID is mapped to rdf:ID or rdf:about attributes that identify CIM object elements.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="IdentifiedObject.aliasName">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p class="comment">The aliasName is free text human readable name of the object alternative to IdentifiedObject.name. It may be non unique and may not correlate to a naming hierarchy.</p>
+<p class="comment">The attribute aliasName is retained because of backwards compatibility between CIM relases. It is however recommended to replace aliasName with the Name class as aliasName is planned for retirement at a future time.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="IdentifiedObject.name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p class="comment">The name is any free human readable and possibly non unique text naming the object.</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="Measurement" class="group">
+<a href="#Measurement">
+<h2 class="abstract">Measurement</h2>
+</a>
+<p class="package">Meas</p>
+<p class="comment">A Measurement represents any measured, calculated or non-measured non-calculated quantity. Any piece of equipment may contain Measurements, e.g. a substation may have temperature measurements and door open indications, a transformer may have oil temperature and tank pressure measurements, a bay may contain a number of power flow measurements and a Breaker may contain a switch status measurement.</p>
+<p class="comment">The PSR - Measurement association is intended to capture this use of Measurement and is included in the naming hierarchy based on EquipmentContainer. The naming hierarchy typically has Measurements as leafs, e.g. Substation-VoltageLevel-Bay-Switch-Measurement.</p>
+<p class="comment">Some Measurements represent quantities related to a particular sensor location in the network, e.g. a voltage transformer (PT) at a busbar or a current transformer (CT) at the bar between a breaker and an isolator. The sensing position is not captured in the PSR - Measurement association. Instead it is captured by the Measurement - Terminal association that is used to define the sensing location in the network topology. The location is defined by the connection of the Terminal to ConductingEquipment.</p>
+<p class="comment">If both a Terminal and PSR are associated, and the PSR is of type ConductingEquipment, the associated Terminal should belong to that ConductingEquipment instance.</p>
+<p class="comment">When the sensor location is needed both Measurement-PSR and Measurement-Terminal are used. The Measurement-Terminal association is never used alone.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="Measurement.direction">direction</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Direction">Direction</a>
+</p>
+</td>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name" id="Measurement.measurementType">measurementType</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#MeasurementType">MeasurementType</a>
+</p>
+</td>
+<td>
+<p class="comment">Specifies the type of measurement.  For example, this specifies if the measurement represents an indoor temperature, outdoor temperature, bus voltage, line flow, etc.</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name" id="Measurement.scadaAddress">scadaAddress</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name" id="Measurement.PowerSystemResource">PowerSystemResource</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#PowerSystemResource">PowerSystemResource</a>
+</p>
+</td>
+<td>
+<p class="comment">The power system resource that contains the measurement.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="PowerSystemResource" class="group">
+<a href="#PowerSystemResource">
+<h2 class="abstract">PowerSystemResource</h2>
+</a>
+<p class="package">Core</p>
+<p class="comment">A power system resource can be an item of equipment such as a switch, an equipment container containing many individual items of equipment such as a substation, or an organisational entity such as sub-control area. Power system resources can have measurements associated.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="PowerSystemResource.Measurements">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p class="comment">The measurements associated with this power system resource.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="ReactivePower" class="group">
+<a href="#ReactivePower">
+<h2 class="abstract">ReactivePower</h2>
+</a>
+<p class="package">Domain</p>
+<p class="comment">Product of RMS value of the voltage and the RMS value of the quadrature component of the current.</p>
+</div>
+<div id="RegulatingCondEq" class="group">
+<a href="#RegulatingCondEq">
+<h2 class="abstract">RegulatingCondEq</h2>
+</a>
+<p class="package">Wires</p>
+<p class="comment">A type of conducting equipment that can regulate a quanity (i.e. voltage or flow) at a specific point in the network.</p>
+<h3>Inherited Members</h3>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Equipment.EquipmentContainer">Equipment</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="RotatingMachine" class="group">
+<a href="#RotatingMachine">
+<h2 class="abstract">RotatingMachine</h2>
+</a>
+<p class="package">Wires</p>
+<p class="comment">A rotating machine which may be used as a generator or motor.</p>
+<h3>Native Members</h3>
+<table>
+<tr>
+<th>
+<p class="name" id="RotatingMachine.ratedS">ratedS</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">float</p>
+</td>
+<td>
+<p class="comment">Nameplate apparent power rating for the unit.</p>
+</td>
+</tr>
+</table>
+<h3>Inherited Members</h3>
+<table/>
+<table/>
+<table>
+<tr>
+<th>
+<p class="name">EquipmentContainer</p>
+</th>
+<td>
+<p class="cardinality">0..1</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#EquipmentContainer">EquipmentContainer</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#Equipment.EquipmentContainer">Equipment</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">Measurements</p>
+</th>
+<td>
+<p class="cardinality">0..unbounded</p>
+</td>
+<td class="type">
+<p class="type">
+<a href="#Measurement">Measurement</a>
+</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#PowerSystemResource.Measurements">PowerSystemResource</a>
+</p>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+<th>
+<p class="name">mRID</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.mRID">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">aliasName</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.aliasName">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+<p class="name">name</p>
+</th>
+<td>
+<p class="cardinality">1..1</p>
+</td>
+<td class="type">
+<p class="type">string</p>
+</td>
+<td>
+<p>see <a class="superclass" href="#IdentifiedObject.name">IdentifiedObject</a>
+</p>
+</td>
+</tr>
+</table>
+</div>
+<h1>Enumerations</h1>
+<div id="Direction" class="group">
+<a href="#Direction">
+<h2 class="enumerated">Direction</h2>
+</a>
+<p class="package">EMS</p>
+<table>
+<tr>
+<th>
+<p class="name">read</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">readWrite</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">write</p>
+</th>
+<td/>
+</tr>
+</table>
+</div>
+<div id="GeneratorType" class="group">
+<a href="#GeneratorType">
+<h2 class="enumerated">GeneratorType</h2>
+</a>
+<p class="package">EMS</p>
+<table>
+<tr>
+<th>
+<p class="name">coal</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">gas</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">hydro</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">oil</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">solar</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">wind</p>
+</th>
+<td/>
+</tr>
+</table>
+</div>
+<div id="MeasurementType" class="group">
+<a href="#MeasurementType">
+<h2 class="enumerated">MeasurementType</h2>
+</a>
+<p class="package">EMS</p>
+<table>
+<tr>
+<th>
+<p class="name">activePower</p>
+</th>
+<td/>
+</tr>
+<tr>
+<th>
+<p class="name">voltage</p>
+</th>
+<td/>
+</tr>
+</table>
+</div>
+<h1>Compound Types</h1>
+<h1>Datatypes</h1>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- CIM Project xml -->
+<cim_project>
+	<name>CimetMaster</name>
+	<profile_source>master.legacy-rdfs</profile_source>
+</cim_project>
