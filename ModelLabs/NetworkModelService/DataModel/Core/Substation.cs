@@ -8,23 +8,31 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 {
     public class Substation : EquipmentContainer
     { 
-     public Substation(long globalId) : base(globalId)
+    public Substation(long globalId) : base(globalId)
     {
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (base.Equals(obj))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 
 
 
-
-
-    public override int GetHashCode()
+        public override int GetHashCode()
     {
         return base.GetHashCode();
     }
 
         #region IAccess implementation
-
-
 
         public override bool HasProperty(ModelCode t)
         {

@@ -27,23 +27,12 @@
 		<cim:IdentifiedObject.mRID>Generator_1</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Generator_1</cim:IdentifiedObject.name>
 	</cim:Generator>
-
-	<!-- <cim:BatteryStorage rdf:ID="BatteryStorage_1"> -->
-		<!-- <cim:BatteryStorage.maxPower></cim:BatteryStorage.maxPower> -->
-		<!-- <cim:BatteryStorage.minCapasity></cim:BatteryStorage.minCapasity> -->
-		<!-- <cim:EnergyConsumer.currentPower></cim:EnergyConsumer.currentPower> -->
-		<!-- <cim:EnergyConsumer.pfixed></cim:EnergyConsumer.pfixed> -->
-		<!-- <cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/> -->
-		<!-- <cim:IdentifiedObject.aliasName>BatteryStorage_1</cim:IdentifiedObject.aliasName> -->
-		<!-- <cim:IdentifiedObject.mRID>BatteryStorage_1</cim:IdentifiedObject.mRID> -->
-		<!-- <cim:IdentifiedObject.name>BatteryStorage_1</cim:IdentifiedObject.name> -->
-	<!-- </cim:BatteryStorage> -->
 	<cim:BatteryStorage rdf:ID="BatteryStorage_2">
 		<cim:BatteryStorage.maxPower></cim:BatteryStorage.maxPower>
 		<cim:BatteryStorage.minCapasity></cim:BatteryStorage.minCapasity>
 		<cim:EnergyConsumer.currentPower></cim:EnergyConsumer.currentPower>
 		<cim:EnergyConsumer.pfixed></cim:EnergyConsumer.pfixed>
-		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_2"/>
+		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>BatteryStorage_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>BatteryStorage_2</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>BatteryStorage_2</cim:IdentifiedObject.name>
@@ -52,24 +41,49 @@
 		<cim:Analog.maxValue></cim:Analog.maxValue>
 		<cim:Analog.minValue></cim:Analog.minValue>
 		<cim:Analog.normalValue></cim:Analog.normalValue>
-		<cim:Measurement.direction> read</cim:Measurement.direction>
+		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_1"/>
 		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_1</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_1</cim:IdentifiedObject.name>
 	</cim:Analog>
-	<cim:Discrete rdf:ID="Discrete_1">
+	<cim:Analog rdf:ID="Analog_2">
+		<cim:Analog.maxValue></cim:Analog.maxValue>
+		<cim:Analog.minValue></cim:Analog.minValue>
+		<cim:Analog.normalValue></cim:Analog.normalValue>
+		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/>
+		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:IdentifiedObject.aliasName>Analog_2</cim:IdentifiedObject.aliasName>
+		<cim:IdentifiedObject.mRID>Analog_2</cim:IdentifiedObject.mRID>
+		<cim:IdentifiedObject.name>Analog_2</cim:IdentifiedObject.name>
+	</cim:Analog>
+	
+     <cim:Discrete rdf:ID="Discrete_1">
 		<cim:Discrete.maxValue> </cim:Discrete.maxValue>
 		<cim:Discrete.minValue> </cim:Discrete.minValue>
 		<cim:Discrete.normalValue> </cim:Discrete.normalValue>
-		<cim:Measurement.direction> read </cim:Measurement.direction>
+		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
-		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_1"/> 
 		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
-		<cim:IdentifiedObject.aliasName>Discrete_2</cim:IdentifiedObject.aliasName>
-		<cim:IdentifiedObject.mRID>Discrete_2</cim:IdentifiedObject.mRID>
+		<cim:IdentifiedObject.aliasName>Discrete_1</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.mRID>Discrete_1</cim:IdentifiedObject.mRID> 
+		<cim:IdentifiedObject.name>Discrete_1</cim:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_2">
+		<cim:Discrete.maxValue> </cim:Discrete.maxValue>
+		<cim:Discrete.minValue> </cim:Discrete.minValue>
+		<cim:Discrete.normalValue> </cim:Discrete.normalValue>
+		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
+		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/> 
+		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:IdentifiedObject.aliasName>Discrete_2</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.mRID>Discrete_2</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_2</cim:IdentifiedObject.name>
-	</cim:Discrete>			
+	</cim:Discrete>
 </rdf:RDF>

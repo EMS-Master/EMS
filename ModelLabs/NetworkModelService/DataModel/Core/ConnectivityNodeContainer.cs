@@ -9,12 +9,21 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
     public class ConnectivityNodeContainer : PowerSystemResource
     {
 
-
         public ConnectivityNodeContainer(long globalId) : base(globalId)
         {
         }
 
-
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 
 

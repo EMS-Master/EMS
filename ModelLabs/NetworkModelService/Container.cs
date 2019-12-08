@@ -138,7 +138,7 @@ namespace FTN.Services.NetworkModelService
 					io = new BatteryStorage(globalId);
 					break;
                 case DMSType.GENERATOR:
-                    io = new BatteryStorage(globalId);
+                    io = new Generator(globalId);
                     break;
 
 

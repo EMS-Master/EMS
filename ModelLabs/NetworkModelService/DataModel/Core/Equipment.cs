@@ -43,7 +43,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (t)
             {
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                case ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER:
                     return true;
 
                 default:
@@ -55,8 +55,12 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (prop.Id)
             {                
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                case ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER:
                     prop.SetValue(equipmentContainer);
+                    break;
+
+                default:
+                    base.GetProperty(prop);
                     break;
             }
         }
@@ -66,7 +70,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
             switch (property.Id)
             {
                 
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                case ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER:
                     equipmentContainer = property.AsReference();
                     break;
 
@@ -93,8 +97,8 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             if (equipmentContainer != 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
             {
-                references[ModelCode.EQUIPMENT_EQ_CONTAINER] = new List<long>();
-                references[ModelCode.EQUIPMENT_EQ_CONTAINER].Add(equipmentContainer);
+                references[ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER] = new List<long>();
+                references[ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER].Add(equipmentContainer);
             }
 
             base.GetReferences(references, refType);

@@ -12,6 +12,17 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
         }
 
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public override int GetHashCode()
         {

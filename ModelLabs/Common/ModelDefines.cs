@@ -43,9 +43,10 @@ namespace FTN.Common
         SUBSTATION                                  = 0x1111100000040000,
 
         EQUIPMENT                                   = 0x1120000000000000,
-        EQUIPMENT_EQ_CONTAINER                      = 0x1120000000000109,
+        EQUIPMENT_EQUIPMENT_CONTAINER               = 0x1120000000000109,
 
         CONDUCTING_EQUIPMENT                        = 0x1121000000000000,
+
         REGULATING_CONDUCTING_EQUIPMENT             = 0x1121100000000000,
 
         ROTATING_MACHINE                            = 0x1121110000000000,

@@ -76,11 +76,20 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         #endregion IAccess implementation
 
         #region IReference implementation
+
+        public override bool IsReferenced
+        {
+            get
+            {
+                return (measurements.Count > 0) || base.IsReferenced;
+            }
+        }
+
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
             if (measurements != null && measurements.Count > 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
             {
-                references[ModelCode.MEASUREMENT_POWER_SYS_RESOURCE] = measurements.GetRange(0, measurements.Count);
+                references[ModelCode.PSR_MEASUREMENTS] = measurements.GetRange(0, measurements.Count);
             }
 
             base.GetReferences(references, refType);

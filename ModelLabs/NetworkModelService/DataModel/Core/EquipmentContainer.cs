@@ -22,9 +22,10 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 
         public override bool Equals(object obj)
         {
+
+            EquipmentContainer x = (EquipmentContainer)obj;
             if (base.Equals(obj))
             {
-                EquipmentContainer x = (EquipmentContainer)obj;
                 return ((CompareHelper.CompareLists(x.equpments, this.equpments)));
             }
             else
@@ -59,6 +60,10 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                 case ModelCode.EQUIPMENT_CONTAINER_EQUIPMENTS:
                     prop.SetValue(equpments);
                     break;
+
+                default:
+                    base.GetProperty(prop);
+                    break;
             }
         }
 
@@ -75,11 +80,20 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         #endregion IAccess implementation
 
         #region IReference implementation
+
+        public override bool IsReferenced
+        {
+            get
+            {
+                return (equpments.Count > 0) || base.IsReferenced;
+            }
+        }
+
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
             if (equpments != null && equpments.Count > 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
             {
-                references[ModelCode.EQUIPMENT_EQ_CONTAINER] = equpments.GetRange(0, equpments.Count);
+                references[ModelCode.EQUIPMENT_CONTAINER_EQUIPMENTS] = equpments.GetRange(0, equpments.Count);
             }
 
             base.GetReferences(references, refType);
@@ -89,7 +103,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (referenceId)
             {
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                case ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER:
                     equpments.Add(globalId);
                     break;
 
@@ -103,7 +117,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (referenceId)
             {
-                case ModelCode.EQUIPMENT_EQ_CONTAINER:
+                case ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER:
 
                     if (equpments.Contains(globalId))
                     {
@@ -121,16 +135,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                     break;
             }
         }
-        //public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
-        //{
-        //	if (location != 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
-        //	{
-        //		references[ModelCode.PSR_LOCATION] = new List<long>();
-        //		references[ModelCode.PSR_LOCATION].Add(location);
-        //	}
-
-        //	base.GetReferences(references, refType);			
-        //}
+        
 
         #endregion IReference implementation		
     }

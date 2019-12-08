@@ -16,9 +16,20 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 		public ConductingEquipment(long globalId) : base(globalId) 
 		{
 		}
-		
 
-		public override int GetHashCode()
+        public override bool Equals(object obj)
+        {
+            if (base.Equals(obj))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
 		{
 			return base.GetHashCode();
 		}

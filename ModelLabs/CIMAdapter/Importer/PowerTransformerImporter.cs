@@ -99,14 +99,15 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             //ImportTransformerWindings();
             //ImportWindingTests();
 
-            ImportGeographicalRegion();
+            
             ImportSubstation();
             ImportGenerator();
             ImportBatteryStorage();
             ImportAnalog();
             ImportDiscrete();
-            
-			LogManager.Log("Loading elements and creating delta completed.", LogLevel.Info);
+            ImportGeographicalRegion();
+
+            LogManager.Log("Loading elements and creating delta completed.", LogLevel.Info);
 		}
 
         #region Import

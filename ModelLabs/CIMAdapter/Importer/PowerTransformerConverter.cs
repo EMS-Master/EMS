@@ -209,7 +209,7 @@
                         report.Report.Append("WARNING: Convert ").Append(cimConductingEquipment.GetType().ToString()).Append(" rdfID = \"").Append(cimConductingEquipment.ID);
                         report.Report.Append("\" - Failed to set reference to EquipmentContainer: rdfID \"").Append(cimConductingEquipment.EquipmentContainer.ID).AppendLine(" \" is not mapped to GID!");
                     }
-                    rd.AddProperty(new Property(ModelCode.EQUIPMENT_EQ_CONTAINER, gid));
+                    rd.AddProperty(new Property(ModelCode.EQUIPMENT_EQUIPMENT_CONTAINER, gid));
                 }
             }
         }
@@ -227,7 +227,7 @@
                         report.Report.Append("WARNING: Convert ").Append(cimConductingEquipment.GetType().ToString()).Append(" rdfID = \"").Append(cimConductingEquipment.ID);
                         report.Report.Append("\" - Failed to set reference to PowerSystemResource: rdfID \"").Append(cimConductingEquipment.PowerSystemResource.ID).AppendLine(" \" is not mapped to GID!");
                     }
-                    rd.AddProperty(new Property(ModelCode.EQUIPMENT_EQ_CONTAINER, gid));
+                    rd.AddProperty(new Property(ModelCode.MEASUREMENT_POWER_SYS_RESOURCE, gid));
                 }
             }
         }

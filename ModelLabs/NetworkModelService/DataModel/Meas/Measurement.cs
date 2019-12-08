@@ -29,7 +29,8 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
             if (base.Equals(obj))
             {
                 Measurement x = (Measurement)obj;
-                return ((x.Direction == this.Direction && x.MeasurmentType == this.MeasurmentType && x.ScadaAddress== this.ScadaAddress));
+                return ((x.Direction == this.Direction && x.MeasurmentType == this.MeasurmentType && 
+                    x.ScadaAddress== this.ScadaAddress && x.powerSystemResource == this.powerSystemResource));
             }
             else
             {
@@ -51,6 +52,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
                 case ModelCode.MEASUREMENT_DIRECTION:
                 case ModelCode.MEASUREMENT_SCADA_ADDRESS:
                 case ModelCode.MEASUREMENT_TYPE:
+                case ModelCode.MEASUREMENT_POWER_SYS_RESOURCE:
                     return true;
 
                 default:
@@ -104,14 +106,8 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
 
         #region IReference implementation
 
-        //public override bool IsReferenced
-        //{
-        //    get
-        //    {
-        //        return conductingEquipments.Count > 0 || base.IsReferenced;
-        //    }
-        //}
-
+        
+      
 
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
