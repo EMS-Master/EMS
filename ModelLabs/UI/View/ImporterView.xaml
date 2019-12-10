@@ -29,7 +29,7 @@
 		</Grid>
 		<TextBox HorizontalAlignment="Left" Height="336" Margin="30,42,0,0" Grid.Row="1" VerticalAlignment="Top" Width="386"
 					 Text="{Binding ConvertReport}"
-					 Foreground="White"
+					 
 					 IsReadOnly="True"
 					 TextWrapping="Wrap"
 					 ScrollViewer.VerticalScrollBarVisibility="Auto"
