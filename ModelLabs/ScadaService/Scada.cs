@@ -58,16 +58,25 @@ namespace ScadaService
 
         public bool GetDataFromSimulator()
         {
-            //const string formatter = "{0,5}{1,17}{2,10}";
+            mdbClient.WriteSingleRegister(5, 567);
+            mdbClient.WriteSingleCoil(10, true);
+
             byte[] val = mdbClient.ReadHoldingRegisters(0, 10);
-            //Console.WriteLine(System.Text.Encoding.Unicode.GetString(val));
+            bool[] val1 = mdbClient.ReadCoils(0, 13);
+            
             ushort[] retVal = ModbusHelper.GetUShortValuesFromByteArray(val, val.Length, 0);
             for (int i = 0; i < retVal.Length; i++)
             {
 
                 Console.WriteLine("Value of HoldingRegister " + (i + 1) + ": " + Convert.ToString((int)retVal[i]));
-                //Console.WriteLine(formatter, 0, BitConverter.ToString(val, 0, 2), retVal);
+                
             }
+
+            for(int i = 0; i < val1.Length; i++)
+            {
+                Console.WriteLine("Value of DiscreteInput " + (i + 1) + ": " + val1[i]);
+            }
+
             Console.WriteLine();
             return true;
         }
