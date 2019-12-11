@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace UI.ViewModel
 {
@@ -25,11 +26,25 @@ namespace UI.ViewModel
             }
         }
 
+        private bool disposed = false;
+
+        protected bool Disposed { get { return disposed; } }
+
         public virtual void Dispose()
         {
             GC.SuppressFinalize(this);
         }
 
+        //private ICommand _CloseCommand;
+        //public ICommand CloseCommand
+        //{
+        //    get
+        //    {
+        //        if (_CloseCommand == null)
+        //            _CloseCommand = new RelayCommand2(call => Close());
+        //        return _CloseCommand;
+        //    }
+        //}
         private bool _IsClosed;
         public bool IsClosed
         {

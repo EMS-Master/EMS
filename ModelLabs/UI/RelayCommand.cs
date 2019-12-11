@@ -62,7 +62,19 @@ namespace UI
             }
         }
 
-        
+        public event EventHandler IsActiveChanged;
+
+
+        public void SetCanExecute(Predicate<T> method)
+        {
+            canExecute = method;
+        }
+
+        public void SetExecute(Action<T> method)
+        {
+            execute = method;
+        }
+
 
         public bool CanExecute(object parameter)
         {

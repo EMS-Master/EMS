@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UI.ViewModel;
 
 namespace UI.View
 {
@@ -22,7 +23,14 @@ namespace UI.View
     {
         public ImporterView()
         {
+
+            DataContext = new ImporterViewModel();
+            
             InitializeComponent();
+            textBox1.Text = "XML document...";
+            textBox1.FontSize = 8;
+            
+            textBox1.Foreground = Brushes.DarkSlateGray;
         }
     }
 }
