@@ -17,18 +17,14 @@ using UI.ViewModel;
 namespace UI.View
 {
     /// <summary>
-    /// Interaction logic for ImporterView.xaml
+    /// Interaction logic for NSMView.xaml
     /// </summary>
-    public partial class ImporterView : UserControl
+    public partial class NMSView : UserControl
     {
-        public ImporterView()
+        public NMSView()
         {
-
-            DataContext = new ImporterViewModel();
-            
+            DataContext = new NMSViewModel(this);
             InitializeComponent();
-            textBox1.Text = "XML document...";
-            textBox1.Foreground = Brushes.DarkSlateGray;
         }
     }
 }

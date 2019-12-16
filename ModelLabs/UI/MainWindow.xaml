@@ -27,7 +27,7 @@
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
 						<TextBlock TextAlignment="Center" Width="100"  Text="{Binding Content.Title}" TextTrimming="CharacterEllipsis">
-							<Image  Width="18" Source="Resources/import.jpg"/>
+							<!--<Image  Width="18" Source="Resources/import.jpg"/>-->
 						</TextBlock>
 					</StackPanel>
 				</DataTemplate>
@@ -35,6 +35,9 @@
 			<dock:DockingManager.Resources>
 				<DataTemplate DataType="{x:Type vm:ImporterViewModel}">
 					<view:ImporterView></view:ImporterView>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type vm:NMSViewModel}">
+					<view:NMSView></view:NMSView>
 				</DataTemplate>
 			</dock:DockingManager.Resources>
 			<dock:DockingManager.Theme>

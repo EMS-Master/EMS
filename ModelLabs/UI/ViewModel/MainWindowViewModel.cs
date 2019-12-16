@@ -14,6 +14,7 @@ namespace UI.ViewModel
         {
             var documents = new List<ViewModelBase>();
 
+            documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);
