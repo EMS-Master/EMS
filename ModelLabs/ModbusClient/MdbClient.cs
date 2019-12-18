@@ -77,7 +77,6 @@ namespace ModbusClient
         }
 
         #region Read/Write
-
         public bool[] ReadCoils(ushort startingAddress, ushort quantity)
         {
             byte[] result = SendAndReceive(startingAddress, quantity, FunctionCode.ReadCoils);

@@ -11,6 +11,8 @@ namespace ScadaServiceSelfHost
     {
         static void Main(string[] args)
         {
+
+
             try
             {
                 using(ScadaService.ScadaService scada = new ScadaService.ScadaService())
