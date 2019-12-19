@@ -91,8 +91,7 @@ namespace ScadaProcessingSevice
 
         public bool IntegrityUpdate()
         {
-            return true;
-                //scadaProcessing.InitiateIntegrityUpdate();
+            return scadaProcessing.InitiateIntegrityUpdate();
         }
     }
 }

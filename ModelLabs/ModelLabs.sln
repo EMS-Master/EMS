@@ -54,6 +54,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScadaProcessingSelfHost", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScadaProcessingSevice", "ScadaProcessingSevice\ScadaProcessingSevice.csproj", "{51D89EE9-CC78-4F1B-95A0-AB9AC057A692}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ForMeasurement", "ForMeasurement", "{BD71B780-9B88-4BD9-AD58-E63E355CF614}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonMeas", "CommonMeas\CommonMeas.csproj", "{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -258,6 +262,18 @@ Global
 		{51D89EE9-CC78-4F1B-95A0-AB9AC057A692}.Release|x64.Build.0 = Release|Any CPU
 		{51D89EE9-CC78-4F1B-95A0-AB9AC057A692}.Release|x86.ActiveCfg = Release|Any CPU
 		{51D89EE9-CC78-4F1B-95A0-AB9AC057A692}.Release|x86.Build.0 = Release|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Debug|x64.Build.0 = Debug|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Debug|x86.Build.0 = Debug|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Release|x64.ActiveCfg = Release|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Release|x64.Build.0 = Release|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Release|x86.ActiveCfg = Release|Any CPU
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -277,6 +293,7 @@ Global
 		{265A6E11-3412-45BE-AA4A-6AA4722D2F46} = {BF286D6A-02BF-4802-8E6F-A499B3DFE0FB}
 		{8D5E8453-0AC4-4627-B0BE-EEACEF17D44B} = {265A6E11-3412-45BE-AA4A-6AA4722D2F46}
 		{51D89EE9-CC78-4F1B-95A0-AB9AC057A692} = {265A6E11-3412-45BE-AA4A-6AA4722D2F46}
+		{41C8517A-D6F5-4BBF-AF20-DC99A12664E8} = {BD71B780-9B88-4BD9-AD58-E63E355CF614}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A49E34D3-A7AB-425F-9F7C-BF0EC8716FAC}
