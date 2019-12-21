@@ -19,9 +19,9 @@
 	</cim:Substation>
 		<cim:Generator rdf:ID="Generator_1">
 		<cim:Generator.generatorType></cim:Generator.generatorType>
-		<cim:Generator.maxQ> </cim:Generator.maxQ>
-		<cim:Generator.minQ> </cim:Generator.minQ>
-		<cim:RotatingMachine.ratedS> </cim:RotatingMachine.ratedS>
+		<cim:Generator.maxQ>350 </cim:Generator.maxQ>
+		<cim:Generator.minQ>140 </cim:Generator.minQ>
+		<cim:RotatingMachine.ratedS>300 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_1</cim:IdentifiedObject.mRID>

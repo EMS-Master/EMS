@@ -43,7 +43,7 @@ namespace ScadaProcessingSelfHost
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.WriteLine("SCADA Crunching Service failed.");
+                Console.WriteLine("SCADA Processing Service failed.");
                 Console.WriteLine(ex.StackTrace);
                 Console.ReadLine();
             }

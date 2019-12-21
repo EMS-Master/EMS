@@ -6,7 +6,47 @@ namespace FTN.ServiceContracts
 {
 	public class NetworkModelGDAProxy : ClientBase<INetworkModelGDAContract>, INetworkModelGDAContract
 	{
-		public NetworkModelGDAProxy(string endpointName)
+        private static INetworkModelGDAContract proxy;
+        private static ChannelFactory<INetworkModelGDAContract> factory;
+        private static object lockObj = new object();
+
+        public static INetworkModelGDAContract Instance
+        {
+            get
+            {
+                lock (lockObj)
+                {
+                    if (proxy == null)
+                    {
+                        factory = new ChannelFactory<INetworkModelGDAContract>("*");
+                        proxy = factory.CreateChannel();
+                    }
+
+                    return proxy;
+                }
+            }
+
+            set
+            {
+                lock (lockObj)
+                {
+                    if (proxy == null)
+                    {
+                        proxy = value;
+                    }
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            if (factory != null)
+            {
+                factory = null;
+            }
+        }
+
+        public NetworkModelGDAProxy(string endpointName)
 			: base(endpointName)
 		{
 		}

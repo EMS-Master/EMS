@@ -36,22 +36,7 @@ namespace ScadaProcessingSevice
         }
 
 
-        private NetworkModelGDAProxy GdaQueryProxy
-        {
-            get
-            {
-                if (gdaQueryProxy != null)
-                {
-                    gdaQueryProxy.Abort();
-                    gdaQueryProxy = null;
-                }
-
-                gdaQueryProxy = new NetworkModelGDAProxy("NetworkModelGDAEndpoint");
-                gdaQueryProxy.Open();
-
-                return gdaQueryProxy;
-            }
-        }
+       
 
         public bool InitiateIntegrityUpdate()
         {
@@ -66,21 +51,21 @@ namespace ScadaProcessingSevice
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
 
-                iteratorId = GdaQueryProxy.GetExtentValues(modelCode, properties);
-                resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
                 }
-                GdaQueryProxy.IteratorClose(iteratorId);
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
             }
             catch (Exception e)
             {
 
-                gdaQueryProxy = null;
+                NetworkModelGDAProxy.Instance = null;
                 Thread.Sleep(1000);
                 InitiateIntegrityUpdate();
 
