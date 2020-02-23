@@ -155,9 +155,9 @@ namespace ModbusClient
 
         private byte[] StripHeader(byte[] data)
         {
-            byte[] returnData = new byte[data.Length - header.Length- 2];
+            byte[] returnData = new byte[data.Length - header.Length];
 
-            Array.Copy(data, header.Length+2, returnData, 0, returnData.Length);
+            Array.Copy(data, header.Length, returnData, 0, returnData.Length);
             return returnData;
         }
 

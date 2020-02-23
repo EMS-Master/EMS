@@ -38,25 +38,25 @@
 		<cim:IdentifiedObject.name>BatteryStorage_2</cim:IdentifiedObject.name>
 	</cim:BatteryStorage>
 	<cim:Analog rdf:ID="Analog_1">
-		<cim:Analog.maxValue></cim:Analog.maxValue>
-		<cim:Analog.minValue></cim:Analog.minValue>
-		<cim:Analog.normalValue></cim:Analog.normalValue>
+		<cim:Analog.maxValue>150</cim:Analog.maxValue>
+		<cim:Analog.minValue>1</cim:Analog.minValue>
+		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_1"/>
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address1</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_1</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_1</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_2">
-		<cim:Analog.maxValue></cim:Analog.maxValue>
-		<cim:Analog.minValue></cim:Analog.minValue>
-		<cim:Analog.normalValue></cim:Analog.normalValue>
+		<cim:Analog.maxValue>160</cim:Analog.maxValue>
+		<cim:Analog.minValue>2</cim:Analog.minValue>
+		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/>
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address2</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_2</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_2</cim:IdentifiedObject.name>

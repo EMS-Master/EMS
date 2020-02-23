@@ -1,4 +1,5 @@
-﻿using ModbusClient;
+﻿using FTN.Common;
+using ModbusClient;
 using ScadaContracts;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,8 @@ namespace ScadaService
     {
 
         private MdbClient mdbClient;
-       
+        private ushort numberOfHoldingRegisters = 104;
+
         public Scada()
         {
             ConnectToSimulator();
@@ -58,27 +60,45 @@ namespace ScadaService
 
         public bool GetDataFromSimulator()
         {
-            mdbClient.WriteSingleRegister(5, 567);
-            mdbClient.WriteSingleCoil(10, true);
+            //mdbClient.WriteSingleRegister(5, 567);
+            //mdbClient.WriteSingleCoil(10, true);
 
-            byte[] val = mdbClient.ReadHoldingRegisters(0, 10);
-            bool[] val1 = mdbClient.ReadCoils(0, 13);
+            //byte[] val = mdbClient.ReadHoldingRegisters(0, 10);
+            //bool[] val1 = mdbClient.ReadCoils(0, 13);
             
-            ushort[] retVal = ModbusHelper.GetUShortValuesFromByteArray(val, val.Length, 0);
-            for (int i = 0; i < retVal.Length; i++)
-            {
+            //ushort[] retVal = ModbusHelper.GetUShortValuesFromByteArray(val, val.Length, 0);
+            //for (int i = 0; i < retVal.Length; i++)
+            //{
 
-                Console.WriteLine("Value of HoldingRegister " + (i + 1) + ": " + Convert.ToString((int)retVal[i]));
+            //    Console.WriteLine("Value of HoldingRegister " + (i + 1) + ": " + Convert.ToString((int)retVal[i]));
                 
-            }
+            //}
 
-            for(int i = 0; i < val1.Length; i++)
+            //for(int i = 0; i < val1.Length; i++)
+            //{
+            //    Console.WriteLine("Value of DiscreteInput " + (i + 1) + ": " + val1[i]);
+            //}
+
+            //Console.WriteLine();
+
+            var values = mdbClient.ReadHoldingRegisters(0, numberOfHoldingRegisters);
+
+            bool isSuccess = false;
+            try
             {
-                Console.WriteLine("Value of DiscreteInput " + (i + 1) + ": " + val1[i]);
+                isSuccess = ScadaProcessingProxy.Instance.SendValues(values);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, ex.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, ex.StackTrace);
+                Console.WriteLine("[Method = GetDataFromSimulator] Error: " + ex.Message);
             }
 
-            Console.WriteLine();
-            return true;
+            return isSuccess;
+
+
+            //return true;
         }
     }
 }

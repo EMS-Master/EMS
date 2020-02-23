@@ -76,6 +76,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
                 case ModelCode.MEASUREMENT_TYPE:
                     prop.SetValue((short)measurmentType);
                     break;
+                default:
+                    base.GetProperty(prop);
+                    break;
             }
         }
 
