@@ -78,6 +78,9 @@
     <Reference Include="AvalonDock.Themes.VS2013, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonDock.Themes.VS2013.2.0.0.5\lib\AvalonDock.Themes.VS2013.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Maps.MapControl.WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Maps.MapControl.WPF.1.0.0.3\lib\net40-Client\Microsoft.Maps.MapControl.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
@@ -141,10 +144,14 @@
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
     <Compile Include="ViewModel\ImporterViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\MapViewModel.cs" />
     <Compile Include="ViewModel\NMSViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\ImporterView.xaml.cs">
       <DependentUpon>ImporterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapView.xaml.cs">
+      <DependentUpon>MapView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\NMSView.xaml.cs">
       <DependentUpon>NMSView.xaml</DependentUpon>
@@ -166,6 +173,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ImporterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

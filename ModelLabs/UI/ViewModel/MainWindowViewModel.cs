@@ -16,6 +16,7 @@ namespace UI.ViewModel
 
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
+            documents.Add(new MapViewModel(new View.MapView()) { Title = "Map" });
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);
         }
