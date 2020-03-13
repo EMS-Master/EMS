@@ -61,13 +61,13 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             switch (prop.Id)
             {
                 case ModelCode.GENERATOR_MAX_Q:
-                    prop.SetValue(this.maxQ);
+                    prop.SetValue(this.MaxQ);
                     break;
                 case ModelCode.GENERATOR_MIN_Q:
-                    prop.SetValue(this.minQ);
+                    prop.SetValue(this.MinQ);
                     break;
                 case ModelCode.GENERATOR_TYPE:
-                    prop.SetValue((short)this.generatorType);
+                    prop.SetValue((short)this.GeneratorType);
                     break;
                 default:
                     base.GetProperty(prop);
@@ -80,14 +80,14 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             switch (property.Id)
             {
                 case ModelCode.GENERATOR_MAX_Q:
-                    this.maxQ = property.AsFloat();
+                    this.MaxQ = property.AsFloat();
                     break;
                 case ModelCode.GENERATOR_MIN_Q:
-                    this.minQ = property.AsFloat();
+                    this.MinQ = property.AsFloat();
                     break;
 
                 case ModelCode.GENERATOR_TYPE:
-                    this.generatorType = (GeneratorType)property.AsEnum();
+                    this.GeneratorType = (GeneratorType)property.AsEnum();
                     break;
                 default:
                     base.SetProperty(property);

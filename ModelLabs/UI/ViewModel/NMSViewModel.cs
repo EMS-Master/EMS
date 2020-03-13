@@ -17,14 +17,23 @@ namespace UI.ViewModel
         private NMSView NMSview;
 
         private ObservableCollection<ResourceDescription> resList;
+        private ObservableCollection<ModelCode> avaliableProperties;
+
         private ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+        private RelayCommand goToReferenceCommand;
 
         private ICommand findCommand;
+        private ICommand typeCheckBoxChangedCommand;
+
+        private Dictionary<ModelCode, List<ModelCode>> propertyMap = new Dictionary<ModelCode, List<ModelCode>>();
 
         public NMSViewModel(NMSView mainWindow)
         {
             Title = "NMS";
+            this.NMSview = mainWindow;
+            this.NMSview.Loaded += View_Loaded;
             ResList = new ObservableCollection<ResourceDescription>();
+            AvaliableProperties = new ObservableCollection<ModelCode>();
         }
 
         public ObservableCollection<ResourceDescription> ResList
@@ -39,8 +48,49 @@ namespace UI.ViewModel
                 resList = value;
             }
         }
+        public ObservableCollection<ModelCode> AvaliableProperties
+        {
+            get
+            {
+                return avaliableProperties;
+            }
+
+            set
+            {
+                avaliableProperties = value;
+            }
+        }
 
         public ICommand FindCommand => findCommand ?? (findCommand = new RelayCommand<string>(FindCommandExecute));
+        public ICommand GoToReferenceCommand => goToReferenceCommand ?? (goToReferenceCommand = new RelayCommand(GoToReferenceCommandExecute));
+        public ICommand TypeCheckBoxChangedCommand => typeCheckBoxChangedCommand ?? (typeCheckBoxChangedCommand = new RelayCommand(TypeCheckBoxChangedCommandExecute));
+
+        private void GoToReferenceCommandExecute(object obj)
+        {
+            var grid = obj as Grid;
+            var property = grid.DataContext as Property;
+            var resDesc = grid.Tag as ResourceDescription;
+
+            List<ResourceDescription> refResList = new List<ResourceDescription>();
+
+            //ReferenceView RefView = new ReferenceView(tgda, resDesc.Id, property);
+            //RefView.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void View_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ModelResourcesDesc resDesc = new ModelResourcesDesc();
+
+            string message = string.Format("Network Model Service Test Client is up and running...");
+            Console.WriteLine(message);
+            CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+
+            message = string.Format("Result directory: {0}", Config.Instance.ResultDirecotry);
+            Console.WriteLine(message);
+            CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+
+            testGda = new TestGDA();
+        }
 
         private void FindCommandExecute(string textForFind)
         {
@@ -49,17 +99,17 @@ namespace UI.ViewModel
 
             List<ModelCode> forFind = getModelCodes();
 
-            //var allSelected = getSelectedProp();
+            var allSelected = getModelCodes();
             foreach (var modCode in forFind)
             {
                 var myProps = modelResourcesDesc.GetAllPropertyIds(ModelCodeHelper.GetTypeFromModelCode(modCode));
-               // var mySelected = myProps.Where(x => allSelected.Contains(x));
-                //var retExtentValues = testGda.GetExtentValues(modCode, mySelected.ToList());
-                //foreach (var res in retExtentValues)
-                //{
+                var mySelected = myProps.Where(x => allSelected.Contains(x));
+                var retExtentValues = testGda.GetExtentValues(modCode, mySelected.ToList());
+                foreach (var res in retExtentValues)
+                {
                     
-                //    ResList.Add(res);
-                //}
+                    ResList.Add(res);
+                }
             }
 
             if (hex_val.Trim() != string.Empty)
@@ -101,7 +151,40 @@ namespace UI.ViewModel
             return retList;
         }
 
-        /*private List<ModelCode> getSelectedProp()
+        private void TypeCheckBoxChangedCommandExecute(object obj)
+        {
+            UpdatePropertyFilter();
+        }
+
+        private void UpdatePropertyFilter()
+        {
+            List<ModelCode> selectedModelCodes = getModelCodes();
+            List<ModelCode> properties;
+            AvaliableProperties.Clear();
+            foreach (var modelCode in selectedModelCodes)
+            {
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
+
+                foreach (var prop in properties)
+                {
+                    if (!AvaliableProperties.Contains(prop))
+                    {
+                        AvaliableProperties.Add(prop);
+                    }
+                }
+
+            }
+        }
+
+
+        public override void Dispose()
+        {
+            NMSview.Loaded -= View_Loaded;
+            base.Dispose();
+            
+        }
+
+      /* private List<ModelCode> getSelectedProp()
         {
             List<ModelCode> retList = new List<ModelCode>();
             foreach (var item in NMSview.PropertiesContainer.Items)

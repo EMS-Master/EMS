@@ -26,5 +26,12 @@ namespace UI
             DataContext = new MainWindowViewModel();
             InitializeComponent();
         }
+
+        public void SetActiveDocument(object document)
+        {
+            if (document == null)
+                return;
+            dockingManager.ActiveContent = document;
+        }
     }
 }

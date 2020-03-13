@@ -3,13 +3,34 @@
                     xmlns:local="clr-namespace:UI.Styles"
 					xmlns:view="clr-namespace:UI.View">
 
-	<SolidColorBrush x:Key="BlueMouseOver" Color="#1C97EA"/>
+	<SolidColorBrush x:Key="BlueMouseOver" Color="#8a1519"/>
+
+	<Style TargetType="CheckBox"  x:Key="CheckBoxDarkStyle">
+		<Setter Property="Foreground" Value="White" ></Setter>
+	</Style>
+
 	
-	<Style TargetType="Button" x:Key="ExpButtonStyle">
+		<LinearGradientBrush x:Key="GrayBlueGardientBrush"  
+                            StartPoint="0,0" EndPoint="1,1">
+		<GradientStop Color="#88888c" Offset="0"/>
+		<GradientStop Color="#c7c7c9" Offset="0.5"/>
+		<GradientStop Color="#88888c" Offset="1"/>
+
+		</LinearGradientBrush>
+	<Style TargetType="{x:Type Button}" x:Key="ExpButtonStyle">
+			<Setter Property="Background" Value="{StaticResource GrayBlueGardientBrush}"/>
+			<Setter Property="Width" Value="80"/>
+		<Setter Property="Margin" Value="10"/>
+		<Setter Property="FontSize" Value="17"/>
+		<Setter Property="FontFamily" Value="Verdana"/>
+	</Style>
+	
+
+	<!--<Style TargetType="Button" x:Key="ExpButtonStyle">
 		<Setter Property="Background" Value="Gray"/>
 		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="FontSize" Value="10"/>
-		<!--<Setter Property="Margin" Value="0,0,-5,0"/>-->
+		
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="Button">
@@ -28,6 +49,6 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-	</Style>
+	</Style>-->
 
 </ResourceDictionary>

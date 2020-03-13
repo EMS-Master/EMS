@@ -1,14 +1,14 @@
-﻿using FTN.Common;
-using FTN.Services.NetworkModelService.DataModel.Core;
-using FTN.Services.NetworkModelService.DataModel.Meas;
-using FTN.Services.NetworkModelService.DataModel.Wires;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FTN.Common;
+using FTN.Services.NetworkModelService.DataModel.Core;
+using FTN.Services.NetworkModelService.DataModel.Meas;
+using FTN.Services.NetworkModelService.DataModel.Wires;
 
-namespace CommonMeas
+namespace CommonMeasurement1
 {
     public static class ResourcesDescriptionConverter
     {
@@ -44,10 +44,6 @@ namespace CommonMeas
                     io = new Analog(globalId);
                     break;
 
-                case DMSType.BATTERY_STORAGE:
-                    io = new BatteryStorage(globalId);
-                    break;
-
                 case DMSType.DISCRETE:
                     io = new Discrete(globalId);
                     break;
@@ -56,12 +52,16 @@ namespace CommonMeas
                     io = new Generator(globalId);
                     break;
 
-                case DMSType.GEOGRAFICAL_REGION:
-                    io = new GeographicalRegion(globalId);
-                    break;
-
                 case DMSType.SUBSTATION:
                     io = new Substation(globalId);
+                    break;
+
+                case DMSType.BATTERY_STORAGE:
+                    io = new BatteryStorage(globalId);
+                    break;
+
+                case DMSType.GEOGRAFICAL_REGION:
+                    io = new GeographicalRegion(globalId);
                     break;
 
                 default:
@@ -72,7 +72,5 @@ namespace CommonMeas
 
             return io;
         }
-
-
     }
 }

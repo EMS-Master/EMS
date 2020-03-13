@@ -39,10 +39,10 @@
 				<DataTemplate DataType="{x:Type vm:NMSViewModel}">
 					<view:NMSView></view:NMSView>
 				</DataTemplate>
-                <DataTemplate DataType="{x:Type vm:MapViewModel}">
-                    <view:MapView></view:MapView>
-                </DataTemplate>
-            </dock:DockingManager.Resources>
+				<DataTemplate DataType="{x:Type vm:MapViewModel}">
+					<view:MapView></view:MapView>
+				</DataTemplate>
+			</dock:DockingManager.Resources>
 			<dock:DockingManager.Theme>
 				<dock:AeroTheme/>
 			</dock:DockingManager.Theme>

@@ -75,8 +75,20 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AvalonDock, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.AvalonDock.4.0.0\lib\net40\AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="AvalonDock.Themes.Aero, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.AvalonDock.Themes.Aero.4.0.0\lib\net40\AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="AvalonDock.Themes.Metro, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dirkster.AvalonDock.Themes.Metro.4.0.0\lib\net40\AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="AvalonDock.Themes.VS2013, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonDock.Themes.VS2013.2.0.0.5\lib\AvalonDock.Themes.VS2013.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Maps.MapControl.WPF, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Maps.MapControl.WPF.1.0.0.3\lib\net40-Client\Microsoft.Maps.MapControl.WPF.dll</HintPath>
@@ -84,6 +96,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -96,41 +111,41 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.6.2.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dirkster.AvalonDock.3.6.2\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.6.2.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dirkster.AvalonDock.Themes.Aero.3.6.2\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.Aero.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.6.2.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dirkster.AvalonDock.Themes.Metro.3.6.2\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.Metro.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.MetroAccent, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.MetroAccent.3.8.19076.18510\lib\net40\Xceed.Wpf.AvalonDock.Themes.MetroAccent.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.MetroAccent, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.MetroAccent.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.Themes.MetroAccent.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Office2007, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.Office2007.3.8.19076.18510\lib\net40\Xceed.Wpf.AvalonDock.Themes.Office2007.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Office2007, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.Office2007.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.Themes.Office2007.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.VS2010.3.8.19076.18510\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.VS2010.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Windows10, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.Windows10.3.8.19076.18510\lib\net40\Xceed.Wpf.AvalonDock.Themes.Windows10.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Windows10, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.AvalonDock.Themes.Windows10.4.0.20076.12200\lib\net40\Xceed.Wpf.AvalonDock.Themes.Windows10.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Themes, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.Themes.3.8.19076.18510\lib\net40\Xceed.Wpf.Themes.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Themes, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Themes.4.0.20076.12200\lib\net40\Xceed.Wpf.Themes.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Themes.Metro, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.Themes.Metro.3.8.19076.18510\lib\net40\Xceed.Wpf.Themes.Metro.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Themes.Metro, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Themes.Metro.4.0.20076.12200\lib\net40\Xceed.Wpf.Themes.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Themes.Office2007, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.Themes.Office2007.3.8.19076.18510\lib\net40\Xceed.Wpf.Themes.Office2007.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Themes.Office2007, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Themes.Office2007.4.0.20076.12200\lib\net40\Xceed.Wpf.Themes.Office2007.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Themes.Windows10, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.Themes.Windows10.3.8.19076.18510\lib\net40\Xceed.Wpf.Themes.Windows10.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Themes.Windows10, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Themes.Windows10.4.0.20076.12200\lib\net40\Xceed.Wpf.Themes.Windows10.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Xceed.Wpf.Toolkit.3.8.19076.18510\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=4.0.20076.12200, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Toolkit.4.0.20076.12200\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -138,7 +153,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Config.cs" />
     <Compile Include="Converters\DMSTypeToStringConverter.cs" />
+    <Compile Include="Converters\GidToMridConverter.cs" />
+    <Compile Include="Converters\GlobalIdToEMSTypeStringConverter.cs" />
+    <Compile Include="Converters\ModelCodeToStringConverter.cs" />
+    <Compile Include="Converters\PropertyValueConverter.cs" />
+    <Compile Include="Converters\StringCompareConverter.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="TestGDA.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
@@ -221,9 +242,21 @@
       <Project>{F680D34F-C148-4314-8914-B2DF3E7B17AF}</Project>
       <Name>CIMAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
+      <Project>{41c8517a-d6f5-4bbf-af20-dc99a12664e8}</Project>
+      <Name>CommonMeas</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
+      <Project>{ade96497-7c11-40b6-ae82-57f956c9f104}</Project>
+      <Name>DataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj">
+      <Project>{2630d180-1b68-4e84-aeac-42ee8c88b50f}</Project>
+      <Name>NetworkModelService</Name>
     </ProjectReference>
     <ProjectReference Include="..\ServiceContracts\NetworkModelQueryContract\NetworkModelGDAContract.csproj">
       <Project>{b726fb71-d295-41ee-9644-b2b0b1bc8911}</Project>
