@@ -1,4 +1,5 @@
-﻿using CommonMeas;
+﻿using CalculationEngineContracts;
+using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
 using FTN.Services.NetworkModelService.DataModel.Meas;
@@ -66,7 +67,7 @@ namespace ScadaProcessingSevice
             bool isSuccess = false;
             try
             {
-                //isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(enConsumMeasUnits, generatorMeasUnits, windSpeed, sunlight);
+                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(enConsumMeasUnits, generatorMeasUnits, windSpeed, sunlight);
             }
             catch (Exception ex)
             {
