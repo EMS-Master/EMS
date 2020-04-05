@@ -557,6 +557,19 @@ namespace FTN.Common
 				}
 				return hash;
 			}
+
 		}
-	}
+        public object Clone()
+        {
+            ResourceDescription resDes = new ResourceDescription();
+            resDes.Id = this.Id;
+            foreach (Property prop in this.Properties)
+            {
+                resDes.AddProperty(prop);
+            }
+
+            return resDes;
+        }
+        
+    }
 }

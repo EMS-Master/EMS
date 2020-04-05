@@ -9,10 +9,11 @@ using FTN.Common;
 using FTN.Services.NetworkModelService.DataModel;
 using FTN.Services.NetworkModelService.DataModel.Core;
 using FTN.Services.NetworkModelService.DataModel.Wires;
+using TransactionContract;
 
 namespace FTN.Services.NetworkModelService
 {	
-	public class NetworkModel
+	public class NetworkModel : ITransactionContract
 	{
 		/// <summary>
 		/// Dictionaru which contains all data: Key - DMSType, Value - Container
@@ -761,5 +762,19 @@ namespace FTN.Services.NetworkModelService
 			return typesCounters;
 		}
 
-	}
+        public UpdateResult Prepare(ref Delta delta)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Commit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Rollback()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

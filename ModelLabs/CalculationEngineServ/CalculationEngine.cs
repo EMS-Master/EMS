@@ -6,11 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TransactionContract;
 
 namespace CalculationEngineServ
 {
-    public class CalculationEngine 
+    public class CalculationEngine : ITransactionContract
     {
+        public bool Commit()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Optimize(List<MeasurementUnit> measEnergyConsumers, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
         {
             bool result = false;
@@ -21,6 +27,16 @@ namespace CalculationEngineServ
             }
             GA ga = new GA();
             return result;
+        }
+
+        public UpdateResult Prepare(ref Delta delta)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Rollback()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,10 +12,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TransactionContract;
 
 namespace ScadaProcessingSevice
 {
-    public class ScadaProcessing : IScadaProcessingContract
+    public class ScadaProcessing : IScadaProcessingContract, ITransactionContract
     {
        
         private ModelResourcesDesc modelResourcesDesc;
@@ -236,5 +237,19 @@ namespace ScadaProcessingSevice
             return true;
         }
 
+        public UpdateResult Prepare(ref Delta delta)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Commit()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Rollback()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

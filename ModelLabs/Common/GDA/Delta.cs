@@ -770,5 +770,59 @@ namespace FTN.Common
 				return gidNew;
 			}
 		}
-	}
+
+        public Delta SeparateDeltaForEMSType(DMSType emsType)
+        {
+            Delta newDelta = new Delta();
+
+            foreach (ResourceDescription rd_item in this.InsertOperations)
+            {
+
+                if (ModelCodeHelper.ExtractTypeFromGlobalId(rd_item.Id).Equals((short)emsType))
+                {
+
+                    newDelta.AddDeltaOperation(DeltaOpType.Insert, rd_item.Clone() as ResourceDescription, true);
+                    //break;
+                }
+
+            }
+
+            foreach (ResourceDescription rd_item in this.UpdateOperations)
+            {
+
+                if (ModelCodeHelper.ExtractTypeFromGlobalId(rd_item.Id).Equals((short)emsType))
+                {
+                    newDelta.AddDeltaOperation(DeltaOpType.Update, rd_item.Clone() as ResourceDescription, true);
+                    //break;
+                }
+
+            }
+
+            foreach (ResourceDescription rd_item in this.DeleteOperations)
+            {
+
+                if (ModelCodeHelper.ExtractTypeFromGlobalId(rd_item.Id).Equals((short)emsType))
+                {
+                    newDelta.AddDeltaOperation(DeltaOpType.Delete, rd_item.Clone() as ResourceDescription, true);
+                    //break;
+                }
+            }
+
+            return newDelta;
+        }
+
+        public static Delta operator +(Delta first, Delta second)
+        {
+            Delta delta = new Delta();
+            delta.InsertOperations.AddRange(first.InsertOperations);
+            delta.UpdateOperations.AddRange(first.UpdateOperations);
+            delta.DeleteOperations.AddRange(first.DeleteOperations);
+
+            delta.InsertOperations.AddRange(second.InsertOperations);
+            delta.UpdateOperations.AddRange(second.UpdateOperations);
+            delta.DeleteOperations.AddRange(second.DeleteOperations);
+
+            return delta;
+        }
+    }
 }

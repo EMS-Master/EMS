@@ -8,6 +8,7 @@ using FTN.Common;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Importer;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Manager;
 using FTN.ServiceContracts;
+using TransactionContract;
 
 namespace FTN.ESI.SIMES.CIM.CIMAdapter
 {
@@ -61,9 +62,10 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter
 
 			if ((delta != null) && (delta.NumberOfOperations != 0))
 			{
-				//// NetworkModelService->ApplyUpdates
-                updateResult = GdaQueryProxy.ApplyUpdate(delta).ToString();
-			}
+                //// NetworkModelService->ApplyUpdates
+                //updateResult = GdaQueryProxy.ApplyUpdate(delta).ToString();
+                updateResult = ImporterProxy.Instance.ModelUpdate(delta).ToString();
+            }
 
 			Thread.CurrentThread.CurrentCulture = culture;
 			return updateResult;

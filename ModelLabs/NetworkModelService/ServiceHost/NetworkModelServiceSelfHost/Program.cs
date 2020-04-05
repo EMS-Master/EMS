@@ -19,7 +19,7 @@ namespace FTN.Services.NetworkModelService
 				CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
 				Console.WriteLine("\n{0}\n", message);
 
-				using (NetworkModelService nms = new NetworkModelService())
+				using (FTN.Services.NetworkModelService.NetworkModelService nms = new FTN.Services.NetworkModelService.NetworkModelService())
 				{					
 					nms.Start();
 
