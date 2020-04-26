@@ -90,8 +90,6 @@ namespace CalculationEngineServ
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             Console.WriteLine("\n\n{0}", message);
         }
-
-       
         
     }
 }

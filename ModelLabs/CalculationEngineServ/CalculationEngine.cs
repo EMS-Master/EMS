@@ -1,6 +1,7 @@
 ﻿using CalculationEngineServ.GeneticAlgorithm;
 using CommonMeas;
 using FTN.Common;
+using ScadaContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,26 @@ namespace CalculationEngineServ
                 Console.WriteLine("masx value: " + m.MaxValue);
             }
             GA ga = new GA();
+
+            //todo optimization and put into measuremnetOptimized list
+            //for now, lets put parameter measGenerators
+            List<MeasurementUnit> measurementsOptimized = measGenerators;
+
+            try
+            {
+                if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measurementsOptimized.Count);
+                    Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measurementsOptimized.Count);
+
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, ex.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, ex.StackTrace);
+            }
             return result;
         }
 

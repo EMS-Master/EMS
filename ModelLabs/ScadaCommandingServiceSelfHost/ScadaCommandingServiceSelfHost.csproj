@@ -4,17 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4E67B062-A8D7-4FB8-9487-B0ACE402DF52}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CalculationEngineServ</RootNamespace>
-    <AssemblyName>CalculationEngineServ</AssemblyName>
+    <ProjectGuid>{02698E74-47C4-492F-8BFA-FD2FF4EA9ED9}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ScadaCommandingServiceSelfHost</RootNamespace>
+    <AssemblyName>ScadaCommandingServiceSelfHost</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,6 +40,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -48,11 +50,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,38 +63,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculationEngine.cs" />
-    <Compile Include="CalculationEngineServiceClass.cs" />
-    <Compile Include="GeneticAlgorithm\DNA.cs" />
-    <Compile Include="GeneticAlgorithm\GA.cs" />
-    <Compile Include="GeneticAlgorithm\GeneticAlgorithm.cs" />
-    <Compile Include="ProcessingToCalculation.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CalculationEngineContracts\CalculationEngineContracts.csproj">
-      <Project>{A6DD77D6-80F9-4BA6-83F7-4913C2DF866A}</Project>
-      <Name>CalculationEngineContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
-      <Project>{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}</Project>
-      <Name>CommonMeas</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
-      <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
-      <Name>ScadaContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServiceContracts\NetworkModelQueryContract\NetworkModelGDAContract.csproj">
-      <Project>{B726FB71-D295-41EE-9644-B2B0B1BC8911}</Project>
-      <Name>NetworkModelGDAContract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TransactionContract\TransactionContract.csproj">
-      <Project>{1e99a031-c0ff-416f-9c9b-3575941df41e}</Project>
-      <Name>TransactionContract</Name>
+    <ProjectReference Include="..\ScadaCommandingService\ScadaCommandingService.csproj">
+      <Project>{1973F0E7-9E30-4F1B-9B3E-F3759C0B4324}</Project>
+      <Name>ScadaCommandingService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
