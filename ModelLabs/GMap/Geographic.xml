@@ -26,4 +26,56 @@
 			<Y>5006154.1329433313</Y>
 		</BatteryStorage>
 	</BatteryStorages>
+	
+	<Generators>
+		<Generator>
+			<MaxQ>750</MaxQ>
+			<MinQ>300</MinQ>
+			<GeneratorType>Wind</GeneratorType>
+			<X>403577.324632827</X>
+			<Y>5012014.3124209</Y>
+		</Generator>
+		<Generator>
+			<MaxQ>520</MaxQ>
+			<MinQ>340</MinQ>
+			<GeneratorType>Oil</GeneratorType>
+			<X>412846.00819883752</X>
+			<Y>5005496.2270590058</Y>
+		</Generator>
+		<Generator>
+			<MaxQ>680</MaxQ>
+			<MinQ>465</MinQ>
+			<GeneratorType>Hydro</GeneratorType>
+			<X>412255</X>
+			<Y>5009240</Y>
+		</Generator>
+		<Generator>
+			<MaxQ>560</MaxQ>
+			<MinQ>255</MinQ>
+			<GeneratorType>Sollar</GeneratorType>
+			<X>412990.95904491353</X>
+			<Y>5009623.1511125257</Y>
+		</Generator>
+		<Generator>
+			<MaxQ>326</MaxQ>
+			<MinQ>143</MinQ>
+			<GeneratorType>Gas</GeneratorType>
+			<X>407497.163373387</X>
+			<Y>5012275.80416248</Y>
+		</Generator>
+		<Generator>
+			<MaxQ>465</MaxQ>
+			<MinQ>235</MinQ>
+			<GeneratorType>Coal</GeneratorType>
+			<X>406651.30089692777</X>
+			<Y>5017832.60079341</Y>
+		</Generator>
+		<Generator>
+			<MaxQ>489</MaxQ>
+			<MinQ>365</MinQ>
+			<GeneratorType>Wind</GeneratorType>
+			<X>411559.26779069373</X>
+			<Y>5008290.2476533391</Y>
+		</Generator>
+	</Generators>
 </NetworkModel>

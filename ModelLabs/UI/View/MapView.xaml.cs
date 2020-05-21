@@ -31,6 +31,7 @@ namespace UI.View
     public partial class MapView : UserControl
     {
         public List<BatteryStorage> BatteryStorageList = new List<BatteryStorage>();
+        public List<Generator> GeneratorList = new List<Generator>();
 
         public MapView()
         {
@@ -64,7 +65,7 @@ namespace UI.View
         public void LoadXML()
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(@"../../../GMap/Geographic.xml");
+            doc.Load("C:/Users/ASUS/Desktop/New folder (2)/EMS/ModelLabs/GMap/Geographic.xml");
 
             XmlNodeList BatteryStorageNode = doc.GetElementsByTagName("BatteryStorage");
             foreach (XmlNode item in BatteryStorageNode)
@@ -79,7 +80,21 @@ namespace UI.View
 
                 BatteryStorageList.Add(bs);
             }
+            XmlNodeList GeneratorNode = doc.GetElementsByTagName("Generator");
+            foreach (XmlNode item in GeneratorNode)
+            {
 
+                float maxPower = float.Parse(item["MaxQ"].InnerText);
+                float minPower = float.Parse(item["MinQ"].InnerText);
+                GeneratorType generatorType;
+                Enum.TryParse(item["GeneratorType"].InnerText, out generatorType);
+                float x = float.Parse(item["X"].InnerText);
+                float y = float.Parse(item["Y"].InnerText);
+
+                Generator g = new Generator(0, minPower, maxPower, generatorType, x, y);
+
+                GeneratorList.Add(g);
+            }
 
         }
 
@@ -141,12 +156,32 @@ namespace UI.View
                 mapa.Overlays.Add(markersOverlay);
             }
         }
+        private void LoadGenerators()
+        {
+            foreach (var item in GeneratorList)
+            {
+                double X;
+                double Y;
+                ToLatLon(item.X, item.Y, 34, out X, out Y);
+
+                GMapOverlay markersOverlay = new GMapOverlay("markersBlue");
+                GMarkerGoogle marker = new GMarkerGoogle(new PointLatLng(X, Y), GMarkerGoogleType.blue);
+                marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                marker.ToolTipText = "maxPower: " + item.MaxQ + " minPower: " + item.MinQ + "Type" + item.GeneratorType;
+
+                markersOverlay.Markers.Add(marker);
+                mapa.Overlays.Add(markersOverlay);
+            }
+        }
 
         private void CheckBox1_Checked(object sender, RoutedEventArgs e)
         {
             LoadBatteryStorage();
         }
-
+        private void CheckBox2_Checked(object sender, RoutedEventArgs e)
+        {
+            LoadGenerators();
+        }
         private void CheckBox1_Unchecked(object sender, RoutedEventArgs e)
         {
             GMap.NET.ObjectModel.ObservableCollectionThreadSafe<GMapOverlay> list = new GMap.NET.ObjectModel.ObservableCollectionThreadSafe<GMapOverlay>();
@@ -154,6 +189,21 @@ namespace UI.View
             foreach (var item in mapa.Overlays)
             {
                 if (item.Id == "markersGreen")
+                    list.Add(item);
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                mapa.Overlays.Remove(list[i]);
+            }
+        }
+        private void CheckBox2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            GMap.NET.ObjectModel.ObservableCollectionThreadSafe<GMapOverlay> list = new GMap.NET.ObjectModel.ObservableCollectionThreadSafe<GMapOverlay>();
+
+            foreach (var item in mapa.Overlays)
+            {
+                if (item.Id == "markersBlue")
                     list.Add(item);
             }
 

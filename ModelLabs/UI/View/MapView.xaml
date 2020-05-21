@@ -27,7 +27,8 @@
 			<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 				<StackPanel Orientation="Horizontal">
 					<CheckBox Width="200" Name="supsCheck" Checked="CheckBox1_Checked" Unchecked="CheckBox1_Unchecked" Content="Battery Storage" />
-				</StackPanel>
+                    <CheckBox Width="200" Name="supsCheck2" Checked="CheckBox2_Checked" Unchecked="CheckBox2_Unchecked" Content="Generators" />
+                </StackPanel>
 				
 			</StackPanel>
 		</Grid>
