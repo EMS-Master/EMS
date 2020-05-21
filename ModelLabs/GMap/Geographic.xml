@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NetworkModel>
+	<BatteryStorages>
+		<BatteryStorage>
+			<MaxPower>300</MaxPower>
+			<MinCapacity>20</MinCapacity>
+			<X>413321.68355993</X>
+			<Y>5009020.27018182</Y>
+		</BatteryStorage>
+		<BatteryStorage>
+			<MaxPower>500</MaxPower>
+			<MinCapacity>30</MinCapacity>
+			 <X>406884.872804481</X>
+			 <Y>5009357.24759746</Y>
+		</BatteryStorage>
+		<BatteryStorage>
+			<MaxPower>250</MaxPower>
+			<MinCapacity>20</MinCapacity>
+			 <X>411643.46923753963</X>
+			 <Y>5020018.3360121045</Y>
+		</BatteryStorage>
+		<BatteryStorage>
+			<MaxPower>400</MaxPower>
+			<MinCapacity>10</MinCapacity>
+			<X>414825.46321875858</X>
+			<Y>5006154.1329433313</Y>
+		</BatteryStorage>
+	</BatteryStorages>
+</NetworkModel>

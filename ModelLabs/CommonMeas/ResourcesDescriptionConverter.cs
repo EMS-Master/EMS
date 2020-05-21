@@ -44,9 +44,9 @@ namespace CommonMeas
                     io = new Analog(globalId);
                     break;
 
-                case DMSType.BATTERY_STORAGE:
-                    io = new BatteryStorage(globalId);
-                    break;
+                //case DMSType.BATTERY_STORAGE:
+                //    io = new BatteryStorage(globalId);
+                //    break;
 
                 case DMSType.DISCRETE:
                     io = new Discrete(globalId);

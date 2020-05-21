@@ -253,17 +253,17 @@ namespace UI.ViewModel
                     return false;
                 }
 
-                foreach (var resDesc in retList)
-                {
-                    if (NmsModelMap.ContainsKey(resDesc.Id))
-                    {
-                        NmsModelMap[resDesc.Id] = ResourcesDescriptionConverter.ConvertTo<BatteryStorage>(resDesc);
-                    }
-                    else
-                    {
-                        NmsModelMap.Add(resDesc.Id, ResourcesDescriptionConverter.ConvertTo<BatteryStorage>(resDesc));
-                    }
-                }
+                //foreach (var resDesc in retList)
+                //{
+                //    if (NmsModelMap.ContainsKey(resDesc.Id))
+                //    {
+                //        NmsModelMap[resDesc.Id] = ResourcesDescriptionConverter.ConvertTo<BatteryStorage>(resDesc);
+                //    }
+                //    else
+                //    {
+                //        NmsModelMap.Add(resDesc.Id, ResourcesDescriptionConverter.ConvertTo<BatteryStorage>(resDesc));
+                //    }
+                //}
 
                 // clear retList
                 retList.Clear();

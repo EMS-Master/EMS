@@ -134,9 +134,9 @@ namespace FTN.Services.NetworkModelService
 				case DMSType.SUBSTATION:
 					io = new Substation(globalId);
 					break;
-				case DMSType.BATTERY_STORAGE:
-					io = new BatteryStorage(globalId);
-					break;
+				//case DMSType.BATTERY_STORAGE:
+				//	io = new BatteryStorage(globalId);
+				//	break;
                 case DMSType.GENERATOR:
                     io = new Generator(globalId);
                     break;

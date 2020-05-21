@@ -20,6 +20,14 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
         {
         }
 
+        //public Generator(long globalId, float minQ, float maxQ, GeneratorType generatorType)
+        //{
+        //    this.MinQ = minQ;
+        //    this.MaxQ = maxQ;
+        //    this.GeneratorType = generatorType;
+        //    this.GlobalId = globalId;
+        //}
+
         public override bool Equals(object obj)
         {
             if (base.Equals(obj))
