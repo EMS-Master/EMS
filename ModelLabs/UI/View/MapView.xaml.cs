@@ -34,6 +34,7 @@ namespace UI.View
     public partial class MapView : UserControl
     {
         public List<BatteryStorage> BatteryStorageList = new List<BatteryStorage>();
+        public List<Generator> GeneratorList = new List<Generator>();
         public static int counter = 0;
 
         public double StartX;
@@ -42,6 +43,7 @@ namespace UI.View
         public double EndY;
 
         GMapOverlay NodesOverlay = new GMapOverlay("markersGreen");
+        GMapOverlay NodesOverlay2 = new GMapOverlay("markersBlue");
 
         public MapView()
         {
@@ -52,7 +54,7 @@ namespace UI.View
             try
             {
                 XmlDocument doc = new XmlDocument();
-                doc.Load("C:/WSGit/EMS/ModelLabs/GMap/Geographic.xml");
+                doc.Load("C:/Users/ASUS/Desktop/New folder (2)/EMS/ModelLabs/GMap/Geographic.xml");
                 
                 XmlNodeList BatteryStorageNode = doc.GetElementsByTagName("BatteryStorage");
                 foreach (XmlNode item in BatteryStorageNode)
@@ -67,6 +69,22 @@ namespace UI.View
 
                     BatteryStorageList.Add(bs);
                 }
+                XmlNodeList GeneratorNode = doc.GetElementsByTagName("Generator");
+                foreach (XmlNode item in GeneratorNode)
+                {
+
+                    float maxPower = float.Parse(item["MaxQ"].InnerText);
+                    float minPower = float.Parse(item["MinQ"].InnerText);
+                    GeneratorType generatorType;
+                    Enum.TryParse(item["GeneratorType"].InnerText, out generatorType);
+                    float x = float.Parse(item["X"].InnerText);
+                    float y = float.Parse(item["Y"].InnerText);
+
+                    Generator g = new Generator(0, minPower, maxPower, generatorType, x, y);
+
+                    GeneratorList.Add(g);
+                }
+
             }
             catch
             {
@@ -94,7 +112,7 @@ namespace UI.View
             foreach (var item in BatteryStorageList)
             {
                 ToLatLon(item.X, item.Y, 34, out double lat, out double lon);
-                GMapMarker gm = new GMarkerGoogle(new PointLatLng(lat, lon), GMarkerGoogleType.blue_small)
+                GMapMarker gm = new GMarkerGoogle(new PointLatLng(lat, lon), GMarkerGoogleType.green)
                 {
                     ToolTipText = item.ToString(),
                     ToolTipMode = MarkerTooltipMode.OnMouseOver
@@ -104,6 +122,20 @@ namespace UI.View
 
             NodesOverlay.IsVisibile = false;
             mapa.Overlays.Add(NodesOverlay);
+
+            foreach (var item in GeneratorList)
+            {
+                ToLatLon(item.X, item.Y, 34, out double lat, out double lon);
+                GMapMarker gm = new GMarkerGoogle(new PointLatLng(lat, lon), GMarkerGoogleType.blue_small)
+                {
+                    ToolTipText = item.ToString(),
+                    ToolTipMode = MarkerTooltipMode.OnMouseOver
+                };
+                NodesOverlay2.Markers.Add(gm);
+            }
+
+            NodesOverlay2.IsVisibile = false;
+            mapa.Overlays.Add(NodesOverlay2);
 
 
         }
@@ -161,6 +193,20 @@ namespace UI.View
         private void CheckBox1_Unchecked(object sender, RoutedEventArgs e)
         {
             NodesOverlay.IsVisibile = false;
+            mapa.Refresh();
+
+
+        }
+        private void CheckBox2_Checked(object sender, RoutedEventArgs e)
+        {
+            NodesOverlay2.IsVisibile = true;
+            mapa.Refresh();
+
+        }
+
+        private void CheckBox2_Unchecked(object sender, RoutedEventArgs e)
+        {
+            NodesOverlay2.IsVisibile = false;
             mapa.Refresh();
 
 

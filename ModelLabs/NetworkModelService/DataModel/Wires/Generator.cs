@@ -11,22 +11,29 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
         private float minQ;
         private float maxQ;
         private GeneratorType generatorType;
+        private float x;
+        private float y;
 
         public float MinQ { get => minQ; set => minQ = value; }
         public float MaxQ { get => maxQ; set => maxQ = value; }
         public GeneratorType GeneratorType { get => generatorType; set => generatorType = value; }
+        public float X { get => x; set => x = value; }
+        public float Y { get => y; set => y = value; }
 
         public Generator(long globalId) : base(globalId)
         {
         }
 
-        //public Generator(long globalId, float minQ, float maxQ, GeneratorType generatorType)
-        //{
-        //    this.MinQ = minQ;
-        //    this.MaxQ = maxQ;
-        //    this.GeneratorType = generatorType;
-        //    this.GlobalId = globalId;
-        //}
+        public Generator(long globalId, float minQ, float maxQ, GeneratorType generatorType, float x, float y) : base(globalId)
+        {
+            this.MinQ = minQ;
+            this.MaxQ = maxQ;
+            this.GeneratorType = generatorType;
+            this.GlobalId = globalId;
+            this.X = x;
+            this.Y = y;
+        }
+
 
         public override bool Equals(object obj)
         {
