@@ -144,7 +144,7 @@ namespace ScadaCommandingService
                         listOfAnalog.Add(new AnalogLocation()
                         {
                             Analog = analog,
-                            StartAddress = START_ADDRESS_GENERATOR + iBateryStorage++ * 2,
+                            StartAddress = START_ADDRESS_GENERATOR + iGen++ * 2,
                             Length = 2,
                             LengthInBytes = 4
                         });

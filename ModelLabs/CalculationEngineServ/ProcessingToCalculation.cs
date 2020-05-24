@@ -19,12 +19,12 @@ namespace CalculationEngineServ
 
         public static CalculationEngine CalculationEngine { get => ce; set => ce = value; }
 
-        public bool OptimisationAlgorithm(List<MeasurementUnit> measEnergyConsumers, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
+        public bool OptimisationAlgorithm(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators)
         {
             bool retVal = false;
             try
             {
-                retVal = CalculationEngine.Optimize(measEnergyConsumers, measGenerators, windSpeed, sunlight);
+                retVal = CalculationEngine.Optimize(measBatteryStorage, measGenerators);
             }
             catch (Exception ex)
             {

@@ -76,9 +76,9 @@ namespace CalculationEngineContracts
         /// <param name="windSpeed">speed of wind</param>
         /// <param name="sunlight">sunlight percent</param>
         /// <returns>returns true if optimization was successful</returns>
-        public bool OptimisationAlgorithm(List<MeasurementUnit> measEnergyConsumers, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
+        public bool OptimisationAlgorithm(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators)
         {
-            return proxy.OptimisationAlgorithm(measEnergyConsumers, measGenerators, windSpeed, sunlight);
+            return proxy.OptimisationAlgorithm(measBatteryStorage, measGenerators);
         }
     }
 }

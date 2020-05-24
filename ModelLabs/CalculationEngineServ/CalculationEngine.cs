@@ -18,10 +18,9 @@ namespace CalculationEngineServ
             throw new NotImplementedException();
         }
 
-        public bool Optimize(List<MeasurementUnit> measEnergyConsumers, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
+        public bool Optimize(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators)
         {
             bool result = false;
-            Console.WriteLine("wind speed: {0}, sun light: {1}.", windSpeed, sunlight);
             foreach(var m in measGenerators)
             {
                 Console.WriteLine("masx value: " + m.MaxValue);

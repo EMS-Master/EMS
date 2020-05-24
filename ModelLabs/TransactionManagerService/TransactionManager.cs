@@ -23,19 +23,11 @@ namespace TransactionManagerService
             deltaToApply = delta;
             noRespone = 0;
             toRespond = 1;
-            // delta object for caclculation engine - contains EMSFuels and SynchronousMachines
             Delta ceDelta = new Delta();
 
             updateResult = new UpdateResult();
 
             List<long> idToRemove = new List<long>(10);
-
-            #region oldDeclarations
-
-            int analogProperty = 0;
-            int ceProperty = 0;
-
-            #endregion oldDeclarations
 
             Delta analogsDelta = delta.SeparateDeltaForEMSType(DMSType.ANALOG);
             Delta batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.BATTERY_STORAGE);
@@ -45,74 +37,6 @@ namespace TransactionManagerService
             Delta geograficalRegionDelta = delta.SeparateDeltaForEMSType(DMSType.GEOGRAFICAL_REGION);
 
             ceDelta = generatorDelta + batteryStorageDelta;
-
-            #region oldcode
-
-            //foreach (ResourceDescription rd_item in delta.InsertOperations)
-            //{
-            //    foreach (Property pr_item in rd_item.Properties)
-            //    {
-            //        if (ModelCodeHelper.GetTypeFromModelCode(pr_item.Id).Equals(EMSType.ANALOG))
-            //        {
-            //            analogProperty++;
-            //        }
-            //        else if (ModelCodeHelper.GetTypeFromModelCode(pr_item.Id).Equals(EMSType.EMSFUEL) || ModelCodeHelper.GetTypeFromModelCode(pr_item.Id).Equals(EMSType.SYNCHRONOUSMACHINE))
-            //        {
-            //            ceProperty++;
-            //        }
-            //    }
-
-            //    if (analogProperty == 0)
-            //    {
-            //        idToRemove.Add(rd_item.Id);
-            //    }
-            //    if (ceProperty != 0)
-            //    {
-            //        ceDelta.InsertOperations.Add(rd_item);
-            //    }
-
-            //    analogProperty = 0;
-            //    ceProperty = 0;
-            //}
-
-            //if (idToRemove.Count != 0 && (delta.InsertOperations.Count - idToRemove.Count > 0))
-            //{
-            //    if (ceDelta.InsertOperations.Count != 0)
-            //    {
-            //        toRespond = 4;
-            //        TransactionCEProxy.Instance.Prepare(ceDelta);
-            //    }
-            //    else
-            //    {
-            //        toRespond = 3;
-            //    }
-
-            //    updateResult = TransactionNMSProxy.Instance.Prepare(delta);
-
-            //    foreach (long id in idToRemove)
-            //    {
-            //        delta.RemoveResourceDescription(id, DeltaOpType.Insert);
-            //    }
-
-            //    TransactionCRProxy.Instance.Prepare(delta);
-            //    TransactionCMDProxy.Instance.Prepare(delta);
-            //}
-            //else
-            //{
-            //    if (ceDelta.InsertOperations.Count != 0)
-            //    {
-            //        toRespond = 2;
-            //        TransactionCEProxy.Instance.Prepare(ceDelta);
-            //    }
-            //    else
-            //    {
-            //        toRespond = 1;
-            //    }
-
-            //    updateResult = TransactionNMSProxy.Instance.Prepare(delta);
-            //}
-
-            #endregion oldcode
 
             if (analogsDelta.InsertOperations.Count != 0 || analogsDelta.UpdateOperations.Count != 0)
             {

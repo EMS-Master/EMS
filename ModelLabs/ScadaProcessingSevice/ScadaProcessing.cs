@@ -45,30 +45,19 @@ namespace ScadaProcessingSevice
             Console.WriteLine("Function executed: {0}", function);
 
             int arrayLength = value[1];
-            int windByteLength = 4;
-            int sunByteLength = 4;
-            byte[] windData = new byte[windByteLength];
-            byte[] sunData = new byte[sunByteLength];
-            byte[] data = new byte[arrayLength - windByteLength - sunByteLength];
+            byte[] data = new byte[arrayLength];
 
             Console.WriteLine("Byte count: {0}", arrayLength);
 
-            Array.Copy(value, 2, data, 0, arrayLength - windByteLength - sunByteLength);
-            Array.Copy(value, 2 + arrayLength - windByteLength - sunByteLength, windData, 0, windByteLength);
-            Array.Copy(value, 2 + arrayLength - sunByteLength, sunData, 0, sunByteLength);
+            Array.Copy(value, 2, data, 0, arrayLength);
 
-            List<MeasurementUnit> enConsumMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
-            List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
-
-            float windSpeed = GetWindSpeed(windData, windByteLength);
-            float sunlight = GetSunlight(sunData, sunByteLength);
-            Console.WriteLine(value[0]);
-            Console.WriteLine(value[1]);
+            List<MeasurementUnit> batteryStorageMeasUnits = new List<MeasurementUnit>();
+            List<MeasurementUnit> generatorMeasUnits = new List<MeasurementUnit>();
 
             bool isSuccess = false;
             try
             {
-                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(enConsumMeasUnits, generatorMeasUnits, windSpeed, sunlight);
+                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageMeasUnits, generatorMeasUnits);
             }
             catch (Exception ex)
             {
@@ -84,73 +73,14 @@ namespace ScadaProcessingSevice
 
             return isSuccess;
         }
-
-
-        private float GetWindSpeed(byte[] windData, int byteLength)
-        {
-            float[] values = ModbusHelper.GetValueFromByteArray<float>(windData, byteLength);
-            return values[0];
-        }
-
-        private float GetSunlight(byte[] sunData, int byteLength)
-        {
-            float[] values = ModbusHelper.GetValueFromByteArray<float>(sunData, byteLength);
-            return values[0];
-        }
-
-        private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
-        {
-            List<MeasurementUnit> retList = new List<MeasurementUnit>();
-            foreach (AnalogLocation analogLoc in analogList)
-            {
-                float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, startAddress + analogLoc.StartAddress * 2); // 2 jer su registri od 2 byte-a
-                float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
-                Console.WriteLine("----------------------------");
-                Console.WriteLine("Values: ");
-                for (int i = 0; i < values.Length; i++)
-                {
-                    Console.WriteLine("[{0}] {1}\n", i, values[i]);
-
-                }
-                Console.WriteLine("EguValue: {0}", eguVal);
-                Console.WriteLine("----------------------------");
-                if (type.Equals(ModelCode.GENERATOR))
-                {
-                    //al
-                }
-                
-
-                if (analogLoc.Analog.Mrid.Equals("Analog_sm_2"))
-                {
-                    using (var txtWriter = new StreamWriter("PointsReport.txt", true))
-                    {
-                        txtWriter.WriteLine(" [" + DateTime.Now + "] " + " The value for " + analogLoc.Analog.Mrid + " before the conversion was: " + values[0] + ", and after:" + eguVal);
-                        txtWriter.Dispose();
-                    }
-                }
-
-                MeasurementUnit measUnit = new MeasurementUnit();
-                measUnit.Gid = analogLoc.Analog.PowerSystemResource;
-                measUnit.MinValue = analogLoc.Analog.MinValue;
-                measUnit.MaxValue = analogLoc.Analog.MaxValue;
-                measUnit.CurrentValue = eguVal;
-                measUnit.TimeStamp = DateTime.Now;
-                retList.Add(measUnit);
-
-                previousGeneratorAnalogs[analogLoc.Analog.GlobalId] = eguVal;
-            }
-
-            return retList;
-        }
-
-
-
-
+        
 
         public bool InitiateIntegrityUpdate()
         {
-            List<ModelCode> properties = new List<ModelCode>(10);
+            List<ModelCode> properties = new List<ModelCode>(10); //analog has 10 properties
+            List<ModelCode> propertiesDiscrete = new List<ModelCode>(10);
             ModelCode modelCode = ModelCode.ANALOG;
+            ModelCode modelCodeDiscrete = ModelCode.DISCRETE;
             
             int resourcesLeft = 0;
             int numberOfResources = 2;
@@ -219,11 +149,11 @@ namespace ScadaProcessingSevice
                 return false;
             }
 
-           var message = string.Format("Integrity update: Number of {0} values: {1}", modelCode.ToString(), retList.Count.ToString());
+            var message = string.Format("Integrity update: Number of {0} values: {1}", modelCode.ToString(), retList.Count.ToString());
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             Console.WriteLine("Integrity update: Number of {0} values: {1}", modelCode.ToString(), retList.Count.ToString());
 
-            Console.WriteLine("BatteryStorafge:");
+            Console.WriteLine("BatteryStorage:");
             foreach(AnalogLocation al in batteryStorageAnalogs)
             {
                 Console.WriteLine(al.Analog.Mrid + " " + al.Analog.NormalValue);

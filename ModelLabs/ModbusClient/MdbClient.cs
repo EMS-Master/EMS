@@ -104,7 +104,6 @@ namespace ModbusClient
         public void WriteSingleCoil(ushort startingAddress, bool value)
         {
             ushort shortValue = value == true ? (ushort)0xFF00 : (ushort)0x0000;
-
             SendForWrite(startingAddress, shortValue, FunctionCode.WriteSingleCoil);
         }
 

@@ -98,20 +98,20 @@ namespace TransactionManagerService
             Console.WriteLine("\n\n{0}", message);
         }
 
-        //public void ScadaCRPrepare(ref Delta analogDelta)
-        //{
-        //    TransactionCRProxy.Instance.Prepare(ref analogDelta);
-        //}
+        public void ScadaCRPrepare(ref Delta analogDelta)
+        {
+            TransactionScadaPRProxy.Instance.Prepare(ref analogDelta);
+        }
 
         //public void ScadaCMDPrepare(Delta analogDelta)
         //{
         //    TransactionCMDProxy.Instance.Prepare(ref analogDelta);
         //}
 
-        //public void NMSPrepare(Delta delta)
-        //{
-        //    TransactionNMSProxy.Instance.Prepare(delta);
-        //}
+        public void NMSPrepare(Delta delta)
+        {
+            TransactionNMSProxy.Instance.Prepare(ref delta);
+        }
 
     }
 }
