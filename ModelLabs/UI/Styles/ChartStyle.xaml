@@ -1,0 +1,561 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+					xmlns:chartingprimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+					xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+					xmlns:sys="clr-namespace:System;assembly=mscorlib"
+					xmlns:converters="clr-namespace:UI.Converters"
+					xmlns:selector="clr-namespace:UI.Selector"
+					xmlns:root ="clr-namespace:UI"
+					xmlns:view ="clr-namespace:UI.View"
+                    xmlns:local="clr-namespace:UI.Styles">
+
+	<SolidColorBrush x:Key="AppBackground" Color="#FF6E6E6E"/>
+	<SolidColorBrush x:Key="DarkBrush" Color="#FF2D2D30"/>
+	<SolidColorBrush x:Key="LigthBrush" Color="#FF6E6E6E"/>
+	<SolidColorBrush x:Key="AxisLineBrush" Color="White"/>
+	<sys:Int32 x:Key="SmallFontSize">24</sys:Int32>
+	<converters:TestConverter x:Key="TestConv"/>
+	<converters:GidToIdObjectConverter x:Key="GidToIdObjectConverter"/>
+	<converters:GidToMridConverter x:Key="GidToMridConverter"/>
+
+	<DataTemplate x:Key="SyncMachineTemplate">
+		<Grid Margin="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<GroupBox Header="Name" Foreground="White" Grid.Column="0" Grid.Row="0" Margin="3">
+				<TextBlock Text="{Binding Name}" Foreground="White"/>
+			</GroupBox>
+			<GroupBox Header="Fuel" Foreground="White" Grid.Column="0" Grid.Row="1" Margin="3">
+				<TextBlock Foreground="White">
+					<TextBlock.Text>
+						<MultiBinding Converter="{StaticResource GidToMridConverter}">
+							<Binding Path="Fuel"></Binding>
+							<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
+			</GroupBox>
+			<GroupBox Header="Max Power" Foreground="White" Grid.Column="1" Grid.Row="0" Margin="3">
+				<TextBlock Text="{Binding MaxQ, StringFormat={}{0}kW}" Foreground="White"/>
+			</GroupBox>
+			<GroupBox Header="Min Power" Foreground="White" Grid.Column="1" Grid.Row="1" Margin="3">
+				<TextBlock Text="{Binding MinQ, StringFormat={}{0}kW}" Foreground="White"/>
+			</GroupBox>
+		</Grid>
+	</DataTemplate>
+
+	<DataTemplate x:Key="EnConsumerTemplate">
+		<Grid Margin="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<GroupBox Header="Name" Grid.Column="0" Grid.Row="0" Foreground="White" Margin="3">
+				<TextBlock Text="{Binding Name}" Foreground="White"/>
+			</GroupBox>
+		</Grid>
+	</DataTemplate>
+
+	<!--<selector:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"
+									  EnConsumerTemplate="{StaticResource EnConsumerTemplate}"
+									  SyncMachineTemplate="{StaticResource SyncMachineTemplate}">
+	</selector:ToolTipTemplateSelector>-->
+
+	<ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">
+		<Grid  Background="{StaticResource DarkBrush}">
+			<Border BorderThickness="1" BorderBrush="White">
+				<Border.Effect>
+					<DropShadowEffect Color="Black" ShadowDepth="2" />
+				</Border.Effect>
+				<ContentControl ContentTemplateSelector="{StaticResource ToolTipTemplateSelector}">
+					<ContentControl.Content>
+						<MultiBinding Converter="{StaticResource GidToIdObjectConverter}">
+							<Binding Path="Key"></Binding>
+							<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+						</MultiBinding>
+					</ContentControl.Content>
+				</ContentControl>
+			</Border>
+		</Grid>
+	</ControlTemplate>
+
+	<!-- LegendStyle-->
+	<Style x:Key="LegendStyle" TargetType="datavis:Legend">
+		<Setter Property="Margin" Value="10,0,10,0" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="SnapsToDevicePixels" Value="True"/>
+	</Style>
+
+	<!-- LegendTitleStyle-->
+	<Style x:Key="LegendTitleStyle" TargetType="datavis:Title">
+		<Setter Property="FontSize" Value="12" />
+		<!--<Setter Property="Foreground" Value="{DynamicResource LabelBrush}"/>-->
+		<Setter Property="FontWeight" Value="Normal"/>
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="Margin" Value="0,0,6,0"/>
+	</Style>
+
+	<!--  charting:Title  -->
+	<Style TargetType="datavis:Title">
+		<Setter Property="HorizontalContentAlignment" Value="Left" />
+		<Setter Property="Margin" Value="10,0,0,0"/>
+		<Setter Property="VerticalContentAlignment" Value="Top" />
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="datavis:Title">
+					<Grid Background="{TemplateBinding Background}">
+						<ContentPresenter Content="{TemplateBinding Content}" 
+										  ContentTemplate="{TemplateBinding ContentTemplate}" 
+										  Cursor="{TemplateBinding Cursor}" 
+										  Margin="{TemplateBinding Padding}" 
+										  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+										  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--  charting:RangeAxis  -->
+	<Style TargetType="charting:RangeAxis">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="TitleStyle">
+			<Setter.Value>
+				<Style TargetType="datavis:Title">
+					<Setter Property="FontSize" Value="{StaticResource SmallFontSize}" />
+					<Setter Property="Margin" Value="0,0,0,4"/>
+					<Setter Property="Opacity" Value="0.7"/>
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="MajorTickMarkStyle">
+			<Setter.Value>
+				<Style TargetType="Line">
+					<Setter Property="Stroke" Value="{StaticResource AxisLineBrush}" />
+					<Setter Property="X2" Value="4" />
+					<Setter Property="Y2" Value="4" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="MinorTickMarkStyle">
+			<Setter.Value>
+				<Style TargetType="Line">
+					<Setter Property="Stroke" Value="{StaticResource AxisLineBrush}" />
+					<Setter Property="X2" Value="2" />
+					<Setter Property="Y2" Value="2" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="charting:RangeAxis">
+					<Grid x:Name="AxisGrid" Background="{TemplateBinding Background}">
+						<datavis:Title x:Name="AxisTitle" Style="{TemplateBinding TitleStyle}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!-- HorizontalLineStyle -->
+	<Style x:Key="HorizontalLineStyle" TargetType="Line">
+		<Setter Property="Width" Value="20" />
+		<Setter Property="Margin" Value="0,0,3,0" />
+		<Setter Property="StrokeThickness" Value="3" />
+		<Setter Property="X1" Value="0" />
+		<Setter Property="Y1" Value="0" />
+		<Setter Property="X2" Value="15" />
+		<Setter Property="Y2" Value="0" />
+		<Setter Property="Stretch" Value="Fill" />
+	</Style>
+
+	<!-- HorizontalLegendStyle-->
+	<Style x:Key="HorizontalLegendStyle" TargetType="datavis:Legend">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type datavis:Legend}">
+					<ItemsPresenter x:Name="Items" />
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="ItemsPanel">
+			<Setter.Value>
+				<ItemsPanelTemplate>
+					<WrapPanel Orientation="Horizontal" />
+					<!--<WrapPanel Orientation="Horizontal" Grid.IsSharedSizeScope="True" />-->
+				</ItemsPanelTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!-- ChartAreaStyle-->
+	<Style x:Key="ChartAreaStyle" TargetType="Panel">
+		<Setter Property="Margin" Value="4"/>
+		<Setter Property="MinWidth" Value="50" />
+		<Setter Property="MinHeight" Value="30" />
+	</Style>
+
+	<!-- PlotAreaStyle-->
+	<Style x:Key="PlotAreaStyle" TargetType="Grid">
+	</Style>
+
+	<!-- charting:DashboardChartStyle -->
+	<Style x:Key="DashboardChartStyle" TargetType="charting:Chart">
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Padding" Value="10" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
+		<Setter Property="LegendStyle">
+			<Setter.Value>
+				<Style TargetType="datavis:Legend" BasedOn="{StaticResource HorizontalLegendStyle}">
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="ChartAreaStyle">
+			<Setter.Value>
+				<Style TargetType="Panel" BasedOn="{StaticResource ChartAreaStyle}">
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="PlotAreaStyle">
+			<Setter.Value>
+				<Style TargetType="Grid" BasedOn="{StaticResource PlotAreaStyle}">
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="charting:Chart">
+					<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+							BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto" />
+								<ColumnDefinition/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition/>
+							</Grid.RowDefinitions>
+
+							<!--<TextBlock Text="{TemplateBinding Title}" Style="{StaticResource TitleStyle}"/>-->
+							<TextBlock Text="{TemplateBinding Title}" Margin="20,0,0,0"/>
+							<datavis:Legend x:Name="Legend" Grid.Column="1" Canvas.ZIndex="1" VerticalAlignment="Top" 
+											MaxWidth="{Binding ActualWidth, ElementName=ChartArea}" HorizontalAlignment="Right"
+											
+											Header="{TemplateBinding LegendTitle}" Style="{TemplateBinding LegendStyle}" Margin="20,6,0,0"/>
+							<chartingprimitives:EdgePanel x:Name="ChartArea" Grid.Row="1" Grid.ColumnSpan="2" Style="{TemplateBinding ChartAreaStyle}">
+								<Grid x:Name="PlotArea" Canvas.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}"/>
+							</chartingprimitives:EdgePanel>
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<ControlTemplate x:Key="GeneratorChartTemplate" TargetType="charting:Chart">
+		<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+							BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<!--<TextBlock Text="{TemplateBinding Title}" Style="{StaticResource TitleStyle}"/>-->
+				<TextBlock Text="{TemplateBinding Title}" Margin="20,0,0,5">
+					<TextBlock.ToolTip>
+						<ToolTip Background="Transparent" Template="{StaticResource ToolTipTemplate}"/>
+					</TextBlock.ToolTip>
+				</TextBlock>
+				<Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="LightGray" Margin="20,0,0,5" BorderThickness="0">
+					<StackPanel Orientation="Horizontal" Margin="1">
+						<TextBlock Text="{TemplateBinding Tag}" Foreground="LightGray"  VerticalAlignment="Center" />
+						<TextBlock Text="kW" Foreground="LightGray" VerticalAlignment="Center" />
+						<!--<Button Command="{Binding DataContext.GoToCommand,RelativeSource={RelativeSource AncestorType={x:Type view:DashboardView}}}"
+											CommandParameter="{Binding DataContext.Key,RelativeSource={RelativeSource AncestorType={x:Type charting:Chart}}}"
+                                            Margin="3,0,0,0"
+                                            Style="{StaticResource ButtonIcon}"
+											Content="{StaticResource historyIcon}"
+                                            ToolTip="Show history">
+						</Button>-->
+					</StackPanel>
+				</Border>
+
+				<chartingprimitives:EdgePanel x:Name="ChartArea" Grid.Row="1" Grid.ColumnSpan="2" Style="{TemplateBinding ChartAreaStyle}">
+					<Grid x:Name="PlotArea" Canvas.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}"/>
+				</chartingprimitives:EdgePanel>
+			</Grid>
+		</Border>
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="EmConsumerChartTemplate" TargetType="charting:Chart">
+		<Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+							BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<!--<TextBlock Text="{TemplateBinding Title}" Style="{StaticResource TitleStyle}"/>-->
+				<TextBlock Text="{TemplateBinding Title}" Margin="20,0,0,5">
+					<TextBlock.ToolTip>
+						<ToolTip Background="Transparent" Template="{StaticResource ToolTipTemplate}"/>
+					</TextBlock.ToolTip>
+				</TextBlock>
+				<Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="LightGray" Margin="20,0,0,5" BorderThickness="0">
+					<StackPanel Orientation="Horizontal" Margin="1">
+						<TextBlock Text="{TemplateBinding Tag}" Foreground="LightGray"  VerticalAlignment="Center" />
+						<TextBlock Text="kW" Foreground="LightGray" VerticalAlignment="Center" />
+					</StackPanel>
+				</Border>
+
+				<chartingprimitives:EdgePanel x:Name="ChartArea" Grid.Row="1" Grid.ColumnSpan="2" Style="{TemplateBinding ChartAreaStyle}">
+					<Grid x:Name="PlotArea" Canvas.ZIndex="-1" Style="{TemplateBinding PlotAreaStyle}"/>
+				</chartingprimitives:EdgePanel>
+			</Grid>
+		</Border>
+	</ControlTemplate>
+
+	<Style x:Key="RealTimeDashboardStyle" TargetType="charting:Chart">
+		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="Padding" Value="10" />
+		<Setter Property="SnapsToDevicePixels" Value="True" />
+		<Setter Property="ChartAreaStyle">
+			<Setter.Value>
+				<Style TargetType="Panel" BasedOn="{StaticResource ChartAreaStyle}">
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="PlotAreaStyle">
+			<Setter.Value>
+				<Style TargetType="Grid" BasedOn="{StaticResource PlotAreaStyle}">
+				</Style>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+	<!--  charting:LineSeries  -->
+	<Style x:Key="LineSeriesStyle" TargetType="charting:LineSeries">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="PolylineStyle">
+			<Setter.Value>
+				<Style TargetType="Polyline">
+					<Setter Property="StrokeThickness" Value="2" />
+					<Setter Property="StrokeMiterLimit" Value="1" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="charting:LineSeries">
+					<Canvas x:Name="PlotArea">
+						<Polyline Points="{TemplateBinding Points}" 
+								  Fill="{TemplateBinding BorderBrush}" 
+								  Stroke="{TemplateBinding Background}" 
+								  Style="{TemplateBinding PolylineStyle}" />
+					</Canvas>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--  charting:DisplayAxis  -->
+	<Style x:Key="DisplayAxisStyle" TargetType="charting:DisplayAxis">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="TitleStyle">
+			<Setter.Value>
+				<Style TargetType="datavis:Title">
+					<Setter Property="FontStyle" Value="Normal" />
+					<Setter Property="Margin" Value="0,4,0,8"/>
+					<Setter Property="Opacity" Value="0.7"/>
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="MajorTickMarkStyle">
+			<Setter.Value>
+				<Style TargetType="Line">
+					<Setter Property="Stroke" Value="{StaticResource AxisLineBrush}" />
+					<Setter Property="X2" Value="4" />
+					<Setter Property="Y2" Value="4" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="charting:DisplayAxis">
+					<Grid x:Name="AxisGrid" Background="{TemplateBinding Background}">
+						<datavis:Title x:Name="AxisTitle" Style="{TemplateBinding TitleStyle}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--  charting:RangeAxis  -->
+	<Style x:Key="RangeAxisStyle" TargetType="charting:RangeAxis">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="TitleStyle">
+			<Setter.Value>
+				<Style TargetType="datavis:Title">
+					<Setter Property="FontStyle" Value="Normal" />
+					<Setter Property="Margin" Value="0,4,0,8"/>
+					<Setter Property="Opacity" Value="0.7"/>
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="MajorTickMarkStyle">
+			<Setter.Value>
+				<Style TargetType="Line">
+					<Setter Property="Stroke" Value="{StaticResource AxisLineBrush}" />
+					<Setter Property="X2" Value="4" />
+					<Setter Property="Y2" Value="4" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="MinorTickMarkStyle">
+			<Setter.Value>
+				<Style TargetType="Line">
+					<Setter Property="Stroke" Value="{StaticResource AxisLineBrush}" />
+					<Setter Property="X2" Value="2" />
+					<Setter Property="Y2" Value="2" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="charting:RangeAxis">
+					<Grid x:Name="AxisGrid" Background="{TemplateBinding Background}">
+						<datavis:Title x:Name="AxisTitle" Style="{TemplateBinding TitleStyle}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!--  charting:AxisLabel  -->
+	<Style x:Key="AxisLabelStyle" TargetType="charting:AxisLabel">
+		<Setter Property="IsTabStop" Value="False" />
+		<Setter Property="StringFormat" Value="{}{0}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="charting:AxisLabel">
+					<TextBlock Text="{TemplateBinding FormattedContent}" Foreground="{StaticResource AxisLabelBrush}" FontSize="10"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="charting:LinearAxis" BasedOn="{StaticResource RangeAxisStyle}">
+	</Style>
+	<Style TargetType="charting:DateTimeAxis" BasedOn="{StaticResource RangeAxisStyle}">
+	</Style>
+	<Style TargetType="charting:CategoryAxis" BasedOn="{StaticResource DisplayAxisStyle}">
+	</Style>
+
+	<ControlTemplate x:Key="LineDataPointTemplate" TargetType="charting:LineDataPoint">
+		<Grid x:Name="Root" Background="Transparent">
+			<ToolTipService.ToolTip>
+				<Grid Margin="-5" Background="{TemplateBinding Background}">
+					<StackPanel Margin="5">
+						<ContentControl Content="{TemplateBinding IndependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Time : {0}"/>
+						<ContentControl Content="{TemplateBinding DependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Power : {0:0.##} kW"/>
+					</StackPanel>
+				</Grid>
+			</ToolTipService.ToolTip>
+			<ToolTipService.BetweenShowDelay>0</ToolTipService.BetweenShowDelay>
+			<Ellipse Name="Marker" Fill="{TemplateBinding BorderBrush}" Width="6" Height="6" 
+					 Opacity="1"
+					 VerticalAlignment="Center" HorizontalAlignment="Center">
+			</Ellipse>
+		</Grid>
+
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="LineDataPointCO2Template" TargetType="charting:LineDataPoint">
+		<Grid x:Name="Root" Background="Transparent">
+			<ToolTipService.ToolTip>
+				<Grid Margin="-5" Background="{TemplateBinding Background}">
+					<StackPanel Margin="5">
+						<ContentControl Content="{TemplateBinding IndependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Time : {0}"/>
+						<ContentControl Content="{TemplateBinding DependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Mass : {0:0.####} t"/>
+					</StackPanel>
+				</Grid>
+			</ToolTipService.ToolTip>
+			<ToolTipService.BetweenShowDelay>0</ToolTipService.BetweenShowDelay>
+			<Ellipse Name="Marker" Fill="{TemplateBinding BorderBrush}" Width="6" Height="6" 
+					 Opacity="1"
+					 VerticalAlignment="Center" HorizontalAlignment="Center">
+			</Ellipse>
+		</Grid>
+
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="LineDataPointPowerTemplate" TargetType="charting:LineDataPoint">
+		<Grid x:Name="Root" Background="Transparent">
+			<ToolTipService.ToolTip>
+				<Grid Margin="-5" Background="{TemplateBinding Background}">
+					<StackPanel Margin="5">
+						<ContentControl Content="{TemplateBinding IndependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Time : {0}"/>
+						<ContentControl Content="{TemplateBinding DependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Power : {0:0.##} kW"/>
+					</StackPanel>
+				</Grid>
+			</ToolTipService.ToolTip>
+			<ToolTipService.BetweenShowDelay>0</ToolTipService.BetweenShowDelay>
+			<Ellipse Name="Marker" Fill="Transparent" Width="6" Height="6" 
+					 Opacity="1"
+					 VerticalAlignment="Center" HorizontalAlignment="Center">
+			</Ellipse>
+		</Grid>
+
+	</ControlTemplate>
+
+	<ControlTemplate x:Key="LineNoDataPointTemplate" TargetType="charting:LineDataPoint">
+		<Grid x:Name="Root" Background="Transparent">
+
+		</Grid>
+	</ControlTemplate>
+
+</ResourceDictionary>
