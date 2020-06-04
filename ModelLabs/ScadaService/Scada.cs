@@ -15,7 +15,7 @@ namespace ScadaService
     {
 
         private MdbClient mdbClient;
-        private ushort numberOfHoldingRegisters = 104;
+        private ushort numberOfHoldingRegisters = 42;
 
         public Scada()
         {

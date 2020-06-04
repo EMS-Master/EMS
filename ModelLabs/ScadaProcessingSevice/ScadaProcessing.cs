@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,14 +17,15 @@ using TransactionContract;
 
 namespace ScadaProcessingSevice
 {
-    public class ScadaProcessing : IScadaProcessingContract, ITransactionContract
+	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+	public class ScadaProcessing : IScadaProcessingContract, ITransactionContract
     {
        
         private ModelResourcesDesc modelResourcesDesc;
         private NetworkModelGDAProxy gdaQueryProxy = null;
         private static List<AnalogLocation> batteryStorageAnalogs;
         private static List<AnalogLocation> generatorAnalogs;
-        private readonly int START_ADDRESS_GENERATOR = 50;
+        private readonly int START_ADDRESS_GENERATOR = 20;
         private ConvertorHelper convertorHelper;
         private static Dictionary<long, float> previousGeneratorAnalogs;
 
@@ -50,11 +52,12 @@ namespace ScadaProcessingSevice
             Console.WriteLine("Byte count: {0}", arrayLength);
 
             Array.Copy(value, 2, data, 0, arrayLength);
+			
+			List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
+			List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
 
-            List<MeasurementUnit> batteryStorageMeasUnits = new List<MeasurementUnit>();
-            List<MeasurementUnit> generatorMeasUnits = new List<MeasurementUnit>();
 
-            bool isSuccess = false;
+			bool isSuccess = false;
             try
             {
                 isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageMeasUnits, generatorMeasUnits);
@@ -181,5 +184,28 @@ namespace ScadaProcessingSevice
         {
             throw new NotImplementedException();
         }
-    }
+
+		private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
+		{
+			List<MeasurementUnit> retList = new List<MeasurementUnit>();
+			foreach (AnalogLocation analogLoc in analogList)
+			{
+				float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, startAddress + analogLoc.StartAddress * 2); // 2 jer su registri od 2 byte-a
+				float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
+				
+				MeasurementUnit measUnit = new MeasurementUnit();
+				measUnit.Gid = analogLoc.Analog.PowerSystemResource;
+				measUnit.MinValue = analogLoc.Analog.MinValue;
+				measUnit.MaxValue = analogLoc.Analog.MaxValue;
+				measUnit.CurrentValue = eguVal;
+				measUnit.TimeStamp = DateTime.Now;
+				retList.Add(measUnit);
+				
+				previousGeneratorAnalogs[analogLoc.Analog.GlobalId] = eguVal;
+			}
+
+			return retList;
+		}
+
+	}
 }
