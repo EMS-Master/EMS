@@ -5,7 +5,7 @@
 					xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
 					xmlns:sys="clr-namespace:System;assembly=mscorlib"
 					xmlns:converters="clr-namespace:UI.Converters"
-					xmlns:selector="clr-namespace:UI.Selector"
+                    xmlns:selector="clr-namespace:UI.Selector"
 					xmlns:root ="clr-namespace:UI"
 					xmlns:view ="clr-namespace:UI.View"
                     xmlns:local="clr-namespace:UI.Styles">
@@ -67,10 +67,10 @@
 		</Grid>
 	</DataTemplate>
 
-	<!--<selector:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"
-									  EnConsumerTemplate="{StaticResource EnConsumerTemplate}"
-									  SyncMachineTemplate="{StaticResource SyncMachineTemplate}">
-	</selector:ToolTipTemplateSelector>-->
+	<selector:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"
+									  GeneratorTemplate="{StaticResource GeneratorTemplate}"
+									  BatteryStorageTemplate="{StaticResource BatteryStorageTemplate}">
+	</selector:ToolTipTemplateSelector>
 
 	<ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">
 		<Grid  Background="{StaticResource DarkBrush}">

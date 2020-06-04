@@ -4,15 +4,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:UI.View"
-	xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-	xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-	xmlns:converters="clr-namespace:UI.Converters"
-	xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
-	xmlns:uiModel ="clr-namespace:UI.Model;assembly=UI"
-	xmlns:sys="clr-namespace:System;assembly=mscorlib"
-	xmlns:root ="clr-namespace:UI"
-	mc:Ignorable="d"
-	d:DesignHeight="900" d:DesignWidth="500">
+	  xmlns:toolkit="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+	  xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+	  xmlns:converters="clr-namespace:UI.Converters"
+	  xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
+	  xmlns:uiModel ="clr-namespace:UI.Model;assembly=UI"
+	  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	  xmlns:root ="clr-namespace:UI"
+	  mc:Ignorable="d"
+	  d:DesignHeight="900" d:DesignWidth="500">
 
 	<UserControl.Resources>
 		<converters:TestConverter x:Key="TestConvetrer"/>
@@ -29,7 +29,7 @@
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 
-		<DataTemplate x:Key="GensVisibilityCheckbox">
+		<DataTemplate x:Key="GensAndBSVisibilityCheckbox">
 			<CheckBox Foreground="White" Margin="1,0,0,2" >
 
 				<CheckBox.Content>
@@ -58,7 +58,7 @@
 			</CheckBox>
 		</DataTemplate>
 
-		<!--<DataTemplate x:Key="GraphGeneratorTemplate">
+		<DataTemplate x:Key="GraphGeneratorTemplate">
 			<Grid>
 				<chartingToolkit:Chart Style="{StaticResource DashboardChartStyle}" Width="500" Height="300">
 
@@ -99,7 +99,187 @@
 					</chartingToolkit:LineSeries>
 				</chartingToolkit:Chart>
 			</Grid>
-		</DataTemplate>-->
+		</DataTemplate>
 
 	</UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid ScrollViewer.CanContentScroll="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <GroupBox Margin="10" FontSize="14" Header="Period"  Foreground="White">
+                    <ComboBox Margin="10" ItemsSource="{Binding Source={StaticResource dataFromPeriodEnum}}" SelectedValue="{Binding SelectedPeriod}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource PeriodEnumToStringConverter}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangePeriodCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Margin="10" FontSize="14" Header="Start Time"  Foreground="White">
+                    <toolkit:DateTimePicker  Margin="10" Value="{Binding StartTime, Mode=TwoWay}" 
+                                    Width="300">
+                    </toolkit:DateTimePicker>
+                </GroupBox>
+
+                <GroupBox Grid.Row="2" Margin="10" FontSize="14" Header="End Time"  Foreground="White">
+                    <toolkit:DateTimePicker Margin="10" Value="{Binding EndTime, Mode=TwoWay}"
+                                        Width="300">
+                    </toolkit:DateTimePicker>
+                </GroupBox>
+
+                <CheckBox Grid.Row="3" Grid.Column="0" Content="All Generators" Margin="10" Foreground="White" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:InvokeCommandAction Command="{Binding DataContext.AllGeneratorsCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+											   />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="Unchecked">
+                            <i:InvokeCommandAction Command="{Binding DataContext.AllGeneratorsUncheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+											   />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </CheckBox>
+
+                <GroupBox Grid.Row="4" Grid.Column="0" Margin="10" FontSize="14" Header="Generators" Foreground="White">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                            <ItemsControl ItemsSource="{Binding GeneratorsFromNms}"
+										  ItemTemplate="{StaticResource GensAndBSVisibilityCheckbox}"/>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                <CheckBox Grid.Row="5" Grid.Column="0" Content="All Battery Storages" Margin="10" Foreground="White" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <i:InvokeCommandAction Command="{Binding DataContext.AllBatteryStoragesCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+											   />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="Unchecked">
+                            <i:InvokeCommandAction Command="{Binding DataContext.AllBatteryStoragesUncheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+											   />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </CheckBox>
+
+                <GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Battery Storages" Foreground="White">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                            <ItemsControl ItemsSource="{Binding BatteryStoragesFromNms}"
+										  ItemTemplate="{StaticResource GensAndBSVisibilityCheckbox}"/>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                <Button Grid.Row="7" Grid.Column="0" Content="View Data" Margin="10" 
+					Command="{Binding ShowDataCommand}"></Button>
+
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Expander Grid.Row="0" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="White" Margin="10">
+                    <ItemsControl ItemsSource="{Binding GeneratorsContainer}" 
+								  ItemTemplate="{StaticResource GraphGeneratorTemplate}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Expander>
+
+                <Expander Grid.Row="1" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="White">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                            <CheckBox Content="All Generators" Margin="10" Foreground="White" IsChecked="True">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.TotalProductionGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.TotalProductionGraphUnCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+                            <CheckBox Content="Selected Generators" Margin="10" Foreground="White">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.ProductionForSelectedCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.ProductionForSelectedUnCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+
+                            <CheckBox Content="All Battery Storages" Margin="10" Foreground="White" IsChecked="True">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.TotaLoadGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.TotalLoadGraphUnCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+                            <CheckBox Content="Selected BS" Margin="10" Foreground="White">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.LoadForSelectedCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction Command="{Binding DataContext.LoadForSelectedUnCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </CheckBox>
+                        </StackPanel>
+
+                        <!--GRAPH-->
+
+                    </Grid>
+                </Expander>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

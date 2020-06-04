@@ -42,6 +42,9 @@
 				<DataTemplate DataType="{x:Type vm:MapViewModel}">
 					<view:MapView></view:MapView>
 				</DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
+                    <view:HistoryView></view:HistoryView>                    
+                </DataTemplate>
 			</dock:DockingManager.Resources>
 			<dock:DockingManager.Theme>
 				<dock:AeroTheme/>

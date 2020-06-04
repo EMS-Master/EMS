@@ -17,6 +17,9 @@ namespace UI.ViewModel
     {
         public DockManagerViewModel DockManagerViewModel { get; private set; }
         public Dictionary<long, IdentifiedObject> NmsModelMap { get; set; }
+        public HistoryViewModel HistoryViewModel { get => historyViewModel; set => historyViewModel = value; }
+
+        private HistoryViewModel historyViewModel;
 
 
         public MainWindowViewModel()
@@ -25,9 +28,13 @@ namespace UI.ViewModel
 
             var documents = new List<ViewModelBase>();
 
+            HistoryViewModel = new HistoryViewModel() { Title = "History" };
+
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
             documents.Add(new MapViewModel(new View.MapView()) { Title = "Map" });
+            documents.Add(HistoryViewModel);
+
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);
         }

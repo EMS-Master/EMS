@@ -179,10 +179,13 @@
     <Compile Include="Converters\PropertyValueConverter.cs" />
     <Compile Include="Converters\StringCompareConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
+    <Compile Include="Model\GraphSample.cs" />
     <Compile Include="Model\PeriodValues.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="Selector\ToolTipTemplateSelector.cs" />
     <Compile Include="TestGDA.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
+    <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\ImporterViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MapViewModel.cs" />
