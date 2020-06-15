@@ -15,12 +15,7 @@ namespace FTN.Services.AlarmsEventsService
             get { return connectionString; }
         }
 
-        //private Config()
-        //{
-        //    //connectionString = ConfigurationManager.ConnectionStrings["alarmsEventsconnectionString"].ConnectionString;
-        //    //connectionString = ConfigurationManager.ConnectionStrings["historyDbConnectionString"].ConnectionString;
-        //    connectionString = ConfigurationManager.ConnectionStrings["SqlServerHistoryDB"].ConnectionString;
-        //}
+        
 
         private static Config instance = null;
 

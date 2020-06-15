@@ -9,14 +9,11 @@ namespace CommonMeas
     public enum AlarmType : int
     {
         NONE = 0,
-        RAW_MIN = 1,
-        RAW_MAX = 2,
-        EGU_MIN = 3,
-        EGU_MAX = 4,
-        OPTIMIZED_MIN = 5,
-        OPTIMIZED_MAX = 6,
-        FLATLINE = 7,
-        NORMAL = 8
+        HIGH = 1,
+        LOW = 2,
+        DOM = 3,
+        ABNORMAL = 4,
+        NORMAL = 5
     }
 
     public enum SeverityLevel : int
@@ -42,18 +39,7 @@ namespace CommonMeas
         UPDATE = 1
     }
 
-    public enum PersistentState : int
-    {
-        Persistent = 0,
-        Nonpersistent = 1,
-    }
-
-    public enum InhibitState : int
-    {
-        Inhibit = 0,
-        Noninhibit = 1
-    }
-
+   
     public enum State : int
     {
         Active = 0,

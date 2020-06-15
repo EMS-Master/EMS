@@ -14,28 +14,21 @@ namespace FTN.Services.AlarmsEventsService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AlarmsEvents : IAlarmsEventsContract, IAesIntegirtyContract
     {
-        // entity for storing PublisherService instance
-        private PublisherService publisher;
+       
 
         // list for storing AlarmHelper entities
         private List<AlarmHelper> alarms;
 
-        // Temp list for alarms from database
-        private List<AlarmHelper> alarmsFromDatabase;
 
-        private readonly int DEADBAND_VALUE = 20;
+       
         public object alarmLock = new object();
         private Dictionary<long, bool> isNormalCreated = new Dictionary<long, bool>(10);
 
         public AlarmsEvents()
         {
-            this.Publisher = new PublisherService();
+            
             this.Alarms = new List<AlarmHelper>();
-            //alarmsFromDatabase = SelectAlarmsFromDatabase();
-            if (alarmsFromDatabase != null)
-            {
-                //this.Alarms = alarmsFromDatabase;
-            }
+            
         }
 
         public List<AlarmHelper> Alarms
@@ -50,19 +43,7 @@ namespace FTN.Services.AlarmsEventsService
                 this.alarms = value;
             }
         }
-        public PublisherService Publisher
-        {
-            get
-            {
-                return this.publisher;
-            }
-
-            set
-            {
-                this.publisher = value;
-            }
-        }
-
+       
         //add new alarm
         public void AddAlarm(AlarmHelper alarm)
         {
@@ -91,8 +72,7 @@ namespace FTN.Services.AlarmsEventsService
                     {
                         item.Severity = alarm.Severity;
                         item.Value = alarm.Value;
-                        item.Message = alarm.Message;
-                        item.TimeStamp = alarm.TimeStamp;
+                        item.Message = alarm.Message;                   
                         publishingStatus = PublishingStatus.UPDATE;
                         updated = true;
                         break;
@@ -120,23 +100,20 @@ namespace FTN.Services.AlarmsEventsService
                 {
                     RemoveFromAlarms(alarm.Gid);
                     this.Alarms.Add(alarm);
-                    //if (InsertAlarmIntoDb(alarm))
-                    //{
-                    //    Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
-                    //}
+                    
                     this.isNormalCreated[alarm.Gid] = false;
                 }
                 if (alarm.Type.Equals(AlarmType.NORMAL) && normalAlarm)
                 {
                     RemoveFromAlarms(alarm.Gid);
                     this.Alarms.Add(alarm);
-                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+
                     this.isNormalCreated[alarm.Gid] = true;
 
                 }
                 else if (!alarm.Type.Equals(AlarmType.NORMAL))
                 {
-                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+         
                 }
 
                 //Console.WriteLine("AlarmsEvents: AddAlarm method");
@@ -191,14 +168,11 @@ namespace FTN.Services.AlarmsEventsService
                 {
                     alarm.CurrentState = string.Format("{0} | {1}", state, alarm.AckState);
                     alarm.PubStatus = PublishingStatus.UPDATE;
-                    //if (UpdateAlarmStatusIntoDb(alarm))
-                    //{
-                    //    Console.WriteLine("Alarm status with GID:{0} updated into database.", alarm.Gid);
-                    //}
+                    
 
                     try
                     {
-                        this.Publisher.PublishStateChange(alarm);
+   
                         string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
                         CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                     }

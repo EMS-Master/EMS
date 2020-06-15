@@ -52,7 +52,7 @@ namespace FTN.Services.AlarmsEventsService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(AlarmsEvents)));
-            hosts.Add(new ServiceHost(typeof(PublisherService)));
+          
         }
 
         private void StartHosts()
