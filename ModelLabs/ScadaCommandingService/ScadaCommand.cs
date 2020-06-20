@@ -173,7 +173,7 @@ namespace ScadaCommandingService
             //foreach(var item in measurements)
             //{
                 float rawValue = convertorHelper.ConvertFromEGUToRawValue(measurements[0].CurrentValue, 1, 0);
-                modbusClient.WriteSingleRegister((ushort)2, rawValue);
+                modbusClient.WriteSingleRegister((ushort)12, rawValue);
             //}
 
             Console.WriteLine("SendDataToSimulator executed...\n");

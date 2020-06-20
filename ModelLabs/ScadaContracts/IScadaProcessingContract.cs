@@ -10,7 +10,7 @@ namespace ScadaContracts
     [ServiceContract]
     public interface IScadaProcessingContract
     {
-        [OperationContract]
-        bool SendValues(byte[] value);
+		[OperationContract]
+		bool SendValues(byte[] value, bool[] valueDiscrete);
     }
 }

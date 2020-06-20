@@ -25,12 +25,16 @@ namespace ScadaProcessingSevice
         private NetworkModelGDAProxy gdaQueryProxy = null;
         private static List<AnalogLocation> batteryStorageAnalogs;
         private static List<AnalogLocation> generatorAnalogs;
-        private readonly int START_ADDRESS_GENERATOR = 20;
+		private static List<DiscreteLocation> batteryStorageDiscretes;
+		private static List<DiscreteLocation> generatorDscretes;
+		private readonly int START_ADDRESS_GENERATOR = 20;
+		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 10;
         private ConvertorHelper convertorHelper;
         private static Dictionary<long, float> previousGeneratorAnalogs;
+		private static Dictionary<long, float> previousGeneratorDiscretes;
 
 
-        public ScadaProcessing()
+		public ScadaProcessing()
         {
             convertorHelper = new ConvertorHelper();
 
@@ -38,24 +42,32 @@ namespace ScadaProcessingSevice
             batteryStorageAnalogs = new List<AnalogLocation>();
             modelResourcesDesc = new ModelResourcesDesc();
             previousGeneratorAnalogs = new Dictionary<long, float>(10);
+			previousGeneratorDiscretes = new Dictionary<long, float>(10);
+			batteryStorageDiscretes = new List<DiscreteLocation>();
+			generatorDscretes = new List<DiscreteLocation>();
         }
         //data collected from simulator should be passed through 
         //scadaProcessing,from scada, to calculationEngine for optimization
-        public bool SendValues(byte[] value)
+        public bool SendValues(byte[] value, bool[] valuesDiscrete)
         {
             string function = Enum.GetName(typeof(FunctionCode), value[0]);
             Console.WriteLine("Function executed: {0}", function);
 
-            int arrayLength = value[1];
+			
+			int arrayLength = value[1];
             byte[] data = new byte[arrayLength];
 
             Console.WriteLine("Byte count: {0}", arrayLength);
 
-            Array.Copy(value, 2, data, 0, arrayLength);
+			Array.Copy(value, 2, data, 0, arrayLength);
 			
 			List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
             
             List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
+
+			List<MeasurementUnit> batteryStorageMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(batteryStorageDiscretes, valuesDiscrete, 0, ModelCode.BATTERY_STORAGE);
+
+			List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
 
 
 			bool isSuccess = false;
@@ -90,11 +102,13 @@ namespace ScadaProcessingSevice
             int numberOfResources = 2;
 
             List<ResourceDescription> retList = new List<ResourceDescription>(5);
+            List<ResourceDescription> retListDiscrete = new List<ResourceDescription>(5);
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
+				propertiesDiscrete = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
 
-                var iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
+				var iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
@@ -104,7 +118,18 @@ namespace ScadaProcessingSevice
                     resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
                 }
                 NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
-            }
+
+				var iteratorIdDiscrete = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
+				resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+
+				while (resourcesLeft > 0)
+				{
+					List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorIdDiscrete);
+					retListDiscrete.AddRange(rds);
+					resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+				}
+				NetworkModelGDAProxy.Instance.IteratorClose(iteratorIdDiscrete);
+			}
             catch (Exception e)
             {
 
@@ -143,8 +168,34 @@ namespace ScadaProcessingSevice
                     }
                 }
 
-              
-            }
+				foreach (ResourceDescription rd in retListDiscrete)
+				{
+					Discrete discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
+
+					if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.BATTERY_STORAGE)
+					{
+						batteryStorageDiscretes.Add(new DiscreteLocation()
+						{
+							Discrete = discrete,
+							StartAddress = batteryStorageAnalogs.Count,
+							Length = 1,
+							LengthInBytes = 2
+						});
+					}
+					else
+					{
+						generatorDscretes.Add(new DiscreteLocation()
+						{
+							Discrete = discrete,
+							StartAddress = START_ADDRESS_GENERATOR_DISCRETE + generatorDscretes.Count,
+							Length = 1,
+							LengthInBytes = 2
+						});
+					}
+				}
+
+
+			}
             catch (Exception e)
             {
                 var message1 = string.Format("Conversion to Analog object failed.\n\t{0}", e.Message);
@@ -161,12 +212,16 @@ namespace ScadaProcessingSevice
             foreach(AnalogLocation al in batteryStorageAnalogs)
             {
                 Console.WriteLine(al.Analog.Mrid + " " + al.Analog.NormalValue);
+				var dic = batteryStorageDiscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
+				Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
             }
             Console.WriteLine("Generator:");
             foreach (AnalogLocation al in generatorAnalogs)
             {
                 Console.WriteLine(al.Analog.Mrid + " " + al.Analog.NormalValue);
-            }
+				var dic = generatorDscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
+				Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
+			}
 
             return true;
         }
@@ -208,6 +263,35 @@ namespace ScadaProcessingSevice
 
 			return retList;
 		}
+
+
+		private List<MeasurementUnit> ParseDataToMeasurementUnitdiscrete(List<DiscreteLocation> discreteList, bool[] value, int startAddress, ModelCode type)
+		{
+			int counter = 0;
+			if (type == ModelCode.GENERATOR)
+			{
+				counter = 10;
+			}
+			
+			List<MeasurementUnit> retList = new List<MeasurementUnit>();
+			foreach (DiscreteLocation discreteLoc in discreteList)
+			{
+				
+				MeasurementUnit measUnit = new MeasurementUnit();
+				measUnit.Gid = discreteLoc.Discrete.PowerSystemResource;
+				measUnit.MinValue = discreteLoc.Discrete.MinValue;
+				measUnit.MaxValue = discreteLoc.Discrete.MaxValue;
+				measUnit.CurrentValue = value[counter] ? 1 : 0;
+				measUnit.TimeStamp = DateTime.Now;
+				retList.Add(measUnit);
+
+				previousGeneratorDiscretes[discreteLoc.Discrete.GlobalId] = measUnit.CurrentValue;
+				counter++;
+			}
+
+			return retList;
+		}
+
 
 	}
 }

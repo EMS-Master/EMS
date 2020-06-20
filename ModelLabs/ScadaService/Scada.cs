@@ -15,9 +15,9 @@ namespace ScadaService
     {
 
         private MdbClient mdbClient;
-        private ushort numberOfHoldingRegisters = 42;
-
-        public Scada()
+        private ushort numberOfHoldingRegisters = 42;    //in bytes
+		private ushort numberOfCoils = 20;
+		public Scada()
         {
             ConnectToSimulator();
         }
@@ -82,11 +82,13 @@ namespace ScadaService
             //Console.WriteLine();
 
             var values = mdbClient.ReadHoldingRegisters(0, numberOfHoldingRegisters);
+			var valuesDiscrete = mdbClient.ReadCoils(0, numberOfCoils);
 
             bool isSuccess = false;
             try
             {
-                isSuccess = ScadaProcessingProxy.Instance.SendValues(values);
+                isSuccess = ScadaProcessingProxy.Instance.SendValues(values, valuesDiscrete);
+				
             }
             catch (Exception ex)
             {
