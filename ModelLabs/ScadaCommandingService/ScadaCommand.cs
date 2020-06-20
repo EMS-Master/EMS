@@ -23,6 +23,7 @@ namespace ScadaCommandingService
         private static List<AnalogLocation> listOfAnalog;
 
         private UpdateResult updateResult;
+        private ConvertorHelper convertorHelper;
 
         private ModelResourcesDesc modelResourcesDesc;
 
@@ -32,6 +33,7 @@ namespace ScadaCommandingService
 
         public ScadaCommand()
         {
+            convertorHelper = new ConvertorHelper();
             ConnectToSimulator();
 
             listOfAnalog = new List<AnalogLocation>();
@@ -168,8 +170,14 @@ namespace ScadaCommandingService
 
         public bool SendDataToSimulator(List<MeasurementUnit> measurements)
         {
+            //foreach(var item in measurements)
+            //{
+                float rawValue = convertorHelper.ConvertFromEGUToRawValue(measurements[0].CurrentValue, 1, 0);
+                modbusClient.WriteSingleRegister((ushort)2, rawValue);
+            //}
+
             Console.WriteLine("SendDataToSimulator executed...\n");
-            modbusClient.WriteSingleRegister(4, 15);
+           // modbusClient.WriteSingleRegister(4, 15);
 
             return true;
         }

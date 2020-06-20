@@ -54,7 +54,8 @@ namespace ScadaProcessingSevice
             Array.Copy(value, 2, data, 0, arrayLength);
 			
 			List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
-			List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
+            
+            List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
 
 
 			bool isSuccess = false;
@@ -191,7 +192,8 @@ namespace ScadaProcessingSevice
 			foreach (AnalogLocation analogLoc in analogList)
 			{
 				float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, startAddress + analogLoc.StartAddress * 2); // 2 jer su registri od 2 byte-a
-				float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
+                Console.WriteLine("Broj: {0}", values[0]);
+                float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
 				
 				MeasurementUnit measUnit = new MeasurementUnit();
 				measUnit.Gid = analogLoc.Analog.PowerSystemResource;
