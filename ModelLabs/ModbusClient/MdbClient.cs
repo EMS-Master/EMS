@@ -168,8 +168,8 @@ namespace ModbusClient
             sendData[0] = (byte)functionCode;
             sendData[1] = startAddressBytes[1];
             sendData[2] = startAddressBytes[0];
-            sendData[3] = outValue[1];
-            sendData[4] = outValue[0];
+            sendData[3] = outValue[0];
+            sendData[4] = outValue[1];
 
             byte[] data = new byte[header.Length + sendData.Length + 1];
 
