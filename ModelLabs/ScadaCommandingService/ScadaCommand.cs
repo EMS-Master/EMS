@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using TransactionContract;
 
 namespace ScadaCommandingService
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class ScadaCommand : IScadaCommandingContract, ITransactionContract
     {
         private MdbClient modbusClient;
@@ -28,7 +30,7 @@ namespace ScadaCommandingService
         private ModelResourcesDesc modelResourcesDesc;
 
         private string message = string.Empty;
-        private readonly int START_ADDRESS_GENERATOR = 50;
+        private readonly int START_ADDRESS_GENERATOR = 20;
         private ITransactionCallback transactionCallback;
 
         public ScadaCommand()
@@ -136,7 +138,7 @@ namespace ScadaCommandingService
                         listOfAnalog.Add(new AnalogLocation()
                         {
                             Analog = analog,
-                            StartAddress = iBateryStorage++ * 2,
+                            StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]),
                             Length = 2,
                             LengthInBytes = 4
                         });
@@ -146,7 +148,7 @@ namespace ScadaCommandingService
                         listOfAnalog.Add(new AnalogLocation()
                         {
                             Analog = analog,
-                            StartAddress = START_ADDRESS_GENERATOR + iGen++ * 2,
+                            StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]),
                             Length = 2,
                             LengthInBytes = 4
                         });
@@ -170,17 +172,37 @@ namespace ScadaCommandingService
 
         public bool SendDataToSimulator(List<MeasurementUnit> measurements)
         {
-            //foreach(var item in measurements)
-            //{
-                float rawValue = convertorHelper.ConvertFromEGUToRawValue(measurements[0].CurrentValue, 1, 0);
-                modbusClient.WriteSingleRegister((ushort)12, rawValue);
-            //}
+
+            foreach (var item in listOfAnalog)
+            {
+                var mes = measurements.Find(x => x.Gid == item.Analog.PowerSystemResource);
+                if (mes != null)
+                {
+                    float rawValue = convertorHelper.ConvertFromEGUToRawValue(mes.CurrentValue, 1, 0);
+                    modbusClient.WriteSingleRegister((ushort)((mes.ScadaAddress-1) * 2), rawValue);
+
+                }
+                else
+                {
+                    if (CheckIfGenerator(item.StartAddress))
+                    {
+                        modbusClient.WriteSingleRegister((ushort)((item.StartAddress-1) * 2), (float)0);
+                    }
+                }
+            }
+
+            //modbusClient.WriteSingleRegister((ushort)12, (float)94.8);
 
             Console.WriteLine("SendDataToSimulator executed...\n");
-           // modbusClient.WriteSingleRegister(4, 15);
 
             return true;
         }
-        
+
+        private bool CheckIfGenerator(int number)
+        {
+            return number > 10 ? true : false;
+        }
+
+
     }
 }

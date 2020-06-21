@@ -224,7 +224,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_1"/>
-		<cim:Measurement.scadaAddress>address1</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_1</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_1</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_1</cim:IdentifiedObject.name>
@@ -236,7 +236,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/>
-		<cim:Measurement.scadaAddress>address2</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_2</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_2</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_2</cim:IdentifiedObject.name>
@@ -248,7 +248,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_3"/>
-		<cim:Measurement.scadaAddress>address3</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_3</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_3</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_3</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_3</cim:IdentifiedObject.name>
@@ -260,7 +260,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_4"/>
-		<cim:Measurement.scadaAddress>address4</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_4</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_4</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_4</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_4</cim:IdentifiedObject.name>
@@ -272,7 +272,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_5"/>
-		<cim:Measurement.scadaAddress>address5</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_5</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_5</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_5</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_5</cim:IdentifiedObject.name>
@@ -284,7 +284,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_6"/>
-		<cim:Measurement.scadaAddress>address6</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_6</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_6</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_6</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_6</cim:IdentifiedObject.name>
@@ -296,7 +296,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_7"/>
-		<cim:Measurement.scadaAddress>address7</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_7</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_7</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_7</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_7</cim:IdentifiedObject.name>
@@ -308,7 +308,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_8"/>
-		<cim:Measurement.scadaAddress>address8</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_8</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_8</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_8</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_8</cim:IdentifiedObject.name>
@@ -320,7 +320,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_9"/>
-		<cim:Measurement.scadaAddress>address9</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_9</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_9</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_9</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_9</cim:IdentifiedObject.name>
@@ -332,7 +332,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_10"/>
-		<cim:Measurement.scadaAddress>address10</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_10</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_10</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_10</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_10</cim:IdentifiedObject.name>
@@ -344,7 +344,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_1"/>
-		<cim:Measurement.scadaAddress>address11</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_11</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_11</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_11</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_11</cim:IdentifiedObject.name>
@@ -356,7 +356,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_2"/>
-		<cim:Measurement.scadaAddress>address12</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_12</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_12</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_12</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_12</cim:IdentifiedObject.name>
@@ -368,7 +368,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_3"/>
-		<cim:Measurement.scadaAddress>address13</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_13</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_13</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_13</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_13</cim:IdentifiedObject.name>
@@ -380,7 +380,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_4"/>
-		<cim:Measurement.scadaAddress>address14</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_14</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_14</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_14</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_14</cim:IdentifiedObject.name>
@@ -392,7 +392,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_5"/>
-		<cim:Measurement.scadaAddress>address15</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_15</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_15</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_15</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_15</cim:IdentifiedObject.name>
@@ -404,7 +404,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_6"/>
-		<cim:Measurement.scadaAddress>address16</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_16</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_16</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_16</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_16</cim:IdentifiedObject.name>
@@ -416,7 +416,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_7"/>
-		<cim:Measurement.scadaAddress>address17</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_17</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_17</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_17</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_17</cim:IdentifiedObject.name>
@@ -428,7 +428,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_8"/>
-		<cim:Measurement.scadaAddress>address18</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_18</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_18</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_18</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_18</cim:IdentifiedObject.name>
@@ -440,7 +440,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_9"/>
-		<cim:Measurement.scadaAddress>address19</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_19</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_19</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_19</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_19</cim:IdentifiedObject.name>
@@ -452,7 +452,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_10"/>
-		<cim:Measurement.scadaAddress>address20</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_20</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_20</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_20</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_20</cim:IdentifiedObject.name>
@@ -465,7 +465,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_1"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_1</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_1</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_1</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_1</cim:IdentifiedObject.name>
@@ -477,7 +477,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_2"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_2</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_2</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_2</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_2</cim:IdentifiedObject.name>
@@ -489,7 +489,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_3"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_3</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_3</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_3</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_3</cim:IdentifiedObject.name>
@@ -501,7 +501,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_4"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_4</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_4</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_4</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_4</cim:IdentifiedObject.name>
@@ -513,7 +513,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_5"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_5</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_5</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_5</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_5</cim:IdentifiedObject.name>
@@ -525,7 +525,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_6"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_6</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_6</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_6</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_6</cim:IdentifiedObject.name>
@@ -537,7 +537,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_7"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_7</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_7</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_7</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_7</cim:IdentifiedObject.name>
@@ -549,7 +549,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_8"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_8</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_8</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_8</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_8</cim:IdentifiedObject.name>
@@ -561,7 +561,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_9"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_9</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_9</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_9</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_9</cim:IdentifiedObject.name>
@@ -573,7 +573,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#BatteryStorage_10"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_10</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_10</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_10</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_10</cim:IdentifiedObject.name>
@@ -585,7 +585,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_1"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_11</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_11</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_11</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_11</cim:IdentifiedObject.name>
@@ -597,7 +597,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_2"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_12</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_12</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_12</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_12</cim:IdentifiedObject.name>
@@ -609,7 +609,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_3"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_13</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_13</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_13</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_13</cim:IdentifiedObject.name>
@@ -621,7 +621,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_4"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_14</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_14</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_14</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_14</cim:IdentifiedObject.name>
@@ -633,7 +633,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_5"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_15</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_15</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_15</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_15</cim:IdentifiedObject.name>
@@ -645,7 +645,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_6"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_16</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_16</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_16</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_16</cim:IdentifiedObject.name>
@@ -657,7 +657,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_7"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_17</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_17</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_17</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_17</cim:IdentifiedObject.name>
@@ -669,7 +669,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_8"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_18</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_18</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_18</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_18</cim:IdentifiedObject.name>
@@ -681,7 +681,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_9"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_19</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_19</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_19</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_19</cim:IdentifiedObject.name>
@@ -693,7 +693,7 @@
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_10"/> 
-		<cim:Measurement.scadaAddress> </cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_20</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_20</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_20</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_20</cim:IdentifiedObject.name>

@@ -35,6 +35,7 @@ namespace CommonMeas
         private DateTime timestamp;
 
         private float currentPrice;
+        private int scadaAddress;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MeasurementUnit" /> class
@@ -45,9 +46,9 @@ namespace CommonMeas
             currentValue = 0;
             minValue = 0;
             maxValue = 0;
-            //OptimizationType = OptimizationType.Linear;
             timestamp = DateTime.Now;
             currentPrice = 0;
+            scadaAddress = 0;
         }
 
         //public OptimizationType OptimizationType { get; set; }
@@ -141,6 +142,18 @@ namespace CommonMeas
             set
             {
                 currentPrice = value;
+            }
+        }
+
+        public int ScadaAddress
+        {
+            get
+            {
+                return scadaAddress;
+            }
+            set
+            {
+                scadaAddress = value;
             }
         }
     }

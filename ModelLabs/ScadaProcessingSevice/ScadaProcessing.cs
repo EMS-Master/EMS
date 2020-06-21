@@ -69,11 +69,13 @@ namespace ScadaProcessingSevice
 
 			List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
 
+            List<MeasurementUnit> batteryStorageActive = SelectActive(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
+            List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
 
-			bool isSuccess = false;
+            bool isSuccess = false;
             try
             {
-                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageMeasUnits, generatorMeasUnits);
+                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageActive, generatorsActive);
             }
             catch (Exception ex)
             {
@@ -151,7 +153,7 @@ namespace ScadaProcessingSevice
                         batteryStorageAnalogs.Add(new AnalogLocation()
                         {
                             Analog = analog,
-                            StartAddress = batteryStorageAnalogs.Count * 2,
+                            StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]),
                             Length = 2,
                             LengthInBytes = 4
                         });
@@ -161,7 +163,7 @@ namespace ScadaProcessingSevice
                         generatorAnalogs.Add(new AnalogLocation()
                         {
                             Analog = analog,
-                            StartAddress = START_ADDRESS_GENERATOR + generatorAnalogs.Count * 2,
+                            StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]),
                             Length = 2,
                             LengthInBytes = 4
                         });
@@ -177,7 +179,7 @@ namespace ScadaProcessingSevice
 						batteryStorageDiscretes.Add(new DiscreteLocation()
 						{
 							Discrete = discrete,
-							StartAddress = batteryStorageAnalogs.Count,
+							StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
 							Length = 1,
 							LengthInBytes = 2
 						});
@@ -187,7 +189,7 @@ namespace ScadaProcessingSevice
 						generatorDscretes.Add(new DiscreteLocation()
 						{
 							Discrete = discrete,
-							StartAddress = START_ADDRESS_GENERATOR_DISCRETE + generatorDscretes.Count,
+							StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
 							Length = 1,
 							LengthInBytes = 2
 						});
@@ -246,7 +248,7 @@ namespace ScadaProcessingSevice
 			List<MeasurementUnit> retList = new List<MeasurementUnit>();
 			foreach (AnalogLocation analogLoc in analogList)
 			{
-				float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, startAddress + analogLoc.StartAddress * 2); // 2 jer su registri od 2 byte-a
+				float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
                 Console.WriteLine("Broj: {0}", values[0]);
                 float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
 				
@@ -256,6 +258,7 @@ namespace ScadaProcessingSevice
 				measUnit.MaxValue = analogLoc.Analog.MaxValue;
 				measUnit.CurrentValue = eguVal;
 				measUnit.TimeStamp = DateTime.Now;
+                measUnit.ScadaAddress = analogLoc.StartAddress;
 				retList.Add(measUnit);
 				
 				previousGeneratorAnalogs[analogLoc.Analog.GlobalId] = eguVal;
@@ -267,31 +270,35 @@ namespace ScadaProcessingSevice
 
 		private List<MeasurementUnit> ParseDataToMeasurementUnitdiscrete(List<DiscreteLocation> discreteList, bool[] value, int startAddress, ModelCode type)
 		{
-			int counter = 0;
-			if (type == ModelCode.GENERATOR)
-			{
-				counter = 10;
-			}
-			
 			List<MeasurementUnit> retList = new List<MeasurementUnit>();
 			foreach (DiscreteLocation discreteLoc in discreteList)
 			{
-				
 				MeasurementUnit measUnit = new MeasurementUnit();
 				measUnit.Gid = discreteLoc.Discrete.PowerSystemResource;
 				measUnit.MinValue = discreteLoc.Discrete.MinValue;
 				measUnit.MaxValue = discreteLoc.Discrete.MaxValue;
-				measUnit.CurrentValue = value[counter] ? 1 : 0;
+				measUnit.CurrentValue = value[discreteLoc.StartAddress - 1] ? 1 : 0;
 				measUnit.TimeStamp = DateTime.Now;
+                measUnit.ScadaAddress = discreteLoc.StartAddress;
 				retList.Add(measUnit);
 
 				previousGeneratorDiscretes[discreteLoc.Discrete.GlobalId] = measUnit.CurrentValue;
-				counter++;
 			}
-
 			return retList;
 		}
 
+        private List<MeasurementUnit> SelectActive(List<MeasurementUnit> analogs, List<MeasurementUnit> descretes)
+        {
+           List<MeasurementUnit> returnList = new List<MeasurementUnit>();
 
-	}
+           foreach(var item in analogs)
+           {
+                var des = descretes.Find(x => x.Gid == item.Gid);
+                if (des.CurrentValue == 1)
+                    returnList.Add(item);
+           }
+            return returnList;
+        }
+
+    }
 }

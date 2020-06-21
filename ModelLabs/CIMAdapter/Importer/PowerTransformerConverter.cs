@@ -219,6 +219,20 @@
             if ((cimConductingEquipment != null) && (rd != null))
             {
                 PowerTransformerConverter.PopulateIdentifiedObjectProperties(cimConductingEquipment, rd);
+
+                if (cimConductingEquipment.ScadaAddressHasValue)
+                {
+                    rd.AddProperty(new Property(ModelCode.MEASUREMENT_SCADA_ADDRESS, cimConductingEquipment.ScadaAddress));
+                }
+                if (cimConductingEquipment.DirectionHasValue)
+                {
+                    rd.AddProperty(new Property(ModelCode.MEASUREMENT_DIRECTION, (short)GetDMSDirection(cimConductingEquipment.Direction)));
+                }
+                if (cimConductingEquipment.MeasurementTypeHasValue)
+                {
+                    rd.AddProperty(new Property(ModelCode.MEASUREMENT_TYPE, (short)GetDMSMeasurementType(cimConductingEquipment.MeasurementType)));
+                }
+
                 if (cimConductingEquipment.PowerSystemResourceHasValue)
                 {
                     long gid = importHelper.GetMappedGID(cimConductingEquipment.PowerSystemResource.ID);
