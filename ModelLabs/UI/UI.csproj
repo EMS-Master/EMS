@@ -167,6 +167,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Config.cs" />
+    <Compile Include="Converters\AckStateToBoolConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DMSTypeToStringConverter.cs" />
     <Compile Include="Converters\GidMapToBoolConverter.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Selector\ToolTipTemplateSelector.cs" />
     <Compile Include="TestGDA.cs" />
+    <Compile Include="ViewModel\AlarmSummaryViewModel.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\ImporterViewModel.cs" />
@@ -191,6 +193,9 @@
     <Compile Include="ViewModel\MapViewModel.cs" />
     <Compile Include="ViewModel\NMSViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\AlarmSummaryView.xaml.cs">
+      <DependentUpon>AlarmSummaryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HistoryView.xaml.cs">
       <DependentUpon>HistoryView.xaml</DependentUpon>
     </Compile>
@@ -220,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\WindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AlarmSummaryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

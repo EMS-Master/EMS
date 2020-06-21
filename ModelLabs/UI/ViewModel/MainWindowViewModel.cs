@@ -18,9 +18,10 @@ namespace UI.ViewModel
         public DockManagerViewModel DockManagerViewModel { get; private set; }
         public Dictionary<long, IdentifiedObject> NmsModelMap { get; set; }
         public HistoryViewModel HistoryViewModel { get => historyViewModel; set => historyViewModel = value; }
+        public AlarmSummaryViewModel AlarmSummaryViewModel { get => alarmSummaryViewModel; set => alarmSummaryViewModel = value; }
 
         private HistoryViewModel historyViewModel;
-
+        private AlarmSummaryViewModel alarmSummaryViewModel;
 
         public MainWindowViewModel()
         {
@@ -28,12 +29,17 @@ namespace UI.ViewModel
 
             var documents = new List<ViewModelBase>();
 
+            AlarmSummaryViewModel = new AlarmSummaryViewModel();
+            AlarmSummaryViewModel.Title = "Alarm Summary";
+
             HistoryViewModel = new HistoryViewModel() { Title = "History" };
+
 
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
             documents.Add(new MapViewModel(new View.MapView()) { Title = "Map" });
             documents.Add(HistoryViewModel);
+            documents.Add(AlarmSummaryViewModel);
 
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);

@@ -46,4 +46,6 @@ namespace CommonMeas
         Cleared = 1,
     }
 
+    
+
 }

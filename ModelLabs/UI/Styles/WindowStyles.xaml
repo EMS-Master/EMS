@@ -4,6 +4,7 @@
 					xmlns:view="clr-namespace:UI.View">
 
 	<SolidColorBrush x:Key="BlueMouseOver" Color="#8a1519"/>
+	<SolidColorBrush x:Key="DarkBrush" Color="#FF2D2D30"/>
 
 	<Style TargetType="CheckBox"  x:Key="CheckBoxDarkStyle">
 		<Setter Property="Foreground" Value="White" ></Setter>
@@ -24,8 +25,55 @@
 		<Setter Property="FontSize" Value="17"/>
 		<Setter Property="FontFamily" Value="Verdana"/>
 	</Style>
-	
 
+	<Style x:Key="AlarmDataGridColumnHeaderStyle" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+		<Setter Property="Background" Value="Gray" />
+		<Setter Property="Foreground" Value="White" />
+		<Setter Property="Padding" Value="3,2,4,2" />
+		<Setter Property="BorderThickness" Value="1,0,0,0"/>
+		<Setter Property="BorderBrush" Value="DarkGray"/>
+	</Style>
+
+	<Style x:Key="AlarmSummaryDataGridRowStyle" TargetType="DataGridRow">
+		<Setter Property="Background" Value="Transparent"></Setter>
+		<Setter Property="Foreground" Value="White"></Setter>
+	</Style>
+
+	<Style x:Key="AlarmGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+		<Setter Property="BorderThickness" Value="0" />
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding Severity}" Value="CRITICAL">
+				<Setter Property="Background" Value="Magenta"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="HIGH">
+				<Setter Property="Background" Value="Red"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="MAJOR">
+				<Setter Property="Background" Value="Orange"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="MEDIUM">
+				<Setter Property="Background" Value="Yellow"></Setter>
+				<Setter Property="Foreground" Value="Gray" />
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="LOW">
+				<Setter Property="Background" Value="Green"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="MINOR">
+				<Setter Property="Background" Value="Cyan"></Setter>
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+
+	<Style TargetType="view:AlarmSummaryView" x:Key="AlarmSummaryStyle">
+		<Setter Property="Foreground" Value="White" ></Setter>
+		<Setter Property="Background" Value="{StaticResource DarkBrush}"></Setter>
+		<Setter Property="BorderThickness" Value="0" ></Setter>
+	</Style>
 	<!--<Style TargetType="Button" x:Key="ExpButtonStyle">
 		<Setter Property="Background" Value="Gray"/>
 		<Setter Property="Foreground" Value="White"/>

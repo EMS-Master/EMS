@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="UI.View.AlarmSummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UI.View"
+			 xmlns:root ="clr-namespace:UI"
+			 xmlns:converters ="clr-namespace:UI.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<converters:GidToMridConverter x:Key="GidToMridConverter"/>
+		<converters:AckStateToBoolConverter x:Key="AckStateToBoolConverter"/>
+	</UserControl.Resources>
+	<Grid>
+		<DataGrid x:Name="AlarmSummaryDataGrid"
+				  Margin="5"
+				  ColumnHeaderStyle="{StaticResource AlarmDataGridColumnHeaderStyle}"
+				  
+				  CanUserDeleteRows="False" CanUserAddRows="False" RowStyle="{StaticResource AlarmSummaryDataGridRowStyle}" ClipToBounds="True"
+				  RowHeaderWidth="0" AutoGenerateColumns="False" SelectionUnit="FullRow"
+				  GridLinesVisibility="None">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="MRID" IsReadOnly="True" >
+					<DataGridTextColumn.Binding>
+						<MultiBinding Converter="{StaticResource GidToMridConverter}">
+							<Binding Path="Gid"></Binding>
+							<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+						</MultiBinding>
+					</DataGridTextColumn.Binding>
+				</DataGridTextColumn>
+				<DataGridTextColumn Header="Severity" Binding="{Binding Severity}" CellStyle="{StaticResource AlarmGridCell}" />
+				<DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Type" Binding="{Binding Type}" />
+				<DataGridTextColumn Header="Current State" Binding="{Binding CurrentState}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" IsReadOnly="True"/>
+				<DataGridTemplateColumn Header="Acknowledge" Width="Auto">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" 
+									  IsChecked="{Binding AckState,Converter={StaticResource AckStateToBoolConverter}}"
+									  Command="{Binding DataContext.AcknowledgeCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+									   CommandParameter="{Binding}" >
+							</CheckBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+
+		</DataGrid>
+	</Grid>
+</UserControl>

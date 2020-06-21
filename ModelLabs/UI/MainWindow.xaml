@@ -45,6 +45,9 @@
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <view:HistoryView></view:HistoryView>                    
                 </DataTemplate>
+				<DataTemplate DataType="{x:Type vm:AlarmSummaryViewModel}">
+					<view:AlarmSummaryView Style="{StaticResource AlarmSummaryStyle}" DataContext="{Binding Path = DataContext.AlarmSummaryViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
+				</DataTemplate>
 			</dock:DockingManager.Resources>
 			<dock:DockingManager.Theme>
 				<dock:AeroTheme/>
