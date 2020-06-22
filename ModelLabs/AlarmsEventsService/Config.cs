@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,12 @@ namespace FTN.Services.AlarmsEventsService
         {
             get { return connectionString; }
         }
+        private Config()
+        {
+            //connectionString = ConfigurationManager.ConnectionStrings["mainDbConnectionString"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["SqlServerMainDB"].ConnectionString;
+        }
 
-        
 
         private static Config instance = null;
 
