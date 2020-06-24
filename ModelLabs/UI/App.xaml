@@ -7,7 +7,9 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Styles/WindowStyles.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="Styles/ChartStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>
 </Application>

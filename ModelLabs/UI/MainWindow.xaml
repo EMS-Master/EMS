@@ -33,7 +33,10 @@
 				</DataTemplate>
 			</dock:DockingManager.DocumentHeaderTemplate>
 			<dock:DockingManager.Resources>
-				<DataTemplate DataType="{x:Type vm:ImporterViewModel}">
+                <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+                    <view:DashboardView DataContext="{Binding Path=DataContext.DashboardViewModel,RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:ImporterViewModel}">
 					<view:ImporterView></view:ImporterView>
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type vm:NMSViewModel}">

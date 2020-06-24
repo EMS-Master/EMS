@@ -14,12 +14,6 @@ namespace UI.Converters
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			return value;
-			//Dictionary<long, ObservableCollection<MeasurementUI>> dictionary = value as Dictionary<long, ObservableCollection<MeasurementUI>>;
-			//if(dictionary == null || dictionary.Count == 0)
-			//{
-			//    return null;
-			//}
-			//return dictionary.ToList()[0].Value;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="UI.View.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UI.View"
+             xmlns:root ="clr-namespace:UI"
+             xmlns:converters="clr-namespace:UI.Converters"
+             xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:TestConverter x:Key="TestConverter" />
+        <converters:GidToMridConverter x:Key="GidToMridConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:GidMapToVisibilityConverter x:Key="GidMapToVisibilityConverter" />
+        <converters:GidMapToBoolConverter x:Key="GidMapToBoolConverter" />
+        <converters:LastValueShowConverter x:Key="LastValueShowConverter" />
+
+        <DataTemplate x:Key="VisibilityCheckbox">
+            <CheckBox Foreground="White" Margin="1,0,0,2">
+
+                <CheckBox.Content>
+                    <MultiBinding Converter="{StaticResource GidToMridConverter}">
+                        <Binding Path="Key"></Binding>
+                        <Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+                    </MultiBinding>
+                </CheckBox.Content>
+
+                <CheckBox.IsChecked>
+                    <MultiBinding Converter="{StaticResource GidMapToBoolConverter}" Mode="OneWay">
+                        <Binding Path="DataContext.GidToBoolMap" RelativeSource="{RelativeSource AncestorType=UserControl}"></Binding>
+                        <Binding Path="Key" Mode="OneWay"></Binding>
+                    </MultiBinding>
+                </CheckBox.IsChecked>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding DataContext.VisibilityCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+											   CommandParameter="{Binding Key}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding DataContext.VisibilityUncheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+											   CommandParameter="{Binding Key}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+        </DataTemplate>
+    </UserControl.Resources>
+
+
+    <Grid>
+
+    </Grid>
+</UserControl>

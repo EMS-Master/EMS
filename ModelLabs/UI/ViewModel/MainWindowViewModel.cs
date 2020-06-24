@@ -22,10 +22,14 @@ namespace UI.ViewModel
 
         private HistoryViewModel historyViewModel;
         private AlarmSummaryViewModel alarmSummaryViewModel;
+        private DashboardViewModel dashboardViewModel;
 
         public MainWindowViewModel()
         {
             InitiateIntegrityUpdate();
+
+            DashboardViewModel = new DashboardViewModel();
+            DashboardViewModel.Title = "Dashboard";
 
             var documents = new List<ViewModelBase>();
 
@@ -34,7 +38,7 @@ namespace UI.ViewModel
 
             HistoryViewModel = new HistoryViewModel() { Title = "History" };
 
-
+            documents.Add(DashboardViewModel);
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
             documents.Add(new MapViewModel(new View.MapView()) { Title = "Map" });
@@ -326,6 +330,20 @@ namespace UI.ViewModel
 
                 OnPropertyChanged(nameof(NmsModelMap));
                 return true;
+            }
+        }
+
+        public DashboardViewModel DashboardViewModel
+        {
+            get
+            {
+                return dashboardViewModel;
+            }
+
+            set
+            {
+                dashboardViewModel = value;
+                OnPropertyChanged();
             }
         }
 

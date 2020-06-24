@@ -171,10 +171,12 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DMSTypeToStringConverter.cs" />
     <Compile Include="Converters\GidMapToBoolConverter.cs" />
+    <Compile Include="Converters\GidMapToVisibilityConverter.cs" />
     <Compile Include="Converters\GidToIdObjectConverter.cs" />
     <Compile Include="Converters\GidToMridConverter.cs" />
     <Compile Include="Converters\GlobalIdToEMSTypeStringConverter.cs" />
     <Compile Include="Converters\HexadecimalConverter.cs" />
+    <Compile Include="Converters\LastValueShowConverter.cs" />
     <Compile Include="Converters\ModelCodeToStringConverter.cs" />
     <Compile Include="Converters\PeriodEnumToStringConverter.cs" />
     <Compile Include="Converters\PropertyValueConverter.cs" />
@@ -186,6 +188,7 @@
     <Compile Include="Selector\ToolTipTemplateSelector.cs" />
     <Compile Include="TestGDA.cs" />
     <Compile Include="ViewModel\AlarmSummaryViewModel.cs" />
+    <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\ImporterViewModel.cs" />
@@ -193,6 +196,9 @@
     <Compile Include="ViewModel\MapViewModel.cs" />
     <Compile Include="ViewModel\NMSViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AlarmSummaryView.xaml.cs">
       <DependentUpon>AlarmSummaryView.xaml</DependentUpon>
     </Compile>
@@ -225,6 +231,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\WindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -308,6 +318,10 @@
     <ProjectReference Include="..\ServiceContracts\NetworkModelQueryContract\NetworkModelGDAContract.csproj">
       <Project>{b726fb71-d295-41ee-9644-b2b0b1bc8911}</Project>
       <Name>NetworkModelGDAContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UIContract\UIContract.csproj">
+      <Project>{7e06bcf7-f3cb-48c1-9a42-4e62f29c4531}</Project>
+      <Name>UIContract</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
