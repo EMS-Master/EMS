@@ -46,6 +46,11 @@ namespace CommonMeas
         Cleared = 1,
     }
 
-    
+    public enum PersistentState : int
+    {
+        Persistent = 0,
+        Nonpersistent = 1,
+    }
+
 
 }

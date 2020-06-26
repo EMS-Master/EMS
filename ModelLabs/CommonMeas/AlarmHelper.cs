@@ -29,6 +29,9 @@ namespace CommonMeas
       
         private PublishingStatus pubStatus;
 
+        // type of alarm - persistent or not
+        private PersistentState persistent;
+
         //stores the message
         private string message;
 
@@ -48,9 +51,9 @@ namespace CommonMeas
             this.gid = gid;
             this.value = value;         
             this.message = "";
-            
-           
-           
+            this.persistent = PersistentState.Persistent;
+
+
         }
 
         public long Gid { get { return this.gid; } set { this.gid = value; } }
@@ -58,9 +61,19 @@ namespace CommonMeas
        
         public AckState AckState { get { return ackState; } set { ackState = value; } }
 
-        
 
-      
+
+        public PersistentState Persistent
+        {
+            get
+            {
+                return persistent;
+            }
+            set
+            {
+                persistent = value;
+            }
+        }
 
 
         public SeverityLevel Severity

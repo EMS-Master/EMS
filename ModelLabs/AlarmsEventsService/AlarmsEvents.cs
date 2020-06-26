@@ -11,6 +11,7 @@ using FTN.Services.AlarmsEventsService.PubSub;
 using System.Data.SqlClient;
 using System.Data;
 
+
 namespace FTN.Services.AlarmsEventsService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
@@ -21,16 +22,31 @@ namespace FTN.Services.AlarmsEventsService
         // list for storing AlarmHelper entities
         private List<AlarmHelper> alarms;
 
+        private PublisherService publisher;
 
-       
+
+
         public object alarmLock = new object();
         private Dictionary<long, bool> isNormalCreated = new Dictionary<long, bool>(10);
 
         public AlarmsEvents()
         {
-            
+            this.Publisher = new PublisherService();
             this.Alarms = new List<AlarmHelper>();
-            
+     
+        }
+
+        public PublisherService Publisher
+        {
+            get
+            {
+                return this.publisher;
+            }
+
+            set
+            {
+                this.publisher = value;
+            }
         }
 
         public List<AlarmHelper> Alarms
@@ -109,13 +125,14 @@ namespace FTN.Services.AlarmsEventsService
                 {
                     RemoveFromAlarms(alarm.Gid);
                     this.Alarms.Add(alarm);
-
+                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
                     this.isNormalCreated[alarm.Gid] = true;
 
                 }
                 else if (!alarm.Type.Equals(AlarmType.NORMAL))
                 {
-         
+                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+
                 }
 
                 //Console.WriteLine("AlarmsEvents: AddAlarm method");
@@ -214,7 +231,7 @@ namespace FTN.Services.AlarmsEventsService
 
                     try
                     {
-   
+                        this.Publisher.PublishStateChange(alarm);
                         string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
                         CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                     }

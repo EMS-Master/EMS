@@ -7,6 +7,7 @@ using System.ServiceModel;
 using FTN.Common;
 using FTN.Services.AlarmsEventsService.PubSub;
 
+
 namespace FTN.Services.AlarmsEventsService
 {
     public class AlarmsEventsService : IDisposable
@@ -52,6 +53,7 @@ namespace FTN.Services.AlarmsEventsService
         {
             hosts = new List<ServiceHost>();
             hosts.Add(new ServiceHost(typeof(AlarmsEvents)));
+            hosts.Add(new ServiceHost(typeof(PublisherService)));
           
         }
 
