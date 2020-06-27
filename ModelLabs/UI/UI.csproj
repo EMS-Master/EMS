@@ -184,6 +184,10 @@
     <Compile Include="Converters\TestConverter.cs" />
     <Compile Include="Model\GraphSample.cs" />
     <Compile Include="Model\PeriodValues.cs" />
+    <Compile Include="PubSub\AePubSubCallbackService.cs" />
+    <Compile Include="PubSub\AlarmsEventsSubscribeProxy.cs" />
+    <Compile Include="PubSub\CePubSubCallbackService.cs" />
+    <Compile Include="PubSub\CeSubscribeProxy.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Selector\ToolTipTemplateSelector.cs" />
     <Compile Include="TestGDA.cs" />
@@ -295,6 +299,14 @@
     <Resource Include="Resources\import.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AESPubSbuContract\AESPubSbuContract.csproj">
+      <Project>{019617fe-7b84-49a7-9449-074fbef06817}</Project>
+      <Name>AESPubSbuContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CEPubSubContract\CEPubSubContract.csproj">
+      <Project>{7d9f6cdc-97d6-4e0e-a371-bf9262fe4c8e}</Project>
+      <Name>CEPubSubContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CIMAdapter\CIMAdapter.csproj">
       <Project>{F680D34F-C148-4314-8914-B2DF3E7B17AF}</Project>
       <Name>CIMAdapter</Name>
