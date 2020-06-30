@@ -167,47 +167,47 @@ namespace FTN.Services.AlarmsEventsService
                 }
             }
         }
-        public bool InsertAlarmIntoDb()
-        {
-            bool success = true;
+        //public bool InsertAlarmIntoDb()
+        //{
+        //    bool success = true;
 
-            using (SqlConnection connection = new SqlConnection(Config.Instance.ConnectionString))
-            {
-                try
-                {
-                    connection.Open();
+        //    using (SqlConnection connection = new SqlConnection(Config.Instance.ConnectionString))
+        //    {
+        //        try
+        //        {
+        //            connection.Open();
 
-                    using (SqlCommand cmd = new SqlCommand("INSERT INTO Alarms (GID, AlarmValue, MinValue,MaxValue,AlarmTimeStamp,AckState,AlarmType,AlarmMessage) VALUES (@gid, @alarmValue, @minValue, @maxValue, @timeStamp,@ackState,@alarmType,@message)", connection))
-                    {
-                        cmd.CommandType = CommandType.Text;
+        //            using (SqlCommand cmd = new SqlCommand("INSERT INTO Alarms (GID, AlarmValue, MinValue,MaxValue,AlarmTimeStamp,AckState,AlarmType,AlarmMessage) VALUES (@gid, @alarmValue, @minValue, @maxValue, @timeStamp,@ackState,@alarmType,@message)", connection))
+        //            {
+        //                cmd.CommandType = CommandType.Text;
 
-                        DateTime date1 = new DateTime(2008, 8, 29, 19, 27, 15, 18);
-                        cmd.Parameters.Add("@gid", SqlDbType.BigInt).Value = 1235689;
-                        cmd.Parameters.Add("@alarmValue", SqlDbType.Float).Value = 300;
-                        cmd.Parameters.Add("@minValue", SqlDbType.Float).Value = 150;
-                        cmd.Parameters.Add("@maxValue", SqlDbType.Float).Value = 250;
-                        cmd.Parameters.Add("@timeStamp", SqlDbType.DateTime).Value = date1;
-                        cmd.Parameters.Add("@ackState", SqlDbType.Int).Value = 0;
-                        cmd.Parameters.Add("@alarmType", SqlDbType.Int).Value = 1;
-                        cmd.Parameters.Add("@message", SqlDbType.NText, 200).Value = "dfsdfccda ";
-                        Console.WriteLine("PROSLOOOOOO");
-                        cmd.ExecuteNonQuery();
-                        cmd.Parameters.Clear();
-                    }
+        //                DateTime date1 = new DateTime(2008, 8, 29, 19, 27, 15, 18);
+        //                cmd.Parameters.Add("@gid", SqlDbType.BigInt).Value = 1235689;
+        //                cmd.Parameters.Add("@alarmValue", SqlDbType.Float).Value = 300;
+        //                cmd.Parameters.Add("@minValue", SqlDbType.Float).Value = 150;
+        //                cmd.Parameters.Add("@maxValue", SqlDbType.Float).Value = 250;
+        //                cmd.Parameters.Add("@timeStamp", SqlDbType.DateTime).Value = date1;
+        //                cmd.Parameters.Add("@ackState", SqlDbType.Int).Value = 0;
+        //                cmd.Parameters.Add("@alarmType", SqlDbType.Int).Value = 1;
+        //                cmd.Parameters.Add("@message", SqlDbType.NText, 200).Value = "dfsdfccda ";
+        //                Console.WriteLine("PROSLOOOOOO");
+        //                cmd.ExecuteNonQuery();
+        //                cmd.Parameters.Clear();
+        //            }
 
-                    connection.Close();
-                }
-                catch (Exception e)
-                {
-                    success = false;
-                    string message = string.Format("Failed to insert alarm into database. {0}", e.Message);
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                    Console.WriteLine(message);
-                }
-            }
+        //            connection.Close();
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            success = false;
+        //            string message = string.Format("Failed to insert alarm into database. {0}", e.Message);
+        //            CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+        //            Console.WriteLine(message);
+        //        }
+        //    }
 
-            return success;
-        }
+        //    return success;
+        //}
 
         public List<AlarmHelper> InitiateIntegrityUpdate()
         {

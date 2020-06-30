@@ -24,7 +24,19 @@ namespace CalculationEngineService
 
         private static void Main(string[] args)
         {
+            using (var db = new AlarmContext())
+            {
+                
+                db.Alarms.Add(new Alarm { Gid = 1 , AlarmValue=300, MinValue = 150, MaxValue = 250, AckState = 0, AlarmType = 1, AlarmMessage = "aaa" });
+           
 
+                db.SaveChanges();
+
+                //foreach (var alarm in db.Alarms)
+                //{
+                //    Console.WriteLine(alarm.Gid);
+                //}
+            }
             StartStandard(); 
         }
 
