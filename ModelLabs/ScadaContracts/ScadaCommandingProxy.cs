@@ -57,5 +57,10 @@ namespace ScadaContracts
         {
             return proxy.SendDataToSimulator(measurements);
         }
+
+        public bool CommandDiscreteValues(List<MeasurementUnitDiscrete> measurements)
+        {
+            return proxy.CommandDiscreteValues(measurements);
+        }
     }
 }

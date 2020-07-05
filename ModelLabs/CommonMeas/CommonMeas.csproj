@@ -66,6 +66,7 @@
     <Compile Include="ConvertorHelper.cs" />
     <Compile Include="DiscreteLocation.cs" />
     <Compile Include="MeasurementUnit.cs" />
+    <Compile Include="MeasurementUnitDiscrete.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesDescriptionConverter.cs" />
   </ItemGroup>

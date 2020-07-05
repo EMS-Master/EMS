@@ -17,7 +17,7 @@ namespace CommonMeas
         /// currentValue for MeasurementUnit
         /// </summary>
         private float currentValue;
-
+        
 
         /// <summary>
         /// minValue for MeasurementUnit

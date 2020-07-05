@@ -23,7 +23,7 @@ namespace ScadaCommandingService
     {
         private MdbClient modbusClient;
         private static List<AnalogLocation> listOfAnalog;
-
+        private static List<DiscreteLocation> listOfDiscretes;
         private UpdateResult updateResult;
         private ConvertorHelper convertorHelper;
 
@@ -39,6 +39,7 @@ namespace ScadaCommandingService
             ConnectToSimulator();
 
             listOfAnalog = new List<AnalogLocation>();
+            listOfDiscretes = new List<DiscreteLocation>();
             modelResourcesDesc = new ModelResourcesDesc();
         }
 
@@ -89,15 +90,19 @@ namespace ScadaCommandingService
         public bool InitiateIntegrityUpdate()
         {
             List<ModelCode> properties = new List<ModelCode>(10);
+            List<ModelCode> propertiesDiscrete = new List<ModelCode>(10);
             ModelCode modelCode = ModelCode.ANALOG;
+            ModelCode modelCodeDiscrete = ModelCode.DISCRETE;
             int iteratorId = 0;
             int resourcesLeft = 0;
             int numberOfResources = 2;
 
             List<ResourceDescription> retList = new List<ResourceDescription>(5);
+            List<ResourceDescription> retListDiscrete = new List<ResourceDescription>(5);
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
+                propertiesDiscrete = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
 
                 iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
@@ -109,6 +114,19 @@ namespace ScadaCommandingService
                     resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
                 }
                 NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+
+                var iteratorIdDiscrete = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorIdDiscrete);
+                    retListDiscrete.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorIdDiscrete);
+
             }
             catch (Exception e)
             {
@@ -154,7 +172,35 @@ namespace ScadaCommandingService
                         });
                     }
                 }
-               
+
+
+                foreach (ResourceDescription rd in retListDiscrete)
+                {
+                    Discrete discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
+
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.BATTERY_STORAGE)
+                    {
+                        listOfDiscretes.Add(new DiscreteLocation()
+                        {
+                            Discrete = discrete,
+                            StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
+                            Length = 1,
+                            LengthInBytes = 2
+                        });
+                    }
+                    else
+                    {
+                        listOfDiscretes.Add(new DiscreteLocation()
+                        {
+                            Discrete = discrete,
+                            StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
+                            Length = 1,
+                            LengthInBytes = 2
+                        });
+                    }
+                }
+
+
             }
             catch (Exception e)
             {
@@ -198,6 +244,32 @@ namespace ScadaCommandingService
             return true;
         }
 
+        public bool CommandDiscreteValues(List<MeasurementUnitDiscrete> measurements)
+        {
+            foreach (var item in listOfDiscretes)
+            {
+                var mes = measurements.Find(x => x.Gid == item.Discrete.PowerSystemResource);
+                if (mes != null)
+                {
+                    // float rawValue = convertorHelper.ConvertFromEGUToRawValue(mes.CurrentValue, 1, 0);
+                    modbusClient.WriteSingleCoil((ushort)((mes.ScadaAddress - 1)), mes.CurrentValue);
+
+                }
+                else
+                {
+                   // if (CheckIfGenerator(item.StartAddress))
+                   // {
+                   //     modbusClient.WriteSingleRegister((ushort)((item.StartAddress - 1) * 2), (float)0);
+                   // }
+                }
+            }
+
+            //modbusClient.WriteSingleRegister((ushort)12, (float)94.8);
+
+            Console.WriteLine("SendDataToSimulator executed...\n");
+
+            return true;
+        }
         private bool CheckIfGenerator(int number)
         {
             return number > 10 ? true : false;
