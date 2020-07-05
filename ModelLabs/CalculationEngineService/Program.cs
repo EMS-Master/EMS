@@ -26,9 +26,9 @@ namespace CalculationEngineService
         {
             using (var db = new AlarmContext())
             {
-                
-                db.Alarms.Add(new Alarm { Gid = 1 , AlarmValue=300, MinValue = 150, MaxValue = 250, AckState = 0, AlarmType = 1, AlarmMessage = "aaa" });
-           
+
+                db.Alarms.Add(new Alarm { Gid = 1, AlarmValue = 300, MinValue = 150, MaxValue = 250, AckState = 0, AlarmType = 1, AlarmMessage = "aaa" });
+
 
                 db.SaveChanges();
 

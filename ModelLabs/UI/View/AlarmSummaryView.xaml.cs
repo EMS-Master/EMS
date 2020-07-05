@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculationEngineService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,19 @@ namespace UI.View
         public AlarmSummaryView()
         {
             InitializeComponent();
+
+            using (var db = new AlarmContext())
+            {
+                List<Alarm> al = new List<Alarm>();
+
+                foreach (var alarm in db.Alarms)
+                {
+                    al.Add(alarm);
+                    AlarmSummaryDataGrid.ItemsSource = al;
+                    //Console.WriteLine(alarm.Gid);
+                }
+
+            }
         }
     }
 }

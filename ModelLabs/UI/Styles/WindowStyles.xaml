@@ -36,7 +36,7 @@
 
 	<Style x:Key="AlarmSummaryDataGridRowStyle" TargetType="DataGridRow">
 		<Setter Property="Background" Value="Transparent"></Setter>
-		<Setter Property="Foreground" Value="White"></Setter>
+		<Setter Property="Foreground" Value="Black"></Setter>
 	</Style>
 
 	<Style x:Key="AlarmGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">

@@ -21,19 +21,15 @@
 				  RowHeaderWidth="0" AutoGenerateColumns="False" SelectionUnit="FullRow"
 				  GridLinesVisibility="None">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="MRID" IsReadOnly="True" >
-					<DataGridTextColumn.Binding>
-						<MultiBinding Converter="{StaticResource GidToMridConverter}">
-							<Binding Path="Gid"></Binding>
-							<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
-						</MultiBinding>
-					</DataGridTextColumn.Binding>
-				</DataGridTextColumn>
+				<DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True"/>
+
 				<DataGridTextColumn Header="Severity" Binding="{Binding Severity}" CellStyle="{StaticResource AlarmGridCell}" />
-				<DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True"/>
-				<DataGridTextColumn Header="Type" Binding="{Binding Type}" />
-				<DataGridTextColumn Header="Current State" Binding="{Binding CurrentState}" IsReadOnly="True"/>
-				<DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Value" Binding="{Binding AlarmValue}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Type" Binding="{Binding AlarmType}" />
+				<DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="MaxValue" Binding="{Binding MaxValue}" IsReadOnly="True"/>
+
+				<DataGridTextColumn Header="Message" Binding="{Binding AlarmMessage}" Width="*" IsReadOnly="True"/>
 				<DataGridTemplateColumn Header="Acknowledge" Width="Auto">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
