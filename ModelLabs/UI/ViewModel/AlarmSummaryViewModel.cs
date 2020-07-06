@@ -22,9 +22,6 @@ namespace UI.ViewModel
 
         public object alarmSummaryLock = new object();
 
-        // to do
-        public ICommand AcknowledgeCommand { get { return acknowledgeCommand; } set { acknowledgeCommand = value; } }
-
         public ObservableCollection<AlarmHelper> AlarmSummaryQueue
         {
             get

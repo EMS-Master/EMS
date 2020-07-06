@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using FTN.Common;
+using CalculationEngineService;
+using CommonMeas;
 
 namespace FTN.Services.AlarmsEventsService
 {
@@ -13,7 +15,7 @@ namespace FTN.Services.AlarmsEventsService
       private  static void Main(string[] args)
         {
             try
-            {
+            {                
                 string message = "Starting Alarms Events Service...";
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                 Console.WriteLine("\n{0}\n", message);

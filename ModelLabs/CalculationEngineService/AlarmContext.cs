@@ -9,6 +9,7 @@ namespace CalculationEngineService
 {
     public class AlarmContext : DbContext
     {
+        //public AlarmContext() : base("HistoryDB") { }
         public DbSet<Alarm> Alarms { get; set; }
     }
 }

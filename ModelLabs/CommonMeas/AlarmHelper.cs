@@ -12,24 +12,17 @@ namespace CommonMeas
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // stores gid of the entity
         private long gid;
-
-        //represents alarm severity level-coloring
         private SeverityLevel severity;
-
-        //stores value of the entity
         private float value;
-
         private AckState ackState;
-   
         private AlarmType type;
 
         private string currentState;
-      
+        private DateTime timeStamp;
         private PublishingStatus pubStatus;
-
-        // type of alarm - persistent or not
+        private float minValue;
+        private float maxValue;
         private PersistentState persistent;
 
         //stores the message
@@ -55,13 +48,48 @@ namespace CommonMeas
 
 
         }
-
+        public AlarmHelper(long gid, float value, float minValue, float maxValue, DateTime timeStamp)
+        {
+            this.gid = gid;
+            this.value = value;
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+            this.timeStamp = timeStamp;
+            this.message = "";
+            this.persistent = PersistentState.Persistent;
+        }
         public long Gid { get { return this.gid; } set { this.gid = value; } }
 
-       
+        public DateTime TimeStamp{ get { return this.timeStamp; } set { this.timeStamp = value; NotifyPropertyChanged();
+            }
+        }
         public AckState AckState { get { return ackState; } set { ackState = value; } }
 
+        public float MinValue
+        {
+            get
+            {
+                return this.minValue;
+            }
 
+            set
+            {
+                this.minValue = value;
+            }
+        }
+
+        public float MaxValue
+        {
+            get
+            {
+                return this.maxValue;
+            }
+
+            set
+            {
+                this.maxValue = value;
+            }
+        }
 
         public PersistentState Persistent
         {

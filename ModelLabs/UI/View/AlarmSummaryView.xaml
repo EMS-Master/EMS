@@ -31,15 +31,7 @@
 
 				<DataGridTextColumn Header="Message" Binding="{Binding AlarmMessage}" Width="*" IsReadOnly="True"/>
 				<DataGridTemplateColumn Header="Acknowledge" Width="Auto">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" 
-									  IsChecked="{Binding AckState,Converter={StaticResource AckStateToBoolConverter}}"
-									  Command="{Binding DataContext.AcknowledgeCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
-									   CommandParameter="{Binding}" >
-							</CheckBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
+					
 				</DataGridTemplateColumn>
 			</DataGrid.Columns>
 

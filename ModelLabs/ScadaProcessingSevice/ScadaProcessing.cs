@@ -30,8 +30,9 @@ namespace ScadaProcessingSevice
 		private readonly int START_ADDRESS_GENERATOR = 20;
 		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 10;
         private ConvertorHelper convertorHelper;
-        private static Dictionary<long, float> previousGeneratorAnalogs;
 		private static Dictionary<long, float> previousGeneratorDiscretes;
+		private static Dictionary<long, int> DiscretOffOn;
+
 
 
 		public ScadaProcessing()
@@ -41,10 +42,10 @@ namespace ScadaProcessingSevice
             generatorAnalogs = new List<AnalogLocation>();
             batteryStorageAnalogs = new List<AnalogLocation>();
             modelResourcesDesc = new ModelResourcesDesc();
-            previousGeneratorAnalogs = new Dictionary<long, float>(10);
 			previousGeneratorDiscretes = new Dictionary<long, float>(10);
 			batteryStorageDiscretes = new List<DiscreteLocation>();
 			generatorDscretes = new List<DiscreteLocation>();
+            DiscretOffOn = new Dictionary<long, int>();
         }
         //data collected from simulator should be passed through 
         //scadaProcessing,from scada, to calculationEngine for optimization
@@ -246,13 +247,38 @@ namespace ScadaProcessingSevice
 		private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
 		{
 			List<MeasurementUnit> retList = new List<MeasurementUnit>();
-			foreach (AnalogLocation analogLoc in analogList)
-			{
-				float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
+            foreach (AnalogLocation analogLoc in analogList)
+            {
+                float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
                 Console.WriteLine("Broj: {0}", values[0]);
                 float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
-				
-				MeasurementUnit measUnit = new MeasurementUnit();
+                bool alarmEGU = false;
+                if (type.Equals(ModelCode.GENERATOR))
+                {
+                    alarmEGU = this.CheckForEGUAlarms(eguVal, analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue, analogLoc.Analog.PowerSystemResource,"g");
+                }
+                else
+                    alarmEGU = this.CheckForEGUAlarms(eguVal, analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue, analogLoc.Analog.PowerSystemResource,"bs");
+
+                if (!alarmEGU)
+                {
+                    AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
+
+                    AlarmHelper normalAlarm = new AlarmHelper();
+                    normalAlarm.AckState = AckState.Unacknowledged;
+                    normalAlarm.CurrentState = string.Format("{0}", normalAlarm.AckState);
+                    normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
+                    normalAlarm.Message = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
+                    normalAlarm.Persistent = PersistentState.Nonpersistent;
+                    normalAlarm.TimeStamp = DateTime.Now;
+                    normalAlarm.Severity = SeverityLevel.NORMAL;
+                    normalAlarm.Value = eguVal;
+                    normalAlarm.Type = AlarmType.NORMAL;
+
+                    AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
+                }
+
+                MeasurementUnit measUnit = new MeasurementUnit();
 				measUnit.Gid = analogLoc.Analog.PowerSystemResource;
 				measUnit.MinValue = analogLoc.Analog.MinValue;
 				measUnit.MaxValue = analogLoc.Analog.MaxValue;
@@ -261,7 +287,6 @@ namespace ScadaProcessingSevice
                 measUnit.ScadaAddress = analogLoc.StartAddress;
 				retList.Add(measUnit);
 				
-				previousGeneratorAnalogs[analogLoc.Analog.GlobalId] = eguVal;
 			}
 
 			return retList;
@@ -274,19 +299,101 @@ namespace ScadaProcessingSevice
 			foreach (DiscreteLocation discreteLoc in discreteList)
 			{
 				MeasurementUnit measUnit = new MeasurementUnit();
-				measUnit.Gid = discreteLoc.Discrete.PowerSystemResource;
-				measUnit.MinValue = discreteLoc.Discrete.MinValue;
-				measUnit.MaxValue = discreteLoc.Discrete.MaxValue;
-				measUnit.CurrentValue = value[discreteLoc.StartAddress - 1] ? 1 : 0;
+                measUnit.Gid = discreteLoc.Discrete.PowerSystemResource;
+                measUnit.MinValue = discreteLoc.Discrete.MinValue;
+                measUnit.MaxValue = discreteLoc.Discrete.MaxValue;;
+                measUnit.CurrentValue = value[discreteLoc.StartAddress - 1] ? 1 : 0;
 				measUnit.TimeStamp = DateTime.Now;
                 measUnit.ScadaAddress = discreteLoc.StartAddress;
 				retList.Add(measUnit);
 
-				previousGeneratorDiscretes[discreteLoc.Discrete.GlobalId] = measUnit.CurrentValue;
-			}
-			return retList;
-		}
+            if (measUnit.CurrentValue == 1)
+            {
+                int CurrentValue;
+                if (!DiscretOffOn.TryGetValue(measUnit.Gid, out CurrentValue))
+                {
+                    DiscretOffOn[measUnit.Gid] = 0;
+                }
+                int numOn = DiscretOffOn[measUnit.Gid];
+                DiscretOffOn[measUnit.Gid] = numOn + 1;
+                if (type.Equals(ModelCode.GENERATOR))
+                {
+                    CheckDiscretAlarm(DiscretOffOn[measUnit.Gid], measUnit.MaxValue, measUnit.Gid, "g");
+                }
+                else
+                    CheckDiscretAlarm(DiscretOffOn[measUnit.Gid], measUnit.MaxValue, measUnit.Gid, "b");
+            }
 
+            previousGeneratorDiscretes[discreteLoc.Discrete.GlobalId] = measUnit.CurrentValue;
+            }
+            return retList;
+		}
+        private bool CheckDiscretAlarm (int value, float max, long gid, string modelCode)
+        {
+            bool retVal = false;
+            AlarmHelper ah = new AlarmHelper(gid, value, -1, max, DateTime.Now);
+            if (value > max)
+            {
+                ah.Type = AlarmType.DOM;
+                if (modelCode == "g")
+                {
+                    ah.Severity = SeverityLevel.HIGH;
+                }
+                else
+                {
+                    ah.Severity = SeverityLevel.MEDIUM;
+                }
+                ah.Message = string.Format("Value on input discret signal: {0:X} higher than maximum expected value", gid);
+                AlarmsEventsProxy.Instance.AddAlarm(ah);
+                retVal = true;
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);
+                Console.WriteLine("Alarm on high raw limit on gid: {0:X}", gid);
+            }
+            return retVal;
+        }
+        private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid, string modelCode)
+        {
+            bool retVal = false;
+            AlarmHelper ah = new AlarmHelper(gid, value, minEgu, maxEgu, DateTime.Now);
+            if (value < minEgu)
+            {
+                ah.Type = AlarmType.LOW;
+                if (modelCode == "g")
+                {
+                    ah.Severity = SeverityLevel.MEDIUM;
+                }
+                else
+                {
+                    ah.Severity = SeverityLevel.LOW;
+                }
+                ah.Message = string.Format("Value on input signal: {0:X} lower than minimum expected value", gid);
+                AlarmsEventsProxy.Instance.AddAlarm(ah);
+                retVal = true;
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on low raw limit on gid: {0:X}", gid);
+                Console.WriteLine("Alarm on low raw limit on gid: {0:X}", gid);
+            }
+
+            if (value > maxEgu)
+            {
+                ah.Type = AlarmType.HIGH;
+                if (modelCode == "g")
+                {
+                    ah.Severity = SeverityLevel.HIGH;
+                }
+                else
+                {
+                    ah.Severity = SeverityLevel.HIGH;
+                }
+                ah.TimeStamp = DateTime.Now;
+                ah.Message = string.Format("Value on input signal: {0:X} higher than maximum expected value", gid);
+                AlarmsEventsProxy.Instance.AddAlarm(ah);
+                retVal = true;
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);
+                Console.WriteLine("Alarm on high raw limit on gid: {0:X}", gid);
+            }
+
+            return retVal;
+        }
         private List<MeasurementUnit> SelectActive(List<MeasurementUnit> analogs, List<MeasurementUnit> descretes)
         {
            List<MeasurementUnit> returnList = new List<MeasurementUnit>();

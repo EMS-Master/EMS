@@ -66,6 +66,10 @@
     <Compile Include="ScadaProcSevice.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AlarmsEventsContract\AlarmsEventsContract.csproj">
+      <Project>{a90da217-6062-4764-9095-dca6c87e5c3a}</Project>
+      <Name>AlarmsEventsContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CalculationEngineContracts\CalculationEngineContracts.csproj">
       <Project>{A6DD77D6-80F9-4BA6-83F7-4913C2DF866A}</Project>
       <Name>CalculationEngineContracts</Name>

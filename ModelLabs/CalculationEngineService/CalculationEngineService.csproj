@@ -80,13 +80,13 @@
   <ItemGroup>
     <Compile Include="Alarm.cs" />
     <Compile Include="AlarmContext.cs" />
-    <Compile Include="Migrations\202006301218069_InitialCreate.cs" />
-    <Compile Include="Migrations\202006301218069_InitialCreate.designer.cs">
-      <DependentUpon>202006301218069_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202007022211033_InitialCreate.cs" />
+    <Compile Include="Migrations\202007022211033_InitialCreate.designer.cs">
+      <DependentUpon>202007022211033_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202006301242101_AlarmMess.cs" />
-    <Compile Include="Migrations\202006301242101_AlarmMess.designer.cs">
-      <DependentUpon>202006301242101_AlarmMess.cs</DependentUpon>
+    <Compile Include="Migrations\202007022231183_Add_property.cs" />
+    <Compile Include="Migrations\202007022231183_Add_property.designer.cs">
+      <DependentUpon>202007022231183_Add_property.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
@@ -103,17 +103,21 @@
       <Project>{4e67b062-a8d7-4fb8-9487-b0ace402df52}</Project>
       <Name>CalculationEngineServ</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
+      <Project>{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}</Project>
+      <Name>CommonMeas</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202006301218069_InitialCreate.resx">
-      <DependentUpon>202006301218069_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007022211033_InitialCreate.resx">
+      <DependentUpon>202007022211033_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202006301242101_AlarmMess.resx">
-      <DependentUpon>202006301242101_AlarmMess.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007022231183_Add_property.resx">
+      <DependentUpon>202007022231183_Add_property.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
