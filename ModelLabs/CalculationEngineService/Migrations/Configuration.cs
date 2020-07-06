@@ -10,7 +10,6 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            ContextKey = "CalculationEngineService.AlarmContext";
         }
 
         protected override void Seed(CalculationEngineService.AlarmContext context)

@@ -80,13 +80,13 @@
   <ItemGroup>
     <Compile Include="Alarm.cs" />
     <Compile Include="AlarmContext.cs" />
-    <Compile Include="Migrations\202007022211033_InitialCreate.cs" />
-    <Compile Include="Migrations\202007022211033_InitialCreate.designer.cs">
-      <DependentUpon>202007022211033_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\202007061213389_InitMigration.cs" />
+    <Compile Include="Migrations\202007061213389_InitMigration.designer.cs">
+      <DependentUpon>202007061213389_InitMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202007022231183_Add_property.cs" />
-    <Compile Include="Migrations\202007022231183_Add_property.designer.cs">
-      <DependentUpon>202007022231183_Add_property.cs</DependentUpon>
+    <Compile Include="Migrations\202007061217488_Empty.cs" />
+    <Compile Include="Migrations\202007061217488_Empty.designer.cs">
+      <DependentUpon>202007061217488_Empty.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Program.cs" />
@@ -113,11 +113,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202007022211033_InitialCreate.resx">
-      <DependentUpon>202007022211033_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007061213389_InitMigration.resx">
+      <DependentUpon>202007061213389_InitMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202007022231183_Add_property.resx">
-      <DependentUpon>202007022231183_Add_property.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202007061217488_Empty.resx">
+      <DependentUpon>202007061217488_Empty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
