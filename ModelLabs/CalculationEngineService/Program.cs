@@ -24,19 +24,24 @@ namespace CalculationEngineService
 
         private static void Main(string[] args)
         {
-            //using (var db = new AlarmContext())
-            //{
+            using (var db = new AlarmContext())
+            {
+                //brisanje svih podataka
+                // var rows = from o in db.Alarms
+                           // select o;
+                // foreach (var row in rows)
+                // {
+                    // db.Alarms.Remove(row);
+                // }
+                // db.SaveChanges();
+                //db.Alarms.Add(new Alarm { Gid = 1, AlarmValue = 300, MinValue = 150, MaxValue = 250, AlarmTimeStamp = DateTime.Now , AckState = CommonMeas.AckState.Acknowledged, AlarmType = CommonMeas.AlarmType.ABNORMAL, AlarmMessage = "aaa", Severity= CommonMeas.SeverityLevel.CRITICAL });
+                //db.SaveChanges();
 
-            //    db.Alarms.Add(new Alarm { Gid = 1, AlarmValue = 300, MinValue = 150, MaxValue = 250, AckState = 0, AlarmType = 1, AlarmMessage = "aaa" });
-
-
-            //    db.SaveChanges();
-
-            //    //foreach (var alarm in db.Alarms)
-            //    //{
-            //    //    Console.WriteLine(alarm.Gid);
-            //    //}
-            //}
+                //    //foreach (var alarm in db.Alarms)
+                //    //{
+                //    //    Console.WriteLine(alarm.Gid);
+                //    //}
+            }
             StartStandard(); 
         }
 

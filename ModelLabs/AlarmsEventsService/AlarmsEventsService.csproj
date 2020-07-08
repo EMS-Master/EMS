@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="AlarmsEvents.cs" />
     <Compile Include="AlarmsEventsService.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PubSub\AlarmsEventsEventArgs.cs" />
     <Compile Include="PubSub\AlarmUpdateEventArgs.cs" />

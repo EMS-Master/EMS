@@ -252,13 +252,15 @@ namespace ScadaProcessingSevice
                 float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
                 Console.WriteLine("Broj: {0}", values[0]);
                 float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
+                float MAX = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MaxValue, 1, 1);
+                float MIN = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MinValue, 1, 1);
                 bool alarmEGU = false;
                 if (type.Equals(ModelCode.GENERATOR))
                 {
-                    alarmEGU = this.CheckForEGUAlarms(eguVal, analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue, analogLoc.Analog.PowerSystemResource,"g");
+                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource,"g");
                 }
                 else
-                    alarmEGU = this.CheckForEGUAlarms(eguVal, analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue, analogLoc.Analog.PowerSystemResource,"bs");
+                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource,"bs");
 
                 if (!alarmEGU)
                 {
@@ -266,7 +268,7 @@ namespace ScadaProcessingSevice
 
                     AlarmHelper normalAlarm = new AlarmHelper();
                     normalAlarm.AckState = AckState.Unacknowledged;
-                    normalAlarm.CurrentState = string.Format("{0}", normalAlarm.AckState);
+                    normalAlarm.CurrentState = string.Format("{0}|{1}",State.Cleared, normalAlarm.AckState);
                     normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
                     normalAlarm.Message = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
                     normalAlarm.Persistent = PersistentState.Nonpersistent;

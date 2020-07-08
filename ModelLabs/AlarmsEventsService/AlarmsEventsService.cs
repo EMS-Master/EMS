@@ -82,10 +82,6 @@ namespace FTN.Services.AlarmsEventsService
 
                 Console.WriteLine("\n");
             }
-
-            message = string.Format("Connection string: {0}", Config.Instance.ConnectionString);
-            Console.WriteLine(message);
-           // ae.InsertAlarmIntoDb();
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             message = string.Format("Trace level: {0}", CommonTrace.TraceLevel);
             Console.WriteLine(message);
