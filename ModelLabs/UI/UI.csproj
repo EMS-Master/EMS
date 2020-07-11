@@ -317,6 +317,10 @@
       <Project>{2F117758-5FEB-4D75-8534-6F1099ED5CEA}</Project>
       <Name>CalculationEngineService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CalculationEngineServ\CalculationEngineServ.csproj">
+      <Project>{4E67B062-A8D7-4FB8-9487-B0ACE402DF52}</Project>
+      <Name>CalculationEngineServ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CEPubSubContract\CEPubSubContract.csproj">
       <Project>{7d9f6cdc-97d6-4e0e-a371-bf9262fe4c8e}</Project>
       <Name>CEPubSubContract</Name>

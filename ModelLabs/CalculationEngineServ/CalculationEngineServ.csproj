@@ -89,9 +89,17 @@
   <ItemGroup>
     <Compile Include="CalculationEngine.cs" />
     <Compile Include="CalculationEngineServiceClass.cs" />
+    <Compile Include="DataBaseModels\Alarm.cs" />
+    <Compile Include="DataBaseModels\DiscreteCounter.cs" />
+    <Compile Include="EmsContext.cs" />
     <Compile Include="GeneticAlgorithm\DNA.cs" />
     <Compile Include="GeneticAlgorithm\GA.cs" />
     <Compile Include="GeneticAlgorithm\GeneticAlgorithm.cs" />
+    <Compile Include="Migrations\202007111111181_InitialMigration.cs" />
+    <Compile Include="Migrations\202007111111181_InitialMigration.designer.cs">
+      <DependentUpon>202007111111181_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ProcessingToCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PubSub\OptimizationEventArgs.cs" />
@@ -142,6 +150,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202007111111181_InitialMigration.resx">
+      <DependentUpon>202007111111181_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,9 +1,9 @@
-﻿namespace CalculationEngineService.Migrations
+﻿namespace CalculationEngineServ.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Empty : DbMigration
+    public partial class InitialMigration : DbMigration
     {
         public override void Up()
         {
@@ -26,10 +26,22 @@
                     })
                 .PrimaryKey(t => t.Id);
             
+            CreateTable(
+                "dbo.DiscreteCounters",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Gid = c.Long(nullable: false),
+                        CurrentValue = c.Boolean(nullable: false),
+                        Counter = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
         }
         
         public override void Down()
         {
+            DropTable("dbo.DiscreteCounters");
             DropTable("dbo.Alarms");
         }
     }

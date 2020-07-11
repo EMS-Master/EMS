@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 namespace CalculationEngineContracts
 {
     [ServiceContract]
-    public interface ICalculationEngineContract
+    public interface ICalculationEngineRepository
     {
         [OperationContract]
-        bool OptimisationAlgorithm(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators);
+        List<DiscreteCounterModel> GetAllDiscreteCounters();
+
+        [OperationContract]
+        void InsertOrUpdate(DiscreteCounterModel model);
 
     }
 }

@@ -11,6 +11,8 @@ using FTN.Services.AlarmsEventsService.PubSub;
 using System.Data.SqlClient;
 using System.Data;
 using CalculationEngineService;
+using CalculationEngineServ.DataBaseModels;
+using CalculationEngineServ;
 
 namespace FTN.Services.AlarmsEventsService
 {
@@ -170,7 +172,7 @@ namespace FTN.Services.AlarmsEventsService
             bool success = true;
             try
             {
-                using (var db = new AlarmContext())
+                using (var db = new EmsContext())
                 {
                     db.Alarms.Add(new Alarm { Gid = alarm.Gid, AlarmValue = alarm.Value, MinValue = alarm.MinValue, MaxValue = alarm.MaxValue, AlarmTimeStamp = alarm.TimeStamp, AckState = alarm.AckState, AlarmType = alarm.Type, AlarmMessage = alarm.Message, Severity = alarm.Severity });
                     db.SaveChanges();
@@ -229,7 +231,7 @@ namespace FTN.Services.AlarmsEventsService
             
                 try
                 {
-                    using (var db = new AlarmContext())
+                    using (var db = new EmsContext())
                     {
                         var tmpAlarm = db.Alarms.First(a => a.Gid == alarm.Gid && a.CurrentState.Contains(State.Active.ToString()));
                         tmpAlarm.PubStatus = alarm.PubStatus;
@@ -250,7 +252,7 @@ namespace FTN.Services.AlarmsEventsService
         }
         private List<Alarm> SelectAlarmsFromDatabase()
         {
-            using (var db = new AlarmContext())
+            using (var db = new EmsContext())
             {
                 return db.Alarms.ToList();
             }

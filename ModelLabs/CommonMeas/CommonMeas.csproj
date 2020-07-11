@@ -64,6 +64,7 @@
     <Compile Include="AlarmHelper.cs" />
     <Compile Include="AnalogLocation.cs" />
     <Compile Include="ConvertorHelper.cs" />
+    <Compile Include="DiscreteCounterModel.cs" />
     <Compile Include="DiscreteLocation.cs" />
     <Compile Include="MeasurementUnit.cs" />
     <Compile Include="MeasurementUnitDiscrete.cs" />

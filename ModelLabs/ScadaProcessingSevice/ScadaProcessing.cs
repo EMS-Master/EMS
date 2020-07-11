@@ -73,6 +73,10 @@ namespace ScadaProcessingSevice
             List<MeasurementUnit> batteryStorageActive = SelectActive(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
             List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
 
+            
+            CheckWhichAreTurnedOff(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
+            CheckWhichAreTurnedOff(generatorMeasUnits, generatorMeasUnitsDiscrete);
+
             bool isSuccess = false;
             try
             {
@@ -407,6 +411,43 @@ namespace ScadaProcessingSevice
                     returnList.Add(item);
            }
             return returnList;
+        }
+
+        private void CheckWhichAreTurnedOff(List<MeasurementUnit> analogs, List<MeasurementUnit> descretes)
+        {
+            List<DiscreteCounterModel> dcFromDB = CalculationEngineProxy.InstanceRepository.GetAllDiscreteCounters();
+            foreach (var item in analogs)
+            {
+                var des = descretes.Find(x => x.Gid == item.Gid);
+                var itemFromDb = dcFromDB.Find(x => x.Gid == item.Gid);
+                if (des.CurrentValue == 1)
+                {
+                    if(itemFromDb != null)
+                    {
+                        if(itemFromDb.CurrentValue == false)
+                        {
+                            itemFromDb.CurrentValue = true;
+                            CalculationEngineProxy.InstanceRepository.InsertOrUpdate(itemFromDb);
+                        }
+                    }
+                }
+                else if(des.CurrentValue == 0)
+                {
+                    if(itemFromDb == null)
+                    {
+                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false });
+                    }
+                    else
+                    {
+                        if (itemFromDb.CurrentValue == true)
+                        {
+                            itemFromDb.CurrentValue = false;
+                            itemFromDb.Counter++;
+                            CalculationEngineProxy.InstanceRepository.InsertOrUpdate(itemFromDb);
+                        }
+                    }
+                }
+            }
         }
 
     }

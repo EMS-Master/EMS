@@ -1,4 +1,6 @@
-﻿using CalculationEngineService;
+﻿using CalculationEngineServ;
+using CalculationEngineServ.DataBaseModels;
+using CalculationEngineService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +27,7 @@ namespace UI.View
         {
             InitializeComponent();
 
-            using (var db = new AlarmContext())
+            using (var db = new EmsContext())
             {
                 List<Alarm> al = new List<Alarm>();
 

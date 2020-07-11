@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="CalculationEngineProxy.cs" />
     <Compile Include="ICalculationEngineContract.cs" />
+    <Compile Include="ICalculationEngineRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CalculationEngineService
+namespace CalculationEngineServ.DataBaseModels
 {
     public class Alarm
     {
@@ -22,6 +22,6 @@ namespace CalculationEngineService
         public string AlarmMessage { get; set; }
         public SeverityLevel Severity { get; set; }
         public string CurrentState { get; set; }
-        public PublishingStatus PubStatus { get; set; } 
+        public PublishingStatus PubStatus { get; set; }
     }
 }
