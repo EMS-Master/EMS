@@ -89,8 +89,10 @@
   <ItemGroup>
     <Compile Include="CalculationEngine.cs" />
     <Compile Include="CalculationEngineServiceClass.cs" />
+    <Compile Include="CeToUI.cs" />
     <Compile Include="DataBaseModels\Alarm.cs" />
     <Compile Include="DataBaseModels\DiscreteCounter.cs" />
+    <Compile Include="DataBaseModels\HistoryMeasurement.cs" />
     <Compile Include="EmsContext.cs" />
     <Compile Include="GeneticAlgorithm\DNA.cs" />
     <Compile Include="GeneticAlgorithm\GA.cs" />
@@ -98,6 +100,10 @@
     <Compile Include="Migrations\202007111111181_InitialMigration.cs" />
     <Compile Include="Migrations\202007111111181_InitialMigration.designer.cs">
       <DependentUpon>202007111111181_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202007121742428_HistoryTable.cs" />
+    <Compile Include="Migrations\202007121742428_HistoryTable.designer.cs">
+      <DependentUpon>202007121742428_HistoryTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ProcessingToCalculation.cs" />
@@ -154,6 +160,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202007111111181_InitialMigration.resx">
       <DependentUpon>202007111111181_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202007121742428_HistoryTable.resx">
+      <DependentUpon>202007121742428_HistoryTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

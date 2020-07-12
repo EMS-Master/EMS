@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CalculationEngineContracts;
+using FTN.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -22,12 +24,9 @@ namespace UI.ViewModel
         private ICommand allBatteryStoragesCheckedCommand;
         private ICommand allBatteryStoragesUnheckedCommand;
         private ICommand selectedPeriodCommand;
-        private ObservableCollection<long> generatorsFromNms = new ObservableCollection<long>();
-        private ObservableCollection<long> batteryStoragesFromNms = new ObservableCollection<long>();
+
         private ICommand showDataCommand;
-        private bool isExpandedSeparated = false;
-        private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
-        private bool isExpandedTotalProduction = false;
+
         private ICommand totalProductionGraphCheckedCommand;
         private ICommand totalProductionGraphUnCheckedCommand;
         private ICommand productionForSelectedCheckedCommand;
@@ -38,14 +37,25 @@ namespace UI.ViewModel
         private ICommand loadForSelectedCheckedCommand;
         private ICommand loadForSelectedUnCheckedCommand;
 
+        private bool isExpandedSeparated = false;
+        private bool isExpandedTotalProduction = false;
+
+
         private bool totalProductionForSelectedVisible = false;
         private bool totalProductionGraphVisible = true;
 
         private bool totalLoadForSelectedVisible = false;
         private bool totalLoadGraphVisible = true;
 
+        private ObservableCollection<long> generatorsFromNms = new ObservableCollection<long>();
+        private ObservableCollection<long> batteryStoragesFromNms = new ObservableCollection<long>();
+
+        private ObservableCollection<Tuple<double, DateTime>> totalProduction = new ObservableCollection<Tuple<double, DateTime>>();
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
+        private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
+        private ObservableCollection<Tuple<double, DateTime>> graphTotalProductionForSelected = new ObservableCollection<Tuple<double, DateTime>>();
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
+
 
 
         #endregion Fields
@@ -149,6 +159,7 @@ namespace UI.ViewModel
                 OnPropertyChanged(nameof(EndTime));
             }
         }
+
         public bool TotalProductionForSelectedVisible
         {
             get
@@ -200,6 +211,8 @@ namespace UI.ViewModel
                 OnPropertyChanged(nameof(TotalLoadGraphVisible));
             }
         }
+        public ObservableCollection<Tuple<double, DateTime>> TotalProduction { get => totalProduction; set => totalProduction = value; }
+        public ObservableCollection<Tuple<double, DateTime>> GraphTotalProductionForSelected { get => graphTotalProductionForSelected; set => graphTotalProductionForSelected = value; }
 
         public ObservableCollection<Tuple<double, DateTime>> GraphTotalProduction { get => graphTotalProduction; set => graphTotalProduction = value; }
         public PeriodValues SelectedPeriod { get => selectedPeriod; set => selectedPeriod = value; }
@@ -225,6 +238,8 @@ namespace UI.ViewModel
                 gidToBoolMap = value;
             }
         }
+
+
 
         #endregion Properties
         public HistoryViewModel()
@@ -287,6 +302,135 @@ namespace UI.ViewModel
 
         private void ShowDataCommandExecute(object obj)
         {
+
+            ObservableCollection<Tuple<double, DateTime>> measurementsFromDb;
+            ObservableCollection<Tuple<double, DateTime>> tempData;
+            ObservableCollection<Tuple<double, DateTime>> tempContainer = new ObservableCollection<Tuple<double, DateTime>>();
+
+
+            GraphTotalProduction.Clear();
+            GeneratorsContainer.Clear();
+            GraphTotalProductionForSelected.Clear();
+
+            foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
+            {
+                if (keyPair.Value == true)
+                {
+                    try
+                    {
+                        measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(keyPair.Key, startTime, endTime));
+
+                        if (measurementsFromDb == null)
+                        {
+                            continue;
+                        }
+
+                        if (graphSampling != GraphSample.None)
+                        {
+                            DateTime tempStartTime = startTime;
+                            DateTime tempEndTime = IncrementTime(tempStartTime);
+
+                            double averageProduction = 0;
+
+                            while (tempEndTime <= endTime)
+                            {
+                                tempData = new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
+                                if (tempData != null && tempData.Count != 0)
+                                {
+                                    averageProduction = tempData.Average(x => x.Item1);
+                                }
+                                else
+                                {
+                                    averageProduction = 0;
+                                }
+
+                                tempStartTime = IncrementTime(tempStartTime);
+                                tempEndTime = IncrementTime(tempEndTime);
+
+                                tempContainer.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime));
+                            }
+                            GeneratorsContainer.Add(new KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>(keyPair.Key, new ObservableCollection<Tuple<double, DateTime>>(tempContainer)));
+                        }
+                        else
+                        {
+                            GeneratorsContainer.Add(new KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>(keyPair.Key, new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb)));
+                        }
+
+                        measurementsFromDb.Clear();
+                        measurementsFromDb = null;
+                        tempContainer.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        CommonTrace.WriteTrace(CommonTrace.TraceError, "[HistoryViewModel] Error ShowDataCommandExecute {0}", ex.Message);
+                    }
+                }
+            }
+
+            List<Tuple<double, DateTime>> allProductionValues = new List<Tuple<double, DateTime>>();
+            List<DateTime> timestamps = new List<DateTime>();
+
+            foreach (var keyPair in GeneratorsContainer)
+            {
+                allProductionValues.AddRange(keyPair.Value.ToList());
+            }
+
+            foreach (Tuple<double, DateTime> tuple in allProductionValues)
+            {
+                timestamps.Add(tuple.Item2);
+            }
+            timestamps = timestamps.Distinct().ToList();
+
+            foreach (DateTime measTime in timestamps)
+            {
+                double production = 0;
+                List<Tuple<double, DateTime>> tuples = allProductionValues.Where(x => x.Item2 == measTime).ToList();
+                if (tuples != null)
+                {
+                    production = tuples.Sum(x => x.Item1);
+                }
+                tuples = null;
+                GraphTotalProductionForSelected.Add(new Tuple<double, DateTime>(production, measTime));
+            }
+
+            //TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetTotalProduction(StartTime, EndTime));
+            GraphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
+
+            if (graphSampling != GraphSample.None)
+            {
+                DateTime tempStartTime = startTime;
+                DateTime tempEndTime = IncrementTime(tempStartTime);
+
+                double averageProduction;
+
+                while (tempEndTime <= endTime)
+                {
+                    tempData = new ObservableCollection<Tuple<double, DateTime>>(TotalProduction.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
+                    if (tempData != null && tempData.Count != 0)
+                    {
+                        averageProduction = tempData.Average(x => x.Item1);
+                    }
+                    else
+                    {
+                        averageProduction = 0;
+                    }
+
+                    tempStartTime = IncrementTime(tempStartTime);
+                    tempEndTime = IncrementTime(tempEndTime);
+                    GraphTotalProduction.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime));
+                }
+            }
+            else
+            {
+                GraphTotalProduction = TotalProduction;
+            }
+            IsExpandedSeparated = true;
+            IsExpandedTotalProduction = true;
+
+            OnPropertyChanged(nameof(GraphTotalProductionForSelected));
+            OnPropertyChanged(nameof(GraphTotalProduction));
+            OnPropertyChanged(nameof(GeneratorsContainer));
+
         }
 
         private void AllGeneratorsCheckedCommandExecute(object obj)
@@ -349,6 +493,31 @@ namespace UI.ViewModel
                     break;
                 default:
                     break;
+            }
+        }
+
+
+        private DateTime IncrementTime(DateTime pointTime)
+        {
+            switch (graphSampling)
+            {
+                case GraphSample.HourSample:
+                    pointTime = pointTime.AddMinutes(5);
+                    return pointTime;
+                case GraphSample.TodaySample:
+                    pointTime = pointTime.AddHours(1);
+                    return pointTime;
+                case GraphSample.YearSample:
+                    pointTime = pointTime.AddMonths(1);
+                    return pointTime;
+                case GraphSample.LastMonthSample:
+                    pointTime = pointTime.AddDays(1);
+                    return pointTime;
+                case GraphSample.Last4MonthSample:
+                    pointTime = pointTime.AddDays(7);
+                    return pointTime;
+                default:
+                    return pointTime;
             }
         }
 

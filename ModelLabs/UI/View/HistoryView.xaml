@@ -276,6 +276,51 @@
                         </StackPanel>
 
                         <!--GRAPH-->
+                        <chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600">
+
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProduction}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                Title="Total Generation [kW]"
+                                                Visibility="{Binding Path=TotalProductionGraphVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="DarkGreen"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+
+                                <chartingToolkit:LineSeries.IndependentAxis>
+                                    <chartingToolkit:DateTimeAxis Orientation="X" Title="Time"  />
+                                </chartingToolkit:LineSeries.IndependentAxis>
+
+                                <chartingToolkit:LineSeries.DependentRangeAxis>
+                                    <chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)"/>
+                                </chartingToolkit:LineSeries.DependentRangeAxis>
+
+                            </chartingToolkit:LineSeries>
+
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProductionForSelected}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                Title="Generation for selected generators [kW]"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="DarkOrange"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+
+                        </chartingToolkit:Chart>
+
+
+
 
                     </Grid>
                 </Expander>
