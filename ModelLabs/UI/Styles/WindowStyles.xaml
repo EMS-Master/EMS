@@ -39,6 +39,24 @@
 		<Setter Property="Foreground" Value="Black"></Setter>
 	</Style>
 
+			
+	<Style x:Key="AlarmBlinkCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding AckState}" Value="Acknowledged">
+				<Setter Property="Background" Value="Gray">
+				</Setter>
+			
+			</DataTrigger>
+			<DataTrigger Binding="{Binding AckState}" Value="Unacknowledged">
+				<Setter Property="Background">
+					<Setter.Value>
+						<SolidColorBrush Color="ForestGreen" Opacity="0.7"/>
+					</Setter.Value>
+				</Setter>
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+	
 	<Style x:Key="AlarmGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
 		<Setter Property="BorderThickness" Value="0" />
 		<Style.Triggers>

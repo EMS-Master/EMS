@@ -1,4 +1,7 @@
-﻿using CommonMeas;
+﻿using CalculationEngineServ;
+using CalculationEngineServ.DataBaseModels;
+using CalculationEngineService;
+using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
 using System;
@@ -14,13 +17,15 @@ namespace UI.ViewModel
 {
    public class AlarmSummaryViewModel : ViewModelBase
     {
-        private AlarmsEventsSubscribeProxy aeSubscribeProxy;
+        
 
         private ObservableCollection<AlarmHelper> alarmSummaryQueue = new ObservableCollection<AlarmHelper>();
 
         private ICommand acknowledgeCommand;
 
         public object alarmSummaryLock = new object();
+
+        
 
         public ObservableCollection<AlarmHelper> AlarmSummaryQueue
         {
@@ -42,18 +47,26 @@ namespace UI.ViewModel
             
         }
 
-  
+        public ICommand AcknowledgeCommand => acknowledgeCommand ?? (acknowledgeCommand = new RelayCommand<Alarm>(AcknowledgeCommandExecute));
 
-        private void AddAlarm(AlarmHelper alarm)
+        private  void AcknowledgeCommandExecute(Alarm alarmHelper)
         {
+            using (var db = new EmsContext())
+            {
+                foreach (var alarm in db.Alarms.ToList())
+                {
+                    if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
+                    {
+                        alarm.AckState = AckState.Acknowledged;
+                        
+                       // db.Alarms.Add(alarm);
+                        db.SaveChanges();
 
+                    }
+                }
+
+            }
         }
-
-        private void UpdateAlarm(AlarmHelper alarm)
-        {
-
         }
-
-    }
 
 }
