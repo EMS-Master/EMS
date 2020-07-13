@@ -47,6 +47,10 @@ namespace UI.View
                     {
                         alRemove.Add(a);
                     }
+                    else
+                    {
+                        AlarmSummaryDataGrid.ItemsSource = al;
+                    }
                 }
 
                 foreach (var a in alRemove)
