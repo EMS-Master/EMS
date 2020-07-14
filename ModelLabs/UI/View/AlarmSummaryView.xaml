@@ -8,30 +8,34 @@
 			 xmlns:converters ="clr-namespace:UI.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-	<UserControl.Resources>
-		<converters:GidToMridConverter x:Key="GidToMridConverter"/>
-		<converters:AckStateToBoolConverter x:Key="AckStateToBoolConverter"/>
-	</UserControl.Resources>
-	<Grid>
-		<DataGrid x:Name="AlarmSummaryDataGrid"
+    <UserControl.Resources>
+        <converters:GidToMridConverter x:Key="GidToMridConverter"/>
+        <converters:AckStateToBoolConverter x:Key="AckStateToBoolConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="62*"/>
+            <ColumnDefinition Width="13*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="AlarmSummaryDataGrid"
 				  Margin="5,30,5,5"
 				  ColumnHeaderStyle="{StaticResource AlarmDataGridColumnHeaderStyle}"
 				  
 				  CanUserDeleteRows="False" CanUserAddRows="False" RowStyle="{StaticResource AlarmSummaryDataGridRowStyle}" ClipToBounds="True"
 				  RowHeaderWidth="0" AutoGenerateColumns="False" SelectionUnit="FullRow"
-				  GridLinesVisibility="None">
+				  GridLinesVisibility="None" Grid.ColumnSpan="2">
 
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True"/>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True"/>
 
-				<DataGridTextColumn Header="Severity" Binding="{Binding Severity}" CellStyle="{StaticResource AlarmGridCell}" />
-				<DataGridTextColumn Header="Value" Binding="{Binding AlarmValue}" IsReadOnly="True"/>
-				<DataGridTextColumn Header="Type" Binding="{Binding AlarmType}" />
-				<DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" IsReadOnly="True"/>
-				<DataGridTextColumn Header="MaxValue" Binding="{Binding MaxValue}" IsReadOnly="True"/>
-				<DataGridTextColumn Header="AckState" Binding="{Binding AckState}" CellStyle="{StaticResource AlarmBlinkCell}">
+                <DataGridTextColumn Header="Severity" Binding="{Binding Severity}" CellStyle="{StaticResource AlarmGridCell}" />
+                <DataGridTextColumn Header="Value" Binding="{Binding AlarmValue}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding AlarmType}" />
+                <DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="MaxValue" Binding="{Binding MaxValue}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="AckState" Binding="{Binding AckState}" CellStyle="{StaticResource AlarmBlinkCell}">
 
-					<!--<DataGridTextColumn.CellStyle>
+                    <!--<DataGridTextColumn.CellStyle>
 						<Style TargetType="{x:Type DataGridCell}">
 							<Style.Triggers>
 								<DataTrigger Binding="{Binding AckState}" Value="Acknowledged" >
@@ -64,28 +68,32 @@
 							</Style.Triggers>
 						</Style>
 					</DataGridTextColumn.CellStyle>-->
-				</DataGridTextColumn>
+                </DataGridTextColumn>
 
-				<DataGridTextColumn Header="Message" Binding="{Binding AlarmMessage}" Width="*" IsReadOnly="True"/>
-				<DataGridTemplateColumn Header="Acknowledge" Width="Auto">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" 
+                <DataGridTextColumn Header="Message" Binding="{Binding AlarmMessage}" Width="*" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Acknowledge" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" 
 									  IsChecked="{Binding AckState,Converter={StaticResource AckStateToBoolConverter}}"
 									  Command="{Binding DataContext.AcknowledgeCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
 									   CommandParameter="{Binding}" >
-							</CheckBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-			</DataGrid.Columns>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
 
-		</DataGrid>
+        </DataGrid>
 
-		<Button x:Name="buttonHide" Content="Hide" HorizontalAlignment="Left" Height="22" Margin="6,3,0,0" VerticalAlignment="Top" Width="59" Click="ButtonHide_Click"/>
-			
-		
-		<Button x:Name="buttonAType" Content="Search" HorizontalAlignment="Left" Height="22" Margin="135,3,0,0" VerticalAlignment="Top" Width="57" Click="ButtonAType_Click"/>
-		<TextBox x:Name="SeveritySearch" HorizontalAlignment="Left" Height="22" Margin="70,3,0,0" TextWrapping="Wrap" Text="Severity..." VerticalAlignment="Top" Width="60"/>
-	</Grid>
+        <Button x:Name="buttonHide" Content="Hide" HorizontalAlignment="Left" Height="22" Margin="6,3,0,0" VerticalAlignment="Top" Width="95" Click="ButtonHide_Click"/>
+        <ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" Margin="106,3,0,0" VerticalAlignment="Top" Width="95" Height="22" SelectionChanged="ComboBox1_SelectionChanged" RenderTransformOrigin="0.958,0.591" >
+            <ComboBoxItem Content="All Alarms"/>
+            <ComboBoxItem Content="Type Alarm"/>
+            <ComboBoxItem Content="Severity"/>
+            <ComboBoxItem Content="GID"/>
+        </ComboBox>
+        <ComboBox x:Name="ComboBox2" HorizontalAlignment="Left" Margin="206,3,-1,0" VerticalAlignment="Top" Width="95" Height="22" SelectionChanged="ComboBox2_SelectionChanged" Grid.ColumnSpan="2" />
+
+    </Grid>
 </UserControl>
