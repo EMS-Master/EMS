@@ -312,7 +312,16 @@ namespace UI.ViewModel
             GeneratorsContainer.Clear();
             GraphTotalProductionForSelected.Clear();
 
-            foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
+			GidToBoolMap.Add(12884901889, true);
+			GidToBoolMap.Add(12884901891, true);
+			GidToBoolMap.Add(12884901892, true);
+			GidToBoolMap.Add(12884901893, true);
+			GidToBoolMap.Add(12884901894, true);
+			GidToBoolMap.Add(12884901895, true);
+			GidToBoolMap.Add(12884901896, true);
+			GidToBoolMap.Add(12884901897, true);
+
+			foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
             {
                 if (keyPair.Value == true)
                 {

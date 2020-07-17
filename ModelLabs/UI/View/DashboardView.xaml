@@ -51,6 +51,68 @@
 
 
     <Grid>
+		<TabControl TabStripPlacement="Left" Margin="0, 0, 0, 10">
+			<TabControl.ItemContainerStyle>
+				<Style TargetType="TabItem">
+					<Setter Property="LayoutTransform">
+						<Setter.Value>
+							<RotateTransform Angle="270" />
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</TabControl.ItemContainerStyle>
+			
+			<TabItem Name="totalTab" Header="Total generation/Load graph">
+				
+				<TabItem.Content>
+					<TextBlock TextWrapping="WrapWithOverflow">
+						<chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600">
 
-    </Grid>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=TotalProductionLoad}" 
+												DependentValueBinding="{Binding Path=Key}" 
+												IndependentValueBinding="{Binding Path=Value}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                Title="Total Generation [kW]"
+                                                Visibility="{Binding Path=TotalProductionLoadVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="DarkGreen"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+
+                                <chartingToolkit:LineSeries.IndependentAxis>
+                                    <chartingToolkit:DateTimeAxis Orientation="X" Title="Time"  />
+                                </chartingToolkit:LineSeries.IndependentAxis>
+
+                                <chartingToolkit:LineSeries.DependentRangeAxis>
+                                    <chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)"/>
+                                </chartingToolkit:LineSeries.DependentRangeAxis>
+
+                            </chartingToolkit:LineSeries>
+
+                        </chartingToolkit:Chart>
+        
+					</TextBlock>
+				</TabItem.Content>
+			</TabItem>
+
+			<TabItem Name="generationTab" Header="Generation graph">
+				<TabItem.Content>
+					<TextBlock TextWrapping="WrapWithOverflow">
+						
+					</TextBlock>
+				</TabItem.Content>
+			</TabItem>
+
+			<TabItem Name="loadTab" Header="Load graph">
+				<TabItem.Content>
+					<TextBlock TextWrapping="WrapWithOverflow">
+
+					</TextBlock>
+				</TabItem.Content>
+			</TabItem>
+		</TabControl>
+	</Grid>
 </UserControl>

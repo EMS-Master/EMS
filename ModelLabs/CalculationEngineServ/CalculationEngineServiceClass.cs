@@ -17,8 +17,9 @@ namespace CalculationEngineServ
         public CalculationEngineServiceClass()
         {
             this.ce = new CalculationEngine();
-            ProcessingToCalculation.CalculationEngine = this.ce;
-            this.InitializeHosts();
+			ProcessingToCalculation.CalculationEngine = this.ce;
+			CeToUI.Ce = this.ce;
+			this.InitializeHosts();
         }
 
         public void Start()
@@ -35,7 +36,8 @@ namespace CalculationEngineServ
         private void InitializeHosts()
         {
             this.hosts = new List<ServiceHost>();
-            this.hosts.Add(new ServiceHost(typeof(ProcessingToCalculation)));
+			this.hosts.Add(new ServiceHost(typeof(CeToUI)));
+			this.hosts.Add(new ServiceHost(typeof(ProcessingToCalculation)));
             this.hosts.Add(new ServiceHost(typeof(CalculationEngine)));
         }
 
