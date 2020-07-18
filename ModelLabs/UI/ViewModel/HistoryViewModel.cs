@@ -414,7 +414,7 @@ namespace UI.ViewModel
 
                 while (tempEndTime <= endTime)
                 {
-                    tempData = new ObservableCollection<Tuple<double, DateTime>>(TotalProduction.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
+                    tempData = new ObservableCollection<Tuple<double, DateTime>>(GraphTotalProductionForSelected.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
                     if (tempData != null && tempData.Count != 0)
                     {
                         averageProduction = tempData.Average(x => x.Item1);
