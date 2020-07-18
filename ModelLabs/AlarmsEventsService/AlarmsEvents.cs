@@ -22,7 +22,7 @@ namespace FTN.Services.AlarmsEventsService
        
 
         // list for storing AlarmHelper entities
-        private List<AlarmHelper> alarms;
+        private List<Alarm> alarms;
 
         private PublisherService publisher;
 
@@ -35,8 +35,9 @@ namespace FTN.Services.AlarmsEventsService
         public AlarmsEvents()
         {
             this.Publisher = new PublisherService();
-            this.Alarms = new List<AlarmHelper>();
-            alarmsFromDatabase = SelectAlarmsFromDatabase();
+            this.Alarms = new List<Alarm>();
+            this.Alarms = SelectAlarmsFromDatabase();
+            //alarmsFromDatabase = SelectAlarmsFromDatabase();
         }
 
         public PublisherService Publisher
@@ -52,7 +53,7 @@ namespace FTN.Services.AlarmsEventsService
             }
         }
 
-        public List<AlarmHelper> Alarms
+        public List<Alarm> Alarms
         {
             get
             {
@@ -65,9 +66,9 @@ namespace FTN.Services.AlarmsEventsService
             }
         }
 
-        public void AddAlarm(AlarmHelper alarm)
+        public void AddAlarm(Alarm alarm)
         {
-            if(Alarms.Count == 0 && alarm.Type.Equals(AlarmType.NORMAL))
+            if(Alarms.Count == 0 && alarm.AlarmType.Equals(AlarmType.NORMAL))
             {
                 return;
             }
@@ -82,14 +83,14 @@ namespace FTN.Services.AlarmsEventsService
                 {
                     alarm.CurrentState = string.Format("{0} | {1}", State.Active, alarm.AckState);
                 }
-                foreach (AlarmHelper item in Alarms)
+                foreach (Alarm item in Alarms)
                 {
                     if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()))
                     {
                         item.Severity = alarm.Severity;
-                        item.Value = alarm.Value;
-                        item.Message = alarm.Message;
-                        item.TimeStamp = alarm.TimeStamp;
+                        item.AlarmValue = alarm.AlarmValue;
+                        item.AlarmMessage = alarm.AlarmMessage;
+                        item.AlarmTimeStamp = alarm.AlarmTimeStamp;
                         publishingStatus = PublishingStatus.UPDATE;
                         updated = true;
                         break;
@@ -97,7 +98,7 @@ namespace FTN.Services.AlarmsEventsService
                     //return to normal
                     else if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Cleared.ToString()))
                     {
-                        if (alarm.Type.Equals(AlarmType.NORMAL) /*&& !item.Type.Equals(AlarmType.NORMAL.ToString())*/)
+                        if (alarm.AlarmType.Equals(AlarmType.NORMAL) /*&& !item.Type.Equals(AlarmType.NORMAL.ToString())*/)
                         {
                             bool normalCreated = false;
                             if (this.isNormalCreated.TryGetValue(alarm.Gid, out normalCreated))
@@ -113,7 +114,7 @@ namespace FTN.Services.AlarmsEventsService
                     }
                 }
                 //ako se prvi put pojavio i nije .NORMAL
-                if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.Type.Equals(AlarmType.NORMAL))
+                if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.AlarmType.Equals(AlarmType.NORMAL))
                 {
                     RemoveFromAlarms(alarm.Gid);
                     this.Alarms.Add(alarm);
@@ -123,7 +124,7 @@ namespace FTN.Services.AlarmsEventsService
                     }
                     this.isNormalCreated[alarm.Gid] = false;
                 }
-                if (alarm.Type.Equals(AlarmType.NORMAL) && normalAlarm)
+                if (alarm.AlarmType.Equals(AlarmType.NORMAL) && normalAlarm)
                 {
                     RemoveFromAlarms(alarm.Gid);
                     this.Alarms.Add(alarm);
@@ -131,12 +132,12 @@ namespace FTN.Services.AlarmsEventsService
                     this.isNormalCreated[alarm.Gid] = true;
 
                 }
-                else if (!alarm.Type.Equals(AlarmType.NORMAL))
+                else if (!alarm.AlarmType.Equals(AlarmType.NORMAL))
                 {
                     this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
                 }
                 //Console.WriteLine("AlarmsEvents: AddAlarm method");
-                string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.Value);
+                string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.AlarmValue);
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             }
             catch (Exception ex)
@@ -152,8 +153,8 @@ namespace FTN.Services.AlarmsEventsService
 
             lock (alarmLock)
             {
-                List<AlarmHelper> alarmsToRemove = new List<AlarmHelper>(1);
-                foreach (AlarmHelper ah in Alarms)
+                List<Alarm> alarmsToRemove = new List<Alarm>(1);
+                foreach (Alarm ah in Alarms)
                 {
                     if (ah.Gid == gid)
                     {
@@ -161,20 +162,20 @@ namespace FTN.Services.AlarmsEventsService
                     }
                 }
 
-                foreach (AlarmHelper ah in alarmsToRemove)
+                foreach (Alarm ah in alarmsToRemove)
                 {
                     Alarms.Remove(ah);
                 }
             }
         }
-        public bool InsertAlarmIntoDb(AlarmHelper alarm)
+        public bool InsertAlarmIntoDb(Alarm alarm)
         {
             bool success = true;
             try
             {
                 using (var db = new EmsContext())
                 {
-                    db.Alarms.Add(new Alarm { Gid = alarm.Gid, AlarmValue = alarm.Value, MinValue = alarm.MinValue, MaxValue = alarm.MaxValue, AlarmTimeStamp = alarm.TimeStamp, AckState = alarm.AckState, AlarmType = alarm.Type, AlarmMessage = alarm.Message, Severity = alarm.Severity });
+                    db.Alarms.Add(new Alarm { Gid = alarm.Gid, AlarmValue = alarm.AlarmValue, MinValue = alarm.MinValue, MaxValue = alarm.MaxValue, AlarmTimeStamp = alarm.AlarmTimeStamp, AckState = alarm.AckState, AlarmType = alarm.AlarmType, AlarmMessage = alarm.AlarmMessage, Severity = alarm.Severity, CurrentState=alarm.CurrentState });
                     db.SaveChanges();
                 };
             }
@@ -188,7 +189,7 @@ namespace FTN.Services.AlarmsEventsService
             return success;
         }
 
-        public List<AlarmHelper> InitiateIntegrityUpdate()
+        public List<Alarm> InitiateIntegrityUpdate()
         {
             string message = string.Format("UI client requested integirty update for existing alarms.");
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
@@ -200,7 +201,7 @@ namespace FTN.Services.AlarmsEventsService
         {
             long powerSystemResGid = analogLoc.Analog.PowerSystemResource;
 
-            foreach (AlarmHelper alarm in this.Alarms)
+            foreach (Alarm alarm in this.Alarms)
             {
                 if (alarm.Gid.Equals(powerSystemResGid) && alarm.CurrentState.Contains(State.Active.ToString()))
                 {
@@ -225,7 +226,7 @@ namespace FTN.Services.AlarmsEventsService
                 }
             }
         }
-        private bool UpdateAlarmStatusIntoDb(AlarmHelper alarm)
+        private bool UpdateAlarmStatusIntoDb(Alarm alarm)
         {
             bool success = true;
             

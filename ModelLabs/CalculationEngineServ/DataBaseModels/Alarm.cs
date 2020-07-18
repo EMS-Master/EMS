@@ -23,5 +23,19 @@ namespace CalculationEngineServ.DataBaseModels
         public SeverityLevel Severity { get; set; }
         public string CurrentState { get; set; }
         public PublishingStatus PubStatus { get; set; }
+
+        public Alarm(long gid, float value, float minValue, float maxValue, DateTime timeStamp)
+        {
+            this.Gid= gid;
+            this.AlarmValue = value;
+            this.MinValue = minValue;
+            this.MaxValue = maxValue;
+            this.AlarmTimeStamp = timeStamp;
+            this.AlarmMessage = "";
+        }
+
+        public Alarm() { }
     }
+
+
 }

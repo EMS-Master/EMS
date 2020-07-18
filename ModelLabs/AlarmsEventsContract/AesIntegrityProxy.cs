@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 
 namespace FTN.ServiceContracts
@@ -54,7 +55,7 @@ namespace FTN.ServiceContracts
             }
         }
 
-        public List<AlarmHelper> InitiateIntegrityUpdate()
+        public List<Alarm> InitiateIntegrityUpdate()
         {
             return proxy.InitiateIntegrityUpdate();
         }

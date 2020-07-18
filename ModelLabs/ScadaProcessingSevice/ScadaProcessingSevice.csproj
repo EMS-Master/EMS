@@ -74,6 +74,10 @@
       <Project>{A6DD77D6-80F9-4BA6-83F7-4913C2DF866A}</Project>
       <Name>CalculationEngineContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CalculationEngineServ\CalculationEngineServ.csproj">
+      <Project>{4E67B062-A8D7-4FB8-9487-B0ACE402DF52}</Project>
+      <Name>CalculationEngineServ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
       <Project>{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}</Project>
       <Name>CommonMeas</Name>

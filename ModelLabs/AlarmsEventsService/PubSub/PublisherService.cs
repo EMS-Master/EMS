@@ -1,4 +1,5 @@
-﻿using CommonMeas;
+﻿using CalculationEngineServ.DataBaseModels;
+using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
 using FTN.Services.AlarmsEventsService.PubSub;
@@ -101,7 +102,7 @@ namespace FTN.Services.AlarmsEventsService.PubSub
             }
         }
 
-        public void PublishAlarmsEvents(AlarmHelper alarm, PublishingStatus status)
+        public void PublishAlarmsEvents(Alarm alarm, PublishingStatus status)
         {
             switch (status)
             {
@@ -150,7 +151,7 @@ namespace FTN.Services.AlarmsEventsService.PubSub
         }
 
 
-        public void PublishStateChange(AlarmHelper alarm)
+        public void PublishStateChange(Alarm alarm)
         {
             AlarmUpdateEventArgs e = new AlarmUpdateEventArgs()
             {

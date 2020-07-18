@@ -1,4 +1,5 @@
 ﻿using CalculationEngineContracts;
+using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
@@ -270,16 +271,16 @@ namespace ScadaProcessingSevice
                 {
                     AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
 
-                    AlarmHelper normalAlarm = new AlarmHelper();
+                    Alarm normalAlarm = new Alarm();
                     normalAlarm.AckState = AckState.Unacknowledged;
                     normalAlarm.CurrentState = string.Format("{0}|{1}",State.Cleared, normalAlarm.AckState);
                     normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
-                    normalAlarm.Message = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
-                    normalAlarm.Persistent = PersistentState.Nonpersistent;
-                    normalAlarm.TimeStamp = DateTime.Now;
+                    normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
+                    //normalAlarm.Persistent = PersistentState.Nonpersistent;
+                    normalAlarm.AlarmTimeStamp = DateTime.Now;
                     normalAlarm.Severity = SeverityLevel.NORMAL;
-                    normalAlarm.Value = eguVal;
-                    normalAlarm.Type = AlarmType.NORMAL;
+                    normalAlarm.AlarmValue = eguVal;
+                    normalAlarm.AlarmType = AlarmType.NORMAL;
 
                     AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
                 }
@@ -337,10 +338,10 @@ namespace ScadaProcessingSevice
         private bool CheckDiscretAlarm (int value, float max, long gid, string modelCode)
         {
             bool retVal = false;
-            AlarmHelper ah = new AlarmHelper(gid, value, -1, max, DateTime.Now);
+            Alarm ah = new Alarm(gid, value, -1, max, DateTime.Now);
             if (value > max)
             {
-                ah.Type = AlarmType.DOM;
+                ah.AlarmType = AlarmType.DOM;
                 if (modelCode == "g")
                 {
                     ah.Severity = SeverityLevel.HIGH;
@@ -349,7 +350,7 @@ namespace ScadaProcessingSevice
                 {
                     ah.Severity = SeverityLevel.MEDIUM;
                 }
-                ah.Message = string.Format("Value on input discret signal: {0:X} higher than maximum expected value", gid);
+                ah.AlarmMessage = string.Format("Value on input discret signal: {0:X} higher than maximum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);
@@ -360,10 +361,10 @@ namespace ScadaProcessingSevice
         private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid, string modelCode)
         {
             bool retVal = false;
-            AlarmHelper ah = new AlarmHelper(gid, value, minEgu, maxEgu, DateTime.Now);
+            Alarm ah = new Alarm(gid, value, minEgu, maxEgu, DateTime.Now);
             if (value < minEgu)
             {
-                ah.Type = AlarmType.LOW;
+                ah.AlarmType = AlarmType.LOW;
                 if (modelCode == "g")
                 {
                     ah.Severity = SeverityLevel.MEDIUM;
@@ -372,7 +373,7 @@ namespace ScadaProcessingSevice
                 {
                     ah.Severity = SeverityLevel.LOW;
                 }
-                ah.Message = string.Format("Value on input signal: {0:X} lower than minimum expected value", gid);
+                ah.AlarmMessage = string.Format("Value on input signal: {0:X} lower than minimum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on low raw limit on gid: {0:X}", gid);
@@ -381,7 +382,7 @@ namespace ScadaProcessingSevice
 
             if (value > maxEgu)
             {
-                ah.Type = AlarmType.HIGH;
+                ah.AlarmType = AlarmType.HIGH;
                 if (modelCode == "g")
                 {
                     ah.Severity = SeverityLevel.HIGH;
@@ -390,8 +391,8 @@ namespace ScadaProcessingSevice
                 {
                     ah.Severity = SeverityLevel.HIGH;
                 }
-                ah.TimeStamp = DateTime.Now;
-                ah.Message = string.Format("Value on input signal: {0:X} higher than maximum expected value", gid);
+                ah.AlarmTimeStamp = DateTime.Now;
+                ah.AlarmMessage = string.Format("Value on input signal: {0:X} higher than maximum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);

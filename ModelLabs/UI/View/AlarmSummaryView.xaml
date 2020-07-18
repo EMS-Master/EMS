@@ -20,17 +20,17 @@
         <DataGrid x:Name="AlarmSummaryDataGrid"
 				  Margin="5,30,5,5"
 				  ColumnHeaderStyle="{StaticResource AlarmDataGridColumnHeaderStyle}"
-				  
+				  ItemsSource="{Binding Path = AlarmSummaryQueue}"
 				  CanUserDeleteRows="False" CanUserAddRows="False" RowStyle="{StaticResource AlarmSummaryDataGridRowStyle}" ClipToBounds="True"
 				  RowHeaderWidth="0" AutoGenerateColumns="False" SelectionUnit="FullRow"
 				  GridLinesVisibility="None" Grid.ColumnSpan="2">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True"/>
-
-                <DataGridTextColumn Header="Severity" Binding="{Binding Severity}" CellStyle="{StaticResource AlarmGridCell}" />
+				<DataGridTextColumn Header="Severity" Binding="{Binding Severity}" CellStyle="{StaticResource AlarmGridCell}" />
                 <DataGridTextColumn Header="Value" Binding="{Binding AlarmValue}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding AlarmType}" />
+				<DataGridTextColumn Header="TimeStamp" Binding="{Binding AlarmTimeStamp}" IsReadOnly="True"/>
+				<DataGridTextColumn Header="Type" Binding="{Binding AlarmType}" />
                 <DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="MaxValue" Binding="{Binding MaxValue}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="AckState" Binding="{Binding AckState}" CellStyle="{StaticResource AlarmBlinkCell}">

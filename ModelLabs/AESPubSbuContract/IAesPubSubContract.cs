@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using CommonMeas;
+using CalculationEngineServ.DataBaseModels;
 
 namespace FTN.ServiceContracts
 {
@@ -21,9 +22,9 @@ namespace FTN.ServiceContracts
     public interface IAesPubSubCallbackContract
     {
         [OperationContract(IsOneWay = false)]
-        void AlarmsEvents(AlarmHelper alarm);
+        void AlarmsEvents(Alarm alarm);
 
         [OperationContract(IsOneWay = false)]
-        void UpdateAlarmsEvents(AlarmHelper alarm);
+        void UpdateAlarmsEvents(Alarm alarm);
     }
 }

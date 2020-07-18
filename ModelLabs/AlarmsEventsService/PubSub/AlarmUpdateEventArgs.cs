@@ -1,4 +1,5 @@
-﻿using CommonMeas;
+﻿using CalculationEngineServ.DataBaseModels;
+using CommonMeas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace FTN.Services.AlarmsEventsService.PubSub
 {
    public class AlarmUpdateEventArgs : EventArgs
     {
-        private AlarmHelper alarm;
+        private Alarm alarm;
 
-        public AlarmHelper Alarm
+        public Alarm Alarm
         {
             get
             {

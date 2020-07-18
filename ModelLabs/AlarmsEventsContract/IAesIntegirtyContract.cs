@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using CommonMeas;
+using CalculationEngineServ.DataBaseModels;
 
 namespace FTN.ServiceContracts
 {
@@ -13,6 +14,6 @@ namespace FTN.ServiceContracts
     {
         //initiates integrity update
         [OperationContract]
-        List<AlarmHelper> InitiateIntegrityUpdate();
+        List<Alarm> InitiateIntegrityUpdate();
     }
 }

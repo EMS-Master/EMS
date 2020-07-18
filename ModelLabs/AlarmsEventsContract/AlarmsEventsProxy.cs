@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 
 namespace FTN.ServiceContracts
@@ -37,7 +38,7 @@ namespace FTN.ServiceContracts
             }
         }
 
-        public void AddAlarm(AlarmHelper alarm)
+        public void AddAlarm(Alarm alarm)
         {
             proxy.AddAlarm(alarm);
         }

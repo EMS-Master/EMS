@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using CommonMeas;
+using CalculationEngineServ.DataBaseModels;
 
 namespace FTN.ServiceContracts
 {
@@ -13,7 +14,7 @@ namespace FTN.ServiceContracts
     {
         //add new alarm
         [OperationContract]
-        void AddAlarm(AlarmHelper alarm);
+        void AddAlarm(Alarm alarm);
 
         //send measured value to alarmEvents service(gid, value)
         [OperationContract]
