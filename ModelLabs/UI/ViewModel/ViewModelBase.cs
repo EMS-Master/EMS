@@ -83,6 +83,10 @@ namespace UI.ViewModel
             this.IsClosed = true;
         }
 
+        protected virtual void OnDispose()
+        {
+        }
+
 
     }
 }

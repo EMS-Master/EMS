@@ -8,7 +8,7 @@
              xmlns:converters="clr-namespace:UI.Converters"
              xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-
+             
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -65,10 +65,11 @@
 			<TabItem Name="totalTab" Header="Total generation/Load graph">
 				
 				<TabItem.Content>
-					<TextBlock TextWrapping="WrapWithOverflow">
+                
+                    <TextBlock TextWrapping="WrapWithOverflow">
 						<chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600">
 
-                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=TotalProductionLoad}" 
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GenerationList}" 
 												DependentValueBinding="{Binding Path=Key}" 
 												IndependentValueBinding="{Binding Path=Value}"
 												IsSelectionEnabled="False"
@@ -93,6 +94,9 @@
                             </chartingToolkit:LineSeries>
 
                         </chartingToolkit:Chart>
+                        
+                         
+
         
 					</TextBlock>
 				</TabItem.Content>

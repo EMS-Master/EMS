@@ -1,4 +1,5 @@
-﻿using FTN.Common;
+﻿using CalculationEngineServ.PubSub;
+using FTN.Common;
 using FTN.ServiceContracts;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,7 @@ namespace CalculationEngineServ
 			this.hosts.Add(new ServiceHost(typeof(CeToUI)));
 			this.hosts.Add(new ServiceHost(typeof(ProcessingToCalculation)));
             this.hosts.Add(new ServiceHost(typeof(CalculationEngine)));
+            this.hosts.Add(new ServiceHost(typeof(PublisherService)));
         }
 
         private void StartHosts()
