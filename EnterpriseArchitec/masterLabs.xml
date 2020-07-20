@@ -471,7 +471,7 @@
 		<cim:IdentifiedObject.name>Discrete_1</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_2">
-		<cim:Discrete.maxValue>5 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -483,7 +483,7 @@
 		<cim:IdentifiedObject.name>Discrete_2</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_3">
-		<cim:Discrete.maxValue>13 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -495,7 +495,7 @@
 		<cim:IdentifiedObject.name>Discrete_3</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_4">
-		<cim:Discrete.maxValue>10 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -507,7 +507,7 @@
 		<cim:IdentifiedObject.name>Discrete_4</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_5">
-		<cim:Discrete.maxValue>8 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -519,7 +519,7 @@
 		<cim:IdentifiedObject.name>Discrete_5</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_6">
-		<cim:Discrete.maxValue>16 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -531,7 +531,7 @@
 		<cim:IdentifiedObject.name>Discrete_6</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_7">
-		<cim:Discrete.maxValue>7 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1</cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -543,7 +543,7 @@
 		<cim:IdentifiedObject.name>Discrete_7</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_8">
-		<cim:Discrete.maxValue>4 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -555,7 +555,7 @@
 		<cim:IdentifiedObject.name>Discrete_8</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_9">
-		<cim:Discrete.maxValue>6 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -567,7 +567,7 @@
 		<cim:IdentifiedObject.name>Discrete_9</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_10">
-		<cim:Discrete.maxValue>7 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -579,7 +579,7 @@
 		<cim:IdentifiedObject.name>Discrete_10</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_11">
-		<cim:Discrete.maxValue>13 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -591,7 +591,7 @@
 		<cim:IdentifiedObject.name>Discrete_11</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_12">
-		<cim:Discrete.maxValue>19 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -615,7 +615,7 @@
 		<cim:IdentifiedObject.name>Discrete_13</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_14">
-		<cim:Discrete.maxValue>12 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -627,7 +627,7 @@
 		<cim:IdentifiedObject.name>Discrete_14</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_15">
-		<cim:Discrete.maxValue>11 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -651,7 +651,7 @@
 		<cim:IdentifiedObject.name>Discrete_16</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_17">
-		<cim:Discrete.maxValue>8 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -663,7 +663,7 @@
 		<cim:IdentifiedObject.name>Discrete_17</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_18">
-		<cim:Discrete.maxValue>15 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
@@ -675,7 +675,7 @@
 		<cim:IdentifiedObject.name>Discrete_18</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_19">
-		<cim:Discrete.maxValue>20 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
@@ -687,7 +687,7 @@
 		<cim:IdentifiedObject.name>Discrete_19</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_20">
-		<cim:Discrete.maxValue>21 </cim:Discrete.maxValue>
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
 		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
 		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
 		<cim:Measurement.direction> readWrite </cim:Measurement.direction>

@@ -23,20 +23,20 @@ namespace FTN.Services.AlarmsEventsService
 
         // list for storing AlarmHelper entities
         private List<Alarm> alarms;
+        private List<Alarm> discretAlarms;
 
         private PublisherService publisher;
 
-
-
         public object alarmLock = new object();
-        private List<Alarm> alarmsFromDatabase;
         private Dictionary<long, bool> isNormalCreated = new Dictionary<long, bool>(10);
 
         public AlarmsEvents()
         {
             this.Publisher = new PublisherService();
             this.Alarms = new List<Alarm>();
+            this.DiscretAlarms = new List<Alarm>();
             this.Alarms = SelectAlarmsFromDatabase();
+            this.DiscretAlarms = SelectDiscretAlarmsFromDatabase();
             //alarmsFromDatabase = SelectAlarmsFromDatabase();
         }
 
@@ -65,6 +65,18 @@ namespace FTN.Services.AlarmsEventsService
                 this.alarms = value;
             }
         }
+        public List<Alarm> DiscretAlarms
+        {
+            get
+            {
+                return this.discretAlarms;
+            }
+
+            set
+            {
+                this.discretAlarms = value;
+            }
+        }
 
         public void AddAlarm(Alarm alarm)
         {
@@ -76,6 +88,7 @@ namespace FTN.Services.AlarmsEventsService
             PublishingStatus publishingStatus = PublishingStatus.INSERT;
             bool updated = false;
             bool normalAlarm = false;
+            bool insert = false;
             try
             {
                 alarm.AckState = AckState.Unacknowledged;
@@ -83,62 +96,84 @@ namespace FTN.Services.AlarmsEventsService
                 {
                     alarm.CurrentState = string.Format("{0} | {1}", State.Active, alarm.AckState);
                 }
-                foreach (Alarm item in Alarms)
+                if (alarm.AlarmMessage.Contains("discret"))
                 {
-                    if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()))
+                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                    DiscretAlarms.Add(alarm);
+                    InsertAlarmIntoDb(alarm);
+                    //foreach(var al in DiscretAlarms)
+                    //{
+                    //    if(al.Gid.Equals(alarm.Gid))
+                    //    {
+                    //        insert = true;
+                    //    }
+                    //}
+                    //if (!insert)
+                    //{
+                    //    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                    //    DiscretAlarms.Add(alarm);
+                    //    InsertAlarmIntoDb(alarm);
+                    //}
+                }
+                else
+                {
+                    foreach (Alarm item in Alarms)
                     {
-                        item.Severity = alarm.Severity;
-                        item.AlarmValue = alarm.AlarmValue;
-                        item.AlarmMessage = alarm.AlarmMessage;
-                        item.AlarmTimeStamp = alarm.AlarmTimeStamp;
-                        publishingStatus = PublishingStatus.UPDATE;
-                        updated = true;
-                        break;
-                    }
-                    //return to normal
-                    else if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Cleared.ToString()))
-                    {
-                        if (alarm.AlarmType.Equals(AlarmType.NORMAL) /*&& !item.Type.Equals(AlarmType.NORMAL.ToString())*/)
+                        if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()) && !item.AlarmMessage.Contains("discret"))
                         {
-                            bool normalCreated = false;
-                            if (this.isNormalCreated.TryGetValue(alarm.Gid, out normalCreated))
-                            {//prodjen je alarm koji je prije kreiran sa alarmom(High/low)
-                                if (!normalCreated)
-                                {
-                                    normalAlarm = true;
-                                }
-                            }
-
+                            item.Severity = alarm.Severity;
+                            item.AlarmValue = alarm.AlarmValue;
+                            item.AlarmMessage = alarm.AlarmMessage;
+                            item.AlarmTimeStamp = alarm.AlarmTimeStamp;
+                            publishingStatus = PublishingStatus.UPDATE;
+                            updated = true;
                             break;
                         }
-                    }
-                }
-                //ako se prvi put pojavio i nije .NORMAL
-                if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.AlarmType.Equals(AlarmType.NORMAL))
-                {
-                    RemoveFromAlarms(alarm.Gid);
-                    this.Alarms.Add(alarm);
-                    if (InsertAlarmIntoDb(alarm))
-                    {
-                        Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
-                    }
-                    this.isNormalCreated[alarm.Gid] = false;
-                }
-                if (alarm.AlarmType.Equals(AlarmType.NORMAL) && normalAlarm)
-                {
-                    RemoveFromAlarms(alarm.Gid);
-                    this.Alarms.Add(alarm);
-                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
-                    this.isNormalCreated[alarm.Gid] = true;
+                        //return to normal
+                        else if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Cleared.ToString()) && !item.AlarmMessage.Contains("discret"))
+                        {
+                            if (alarm.AlarmType.Equals(AlarmType.NORMAL) /*&& !item.Type.Equals(AlarmType.NORMAL.ToString())*/)
+                            {
+                                bool normalCreated = false;
+                                if (this.isNormalCreated.TryGetValue(alarm.Gid, out normalCreated))
+                                {//prodjen je alarm koji je prije kreiran sa alarmom(High/low)
+                                    if (!normalCreated)
+                                    {
+                                        normalAlarm = true;
+                                    }
+                                }
 
+                                break;
+                            }
+                        }
+                    }
+                    //ako se prvi put pojavio i nije .NORMAL
+                    if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.AlarmType.Equals(AlarmType.NORMAL) && !alarm.AlarmMessage.Contains("discret"))
+                    {
+                        RemoveFromAlarms(alarm.Gid);
+                        this.Alarms.Add(alarm);
+                        if (InsertAlarmIntoDb(alarm))
+                        {
+                            Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                        }
+                        this.isNormalCreated[alarm.Gid] = false;
+                    }
+                    if (alarm.AlarmType.Equals(AlarmType.NORMAL) && normalAlarm)
+                    {
+                        RemoveFromAlarms(alarm.Gid);
+                        this.Alarms.Add(alarm);
+                        this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                        this.isNormalCreated[alarm.Gid] = true;
+
+                    }
+                    else if (!alarm.AlarmType.Equals(AlarmType.NORMAL))
+                    {
+                        this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                    }
+                    //Console.WriteLine("AlarmsEvents: AddAlarm method");
+                    string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.AlarmValue);
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                 }
-                else if (!alarm.AlarmType.Equals(AlarmType.NORMAL))
-                {
-                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
-                }
-                //Console.WriteLine("AlarmsEvents: AddAlarm method");
-                string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.AlarmValue);
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             }
             catch (Exception ex)
             {
@@ -194,7 +229,12 @@ namespace FTN.Services.AlarmsEventsService
             string message = string.Format("UI client requested integirty update for existing alarms.");
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
 
-            return Alarms;
+            List<Alarm> retList = Alarms;
+            foreach(var a in DiscretAlarms)
+            {
+                retList.Add(a);
+            }
+            return retList;
         }
 
         public void UpdateStatus(AnalogLocation analogLoc, State state)
@@ -258,5 +298,21 @@ namespace FTN.Services.AlarmsEventsService
                 return db.Alarms.ToList();
             }
         }
+        private List<Alarm> SelectDiscretAlarmsFromDatabase()
+        {
+            List<Alarm> discret = new List<Alarm>();
+            using (var db = new EmsContext())
+            {
+                foreach(var a in db.Alarms)
+                {
+                    if (a.AlarmMessage.Contains("discret"))
+                    {
+                        discret.Add(a);
+                    }
+                }
+            }
+            return discret;
+        }
+        
     }
 }

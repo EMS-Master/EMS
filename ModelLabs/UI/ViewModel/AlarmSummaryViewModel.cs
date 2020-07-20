@@ -210,56 +210,64 @@ namespace UI.ViewModel
 
         private void AcknowledgeCommandExecute(Alarm alarmHelper)
         {
-            //using (var db = new EmsContext())
-            //{
-            //    foreach (var alarm in db.Alarms.ToList())
-            //    {
-            //        if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
-            //        {
-            //            alarm.AckState = AckState.Acknowledged;
-
-            //           // db.Alarms.Add(alarm);
-            //            db.SaveChanges();
-
-            //        }
-            //    }
-
-            //}
-
             using (var db = new EmsContext())
             {
-                if (alarmHelper == null)
+                foreach (Alarm alarm in AlarmSummaryQueue)
                 {
-                    return;
-                }
-
-                if (alarmHelper.AckState == AckState.Unacknowledged)
-                {
-                    lock (alarmSummaryLock)
+                    if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
                     {
-
-                        foreach (Alarm alarm in db.Alarms.ToList())
-                        {
-                            if (alarm.Gid.Equals(alarmHelper.Gid))
-                            {
-                                alarm.AckState = AckState.Acknowledged;
-                                db.SaveChanges();
-                                alarm.CurrentState = string.Format("{0} | {1}", alarm.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString(), alarm.AckState.ToString());
-                                OnPropertyChanged(nameof(db.Alarms));
-                                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm acknowledged");
-                            }
-                        }
-
+                        Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid).FirstOrDefault();                        
+                        al.AckState = AckState.Acknowledged;
+                        alarm.AckState = AckState.Acknowledged;
+                        OnPropertyChanged(nameof(AlarmSummaryQueue));
+                        // db.Alarms.Add(alarm);
+                        db.SaveChanges();
                     }
-                }
-                else
-                {
-                    alarmHelper.AckState = AckState.Unacknowledged;
-                    string state = alarmHelper.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString();
-                    alarmHelper.CurrentState = string.Format("{0} | {1}", state, alarmHelper.AckState.ToString());
-                    OnPropertyChanged(nameof(db.Alarms));
-                }
+                    if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid == alarmHelper.Gid && alarmHelper.AlarmMessage.Contains("discret"))
+                    {
+                        Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid && a.AlarmMessage.Contains("discret")).FirstOrDefault();
+                        al.AckState = AckState.Acknowledged;
+                        alarm.AckState = AckState.Acknowledged;
+                        OnPropertyChanged(nameof(AlarmSummaryQueue));
+                        // db.Alarms.Add(alarm);
+                        db.SaveChanges();
+                    }
+                }                
             }
+            //using (var db = new EmsContext())
+            //{
+            //    if (alarmHelper == null)
+            //    {
+            //        return;
+            //    }
+
+            //if (alarmHelper.AckState == AckState.Unacknowledged)
+            //{
+            //    lock (alarmSummaryLock)
+            //    {
+
+            //        foreach (Alarm alarm in db.Alarms.ToList())
+            //        {
+            //            if (alarm.Gid.Equals(alarmHelper.Gid))
+            //            {
+            //                alarm.AckState = AckState.Acknowledged;
+            //                db.SaveChanges();
+            //                //alarm.CurrentState = string.Format("{0} | {1}", alarm.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString(), alarm.AckState.ToString());
+            //                OnPropertyChanged(nameof(db.Alarms));
+            //                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm acknowledged");
+            //            }
+            //        }
+
+            //    }
+            //}
+            //else
+            //{
+            //    alarmHelper.AckState = AckState.Unacknowledged;
+            //    string state = alarmHelper.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString();
+            //    alarmHelper.CurrentState = string.Format("{0} | {1}", state, alarmHelper.AckState.ToString());
+            //    OnPropertyChanged(nameof(db.Alarms));
+            //}
+            //}
         }
         }
 
