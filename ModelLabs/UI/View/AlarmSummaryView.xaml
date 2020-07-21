@@ -33,7 +33,7 @@
 				<DataGridTextColumn Header="Type" Binding="{Binding AlarmType}" />
                 <DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="MaxValue" Binding="{Binding MaxValue}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="AckState" Binding="{Binding AckState}" CellStyle="{StaticResource AlarmBlinkCell}">
+                <DataGridTextColumn Header="AckState" Binding="{Binding AckState, UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource AlarmBlinkCell}">
 
                     <!--<DataGridTextColumn.CellStyle>
 						<Style TargetType="{x:Type DataGridCell}">

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace UI.PubSub
 {
+    [CallbackBehavior(UseSynchronizationContext = false)]
     public class CePubSubCallbackService : ICePubSubCallbackContract
     {
         private Action<object> callbackAction;

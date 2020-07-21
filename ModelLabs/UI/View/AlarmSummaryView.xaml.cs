@@ -28,47 +28,44 @@ namespace UI.View
         {
             InitializeComponent();
 
-            AlarmSummaryDataGrid.Items.SortDescriptions.Add(
-                             new System.ComponentModel.SortDescription("TimeStamp", System.ComponentModel.ListSortDirection.Descending));
+            //AlarmSummaryDataGrid.Items.SortDescriptions.Add(
+            //                 new System.ComponentModel.SortDescription("TimeStamp", System.ComponentModel.ListSortDirection.Descending));
 
             //SeveritySearch.Text = "Alarm Type...";
             ComboBox1.Text = "Select Type";
 
-            //using (var db = new EmsContext())
-            //{
-            //    List<Alarm> al = new List<Alarm>();
-            //    List<Alarm> alRemove = new List<Alarm>();
+            using (var db = new EmsContext())
+            {
+                List<Alarm> al = new List<Alarm>();
+                List<Alarm> alRemove = new List<Alarm>();
 
-            //    foreach (var alarm in db.Alarms)
-            //    {
-            //        al.Add(alarm);
-                    
-            //    }
+                foreach (var alarm in db.Alarms)
+                {
+                    al.Add(alarm);
+                }
+                foreach (var a in al)
+                {
+                    if (a.AckState == AckState.Acknowledged)
+                    {
+                        alRemove.Add(a);
+                    }
+                    else if (alRemove.Count == 0)
+                    {
+                        AlarmSummaryDataGrid.ItemsSource = al;
 
-            //    foreach (var a in al)
-            //    {
-            //        if (a.AckState == AckState.Acknowledged)
-            //        {
-            //            alRemove.Add(a);
-            //        }
-            //        else
-            //        {
-            //            AlarmSummaryDataGrid.ItemsSource = al;
-            //        }
-            //    }
+                    }
+                }
+                foreach (var a in alRemove)
+                {
+                    al.Remove(a);
+                }
+                foreach (var a in alRemove)
+                {
+                    al.Add(a);
+                    AlarmSummaryDataGrid.ItemsSource = al;
+                }
 
-            //    foreach (var a in alRemove)
-            //    {
-            //        al.Remove(a);
-            //    }
-
-            //    foreach (var a in alRemove)
-            //    {
-            //        al.Add(a);
-            //        AlarmSummaryDataGrid.ItemsSource = al;
-            //    }
-
-            //}
+            }
         }
 
         private void ButtonHide_Click(object sender, RoutedEventArgs e)
@@ -172,6 +169,10 @@ namespace UI.View
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("GID"))
             {
+                if (ComboBox2.SelectedValue == null)
+                {
+                    return;
+                }
                 long gid =(long)ComboBox2.SelectedValue;
                 List<Alarm> alarms = new List<Alarm>();
                 using (var db = new EmsContext())

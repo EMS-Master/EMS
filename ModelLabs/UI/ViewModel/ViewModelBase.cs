@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculationEngineServ.DataBaseModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,10 +13,13 @@ namespace UI.ViewModel
     public class ViewModelBase : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
+             
+        
 
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+           
         }
 
         public void OnPropertyChanged(params string[] propertyNames)

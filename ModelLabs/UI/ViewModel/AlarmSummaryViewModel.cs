@@ -10,16 +10,19 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using UI.PubSub;
 using UI.View;
 
 namespace UI.ViewModel
 {
-   public class AlarmSummaryViewModel : ViewModelBase
+    public class AlarmSummaryViewModel : ViewModelBase
     {
         private AlarmsEventsSubscribeProxy aeSubscribeProxy;
 
+        
 
         private ObservableCollection<Alarm> alarmSummaryQueue = new ObservableCollection<Alarm>();
 
@@ -27,8 +30,6 @@ namespace UI.ViewModel
 
         public object alarmSummaryLock = new object();
         AlarmSummaryView aw = new AlarmSummaryView();
-
-
 
 
         public ObservableCollection<Alarm> AlarmSummaryQueue
@@ -47,7 +48,7 @@ namespace UI.ViewModel
         public AlarmSummaryViewModel()
         {
             Title = "Alarm Summary";
-           
+
             //using (var db = new EmsContext())
             //{
             //    List<Alarm> al = new List<Alarm>();
@@ -55,7 +56,7 @@ namespace UI.ViewModel
             //    {
             //        al.Add(alarm);
             //        aw.AlarmSummaryDataGrid.ItemsSource = al;
-                    
+
 
             //    }
 
@@ -73,7 +74,7 @@ namespace UI.ViewModel
 
             try
             {
-                IntegirtyUpdate();
+                //IntegirtyUpdate();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Successfully finished Integirty update operation for existing Alarms on AES! \n");
             }
             catch (Exception e)
@@ -83,6 +84,7 @@ namespace UI.ViewModel
         }
 
         public ICommand AcknowledgeCommand => acknowledgeCommand ?? (acknowledgeCommand = new RelayCommand<Alarm>(AcknowledgeCommandExecute));
+
 
         private void CallbackAction(object obj)
         {
@@ -212,28 +214,33 @@ namespace UI.ViewModel
         {
             using (var db = new EmsContext())
             {
-                foreach (Alarm alarm in AlarmSummaryQueue)
+                foreach (Alarm alarm in db.Alarms.ToList())
                 {
                     if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
                     {
-                        Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid).FirstOrDefault();                        
-                        al.AckState = AckState.Acknowledged;
+                        //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid).FirstOrDefault();                        
+                        //al.AckState = AckState.Acknowledged;
                         alarm.AckState = AckState.Acknowledged;
-                        OnPropertyChanged(nameof(AlarmSummaryQueue));
+                        OnPropertyChanged(nameof(db.Alarms));
+                      
                         // db.Alarms.Add(alarm);
                         db.SaveChanges();
                     }
                     if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid == alarmHelper.Gid && alarmHelper.AlarmMessage.Contains("discret"))
                     {
-                        Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid && a.AlarmMessage.Contains("discret")).FirstOrDefault();
-                        al.AckState = AckState.Acknowledged;
+                        //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid && a.AlarmMessage.Contains("discret")).FirstOrDefault();
+                        //al.AckState = AckState.Acknowledged;
                         alarm.AckState = AckState.Acknowledged;
-                        OnPropertyChanged(nameof(AlarmSummaryQueue));
+
+                        OnPropertyChanged(nameof(db.Alarms));
+                        
                         // db.Alarms.Add(alarm);
                         db.SaveChanges();
                     }
                 }                
             }
+
+           
             //using (var db = new EmsContext())
             //{
             //    if (alarmHelper == null)
@@ -269,6 +276,7 @@ namespace UI.ViewModel
             //}
             //}
         }
+        
         }
 
 }
