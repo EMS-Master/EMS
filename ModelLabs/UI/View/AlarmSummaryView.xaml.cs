@@ -30,7 +30,7 @@ namespace UI.View
 
             //AlarmSummaryDataGrid.Items.SortDescriptions.Add(
             //                 new System.ComponentModel.SortDescription("TimeStamp", System.ComponentModel.ListSortDirection.Descending));
-
+           
             //SeveritySearch.Text = "Alarm Type...";
             ComboBox1.Text = "Select Type";
 
@@ -41,31 +41,26 @@ namespace UI.View
 
                 foreach (var alarm in db.Alarms)
                 {
-                    al.Add(alarm);
-                }
-                foreach (var a in al)
-                {
-                    if (a.AckState == AckState.Acknowledged)
+                    if (alarm.AckState == AckState.Acknowledged)
                     {
-                        alRemove.Add(a);
+                        alRemove.Add(alarm);
                     }
-                    else if (alRemove.Count == 0)
+                    else
                     {
-                        AlarmSummaryDataGrid.ItemsSource = al;
+                        al.Add(alarm);
+                    }                    
+                }               
+                var alSort = al.OrderByDescending(x => x.AlarmTimeStamp).ToList();
+                var alRemoveSort = alRemove.OrderByDescending(x => x.AlarmTimeStamp).ToList();
 
-                    }
-                }
-                foreach (var a in alRemove)
+                foreach (var alarm in alRemoveSort)
                 {
-                    al.Remove(a);
-                }
-                foreach (var a in alRemove)
-                {
-                    al.Add(a);
-                    AlarmSummaryDataGrid.ItemsSource = al;
+                    alSort.Add(alarm);
                 }
 
+                    AlarmSummaryDataGrid.ItemsSource = alSort;
             }
+
         }
 
         private void ButtonHide_Click(object sender, RoutedEventArgs e)
