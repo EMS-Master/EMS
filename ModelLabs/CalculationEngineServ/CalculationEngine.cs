@@ -45,6 +45,7 @@ namespace CalculationEngineServ
 
                     result = true;
                 }
+               // ScadaCommandingProxy.Instance.CommandDiscreteValues(25769803777,true);
             }
             catch (Exception ex)
             {

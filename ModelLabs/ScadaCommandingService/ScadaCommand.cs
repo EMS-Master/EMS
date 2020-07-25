@@ -145,8 +145,6 @@ namespace ScadaCommandingService
 
             try
             {
-                int iBateryStorage = 0;
-                int iGen = 0;
                 foreach (ResourceDescription rd in retList)
                 {
                     Analog analog = ResourcesDescriptionConverter.ConvertTo<Analog>(rd);
@@ -244,32 +242,35 @@ namespace ScadaCommandingService
             return true;
         }
 
-        public bool CommandDiscreteValues(List<MeasurementUnitDiscrete> measurements)
+        public bool CommandDiscreteValues(long gid, bool value)
         {
-            foreach (var item in listOfDiscretes)
+            var discLoc = listOfDiscretes.Find(p => p.Discrete.PowerSystemResource == gid);
+           
+            if (discLoc != null)
             {
-                var mes = measurements.Find(x => x.Gid == item.Discrete.PowerSystemResource);
-                if (mes != null)
-                {
-                    // float rawValue = convertorHelper.ConvertFromEGUToRawValue(mes.CurrentValue, 1, 0);
-                    modbusClient.WriteSingleCoil((ushort)((mes.ScadaAddress - 1)), mes.CurrentValue);
-
-                }
-                else
-                {
-                   // if (CheckIfGenerator(item.StartAddress))
-                   // {
-                   //     modbusClient.WriteSingleRegister((ushort)((item.StartAddress - 1) * 2), (float)0);
-                   // }
-                }
+                modbusClient.WriteSingleCoil((ushort)(discLoc.StartAddress - 1), value);
             }
-
-            //modbusClient.WriteSingleRegister((ushort)12, (float)94.8);
 
             Console.WriteLine("SendDataToSimulator executed...\n");
 
             return true;
         }
+
+        public bool CommandAnalogValues(long gid, float value)
+        {
+            var anLoc = listOfAnalog.Find(p => p.Analog.PowerSystemResource == gid);
+
+            if (anLoc != null)
+            {
+                float rawValue = convertorHelper.ConvertFromEGUToRawValue(value, 1, 0);
+                modbusClient.WriteSingleRegister((ushort)((anLoc.StartAddress - 1) * 2), rawValue);
+            }
+
+            Console.WriteLine("SendDataToSimulator executed...\n");
+
+            return true;
+        }
+
         private bool CheckIfGenerator(int number)
         {
             return number > 10 ? true : false;
