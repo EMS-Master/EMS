@@ -12,7 +12,7 @@
         <converters:GidToMridConverter x:Key="GidToMridConverter"/>
         <converters:AckStateToBoolConverter x:Key="AckStateToBoolConverter"/>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="Beige">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="62*"/>
             <ColumnDefinition Width="13*"/>
@@ -86,8 +86,14 @@
 
         </DataGrid>
 
-        <Button x:Name="buttonHide" Content="Hide" HorizontalAlignment="Left" Height="22" Margin="6,3,0,0" VerticalAlignment="Top" Width="95" Click="ButtonHide_Click"/>
-        <ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" Margin="106,3,0,0" VerticalAlignment="Top" Width="95" Height="22" SelectionChanged="ComboBox1_SelectionChanged" RenderTransformOrigin="0.958,0.591" >
+		<Button x:Name="buttonHide" Content="Hide" HorizontalAlignment="Left" Height="22" Margin="6,3,0,0" VerticalAlignment="Top" Width="95" Click="ButtonHide_Click" >
+			<Button.ToolTip>
+				<ToolTip>
+					Hide acknowledged alarms.
+				</ToolTip>
+			</Button.ToolTip>
+		</Button>
+		<ComboBox x:Name="ComboBox1" HorizontalAlignment="Left" Margin="106,3,0,0" VerticalAlignment="Top" Width="95" Height="22" SelectionChanged="ComboBox1_SelectionChanged" RenderTransformOrigin="0.958,0.591" >
             <ComboBoxItem Content="All Alarms"/>
             <ComboBoxItem Content="Type Alarm"/>
             <ComboBoxItem Content="Severity"/>

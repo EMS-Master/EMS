@@ -4,6 +4,7 @@ using CalculationEngineService;
 using CommonMeas;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace UI.View
 {
@@ -24,16 +26,40 @@ namespace UI.View
     /// </summary>
     public partial class AlarmSummaryView : UserControl
     {
+        // create a new timer
+
         public AlarmSummaryView()
         {
+            
             InitializeComponent();
 
-            //AlarmSummaryDataGrid.Items.SortDescriptions.Add(
-            //                 new System.ComponentModel.SortDescription("TimeStamp", System.ComponentModel.ListSortDirection.Descending));
-           
-            //SeveritySearch.Text = "Alarm Type...";
+            DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
+            dispatcherTimer.Start();
+
+            //var timer = new System.Threading.Timer((e) =>
+            //{
+            //    this.Dispatcher.Invoke(() =>
+            //    {
+            //        AlarmSummaryDataGrid.Items.Refresh();
+            //    });
+            //}, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+
             ComboBox1.Text = "Select Type";
 
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            DisplayData();
+
+            // Forcing the CommandManager to raise the RequerySuggested event
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        public void DisplayData()
+        {
             using (var db = new EmsContext())
             {
                 List<Alarm> al = new List<Alarm>();
@@ -48,8 +74,8 @@ namespace UI.View
                     else
                     {
                         al.Add(alarm);
-                    }                    
-                }               
+                    }
+                }
                 var alSort = al.OrderByDescending(x => x.AlarmTimeStamp).ToList();
                 var alRemoveSort = alRemove.OrderByDescending(x => x.AlarmTimeStamp).ToList();
 
@@ -58,11 +84,15 @@ namespace UI.View
                     alSort.Add(alarm);
                 }
 
+                this.Dispatcher.Invoke(() =>
+                {
                     AlarmSummaryDataGrid.ItemsSource = alSort;
-            }
+                });
 
+            }
         }
 
+        
         private void ButtonHide_Click(object sender, RoutedEventArgs e)
         {
 

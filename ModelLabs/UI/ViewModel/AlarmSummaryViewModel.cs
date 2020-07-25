@@ -236,6 +236,7 @@ namespace UI.ViewModel
                         
                         // db.Alarms.Add(alarm);
                         db.SaveChanges();
+
                     }
                 }                
             }
