@@ -94,6 +94,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AESPubSbuContract", "AESPub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CEPubSubContract", "CEPubSubContract\CEPubSubContract.csproj", "{7D9F6CDC-97D6-4E0E-A371-BF9262FE4C8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloatToShortConvertor", "FloatToShortConvertor\FloatToShortConvertor.csproj", "{E160E776-A6AF-43DC-9072-BB3917E94CC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -478,6 +480,18 @@ Global
 		{7D9F6CDC-97D6-4E0E-A371-BF9262FE4C8E}.Release|x64.Build.0 = Release|Any CPU
 		{7D9F6CDC-97D6-4E0E-A371-BF9262FE4C8E}.Release|x86.ActiveCfg = Release|Any CPU
 		{7D9F6CDC-97D6-4E0E-A371-BF9262FE4C8E}.Release|x86.Build.0 = Release|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Debug|x64.Build.0 = Debug|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Debug|x86.Build.0 = Debug|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Release|x64.ActiveCfg = Release|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Release|x64.Build.0 = Release|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Release|x86.ActiveCfg = Release|Any CPU
+		{E160E776-A6AF-43DC-9072-BB3917E94CC6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
