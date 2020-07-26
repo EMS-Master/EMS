@@ -62,7 +62,7 @@ namespace FTN.ServiceContracts
             }
         }
 
-        public void UpdateStatus(AnalogLocation analogLoc, State state)
+        public void UpdateStatus(Alarm analogLoc, State state)
         {
             proxy.UpdateStatus(analogLoc, state);
         }

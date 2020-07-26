@@ -18,6 +18,6 @@ namespace FTN.ServiceContracts
 
         //send measured value to alarmEvents service(gid, value)
         [OperationContract]
-        void UpdateStatus(AnalogLocation analogLoc, State state);
+        void UpdateStatus(Alarm analogLoc, State state);
     }
 }

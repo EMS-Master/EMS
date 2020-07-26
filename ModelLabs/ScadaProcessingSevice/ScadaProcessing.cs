@@ -269,21 +269,25 @@ namespace ScadaProcessingSevice
                 else
                     alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource,"bs");
 
+
                 if (!alarmEGU)
                 {
-                    AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
+                    Alarm al = new Alarm();
+                    al.Gid = analogLoc.Analog.PowerSystemResource;
+                    al.AlarmValue = eguVal;
+                    AlarmsEventsProxy.Instance.UpdateStatus(al, State.Cleared);
 
                     Alarm normalAlarm = new Alarm();
                     normalAlarm.AckState = AckState.Unacknowledged;
-                    normalAlarm.CurrentState = string.Format("{0}|{1}",State.Cleared, normalAlarm.AckState);
+                    normalAlarm.CurrentState = string.Format("{0}", State.Active);
                     normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
                     normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
-                    //normalAlarm.Persistent = PersistentState.Nonpersistent;
                     normalAlarm.AlarmTimeStamp = DateTime.Now;
                     normalAlarm.Severity = SeverityLevel.NORMAL;
                     normalAlarm.AlarmValue = eguVal;
                     normalAlarm.AlarmType = AlarmType.NORMAL;
-
+                    normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
+                    normalAlarm.MinValue = analogLoc.Analog.MinValue;
                     AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
                 }
 
