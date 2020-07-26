@@ -21,6 +21,7 @@ namespace ScadaCommandingServiceSelfHost
                 using (ScadaCommandService scadaCMD = new ScadaCommandService())
                 {
                     scadaCMD.Start();
+                    scadaCMD.GenerateSimulatorValuesFirstTime();
 
                     try
                     {

@@ -276,6 +276,27 @@ namespace ScadaCommandingService
             return number > 10 ? true : false;
         }
 
-
+        public void FillSimulatorFirstTime()
+        {
+            var random = new Random();
+            for(int i = 0; i < 20; i++)
+            {
+                float value = 0;
+                if(i < 10)
+                {
+                    var x = random.Next(10, 70);
+                    var y = (float)random.NextDouble();
+                    value = x + y;
+                }
+                else
+                {
+                    var x = random.Next(70, 150);
+                    var y = (float)random.NextDouble();
+                    value = x + y;
+                }
+                modbusClient.WriteSingleRegister((ushort)(i * 2), value);
+                modbusClient.WriteSingleCoil((ushort)i, true);
+            }
+        }
     }
 }

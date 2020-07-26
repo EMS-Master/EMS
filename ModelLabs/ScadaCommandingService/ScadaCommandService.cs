@@ -28,6 +28,10 @@ namespace ScadaCommandingService
         {
             return scadaCMD.InitiateIntegrityUpdate();
         }
+        public void GenerateSimulatorValuesFirstTime()
+        {
+            scadaCMD.FillSimulatorFirstTime();
+        }
 
         private void InitializeHosts()
         {
