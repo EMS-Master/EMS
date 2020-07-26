@@ -51,7 +51,7 @@ namespace ScadaProcessingSevice
         }
         //data collected from simulator should be passed through 
         //scadaProcessing,from scada, to calculationEngine for optimization
-        public bool SendValues(byte[] value, bool[] valuesDiscrete)
+        public bool SendValues(byte[] value, bool[] valuesDiscrete, byte[] valuesWindSun)
         {
             string function = Enum.GetName(typeof(FunctionCode), value[0]);
             Console.WriteLine("Function executed: {0}", function);
@@ -59,12 +59,16 @@ namespace ScadaProcessingSevice
 			
 			int arrayLength = value[1];
             byte[] data = new byte[arrayLength];
+            byte[] windData = new byte[4];
+            byte[] sunData = new byte[4];
 
             Console.WriteLine("Byte count: {0}", arrayLength);
 
 			Array.Copy(value, 2, data, 0, arrayLength);
-			
-			List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
+            Array.Copy(valuesWindSun, 2, windData, 0, 4);
+            Array.Copy(valuesWindSun, 6, sunData, 0, 4);
+
+            List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
             
             List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
 
@@ -75,6 +79,9 @@ namespace ScadaProcessingSevice
             List<MeasurementUnit> batteryStorageActive = SelectActive(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
             List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
 
+            float windSpeed = GetWindSpeed(windData, 4);
+            float sunlight = GetSunlight(sunData, 4);
+
             LoadXMLFile();
             
             CheckWhichAreTurnedOff(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
@@ -83,7 +90,7 @@ namespace ScadaProcessingSevice
             bool isSuccess = false;
             try
             {
-                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageActive, generatorsActive);
+                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageActive, generatorsActive, windSpeed, sunlight);
             }
             catch (Exception ex)
             {
@@ -468,5 +475,16 @@ namespace ScadaProcessingSevice
             }
         }
 
+        private float GetWindSpeed(byte[] windData, int byteLength)
+        {
+            float[] values = ModbusHelper.GetValueFromByteArray<float>(windData, byteLength);
+            return values[0];
+        }
+
+        private float GetSunlight(byte[] sunData, int byteLength)
+        {
+            float[] values = ModbusHelper.GetValueFromByteArray<float>(sunData, byteLength);
+            return values[0];
+        }
     }
 }

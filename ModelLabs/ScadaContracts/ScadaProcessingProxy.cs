@@ -50,11 +50,11 @@ namespace ScadaContracts
             }
         }
 
-        public bool SendValues(byte[] value, bool[] valueDiscrete)
+        public bool SendValues(byte[] value, bool[] valueDiscrete, byte[] valueWindSun)
         {
             lock (lockObj)
             {
-                return proxy.SendValues(value, valueDiscrete);
+                return proxy.SendValues(value, valueDiscrete, valueWindSun);
             }
         }
     }

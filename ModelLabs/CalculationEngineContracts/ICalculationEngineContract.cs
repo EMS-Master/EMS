@@ -12,7 +12,7 @@ namespace CalculationEngineContracts
     public interface ICalculationEngineContract
     {
         [OperationContract]
-        bool OptimisationAlgorithm(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators);
+        bool OptimisationAlgorithm(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators, float windData, float sunData);
 
     }
 }

@@ -19,7 +19,7 @@ namespace CalculationEngineServ
             throw new NotImplementedException();
         }
 
-        public bool Optimize(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators)
+        public bool Optimize(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators, float windData, float sunData)
         {
             bool result = false;
             foreach (var m in measGenerators)

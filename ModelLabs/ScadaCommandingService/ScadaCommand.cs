@@ -297,6 +297,16 @@ namespace ScadaCommandingService
                 modbusClient.WriteSingleRegister((ushort)(i * 2), value);
                 modbusClient.WriteSingleCoil((ushort)i, true);
             }
+            var a = random.Next(1, 8);
+            var b = (float)random.NextDouble();
+            float val = a + b; // m/s
+            modbusClient.WriteSingleRegister(49, val);
+
+            a = random.Next(1, 7);
+            b = (float)random.NextDouble();
+            val = a + b; // kWh/m2/per day
+            modbusClient.WriteSingleRegister(51, val);
+
         }
     }
 }
