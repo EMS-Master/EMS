@@ -192,6 +192,7 @@
     <Compile Include="Converters\PropertyValueConverter.cs" />
     <Compile Include="Converters\StringCompareConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
+    <Compile Include="Model\CheckedListItem.cs" />
     <Compile Include="Model\GraphSample.cs" />
     <Compile Include="Model\PeriodValues.cs" />
     <Compile Include="PubSub\AePubSubCallbackService.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Selector\ToolTipTemplateSelector.cs" />
     <Compile Include="TestGDA.cs" />
     <Compile Include="ViewModel\AlarmSummaryViewModel.cs" />
+    <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
@@ -210,6 +212,9 @@
     <Compile Include="ViewModel\MapViewModel.cs" />
     <Compile Include="ViewModel\NMSViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\CommandView.xaml.cs">
+      <DependentUpon>CommandView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
@@ -249,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\WindowStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CommandView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -356,6 +365,10 @@
     <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj">
       <Project>{2630d180-1b68-4e84-aeac-42ee8c88b50f}</Project>
       <Name>NetworkModelService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
+      <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
+      <Name>ScadaContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ServiceContracts\NetworkModelQueryContract\NetworkModelGDAContract.csproj">
       <Project>{b726fb71-d295-41ee-9644-b2b0b1bc8911}</Project>

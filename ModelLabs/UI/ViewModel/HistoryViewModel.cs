@@ -1,5 +1,6 @@
 ﻿using CalculationEngineContracts;
 using FTN.Common;
+using FTN.ServiceContracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,6 +56,17 @@ namespace UI.ViewModel
         private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProductionForSelected = new ObservableCollection<Tuple<double, DateTime>>();
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
+
+        private int resourcesLeft;
+        private List<ModelCode> properties;
+        private static List<ResourceDescription> internalGen;
+        private ModelResourcesDesc modelResourcesDesc;
+        private int numberOfResources = 2;
+        private int iteratorId;
+        private List<ResourceDescription> retList;
+
+
+
 
 
 
@@ -254,6 +266,56 @@ namespace UI.ViewModel
         }
         public void IntegrityUpdateForGenerators()
         {
+            internalGen = new List<ResourceDescription>(5);
+            modelResourcesDesc = new ModelResourcesDesc();
+            retList = new List<ResourceDescription>(5);
+            properties = new List<ModelCode>(10);
+            ModelCode modelCodeGenerator = ModelCode.GENERATOR;
+            iteratorId = 0;
+            resourcesLeft = 0;
+            numberOfResources = 2;
+            string message = string.Empty;
+
+            try
+            {
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                internalGen.AddRange(retList);
+
+                foreach (ResourceDescription rd in internalGen)
+                {
+                    //if (rd.ContainsProperty(ModelCode.IDOBJ))
+                    //{
+                        //long gid = rd.GetProperty(ModelCode.IDOBJ_GID).AsLong();
+                        if (GeneratorsFromNms.Contains(rd.Id))
+                        {
+                            continue;
+                        }
+                        GeneratorsFromNms.Add(rd.Id);
+                        GidToBoolMap.Add(rd.Id, false);
+                    //}
+                }
+                OnPropertyChanged(nameof(GeneratorsFromNms));
+
+            }
+            catch (Exception e)
+            {
+                message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCodeGenerator, e.Message);
+                Console.WriteLine(message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                //return false;
+            }
+
+            retList.Clear();
         }
 
         #region Commands
@@ -312,14 +374,14 @@ namespace UI.ViewModel
             GeneratorsContainer.Clear();
             GraphTotalProductionForSelected.Clear();
 
-			GidToBoolMap.Add(12884901889, true);
-			GidToBoolMap.Add(12884901891, true);
-			GidToBoolMap.Add(12884901892, true);
-			GidToBoolMap.Add(12884901893, true);
-			GidToBoolMap.Add(12884901894, true);
-			GidToBoolMap.Add(12884901895, true);
-			GidToBoolMap.Add(12884901896, true);
-			GidToBoolMap.Add(12884901897, true);
+			//GidToBoolMap.Add(12884901889, true);
+			//GidToBoolMap.Add(12884901891, true);
+			//GidToBoolMap.Add(12884901892, true);
+			//GidToBoolMap.Add(12884901893, true);
+			//GidToBoolMap.Add(12884901894, true);
+			//GidToBoolMap.Add(12884901895, true);
+			//GidToBoolMap.Add(12884901896, true);
+			//GidToBoolMap.Add(12884901897, true);
 
 			foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
             {

@@ -16,12 +16,16 @@ namespace UI.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         public DockManagerViewModel DockManagerViewModel { get; private set; }
-        public Dictionary<long, IdentifiedObject> NmsModelMap { get; set; }
+        private Dictionary<long, IdentifiedObject> nmsModelMap;
+
+        public Dictionary<long, IdentifiedObject> NmsModelMap { get { return nmsModelMap; } set { nmsModelMap = value; } }
         public HistoryViewModel HistoryViewModel { get => historyViewModel; set => historyViewModel = value; }
+        public CommandViewModel CommandViewModel { get => commandViewModel; set => commandViewModel = value; }
         public AlarmSummaryViewModel AlarmSummaryViewModel { get => alarmSummaryViewModel; set => alarmSummaryViewModel = value; }
 
         private HistoryViewModel historyViewModel;
         private AlarmSummaryViewModel alarmSummaryViewModel;
+        private CommandViewModel commandViewModel;
         private DashboardViewModel dashboardViewModel;
 
         public MainWindowViewModel()
@@ -33,10 +37,11 @@ namespace UI.ViewModel
 
             var documents = new List<ViewModelBase>();
 
-            AlarmSummaryViewModel = new AlarmSummaryViewModel();
-            AlarmSummaryViewModel.Title = "Alarm Summary";
+            AlarmSummaryViewModel = new AlarmSummaryViewModel() { Title = "Alarm Summary" };
 
             HistoryViewModel = new HistoryViewModel() { Title = "History" };
+
+            CommandViewModel = new CommandViewModel() { Title = "Comand" };
 
             documents.Add(DashboardViewModel);
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
@@ -44,6 +49,7 @@ namespace UI.ViewModel
             documents.Add(new MapViewModel(new View.MapView()) { Title = "Map" });
             documents.Add(HistoryViewModel);
             documents.Add(AlarmSummaryViewModel);
+            documents.Add(CommandViewModel);
 
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);

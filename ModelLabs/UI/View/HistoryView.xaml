@@ -11,6 +11,7 @@
 	  xmlns:uiModel ="clr-namespace:UI.Model;assembly=UI"
 	  xmlns:sys="clr-namespace:System;assembly=mscorlib"
 	  xmlns:root ="clr-namespace:UI"
+      xmlns:system="clr-namespace:System;assembly=mscorlib"
 	  mc:Ignorable="d"
 	  d:DesignHeight="900" d:DesignWidth="500">
 
@@ -35,8 +36,11 @@
 				<CheckBox.Content>
 					<MultiBinding Converter="{StaticResource GidToMridConverter}">
 						<Binding ></Binding>
-						<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+						<Binding Path="" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
 					</MultiBinding>
+                    <!--<Binding Converter="{StaticResource GidToMridConverter}" S>
+                        
+                    </Binding>-->
 				</CheckBox.Content>
 
 				<CheckBox.IsChecked>
@@ -193,7 +197,9 @@
                         </Grid.RowDefinitions>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
                             <ItemsControl ItemsSource="{Binding BatteryStoragesFromNms}"
-										  ItemTemplate="{StaticResource GensAndBSVisibilityCheckbox}"/>
+										  ItemTemplate="{StaticResource GensAndBSVisibilityCheckbox}">
+                               
+                            </ItemsControl>
                         </ScrollViewer>
                     </Grid>
                 </GroupBox>
