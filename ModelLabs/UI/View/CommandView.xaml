@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             
-             xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
-
+			 xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:model="clr-namespace:UI.ViewModel"
              xmlns:local="clr-namespace:UI.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -14,14 +13,25 @@
             <GroupBox Grid.Row="1" Grid.Column="0" Margin="10" FontSize="14" Header="Generators" Foreground="White">
                 <Grid>
                     <ListBox ItemsSource="{Binding Gens}" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsActive}" Content="{Binding Id}"
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="150"></ColumnDefinition>
+										<ColumnDefinition Width="80"></ColumnDefinition>
+									</Grid.ColumnDefinitions>
+									<CheckBox IsChecked="{Binding IsActive}" Content="{Binding Id}"
                                           Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                          CommandParameter="{Binding}" Grid.Column="0"/>
+									<TextBox Text ="{Binding InputValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" IsEnabled="{Binding  Path=IsActive}" >
+										<TextBox.InputBindings>
+											<KeyBinding Command="{Binding DataContext.CommandGen, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter"  CommandParameter="{Binding}"/>
+										</TextBox.InputBindings>
+									</TextBox>
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
                 </Grid>
             </GroupBox>
 

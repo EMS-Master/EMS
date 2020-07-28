@@ -29,12 +29,16 @@ namespace UI.ViewModel
         private ICommand activateGen;
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
 
-        private ICommand checkedCommand;
+		private ICommand commandGen;
+		public ICommand CommandGen => commandGen ?? (commandGen = new RelayCommand<object>(CommandGenExecute));
+
+		private ICommand checkedCommand;
         private ICommand uncheckedCommand;
 
         public ICommand CheckedCommand => checkedCommand ?? (checkedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
 
         public ICommand UncheckedCommand => uncheckedCommand ?? (uncheckedCommand = new RelayCommand<long>(VisibilityUncheckedCommandExecute));
+
 
         private void VisibilityCheckedCommandExecute(long gid)
         {
@@ -54,8 +58,17 @@ namespace UI.ViewModel
             ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Id, model.IsActive);
         }
 
+		private void CommandGenExecute(object obj)
+		{
+			ModelForCheckboxes model = (ModelForCheckboxes)obj;
+			if(model.IsActive)
+			{
+				ScadaCommandingProxy.Instance.CommandAnalogValues(model.Id, model.InputValue);
+			}
+		}
 
-        public ObservableCollection<ModelForCheckboxes> Gens
+
+		public ObservableCollection<ModelForCheckboxes> Gens
         {
             get
             {
@@ -172,5 +185,7 @@ namespace UI.ViewModel
     {
         public long Id { get; set; }
         public bool IsActive { get; set; }
+
+		public float InputValue { get; set; }
     }
 }
