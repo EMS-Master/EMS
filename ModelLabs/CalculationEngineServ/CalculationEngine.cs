@@ -1,20 +1,30 @@
 ﻿using CalculationEngineServ.DataBaseModels;
 using CalculationEngineServ.GeneticAlgorithm;
+using CalculationEngineServ.PubSub;
 using CommonMeas;
 using FTN.Common;
+using FTN.ServiceContracts;
 using ScadaContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using TransactionContract;
 
 namespace CalculationEngineServ
 {
-    public class CalculationEngine : ITransactionContract
+	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+	public class CalculationEngine : ITransactionContract
     {
-        public bool Commit()
+		private PublisherService publisher = null;
+
+		public CalculationEngine()
+		{
+			publisher = new PublisherService();
+		}
+			public bool Commit()
         {
             throw new NotImplementedException();
         }
@@ -36,7 +46,9 @@ namespace CalculationEngineServ
                 Console.WriteLine("Inserted {0} Measurement(s) into history database.", measurementsOptimized.Count);
             }
 
-            try
+			PublishGeneratorsToUI(measurementsOptimized);
+
+			try
             {
                 if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
                 {
@@ -119,5 +131,21 @@ namespace CalculationEngineServ
 
             return retVal;
         }
-    }
+
+		private void PublishGeneratorsToUI(List<MeasurementUnit> measurementsFromGenerators)
+		{
+			List<MeasurementUI> measListUI = new List<MeasurementUI>();
+			foreach (var meas in measurementsFromGenerators)
+			{
+				MeasurementUI measUI = new MeasurementUI();
+				measUI.Gid = meas.Gid;
+				measUI.CurrentValue = meas.CurrentValue;
+				measUI.TimeStamp = meas.TimeStamp;
+				//measUI.OptimizationType = 1;
+				//measUI.Price = meas.CurrentPrice;
+				measListUI.Add(measUI);
+			}
+			publisher.PublishOptimizationResults(measListUI);
+		}
+	}
 }

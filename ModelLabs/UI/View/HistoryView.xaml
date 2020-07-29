@@ -36,11 +36,8 @@
 				<CheckBox.Content>
 					<MultiBinding Converter="{StaticResource GidToMridConverter}">
 						<Binding ></Binding>
-						<Binding Path="" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+						<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
 					</MultiBinding>
-                    <!--<Binding Converter="{StaticResource GidToMridConverter}" S>
-                        
-                    </Binding>-->
 				</CheckBox.Content>
 
 				<CheckBox.IsChecked>

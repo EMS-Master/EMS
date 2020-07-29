@@ -19,7 +19,10 @@ namespace FTN.ServiceContracts
 
         [OperationContract(IsOneWay = false, IsTerminating = true)]
         void Unsubscribe();
-    }
+
+		[OperationContract(IsOneWay = false, IsInitiating = true)]
+		bool Optimization();
+	}
 
     public interface ICePubSubCallbackContract
     {

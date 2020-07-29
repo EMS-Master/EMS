@@ -10,9 +10,9 @@ namespace UI.PubSub
 {
     public class CeSubscribeProxy : ICePubSubContract, IDisposable
     {
-        private static ICePubSubContract proxy;
-        private static DuplexChannelFactory<ICePubSubContract> factory;
-        private static InstanceContext context;
+        private ICePubSubContract proxy;
+        private DuplexChannelFactory<ICePubSubContract> factory;
+        private InstanceContext context;
 
         public ICePubSubContract Proxy
         {
@@ -21,7 +21,7 @@ namespace UI.PubSub
         }
         public CeSubscribeProxy(Action<object> callbackAction)
         {
-            if (proxy == null)
+            if (Proxy == null)
             {
                 context = new InstanceContext(new CePubSubCallbackService() { CallbackAction = callbackAction });
                 factory = new DuplexChannelFactory<ICePubSubContract>(context, "CalculationEnginePubSub");
@@ -39,12 +39,17 @@ namespace UI.PubSub
 
         public void Subscribe()
         {
-            proxy.Subscribe();
+            Proxy.Subscribe();
         }
 
         public void Unsubscribe()
         {
-            proxy.Unsubscribe();
+            Proxy.Unsubscribe();
         }
-    }
+
+		public bool Optimization()
+		{
+			return Proxy.Optimization();
+		}
+	}
 }

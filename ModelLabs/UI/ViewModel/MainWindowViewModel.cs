@@ -41,7 +41,7 @@ namespace UI.ViewModel
 
             HistoryViewModel = new HistoryViewModel() { Title = "History" };
 
-            CommandViewModel = new CommandViewModel() { Title = "Comand" };
+            CommandViewModel = new CommandViewModel() { Title = "Command" };
 
             documents.Add(DashboardViewModel);
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });

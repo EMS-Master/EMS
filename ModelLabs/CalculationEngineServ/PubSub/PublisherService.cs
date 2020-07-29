@@ -20,9 +20,10 @@ namespace CalculationEngineServ.PubSub
 
         private static List<ICePubSubCallbackContract> clientsToPublish = new List<ICePubSubCallbackContract>(4);
 
-        private object clientsLocker = new object(); 
+        private object clientsLocker = new object();
+		public static string OptimizationType = "Genetic";
 
-        public PublisherService()
+		public PublisherService()
         {
             optimizationResultHandler = new OptimizationResultEventHandler(OptimizationResultHandler);
             OptimizationResultEvent += optimizationResultHandler;
@@ -82,7 +83,12 @@ namespace CalculationEngineServ.PubSub
                 Console.WriteLine(message);
             }
         }
-        
-        
-    }
+		public bool Optimization()
+		{
+			OptimizationType = "Genetic";
+			// ChangeOptimizationTypeAction?.Invoke(optimizationType);
+			return true;
+		}
+
+	}
 }

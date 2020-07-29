@@ -16,16 +16,53 @@ namespace UI.ViewModel
         private CeSubscribeProxy ceSubscribeProxy;
         private float currentProduction;
 
-        private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+		private readonly double graphSizeOffset = 18;
+
+		private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
         private ObservableCollection<KeyValuePair<DateTime, float>> generationList = new ObservableCollection<KeyValuePair<DateTime, float>>();
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
+		private double graphWidth;
+		private double graphHeight;
+
+		public double GraphWidth
+		{
+			get
+			{
+				return graphWidth;
+			}
+
+			set
+			{
+				graphWidth = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public double GraphHeight
+		{
+			get
+			{
+				return graphHeight;
+			}
+
+			set
+			{
+				graphHeight = value;
+				OnPropertyChanged();
+			}
+		}
 
 
 
-        public DashboardViewModel()
+		public DashboardViewModel()
         {
             SubsrcibeToCE();
-            Title = "Dashboard";
+			ceSubscribeProxy.Optimization();
+
+			GraphWidth = 16 * graphSizeOffset;
+			GraphHeight = 9 * graphSizeOffset;
+
+			Title = "Dashboard";
         }
 
         public float CurrentProduction

@@ -197,6 +197,7 @@
     <Compile Include="Model\PeriodValues.cs" />
     <Compile Include="PubSub\AePubSubCallbackService.cs" />
     <Compile Include="PubSub\AlarmsEventsSubscribeProxy.cs" />
+    <Compile Include="PubSub\CallbackEventArgs.cs" />
     <Compile Include="PubSub\CePubSubCallbackService.cs" />
     <Compile Include="PubSub\CeSubscribeProxy.cs" />
     <Compile Include="RelayCommand.cs" />
