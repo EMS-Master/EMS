@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using UI.PubSub;
 
 namespace UI.ViewModel
@@ -24,7 +25,27 @@ namespace UI.ViewModel
 		private double graphWidth;
 		private double graphHeight;
 
-		public double GraphWidth
+        private ICommand visibilityCheckedCommand;
+        private ICommand visibilityUncheckedCommand;
+
+        public ICommand VisibilityCheckedCommand => visibilityCheckedCommand ?? (visibilityCheckedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
+
+        public ICommand VisibilityUncheckedCommand => visibilityUncheckedCommand ?? (visibilityUncheckedCommand = new RelayCommand<long>(VisibilityUncheckedCommandExecute));
+        private void VisibilityCheckedCommandExecute(long gid)
+        {
+            GidToBoolMap[gid] = true;
+            OnPropertyChanged(nameof(GidToBoolMap));
+        }
+
+        private void VisibilityUncheckedCommandExecute(long gid)
+        {
+            GidToBoolMap[gid] = false;
+            OnPropertyChanged(nameof(GidToBoolMap));
+        }
+
+
+
+        public double GraphWidth
 		{
 			get
 			{
@@ -125,13 +146,20 @@ namespace UI.ViewModel
             foreach (var measUI in measUIs)
             {
                 var keyPair = container.FirstOrDefault(x => x.Key == measUI.Gid);
-
-                var tempQueue = new ObservableCollection<MeasurementUI>();
-                tempQueue.Add(measUI);
-                container.Add(new KeyValuePair<long, ObservableCollection<MeasurementUI>>(measUI.Gid, tempQueue));
-                if (!GidToBoolMap.ContainsKey(measUI.Gid))
+                if (keyPair.Value == null)
                 {
-                    GidToBoolMap.Add(measUI.Gid, true);
+                    var tempQueue = new ObservableCollection<MeasurementUI>();
+                    tempQueue.Add(measUI);
+                    container.Add(new KeyValuePair<long, ObservableCollection<MeasurementUI>>(measUI.Gid, tempQueue));
+                    if (!GidToBoolMap.ContainsKey(measUI.Gid))
+                    {
+                        GidToBoolMap.Add(measUI.Gid, true);
+                    }
+
+                }
+                else
+                {
+                    keyPair.Value.Add(measUI);
                 }
             }
         }
