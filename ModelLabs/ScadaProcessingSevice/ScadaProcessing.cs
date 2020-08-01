@@ -68,11 +68,11 @@ namespace ScadaProcessingSevice
             Array.Copy(valuesWindSun, 2, windData, 0, 4);
             Array.Copy(valuesWindSun, 6, sunData, 0, 4);
 
-            List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.BATTERY_STORAGE);
+            List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.ENERGY_CONSUMER);
             
             List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
 
-			List<MeasurementUnit> batteryStorageMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(batteryStorageDiscretes, valuesDiscrete, 0, ModelCode.BATTERY_STORAGE);
+			List<MeasurementUnit> batteryStorageMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(batteryStorageDiscretes, valuesDiscrete, 0, ModelCode.ENERGY_CONSUMER);
 
 			List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
 
@@ -163,7 +163,7 @@ namespace ScadaProcessingSevice
                 {
                     Analog analog = ResourcesDescriptionConverter.ConvertTo<Analog>(rd);
 
-                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.BATTERY_STORAGE)
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
                     {
                         batteryStorageAnalogs.Add(new AnalogLocation()
                         {
@@ -189,7 +189,7 @@ namespace ScadaProcessingSevice
 				{
 					Discrete discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
 
-					if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.BATTERY_STORAGE)
+					if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
 					{
 						batteryStorageDiscretes.Add(new DiscreteLocation()
 						{

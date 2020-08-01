@@ -30,7 +30,7 @@ namespace TransactionManagerService
             List<long> idToRemove = new List<long>(10);
 
             Delta analogsDelta = delta.SeparateDeltaForEMSType(DMSType.ANALOG);
-            Delta batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.BATTERY_STORAGE);
+            Delta batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
             Delta generatorDelta = delta.SeparateDeltaForEMSType(DMSType.GENERATOR);
             Delta discreteDelta = delta.SeparateDeltaForEMSType(DMSType.DISCRETE);
             Delta substationDelta = delta.SeparateDeltaForEMSType(DMSType.SUBSTATION);
@@ -62,7 +62,7 @@ namespace TransactionManagerService
                 }
                 // create new delta object from delta with gids
                  analogsDelta = delta.SeparateDeltaForEMSType(DMSType.ANALOG);
-                 batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.BATTERY_STORAGE);
+                 batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
                  generatorDelta = delta.SeparateDeltaForEMSType(DMSType.GENERATOR);
                  discreteDelta = delta.SeparateDeltaForEMSType(DMSType.DISCRETE);
                  substationDelta = delta.SeparateDeltaForEMSType(DMSType.SUBSTATION);

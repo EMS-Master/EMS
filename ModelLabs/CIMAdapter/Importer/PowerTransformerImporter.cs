@@ -102,7 +102,7 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             
             ImportSubstation();
             ImportGenerator();
-            ImportBatteryStorage();
+            ImportEnergyConsumer();
             ImportAnalog();
             ImportDiscrete();
             ImportGeographicalRegion();
@@ -225,46 +225,84 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             return rd;
         }
 
-        private void ImportBatteryStorage()
-        {
-            SortedDictionary<string, object> cimBaseVoltages = concreteModel.GetAllObjectsOfType("FTN.BatteryStorage");
-            if (cimBaseVoltages != null)
-            {
-                foreach (KeyValuePair<string, object> cimBaseVoltagePair in cimBaseVoltages)
-                {
-                    FTN.BatteryStorage cimBaseVoltage = cimBaseVoltagePair.Value as FTN.BatteryStorage;
+		//private void ImportBatteryStorage()
+		//{
+		//    SortedDictionary<string, object> cimBaseVoltages = concreteModel.GetAllObjectsOfType("FTN.BatteryStorage");
+		//    if (cimBaseVoltages != null)
+		//    {
+		//        foreach (KeyValuePair<string, object> cimBaseVoltagePair in cimBaseVoltages)
+		//        {
+		//            FTN.BatteryStorage cimBaseVoltage = cimBaseVoltagePair.Value as FTN.BatteryStorage;
 
-                    ResourceDescription rd = CreateBatteryStorageResourceDescription(cimBaseVoltage);
-                    if (rd != null)
-                    {
-                        delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-                        report.Report.Append("BatteryStorage ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
-                    }
-                    else
-                    {
-                        report.Report.Append("BatteryStorage ID = ").Append(cimBaseVoltage.ID).AppendLine(" FAILED to be converted");
-                    }
-                }
-                report.Report.AppendLine();
-            }
-        }
+		//            ResourceDescription rd = CreateBatteryStorageResourceDescription(cimBaseVoltage);
+		//            if (rd != null)
+		//            {
+		//                delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+		//                report.Report.Append("BatteryStorage ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+		//            }
+		//            else
+		//            {
+		//                report.Report.Append("BatteryStorage ID = ").Append(cimBaseVoltage.ID).AppendLine(" FAILED to be converted");
+		//            }
+		//        }
+		//        report.Report.AppendLine();
+		//    }
+		//}
 
-        private ResourceDescription CreateBatteryStorageResourceDescription(FTN.BatteryStorage cimBaseVoltage)
-        {
-            ResourceDescription rd = null;
-            if (cimBaseVoltage != null)
-            {
-                long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.BATTERY_STORAGE, importHelper.CheckOutIndexForDMSType(DMSType.BATTERY_STORAGE));
-                rd = new ResourceDescription(gid);
-                importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+		//private ResourceDescription CreateBatteryStorageResourceDescription(FTN.BatteryStorage cimBaseVoltage)
+		//{
+		//    ResourceDescription rd = null;
+		//    if (cimBaseVoltage != null)
+		//    {
+		//        long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.BATTERY_STORAGE, importHelper.CheckOutIndexForDMSType(DMSType.BATTERY_STORAGE));
+		//        rd = new ResourceDescription(gid);
+		//        importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
 
-                PowerTransformerConverter.PopulateBatteryStorageProperties(cimBaseVoltage, rd, importHelper, report);
-            }
-            return rd;
-        }
+		//        PowerTransformerConverter.PopulateBatteryStorageProperties(cimBaseVoltage, rd, importHelper, report);
+		//    }
+		//    return rd;
+		//}
+
+		private void ImportEnergyConsumer()
+		{
+			SortedDictionary<string, object> cimBaseVoltages = concreteModel.GetAllObjectsOfType("FTN.EnergyConsumer");
+			if (cimBaseVoltages != null)
+			{
+				foreach (KeyValuePair<string, object> cimBaseVoltagePair in cimBaseVoltages)
+				{
+					FTN.EnergyConsumer cimBaseVoltage = cimBaseVoltagePair.Value as FTN.EnergyConsumer;
+
+					ResourceDescription rd = CreateEnergyConsumerResourceDescription(cimBaseVoltage);
+					if (rd != null)
+					{
+						delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+						report.Report.Append("EnergyConsumer ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+					}
+					else
+					{
+						report.Report.Append("EnergyConsumer ID = ").Append(cimBaseVoltage.ID).AppendLine(" FAILED to be converted");
+					}
+				}
+				report.Report.AppendLine();
+			}
+		}
+
+		private ResourceDescription CreateEnergyConsumerResourceDescription(FTN.EnergyConsumer cimBaseVoltage)
+		{
+			ResourceDescription rd = null;
+			if (cimBaseVoltage != null)
+			{
+				long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.ENERGY_CONSUMER, importHelper.CheckOutIndexForDMSType(DMSType.ENERGY_CONSUMER));
+				rd = new ResourceDescription(gid);
+				importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+
+				PowerTransformerConverter.PopulateEnergyConsumerProperties(cimBaseVoltage, rd, importHelper, report);
+			}
+			return rd;
+		}
 
 
-        private void ImportGeographicalRegion()
+		private void ImportGeographicalRegion()
         {
             SortedDictionary<string, object> cimBaseVoltages = concreteModel.GetAllObjectsOfType("FTN.GeographicalRegion");
             if (cimBaseVoltages != null)

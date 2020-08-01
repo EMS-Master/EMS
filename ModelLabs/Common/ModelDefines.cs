@@ -14,7 +14,7 @@ namespace FTN.Common
         GENERATOR                           = 0x0003,
         SUBSTATION                          = 0x0004,
         GEOGRAFICAL_REGION                  = 0x0005,
-        BATTERY_STORAGE                     = 0x0006,
+		ENERGY_CONSUMER						= 0x0006,
 
 		//BASEVOLTAGE							= 0x0007,
 		//LOCATION							= 0x0008,
@@ -57,14 +57,14 @@ namespace FTN.Common
         GENERATOR_MIN_Q                             = 0x1121111000030205,
         GENERATOR_TYPE                              = 0x112111100003030a,
 
-        ENERGY_CONSUMER                             = 0x1121200000000000,
-        ENERGY_CONSUMER_CURRENT_POWER               = 0x1121200000000105,
-        ENERGY_CONSUMER_PFIXED                      = 0x1121200000000205,
+        ENERGY_CONSUMER                             = 0x1121200000060000,
+        ENERGY_CONSUMER_CURRENT_POWER               = 0x1121200000060105,
+        ENERGY_CONSUMER_PFIXED                      = 0x1121200000060205,
 
 
-        BATTERY_STORAGE                             = 0x1121210000060000,
-        BATTERY_STORAGE_MAX_POWER                   = 0x1121210000060105,
-        BATTERY_STORAGE_MIN_CAPACITY                = 0x1121210000060205,
+        //BATTERY_STORAGE                             = 0x1121210000060000,
+        //BATTERY_STORAGE_MAX_POWER                   = 0x1121210000060105,
+        //BATTERY_STORAGE_MIN_CAPACITY                = 0x1121210000060205,
         
         MEASUREMENT                                 = 0x1200000000000000,
         MEASUREMENT_DIRECTION                       = 0x120000000000010a,

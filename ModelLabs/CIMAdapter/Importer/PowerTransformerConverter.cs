@@ -162,22 +162,22 @@
             }
         }
 
-        public static void PopulateBatteryStorageProperties(FTN.BatteryStorage cimIdentifiedObject, ResourceDescription rd, ImportHelper importHelper, TransformAndLoadReport report)
-        {
-            if ((cimIdentifiedObject != null) && (rd != null))
-            {
-                PowerTransformerConverter.PopulateEnergyConsumerProperties(cimIdentifiedObject, rd, importHelper, report);
+        //public static void PopulateBatteryStorageProperties(FTN.BatteryStorage cimIdentifiedObject, ResourceDescription rd, ImportHelper importHelper, TransformAndLoadReport report)
+        //{
+        //    if ((cimIdentifiedObject != null) && (rd != null))
+        //    {
+        //        PowerTransformerConverter.PopulateEnergyConsumerProperties(cimIdentifiedObject, rd, importHelper, report);
 
-                if (cimIdentifiedObject.MaxPowerHasValue)
-                {
-                    rd.AddProperty(new Property(ModelCode.BATTERY_STORAGE_MAX_POWER, cimIdentifiedObject.MaxPower));
-                }
-                if (cimIdentifiedObject.MinCapasityHasValue)
-                {
-                    rd.AddProperty(new Property(ModelCode.BATTERY_STORAGE_MIN_CAPACITY, cimIdentifiedObject.MinCapasity));
-                }
-            }
-        }
+        //        if (cimIdentifiedObject.MaxPowerHasValue)
+        //        {
+        //            rd.AddProperty(new Property(ModelCode.BATTERY_STORAGE_MAX_POWER, cimIdentifiedObject.MaxPower));
+        //        }
+        //        if (cimIdentifiedObject.MinCapasityHasValue)
+        //        {
+        //            rd.AddProperty(new Property(ModelCode.BATTERY_STORAGE_MIN_CAPACITY, cimIdentifiedObject.MinCapasity));
+        //        }
+        //    }
+        //}
 
         public static void PopulatePowerSystemResourceProperties(FTN.PowerSystemResource cimBaseVoltage, ResourceDescription rd, ImportHelper importHelper, TransformAndLoadReport report)
         {

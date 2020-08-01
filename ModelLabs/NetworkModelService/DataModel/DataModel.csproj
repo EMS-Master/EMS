@@ -96,7 +96,6 @@
     <Compile Include="Meas\Measurement.cs" />
     <Compile Include="Core\PowerSystemResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Wires\BatteryStorage.cs" />
     <Compile Include="Wires\EnergyConsumer.cs" />
     <Compile Include="Wires\Generator.cs" />
     <Compile Include="Wires\RegulatingCondEq.cs" />

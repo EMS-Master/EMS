@@ -68,7 +68,7 @@ namespace UI.ViewModel
                 ModelCode modelCodeAnalog = ModelCode.ANALOG;
                 ModelCode modelCodeGenerator = ModelCode.GENERATOR;
                 ModelCode modelCodeSubstation= ModelCode.SUBSTATION;
-                ModelCode modelCodeBatteryStorage = ModelCode.BATTERY_STORAGE;
+                ModelCode modelCodeBatteryStorage = ModelCode.ENERGY_CONSUMER;
                 ModelCode modelCodeGeographicalRegion = ModelCode.GEOGRAFICAL_REGION;
 
                 int iteratorId = 0;

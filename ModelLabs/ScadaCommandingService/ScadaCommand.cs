@@ -149,7 +149,7 @@ namespace ScadaCommandingService
                 {
                     Analog analog = ResourcesDescriptionConverter.ConvertTo<Analog>(rd);
 
-                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.BATTERY_STORAGE)
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
                     {
                         listOfAnalog.Add(new AnalogLocation()
                         {
@@ -176,7 +176,7 @@ namespace ScadaCommandingService
                 {
                     Discrete discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
 
-                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.BATTERY_STORAGE)
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
                     {
                         listOfDiscretes.Add(new DiscreteLocation()
                         {

@@ -21,7 +21,7 @@ namespace UI.Selector
             {
                 return GeneratorTemplate;
             }
-            else if (item is BatteryStorage)
+            else if (item is EnergyConsumer)
             {
                 return BatteryStorageTemplate;
             }

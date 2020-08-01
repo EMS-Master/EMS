@@ -875,7 +875,7 @@ namespace FTN.Common
             
             typeIdsInInsertOrder.Add(ModelCode.SUBSTATION);
             typeIdsInInsertOrder.Add(ModelCode.GENERATOR);
-            typeIdsInInsertOrder.Add(ModelCode.BATTERY_STORAGE);
+            typeIdsInInsertOrder.Add(ModelCode.ENERGY_CONSUMER);
             typeIdsInInsertOrder.Add(ModelCode.ANALOG);
             typeIdsInInsertOrder.Add(ModelCode.DISCRETE);
             typeIdsInInsertOrder.Add(ModelCode.GEOGRAFICAL_REGION);

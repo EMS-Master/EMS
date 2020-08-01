@@ -108,7 +108,7 @@ namespace UI.ViewModel
             retList = new List<ResourceDescription>(5);
             properties = new List<ModelCode>(10);
             ModelCode modelCodeGenerator = ModelCode.GENERATOR;
-            ModelCode modelCodeBattery = ModelCode.BATTERY_STORAGE;
+            ModelCode modelCodeBattery = ModelCode.ENERGY_CONSUMER;
             iteratorId = 0;
             resourcesLeft = 0;
             numberOfResources = 2;

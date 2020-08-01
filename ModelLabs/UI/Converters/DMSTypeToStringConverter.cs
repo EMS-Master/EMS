@@ -32,8 +32,8 @@ namespace UI.Converters
                     return "Substation";
                 case DMSType.GEOGRAFICAL_REGION:
                     return "GeograficalRegion";
-                case DMSType.BATTERY_STORAGE:
-                    return "BatteryStorage";
+                case DMSType.ENERGY_CONSUMER:
+                    return "EnergyConsumer";
                 default:
                     return "";
             }

@@ -44,8 +44,8 @@ namespace CommonMeas
                     io = new Analog(globalId);
                     break;
 
-                case DMSType.BATTERY_STORAGE:
-                    io = new BatteryStorage(globalId);
+                case DMSType.ENERGY_CONSUMER:
+                    io = new EnergyConsumer(globalId);
                     break;
 
                 case DMSType.DISCRETE:
