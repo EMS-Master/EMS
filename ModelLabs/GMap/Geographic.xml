@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NetworkModel>
-	<BatteryStorages>
-		<BatteryStorage>
-			<MaxPower>300</MaxPower>
-			<MinCapacity>20</MinCapacity>
+	<EnergyConsumers>
+		<EnergyConsumer>
+			<CurrentPower>21</CurrentPower>
+			<PFixed>5</PFixed>
 			<X>413321.68355993</X>
 			<Y>5009020.27018182</Y>
-		</BatteryStorage>
-		<BatteryStorage>
-			<MaxPower>500</MaxPower>
-			<MinCapacity>30</MinCapacity>
+		</EnergyConsumer>
+		<EnergyConsumer>
+			<CurrentPower>22</CurrentPower>
+			<PFixed>5</PFixed>
 			 <X>406884.872804481</X>
 			 <Y>5009357.24759746</Y>
-		</BatteryStorage>
-		<BatteryStorage>
-			<MaxPower>250</MaxPower>
-			<MinCapacity>20</MinCapacity>
+		</EnergyConsumer>
+		<EnergyConsumer>
+			<CurrentPower>23</CurrentPower>
+			<PFixed>5</PFixed>
 			 <X>411643.46923753963</X>
 			 <Y>5020018.3360121045</Y>
-		</BatteryStorage>
-		<BatteryStorage>
-			<MaxPower>400</MaxPower>
-			<MinCapacity>10</MinCapacity>
+		</EnergyConsumer>
+		<EnergyConsumer>
+			<CurrentPower>24</CurrentPower>
+			<PFixed>5</PFixed>
 			<X>414825.46321875858</X>
 			<Y>5006154.1329433313</Y>
-		</BatteryStorage>
-	</BatteryStorages>
+		</EnergyConsumer>
+	</EnergyConsumers>
 	
 	<Generators>
 		<Generator>

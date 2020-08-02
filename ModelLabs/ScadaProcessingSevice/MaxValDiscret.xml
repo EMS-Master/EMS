@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NetworkModel>
-	<BatteryStorages>
-		<BatteryStorage>
+	<EnergyConsumers>
+		<EnergyConsumer>
 			<Gid>25769803777</Gid>
 			<MaxVal>2</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803778</Gid>
 			<MaxVal>5</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803779</Gid>
 			<MaxVal>3</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803780</Gid>
 			<MaxVal>4</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803781</Gid>
 			<MaxVal>7</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803782</Gid>
 			<MaxVal>6</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803783</Gid>
 			<MaxVal>4</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803784</Gid>
 			<MaxVal>8</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803785</Gid>
 			<MaxVal>7</MaxVal>
-		</BatteryStorage>
-		<BatteryStorage>
+		</EnergyConsumer>
+		<EnergyConsumer>
 			<Gid>25769803786</Gid>
 			<MaxVal>5</MaxVal>
-		</BatteryStorage>
-	</BatteryStorages>
+		</EnergyConsumer>
+	</EnergyConsumers>
 	
 	<Generators>
 		<Generator>

@@ -22,8 +22,8 @@ namespace UI.ViewModel
         private GraphSample graphSampling;
         private ICommand allGeneratorsCheckedCommand;
         private ICommand allGeneratorsUnheckedCommand;
-        private ICommand allBatteryStoragesCheckedCommand;
-        private ICommand allBatteryStoragesUnheckedCommand;
+        private ICommand allEnergyConsumersCheckedCommand;
+        private ICommand allEnergyConsumersUnheckedCommand;
         private ICommand selectedPeriodCommand;
 
         private ICommand showDataCommand;
@@ -49,7 +49,7 @@ namespace UI.ViewModel
         private bool totalLoadGraphVisible = true;
 
         private ObservableCollection<long> generatorsFromNms = new ObservableCollection<long>();
-        private ObservableCollection<long> batteryStoragesFromNms = new ObservableCollection<long>();
+        private ObservableCollection<long> energyConsumersFromNms = new ObservableCollection<long>();
 
         private ObservableCollection<Tuple<double, DateTime>> totalProduction = new ObservableCollection<Tuple<double, DateTime>>();
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
@@ -86,15 +86,15 @@ namespace UI.ViewModel
             }
         }
 
-        public ObservableCollection<long> BatteryStoragesFromNms
+        public ObservableCollection<long> EnergyConsumersFromNms
         {
             get
             {
-                return batteryStoragesFromNms;
+                return energyConsumersFromNms;
             }
             set
             {
-                batteryStoragesFromNms = value;
+                energyConsumersFromNms = value;
                 OnPropertyChanged();
             }
         }
@@ -234,9 +234,9 @@ namespace UI.ViewModel
 
         public ICommand AllGeneratorsUncheckedCommand => allGeneratorsUnheckedCommand ?? (allGeneratorsUnheckedCommand = new RelayCommand(AllGeneratorsUnheckedCommandExecute));
 
-        public ICommand AllBatteryStoragesCheckedCommand => allBatteryStoragesCheckedCommand ?? (allBatteryStoragesCheckedCommand = new RelayCommand(AllBatteryStoragesCheckedCommandExecute));
+        public ICommand AllEnergyConsumersCheckedCommand => allEnergyConsumersCheckedCommand ?? (allEnergyConsumersCheckedCommand = new RelayCommand(AllEnergyConsumersCheckedCommandExecute));
 
-        public ICommand AllBatteryStoragesUncheckedCommand => allBatteryStoragesUnheckedCommand ?? (allBatteryStoragesUnheckedCommand = new RelayCommand(AllBatteryStoragesUnheckedCommandExecute));
+        public ICommand AllEnergyConsumersUncheckedCommand => allEnergyConsumersUnheckedCommand ?? (allEnergyConsumersUnheckedCommand = new RelayCommand(AllEnergyConsumersUnheckedCommandExecute));
 
         public Dictionary<long, bool> GidToBoolMap
         {
@@ -516,13 +516,13 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
-        private void AllBatteryStoragesCheckedCommandExecute(object obj)
+        private void AllEnergyConsumersCheckedCommandExecute(object obj)
         {
             GidToBoolMap = GidToBoolMap.ToDictionary(p => p.Key, p => true);
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
-        private void AllBatteryStoragesUnheckedCommandExecute(object obj)
+        private void AllEnergyConsumersUnheckedCommandExecute(object obj)
         {
             GidToBoolMap = GidToBoolMap.ToDictionary(p => p.Key, p => false);
             OnPropertyChanged(nameof(GidToBoolMap));

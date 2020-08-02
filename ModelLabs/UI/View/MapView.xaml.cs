@@ -74,12 +74,12 @@ namespace UI.View
                 XmlDocument doc = new XmlDocument();
                 doc.Load(path + "GMap/Geographic.xml");
 
-                XmlNodeList BatteryStorageNode = doc.GetElementsByTagName("BatteryStorage");
-                foreach (XmlNode item in BatteryStorageNode)
+                XmlNodeList EnergyConsumerNode = doc.GetElementsByTagName("EnergyConsumer");
+                foreach (XmlNode item in EnergyConsumerNode)
                 {
 
-                    float maxPower = float.Parse(item["MaxPower"].InnerText);
-                    float minCapacity = float.Parse(item["MinCapacity"].InnerText);
+                    float currentPower = float.Parse(item["CurrentPower"].InnerText);
+                    float pFixed = float.Parse(item["PFixed"].InnerText);
                     float x = float.Parse(item["X"].InnerText);
                     float y = float.Parse(item["Y"].InnerText);
 

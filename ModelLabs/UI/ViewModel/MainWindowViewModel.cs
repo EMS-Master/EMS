@@ -68,7 +68,7 @@ namespace UI.ViewModel
                 ModelCode modelCodeAnalog = ModelCode.ANALOG;
                 ModelCode modelCodeGenerator = ModelCode.GENERATOR;
                 ModelCode modelCodeSubstation= ModelCode.SUBSTATION;
-                ModelCode modelCodeBatteryStorage = ModelCode.ENERGY_CONSUMER;
+                ModelCode modelCodeEnergyConsumer = ModelCode.ENERGY_CONSUMER;
                 ModelCode modelCodeGeographicalRegion = ModelCode.GEOGRAFICAL_REGION;
 
                 int iteratorId = 0;
@@ -251,13 +251,13 @@ namespace UI.ViewModel
                 retList.Clear();
                 #endregion
 
-                #region getting BattaryStorage
+                #region getting EnergyConsumer
                 try
                 {
                     // third get all enenrgy consumers from NMS
-                    properties = modelResourcesDesc.GetAllPropertyIds(modelCodeBatteryStorage);
+                    properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeBatteryStorage, properties);
+                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeEnergyConsumer, properties);
                     resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
@@ -270,7 +270,7 @@ namespace UI.ViewModel
                 }
                 catch (Exception e)
                 {
-                    message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCodeBatteryStorage, e.Message);
+                    message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCodeEnergyConsumer, e.Message);
                     Console.WriteLine(message);
                     CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                     return false;

@@ -35,9 +35,9 @@
                 </Grid>
             </GroupBox>
 
-            <!--<GroupBox Grid.Row="1" Grid.Column="0" Margin="10" FontSize="14" Header="Battery storages" Foreground="White">
+            <!--<GroupBox Grid.Row="1" Grid.Column="0" Margin="10" FontSize="14" Header="Energy consumers" Foreground="White">
                 <Grid>
-                    <ListBox ItemsSource="{Binding Battery}">
+                    <ListBox ItemsSource="{Binding EnergyConsumer}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding IsActive}" Content="{Binding Id}"/>

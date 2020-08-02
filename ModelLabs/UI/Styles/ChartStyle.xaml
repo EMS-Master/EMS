@@ -69,7 +69,7 @@
 
 	<selector:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"
 									  GeneratorTemplate="{StaticResource GeneratorTemplate}"
-									  BatteryStorageTemplate="{StaticResource BatteryStorageTemplate}">
+									  EnergyConsumerTemplate="{StaticResource EnergyConsumerTemplate}">
 	</selector:ToolTipTemplateSelector>
 
 	<ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">

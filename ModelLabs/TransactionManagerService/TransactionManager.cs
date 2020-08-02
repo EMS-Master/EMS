@@ -30,13 +30,13 @@ namespace TransactionManagerService
             List<long> idToRemove = new List<long>(10);
 
             Delta analogsDelta = delta.SeparateDeltaForEMSType(DMSType.ANALOG);
-            Delta batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
+            Delta energyConsumerDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
             Delta generatorDelta = delta.SeparateDeltaForEMSType(DMSType.GENERATOR);
             Delta discreteDelta = delta.SeparateDeltaForEMSType(DMSType.DISCRETE);
             Delta substationDelta = delta.SeparateDeltaForEMSType(DMSType.SUBSTATION);
             Delta geograficalRegionDelta = delta.SeparateDeltaForEMSType(DMSType.GEOGRAFICAL_REGION);
 
-            ceDelta = generatorDelta + batteryStorageDelta;
+            ceDelta = generatorDelta + energyConsumerDelta;
 
             if (analogsDelta.InsertOperations.Count != 0 || analogsDelta.UpdateOperations.Count != 0)
             {
@@ -62,13 +62,13 @@ namespace TransactionManagerService
                 }
                 // create new delta object from delta with gids
                  analogsDelta = delta.SeparateDeltaForEMSType(DMSType.ANALOG);
-                 batteryStorageDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
+                energyConsumerDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
                  generatorDelta = delta.SeparateDeltaForEMSType(DMSType.GENERATOR);
                  discreteDelta = delta.SeparateDeltaForEMSType(DMSType.DISCRETE);
                  substationDelta = delta.SeparateDeltaForEMSType(DMSType.SUBSTATION);
                  geograficalRegionDelta = delta.SeparateDeltaForEMSType(DMSType.GEOGRAFICAL_REGION);
 
-                ceDelta = batteryStorageDelta + generatorDelta;
+                ceDelta = energyConsumerDelta + generatorDelta;
                 ceDeltaToApply = ceDelta;
 
                 // second transaction - send ceDelta to CE

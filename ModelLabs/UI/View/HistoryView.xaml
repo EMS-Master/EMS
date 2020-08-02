@@ -174,26 +174,26 @@
                     </Grid>
                 </GroupBox>
 
-                <CheckBox Grid.Row="5" Grid.Column="0" Content="All Battery Storages" Margin="10" Foreground="White" >
+                <CheckBox Grid.Row="5" Grid.Column="0" Content="All Energy Consumers" Margin="10" Foreground="White" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
-                            <i:InvokeCommandAction Command="{Binding DataContext.AllBatteryStoragesCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+							<i:InvokeCommandAction Command="{Binding DataContext.AllEnergyConsumersCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
 											   />
                         </i:EventTrigger>
                         <i:EventTrigger EventName="Unchecked">
-                            <i:InvokeCommandAction Command="{Binding DataContext.AllBatteryStoragesUncheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+							<i:InvokeCommandAction Command="{Binding DataContext.AllEnergyConsumersUncheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
 											   />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </CheckBox>
 
-                <GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Battery Storages" Foreground="White">
+				<GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Energy Consumers" Foreground="White">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
-                            <ItemsControl ItemsSource="{Binding BatteryStoragesFromNms}"
+							<ItemsControl ItemsSource="{Binding EnergyConsumersFromNms}"
 										  ItemTemplate="{StaticResource GensAndBSVisibilityCheckbox}">
                                
                             </ItemsControl>
@@ -256,7 +256,7 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox Content="All Battery Storages" Margin="10" Foreground="White" IsChecked="True">
+							<CheckBox Content="All Energy Consumers" Margin="10" Foreground="White" IsChecked="True">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.TotaLoadGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>

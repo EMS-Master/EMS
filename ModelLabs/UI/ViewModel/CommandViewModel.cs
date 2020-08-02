@@ -81,7 +81,7 @@ namespace UI.ViewModel
             }
         }
 
-        public ObservableCollection<ModelForCheckboxes> Battery
+        public ObservableCollection<ModelForCheckboxes> EnergyConsumer
         {
             get
             {
@@ -108,7 +108,7 @@ namespace UI.ViewModel
             retList = new List<ResourceDescription>(5);
             properties = new List<ModelCode>(10);
             ModelCode modelCodeGenerator = ModelCode.GENERATOR;
-            ModelCode modelCodeBattery = ModelCode.ENERGY_CONSUMER;
+            ModelCode modelCodeEnergyConsumer = ModelCode.ENERGY_CONSUMER;
             iteratorId = 0;
             resourcesLeft = 0;
             numberOfResources = 2;
@@ -143,8 +143,8 @@ namespace UI.ViewModel
                 OnPropertyChanged(nameof(Gens));
 
 
-                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeBattery);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeBattery, properties);
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeEnergyConsumer, properties);
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
                 while (resourcesLeft > 0)
                 {
@@ -158,16 +158,16 @@ namespace UI.ViewModel
                
                 foreach (ResourceDescription rd in internalGen)
                 {
-                    if (Battery.Any(x => x.Id == rd.Id))
+                    if (EnergyConsumer.Any(x => x.Id == rd.Id))
                     {
                         continue;
                     }
 
                     bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
-                    Battery.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active });
+                    EnergyConsumer.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active });
 
                 }
-                OnPropertyChanged(nameof(Battery));
+                OnPropertyChanged(nameof(EnergyConsumer));
 
             }
             catch (Exception e)

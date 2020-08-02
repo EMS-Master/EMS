@@ -12,7 +12,7 @@ namespace UI.Selector
     public class ToolTipTemplateSelector : DataTemplateSelector
     {
         public DataTemplate GeneratorTemplate { get; set; }
-        public DataTemplate BatteryStorageTemplate { get; set; }
+        public DataTemplate EnergyConsumerTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item,
                    DependencyObject container)
@@ -23,7 +23,7 @@ namespace UI.Selector
             }
             else if (item is EnergyConsumer)
             {
-                return BatteryStorageTemplate;
+                return EnergyConsumerTemplate;
             }
 
             return null;

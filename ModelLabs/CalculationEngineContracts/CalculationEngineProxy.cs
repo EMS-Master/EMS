@@ -108,9 +108,9 @@ namespace CalculationEngineContracts
         /// <param name="windSpeed">speed of wind</param>
         /// <param name="sunlight">sunlight percent</param>
         /// <returns>returns true if optimization was successful</returns>
-        public bool OptimisationAlgorithm(List<MeasurementUnit> measBatteryStorage, List<MeasurementUnit> measGenerators, float windData, float sunData)
+        public bool OptimisationAlgorithm(List<MeasurementUnit> measEnergyConsumer, List<MeasurementUnit> measGenerators, float windData, float sunData)
         {
-            return proxy.OptimisationAlgorithm(measBatteryStorage, measGenerators, windData, sunData);
+            return proxy.OptimisationAlgorithm(measEnergyConsumer, measGenerators, windData, sunData);
         }
 
         public List<DiscreteCounterModel> GetAllDiscreteCounters()

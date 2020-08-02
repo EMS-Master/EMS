@@ -25,9 +25,9 @@ namespace ScadaProcessingSevice
        
         private ModelResourcesDesc modelResourcesDesc;
         private NetworkModelGDAProxy gdaQueryProxy = null;
-        private static List<AnalogLocation> batteryStorageAnalogs;
+        private static List<AnalogLocation> energyConsumerAnalogs;
         private static List<AnalogLocation> generatorAnalogs;
-		private static List<DiscreteLocation> batteryStorageDiscretes;
+		private static List<DiscreteLocation> energyConsumerDiscretes;
 		private static List<DiscreteLocation> generatorDscretes;
 		private readonly int START_ADDRESS_GENERATOR = 20;
 		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 10;
@@ -42,10 +42,10 @@ namespace ScadaProcessingSevice
             convertorHelper = new ConvertorHelper();
 
             generatorAnalogs = new List<AnalogLocation>();
-            batteryStorageAnalogs = new List<AnalogLocation>();
+            energyConsumerAnalogs = new List<AnalogLocation>();
             modelResourcesDesc = new ModelResourcesDesc();
 			previousGeneratorDiscretes = new Dictionary<long, float>(10);
-			batteryStorageDiscretes = new List<DiscreteLocation>();
+            energyConsumerDiscretes = new List<DiscreteLocation>();
 			generatorDscretes = new List<DiscreteLocation>();
             DiscretMaxVal = new Dictionary<long, int>();
         }
@@ -68,15 +68,15 @@ namespace ScadaProcessingSevice
             Array.Copy(valuesWindSun, 2, windData, 0, 4);
             Array.Copy(valuesWindSun, 6, sunData, 0, 4);
 
-            List<MeasurementUnit> batteryStorageMeasUnits = ParseDataToMeasurementUnit(batteryStorageAnalogs, data, 0, ModelCode.ENERGY_CONSUMER);
+            List<MeasurementUnit> energyConsumerMeasUnits = ParseDataToMeasurementUnit(energyConsumerAnalogs, data, 0, ModelCode.ENERGY_CONSUMER);
             
             List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
 
-			List<MeasurementUnit> batteryStorageMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(batteryStorageDiscretes, valuesDiscrete, 0, ModelCode.ENERGY_CONSUMER);
+			List<MeasurementUnit> energyConsumerMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(energyConsumerDiscretes, valuesDiscrete, 0, ModelCode.ENERGY_CONSUMER);
 
 			List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
 
-            List<MeasurementUnit> batteryStorageActive = SelectActive(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
+            List<MeasurementUnit> energyConsumerActive = SelectActive(energyConsumerMeasUnits, energyConsumerMeasUnitsDiscrete);
             List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
 
             float windSpeed = GetWindSpeed(windData, 4);
@@ -84,13 +84,13 @@ namespace ScadaProcessingSevice
 
             LoadXMLFile();
             
-            CheckWhichAreTurnedOff(batteryStorageMeasUnits, batteryStorageMeasUnitsDiscrete);
+            CheckWhichAreTurnedOff(energyConsumerMeasUnits, energyConsumerMeasUnitsDiscrete);
             CheckWhichAreTurnedOff(generatorMeasUnits, generatorMeasUnitsDiscrete);
 
             bool isSuccess = false;
             try
             {
-                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(batteryStorageActive, generatorsActive, windSpeed, sunlight);
+                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(energyConsumerActive, generatorsActive, windSpeed, sunlight);
             }
             catch (Exception ex)
             {
@@ -165,7 +165,7 @@ namespace ScadaProcessingSevice
 
                     if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
                     {
-                        batteryStorageAnalogs.Add(new AnalogLocation()
+                        energyConsumerAnalogs.Add(new AnalogLocation()
                         {
                             Analog = analog,
                             StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]),
@@ -191,7 +191,7 @@ namespace ScadaProcessingSevice
 
 					if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
 					{
-						batteryStorageDiscretes.Add(new DiscreteLocation()
+                        energyConsumerDiscretes.Add(new DiscreteLocation()
 						{
 							Discrete = discrete,
 							StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
@@ -225,11 +225,11 @@ namespace ScadaProcessingSevice
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             Console.WriteLine("Integrity update: Number of {0} values: {1}", modelCode.ToString(), retList.Count.ToString());
 
-            Console.WriteLine("BatteryStorage:");
-            foreach(AnalogLocation al in batteryStorageAnalogs)
+            Console.WriteLine("EnergyConsumer:");
+            foreach(AnalogLocation al in energyConsumerAnalogs)
             {
                 Console.WriteLine(al.Analog.Mrid + " " + al.Analog.NormalValue);
-				var dic = batteryStorageDiscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
+				var dic = energyConsumerDiscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
 				Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
             }
             Console.WriteLine("Generator:");
@@ -401,8 +401,8 @@ namespace ScadaProcessingSevice
                 XmlDocument doc = new XmlDocument();
                 doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");
 
-                XmlNodeList BatteryStorageNode = doc.GetElementsByTagName("BatteryStorage");
-                foreach (XmlNode item in BatteryStorageNode)
+                XmlNodeList EnergyConsumerNode = doc.GetElementsByTagName("EnergyConsumer");
+                foreach (XmlNode item in EnergyConsumerNode)
                 {
                     long gid = long.Parse(item["Gid"].InnerText);
                     int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
