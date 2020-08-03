@@ -27,16 +27,20 @@ namespace UI.View
     public partial class AlarmSummaryView : UserControl
     {
         // create a new timer
+       public DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+
 
         public AlarmSummaryView()
         {
             
             InitializeComponent();
 
-            DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+
+            //DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 3);
             dispatcherTimer.Start();
+            
 
             //var timer = new System.Threading.Timer((e) =>
             //{
@@ -96,7 +100,8 @@ namespace UI.View
         private void ButtonHide_Click(object sender, RoutedEventArgs e)
         {
 
-
+            dispatcherTimer.Stop();
+            
             using (var db = new EmsContext())
             {
                 List<Alarm> al = new List<Alarm>();
@@ -129,9 +134,11 @@ namespace UI.View
 
         private void ComboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            dispatcherTimer.Start();
             ComboBox2.SelectedValue = null;
             if (ComboBox1.SelectedValue.ToString().Contains("All Alarms"))
             {
+                dispatcherTimer.Start();
                 List<Alarm> alarms = new List<Alarm>();
                 using (var db = new EmsContext())
                 {
@@ -162,6 +169,7 @@ namespace UI.View
 
         private void ComboBox2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            dispatcherTimer.Stop();
             if (ComboBox1.SelectedValue.ToString().Contains("Type Alarm"))
             {
                 string str = ComboBox2.SelectedValue.ToString();
