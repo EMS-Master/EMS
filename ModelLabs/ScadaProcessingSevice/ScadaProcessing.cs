@@ -271,31 +271,28 @@ namespace ScadaProcessingSevice
                 bool alarmEGU = false;
                 if (type.Equals(ModelCode.GENERATOR))
                 {
-                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource,"g");
-                }
-                else
-                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource,"bs");
+                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource);
 
+                    if (!alarmEGU)
+                    {
+                        Alarm al = new Alarm();
+                        al.Gid = analogLoc.Analog.PowerSystemResource;
+                        al.AlarmValue = eguVal;
+                        AlarmsEventsProxy.Instance.UpdateStatus(al, State.Cleared);
 
-                if (!alarmEGU)
-                {
-                    Alarm al = new Alarm();
-                    al.Gid = analogLoc.Analog.PowerSystemResource;
-                    al.AlarmValue = eguVal;
-                    AlarmsEventsProxy.Instance.UpdateStatus(al, State.Cleared);
-
-                    Alarm normalAlarm = new Alarm();
-                    normalAlarm.AckState = AckState.Unacknowledged;
-                    normalAlarm.CurrentState = string.Format("{0}", State.Active);
-                    normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
-                    normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
-                    normalAlarm.AlarmTimeStamp = DateTime.Now;
-                    normalAlarm.Severity = SeverityLevel.NORMAL;
-                    normalAlarm.AlarmValue = eguVal;
-                    normalAlarm.AlarmType = AlarmType.NORMAL;
-                    normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
-                    normalAlarm.MinValue = analogLoc.Analog.MinValue;
-                    AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
+                        Alarm normalAlarm = new Alarm();
+                        normalAlarm.AckState = AckState.Unacknowledged;
+                        normalAlarm.CurrentState = string.Format("{0}", State.Active);
+                        normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
+                        normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
+                        normalAlarm.AlarmTimeStamp = DateTime.Now;
+                        normalAlarm.Severity = SeverityLevel.NORMAL;
+                        normalAlarm.AlarmValue = eguVal;
+                        normalAlarm.AlarmType = AlarmType.NORMAL;
+                        normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
+                        normalAlarm.MinValue = analogLoc.Analog.MinValue;
+                        //AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
+                    }
                 }
 
                 MeasurementUnit measUnit = new MeasurementUnit();
@@ -349,21 +346,26 @@ namespace ScadaProcessingSevice
             }
             return retVal;
         }
-        private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid, string modelCode)
+        private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid)
         {
             bool retVal = false;
             Alarm ah = new Alarm(gid, value, minEgu, maxEgu, DateTime.Now);
             if (value < minEgu)
             {
                 ah.AlarmType = AlarmType.LOW;
-                if (modelCode == "g")
+                if (value >= (minEgu - (minEgu * 20 / 100)))
                 {
                     ah.Severity = SeverityLevel.MEDIUM;
+                }
+                else if (value >= (minEgu - (minEgu * 40 / 100)))
+                {
+                    ah.Severity = SeverityLevel.MINOR;
                 }
                 else
                 {
                     ah.Severity = SeverityLevel.LOW;
                 }
+                ah.AlarmTimeStamp = DateTime.Now;
                 ah.AlarmMessage = string.Format("Value on input analog signal: {0:X} lower than minimum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
@@ -374,13 +376,17 @@ namespace ScadaProcessingSevice
             if (value > maxEgu)
             {
                 ah.AlarmType = AlarmType.HIGH;
-                if (modelCode == "g")
+                if (value <= (maxEgu + (maxEgu * 20 / 100)))
+                {
+                    ah.Severity = SeverityLevel.MAJOR;
+                }
+                else if (value <= (maxEgu + (maxEgu * 40 / 100)))
                 {
                     ah.Severity = SeverityLevel.HIGH;
                 }
                 else
                 {
-                    ah.Severity = SeverityLevel.HIGH;
+                    ah.Severity = SeverityLevel.CRITICAL;
                 }
                 ah.AlarmTimeStamp = DateTime.Now;
                 ah.AlarmMessage = string.Format("Value on input analog signal: {0:X} higher than maximum expected value", gid);

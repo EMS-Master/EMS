@@ -213,7 +213,8 @@ namespace FTN.Services.AlarmsEventsService
                     using (var db = new EmsContext())
                     {
                         var tmpAlarm = db.Alarms.First(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
-                        tmpAlarm.AlarmValue = alarm.AlarmValue;                    
+                        tmpAlarm.AlarmValue = alarm.AlarmValue;
+                        tmpAlarm.Severity = alarm.Severity;
                         db.SaveChanges();                       
                     }
                 }
