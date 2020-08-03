@@ -25,6 +25,9 @@ namespace UI.ViewModel
         private ICommand allEnergyConsumersCheckedCommand;
         private ICommand allEnergyConsumersUnheckedCommand;
         private ICommand selectedPeriodCommand;
+        private ICommand visibilityCheckedCommand;
+        private ICommand visibilityUncheckedCommand;
+
 
         private ICommand showDataCommand;
 
@@ -230,6 +233,11 @@ namespace UI.ViewModel
         public PeriodValues SelectedPeriod { get => selectedPeriod; set => selectedPeriod = value; }
         public GraphSample GraphSampling { get => graphSampling; set => graphSampling = value; }
 
+        public ICommand VisibilityCheckedCommand => visibilityCheckedCommand ?? (visibilityCheckedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
+
+        public ICommand VisibilityUncheckedCommand => visibilityUncheckedCommand ?? (visibilityUncheckedCommand = new RelayCommand<long>(VisibilityUncheckedCommandExecute));
+
+
         public ICommand AllGeneratorsCheckedCommand => allGeneratorsCheckedCommand ?? (allGeneratorsCheckedCommand = new RelayCommand(AllGeneratorsCheckedCommandExecute));
 
         public ICommand AllGeneratorsUncheckedCommand => allGeneratorsUnheckedCommand ?? (allGeneratorsUnheckedCommand = new RelayCommand(AllGeneratorsUnheckedCommandExecute));
@@ -319,6 +327,18 @@ namespace UI.ViewModel
         }
 
         #region Commands
+
+        private void VisibilityCheckedCommandExecute(long gid)
+        {
+            GidToBoolMap[gid] = true;
+            OnPropertyChanged(nameof(GidToBoolMap));
+        }
+
+        private void VisibilityUncheckedCommandExecute(long gid)
+        {
+            GidToBoolMap[gid] = false;
+            OnPropertyChanged(nameof(GidToBoolMap));
+        }
 
         private void ProductionForSelectedCheckedExecute(object obj)
         {

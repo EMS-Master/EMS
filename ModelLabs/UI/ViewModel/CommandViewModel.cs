@@ -137,7 +137,8 @@ namespace UI.ViewModel
                     }
 
                     bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
-                    Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active });
+                    float inputValue = _context.HistoryMeasurements.Where(x => x.Gid == rd.Id).OrderByDescending(x => x.MeasurementTime).First().MeasurementValue;
+                    Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active, InputValue = inputValue });
 
                 }
                 OnPropertyChanged(nameof(Gens));
