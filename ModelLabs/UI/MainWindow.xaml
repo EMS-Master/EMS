@@ -11,7 +11,7 @@
 		xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
 		xmlns:dock1="clr-namespace:AvalonDock.Themes.VS2013;assembly=AvalonDock.Themes.VS2013"
 		mc:Ignorable="d"
-        Title="Energy management system" Height="600" Width="950"
+        Title="Energy management system" WindowState="Maximized" WindowStyle="None"
 	    Icon="Resources/emsicon.jpg">
     <Grid>
 		<Grid.RowDefinitions>

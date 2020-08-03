@@ -14,7 +14,15 @@ namespace UI.ViewModel
 {
     public class DashboardViewModel : ViewModelBase
     {
-        private CeSubscribeProxy ceSubscribeProxy;
+
+		private int MAX_DISPLAY_NUMBER = 10;
+		private int MAX_DISPLAY_TOTAL_NUMBER = 20;
+		private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
+		private int attemptsCount = 0;
+		private double sizeValue;
+
+
+		private CeSubscribeProxy ceSubscribeProxy;
         private float currentProduction;
 
 		private readonly double graphSizeOffset = 18;
@@ -73,12 +81,29 @@ namespace UI.ViewModel
 			}
 		}
 
+		public double SizeValue
+		{
+			get
+			{
+				return sizeValue;
+			}
+
+			set
+			{
+				sizeValue = value;
+				OnPropertyChanged();
+				UpdateSizeWidget(value);
+			}
+		}
+
 
 
 		public DashboardViewModel()
         {
             SubsrcibeToCE();
 			ceSubscribeProxy.Optimization();
+
+			SizeValue = 0;
 
 			GraphWidth = 16 * graphSizeOffset;
 			GraphHeight = 9 * graphSizeOffset;
@@ -116,9 +141,16 @@ namespace UI.ViewModel
                 CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Could not connect to Publisher Service! \n ");
                 Thread.Sleep(1000);
 
-                SubsrcibeToCE();
+				if (attemptsCount++ < NUMBER_OF_ALLOWED_ATTEMPTS)
+				{
+					SubsrcibeToCE();
+				}
+				else
+				{
+					CommonTrace.WriteTrace(CommonTrace.TraceError, "Could not connect to Publisher Service!  \n {0}", e.Message);
+				}
 
-            }
+			}
         }
         private void CallbackAction(object obj)
         {
@@ -138,7 +170,11 @@ namespace UI.ViewModel
                 AddMeasurmentTo(GeneratorsContainer, measUIs);
                 CurrentProduction = measUIs.Sum(x => x.CurrentValue);
                 GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
-            });
+				if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+				{
+					GenerationList.RemoveAt(0);
+				}
+			});
         }
 
         private void AddMeasurmentTo(ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> container, List<MeasurementUI> measUIs)
@@ -160,11 +196,31 @@ namespace UI.ViewModel
                 else
                 {
                     keyPair.Value.Add(measUI);
-                }
+					if (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+					{
+						keyPair.Value.RemoveAt(0);
+					}
+				}
             }
         }
 
-        protected override void OnDispose()
+		private void UpdateSizeWidget(double sliderValue)
+		{
+			GraphWidth = (sliderValue + 1) * 16 * graphSizeOffset;
+			GraphHeight = (sliderValue + 1) * 9 * graphSizeOffset;
+			MAX_DISPLAY_NUMBER = 10 * ((int)sliderValue + 1);
+
+			foreach (var keyPair in GeneratorsContainer)
+			{
+				while (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+				{
+					keyPair.Value.RemoveAt(0);
+				}
+			}
+
+		}
+
+		protected override void OnDispose()
         {
             ceSubscribeProxy.Unsubscribe();
             base.OnDispose();

@@ -13,13 +13,13 @@
 	<SolidColorBrush x:Key="AppBackground" Color="#FF6E6E6E"/>
 	<SolidColorBrush x:Key="DarkBrush" Color="#FF2D2D30"/>
 	<SolidColorBrush x:Key="LigthBrush" Color="#FF6E6E6E"/>
-	<SolidColorBrush x:Key="AxisLineBrush" Color="White"/>
+	<SolidColorBrush x:Key="AxisLineBrush" Color="Black"/>
 	<sys:Int32 x:Key="SmallFontSize">24</sys:Int32>
 	<converters:TestConverter x:Key="TestConv"/>
 	<converters:GidToIdObjectConverter x:Key="GidToIdObjectConverter"/>
 	<converters:GidToMridConverter x:Key="GidToMridConverter"/>
 
-	<DataTemplate x:Key="SyncMachineTemplate">
+	<DataTemplate x:Key="GeneratorTemplate">
 		<Grid Margin="2">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
@@ -29,11 +29,11 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<GroupBox Header="Name" Foreground="White" Grid.Column="0" Grid.Row="0" Margin="3">
-				<TextBlock Text="{Binding Name}" Foreground="White"/>
+			<GroupBox Header="Name" Foreground="Black" Grid.Column="0" Grid.Row="0" Margin="3">
+				<TextBlock Text="{Binding Name}" Foreground="Black"/>
 			</GroupBox>
-			<GroupBox Header="Fuel" Foreground="White" Grid.Column="0" Grid.Row="1" Margin="3">
-				<TextBlock Foreground="White">
+			<GroupBox Header="Fuel" Foreground="Black" Grid.Column="0" Grid.Row="1" Margin="3">
+				<TextBlock Foreground="Black">
 					<TextBlock.Text>
 						<MultiBinding Converter="{StaticResource GidToMridConverter}">
 							<Binding Path="Fuel"></Binding>
@@ -42,11 +42,11 @@
 					</TextBlock.Text>
 				</TextBlock>
 			</GroupBox>
-			<GroupBox Header="Max Power" Foreground="White" Grid.Column="1" Grid.Row="0" Margin="3">
-				<TextBlock Text="{Binding MaxQ, StringFormat={}{0}kW}" Foreground="White"/>
+			<GroupBox Header="Max Power" Foreground="Black" Grid.Column="1" Grid.Row="0" Margin="3">
+				<TextBlock Text="{Binding MaxQ, StringFormat={}{0}kW}" Foreground="Black"/>
 			</GroupBox>
-			<GroupBox Header="Min Power" Foreground="White" Grid.Column="1" Grid.Row="1" Margin="3">
-				<TextBlock Text="{Binding MinQ, StringFormat={}{0}kW}" Foreground="White"/>
+			<GroupBox Header="Min Power" Foreground="Black" Grid.Column="1" Grid.Row="1" Margin="3">
+				<TextBlock Text="{Binding MinQ, StringFormat={}{0}kW}" Foreground="Black"/>
 			</GroupBox>
 		</Grid>
 	</DataTemplate>
@@ -61,8 +61,8 @@
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-			<GroupBox Header="Name" Grid.Column="0" Grid.Row="0" Foreground="White" Margin="3">
-				<TextBlock Text="{Binding Name}" Foreground="White"/>
+			<GroupBox Header="Name" Grid.Column="0" Grid.Row="0" Foreground="Black" Margin="3">
+				<TextBlock Text="{Binding Name}" Foreground="Black"/>
 			</GroupBox>
 		</Grid>
 	</DataTemplate>
@@ -74,7 +74,7 @@
 
 	<ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">
 		<Grid  Background="{StaticResource DarkBrush}">
-			<Border BorderThickness="1" BorderBrush="White">
+			<Border BorderThickness="1" BorderBrush="Black">
 				<Border.Effect>
 					<DropShadowEffect Color="Black" ShadowDepth="2" />
 				</Border.Effect>
@@ -216,7 +216,7 @@
 	<!-- charting:DashboardChartStyle -->
 	<Style x:Key="DashboardChartStyle" TargetType="charting:Chart">
 		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Foreground" Value="Black"/>
 		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="IsTabStop" Value="False" />
 		<Setter Property="Padding" Value="10" />
@@ -291,8 +291,8 @@
 				</TextBlock>
 				<Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="LightGray" Margin="20,0,0,5" BorderThickness="0">
 					<StackPanel Orientation="Horizontal" Margin="1">
-						<TextBlock Text="{TemplateBinding Tag}" Foreground="LightGray"  VerticalAlignment="Center" />
-						<TextBlock Text="kW" Foreground="LightGray" VerticalAlignment="Center" />
+						<TextBlock Text="{TemplateBinding Tag}" Foreground="Black"  VerticalAlignment="Center" />
+						<TextBlock Text="kW" Foreground="Black" VerticalAlignment="Center" />
 						<!--<Button Command="{Binding DataContext.GoToCommand,RelativeSource={RelativeSource AncestorType={x:Type view:DashboardView}}}"
 											CommandParameter="{Binding DataContext.Key,RelativeSource={RelativeSource AncestorType={x:Type charting:Chart}}}"
                                             Margin="3,0,0,0"
@@ -345,7 +345,7 @@
 
 	<Style x:Key="RealTimeDashboardStyle" TargetType="charting:Chart">
 		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Foreground" Value="Black"/>
 		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="IsTabStop" Value="False" />
 		<Setter Property="Padding" Value="10" />
