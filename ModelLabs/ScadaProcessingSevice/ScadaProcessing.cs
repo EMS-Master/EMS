@@ -464,7 +464,7 @@ namespace ScadaProcessingSevice
                 {
                     if(itemFromDb == null)
                     {
-                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 0, CurrentValue = false });
+                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false });
                     }
                     else
                     {
