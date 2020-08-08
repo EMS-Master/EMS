@@ -276,37 +276,37 @@ namespace ScadaCommandingService
             return number > 10 ? true : false;
         }
 
-        public void FillSimulatorFirstTime()
-        {
-            var random = new Random();
-            for(int i = 0; i < 20; i++)
-            {
-                float value = 0;
-                if(i < 10)
-                {
-                    var x = random.Next(10, 70);
-                    var y = (float)random.NextDouble();
-                    value = x + y;
-                }
-                else
-                {
-                    var x = random.Next(70, 150);
-                    var y = (float)random.NextDouble();
-                    value = x + y;
-                }
-                modbusClient.WriteSingleRegister((ushort)(i * 2), value);
-                modbusClient.WriteSingleCoil((ushort)i, true);
-            }
-            var a = random.Next(1, 8);
-            var b = (float)random.NextDouble();
-            float val = a + b; // m/s
-            modbusClient.WriteSingleRegister(49, val);
+        //public void FillSimulatorFirstTime()
+        //{
+        //    var random = new Random();
+        //    for(int i = 0; i < 20; i++)
+        //    {
+        //        float value = 0;
+        //        if(i < 10)
+        //        {
+        //            var x = random.Next(10, 70);
+        //            var y = (float)random.NextDouble();
+        //            value = x + y;
+        //        }
+        //        else
+        //        {
+        //            var x = random.Next(70, 150);
+        //            var y = (float)random.NextDouble();
+        //            value = x + y;
+        //        }
+        //        modbusClient.WriteSingleRegister((ushort)(i * 2), value);
+        //        modbusClient.WriteSingleCoil((ushort)i, true);
+        //    }
+        //    var a = random.Next(1, 8);
+        //    var b = (float)random.NextDouble();
+        //    float val = a + b; // m/s
+        //    modbusClient.WriteSingleRegister(49, val);
 
-            a = random.Next(1, 7);
-            b = (float)random.NextDouble();
-            val = a + b; // kWh/m2/per day
-            modbusClient.WriteSingleRegister(51, val);
+        //    a = random.Next(1, 7);
+        //    b = (float)random.NextDouble();
+        //    val = a + b; // kWh/m2/per day
+        //    modbusClient.WriteSingleRegister(51, val);
 
-        }
+        //}
     }
 }

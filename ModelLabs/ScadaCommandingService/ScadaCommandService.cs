@@ -30,7 +30,7 @@ namespace ScadaCommandingService
         }
         public void GenerateSimulatorValuesFirstTime()
         {
-            scadaCMD.FillSimulatorFirstTime();
+           // scadaCMD.FillSimulatorFirstTime();
         }
 
         private void InitializeHosts()

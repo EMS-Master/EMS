@@ -13,14 +13,17 @@ namespace DataSimulator
 	{
 		private MdbClient mdbClient;
 		private Dictionary<int, Tuple<int, int>> insolationRange;
-		private float oldWindSpeed = 5f;
+        private Dictionary<int, Tuple<double, double>> consumptionRange;
+        private float oldWindSpeed = 5f;
 		 
 		
 		public DataSimulatorService()
 		{
 			ConnectToSimulator();
 			PopulateInsolationRange();
-		}
+            PopulateConsumptionRange();
+
+        }
 
 		private void ConnectToSimulator()
 		{
@@ -137,5 +140,89 @@ namespace DataSimulator
 			insolationRange.Add(17, new Tuple<int, int>(100, 250));
 			insolationRange.Add(18, new Tuple<int, int>(7, 100));
 		}
+
+        public void SimulateConsumption()
+        {
+            TimeSpan time = DateTime.Now.TimeOfDay;
+            var range = consumptionRange[time.Hours];
+
+            Random random = new Random();
+
+            float consumption1 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption2 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption3 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption4 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption5 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption6 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption7 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption8 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption9 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+            float consumption10 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
+
+
+            mdbClient.WriteSingleRegister(0, consumption1); //W
+            mdbClient.WriteSingleRegister(2, consumption2); //W
+            mdbClient.WriteSingleRegister(4, consumption3); //W
+            mdbClient.WriteSingleRegister(6, consumption4); //W
+            mdbClient.WriteSingleRegister(8, consumption5); //W
+            mdbClient.WriteSingleRegister(10, consumption6); //W
+            mdbClient.WriteSingleRegister(12, consumption7); //W
+            mdbClient.WriteSingleRegister(14, consumption8); //W
+            mdbClient.WriteSingleRegister(16, consumption9); //W
+            mdbClient.WriteSingleRegister(18, consumption10); //W
+
+            Console.WriteLine("Consumption:");
+            Console.WriteLine(consumption1);
+            Console.WriteLine(consumption2);
+            Console.WriteLine(consumption3);
+            Console.WriteLine(consumption4);
+            Console.WriteLine(consumption5);
+            Console.WriteLine(consumption6);
+            Console.WriteLine(consumption7);
+            Console.WriteLine(consumption8);
+            Console.WriteLine(consumption9);
+            Console.WriteLine(consumption10);
+
+
+        }
+
+        private void PopulateConsumptionRange()
+        {
+            consumptionRange = new Dictionary<int, Tuple<double, double>>();
+
+            consumptionRange.Add(0, new Tuple<double, double>(0, 0.3));
+            consumptionRange.Add(1, new Tuple<double, double>(0, 0.26));
+            consumptionRange.Add(2, new Tuple<double, double>(0, 0.2));
+            consumptionRange.Add(3, new Tuple<double, double>(0, 0.18));
+            consumptionRange.Add(4, new Tuple<double, double>(0.2, 0.31));
+            consumptionRange.Add(5, new Tuple<double, double>(0.2, 0.35));
+            consumptionRange.Add(6, new Tuple<double, double>(0.2, 0.4));
+            consumptionRange.Add(7, new Tuple<double, double>(0.3, 0.45));
+            consumptionRange.Add(8, new Tuple<double, double>(0.3, 0.5));
+            consumptionRange.Add(9, new Tuple<double, double>(0.35, 0.5));
+            consumptionRange.Add(10, new Tuple<double, double>(0.5, 0.61));
+            consumptionRange.Add(11, new Tuple<double, double>(0.5, 0.62));
+            consumptionRange.Add(12, new Tuple<double, double>(0.5, 0.63));
+            consumptionRange.Add(13, new Tuple<double, double>(0.5, 0.65));
+            consumptionRange.Add(14, new Tuple<double, double>(0.5, 0.67));
+            consumptionRange.Add(15, new Tuple<double, double>(0.5, 0.7));
+            consumptionRange.Add(16, new Tuple<double, double>(0.6, 0.9));
+            consumptionRange.Add(17, new Tuple<double, double>(0.6, 0.92));
+            consumptionRange.Add(18, new Tuple<double, double>(0.6, 0.94));
+            consumptionRange.Add(19, new Tuple<double, double>(0.6, 0.98));
+            consumptionRange.Add(20, new Tuple<double, double>(0.8, 1));
+            consumptionRange.Add(21, new Tuple<double, double>(0.8, 1));
+            consumptionRange.Add(22, new Tuple<double, double>(0.8, 0.98));
+            consumptionRange.Add(23, new Tuple<double, double>(0.8, 0.98));
+        }
+
+        public void TurnOnRenewableGenerators()
+        {
+            for(int i = 0; i<16; i++)
+            {
+                mdbClient.WriteSingleCoil((ushort)i, true);
+            }
+            
+        }
 	}
 }

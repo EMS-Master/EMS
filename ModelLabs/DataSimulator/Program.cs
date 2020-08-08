@@ -14,13 +14,14 @@ namespace DataSimulator
 		static void Main(string[] args)
 		{
 			DataSimulatorService dss = new DataSimulatorService();
-			
+            dss.TurnOnRenewableGenerators();
 			Task task = new Task(() =>
 			{
 				while (true)
 				{
 					dss.SimulateSunData();
 					dss.SimulateWindData();
+                    dss.SimulateConsumption();
 					Thread.Sleep(3000);
 				}
 			});
