@@ -11,8 +11,10 @@
 		xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
 		xmlns:dock1="clr-namespace:AvalonDock.Themes.VS2013;assembly=AvalonDock.Themes.VS2013"
 		mc:Ignorable="d"
-        Title="Energy management system" WindowState="Maximized" WindowStyle="None"
+        Title="Energy management system" Height="750" Width="1100"
+       
 	    Icon="Resources/emsicon.jpg">
+    <!--WindowState="Normal"  WindowStyle="None"-->
     <Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
@@ -56,7 +58,7 @@
                 </DataTemplate>
             </dock:DockingManager.Resources>
 			<dock:DockingManager.Theme>
-				<dock:AeroTheme/>
+				<dock:MetroTheme/>
 			</dock:DockingManager.Theme>
 		</dock:DockingManager>
 	</Grid>

@@ -31,7 +31,7 @@
 		</ObjectDataProvider>
 
 		<DataTemplate x:Key="GensAndBSVisibilityCheckbox">
-			<CheckBox Foreground="White" Margin="1,0,0,2" >
+			<CheckBox Foreground="Black" Margin="1,0,0,2" >
 
 				<CheckBox.Content>
 					<MultiBinding Converter="{StaticResource GidToMridConverter}">
@@ -122,7 +122,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <GroupBox Margin="10" FontSize="14" Header="Period"  Foreground="White">
+                <GroupBox Margin="10" FontSize="14" Header="Period"  Foreground="Black">
                     <ComboBox Margin="10" ItemsSource="{Binding Source={StaticResource dataFromPeriodEnum}}" SelectedValue="{Binding SelectedPeriod}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -137,19 +137,19 @@
                     </ComboBox>
                 </GroupBox>
 
-                <GroupBox Grid.Row="1" Margin="10" FontSize="14" Header="Start Time"  Foreground="White">
+                <GroupBox Grid.Row="1" Margin="10" FontSize="14" Header="Start Time"  Foreground="Black">
                     <toolkit:DateTimePicker  Margin="10" Value="{Binding StartTime, Mode=TwoWay}" 
                                     Width="300">
                     </toolkit:DateTimePicker>
                 </GroupBox>
 
-                <GroupBox Grid.Row="2" Margin="10" FontSize="14" Header="End Time"  Foreground="White">
+                <GroupBox Grid.Row="2" Margin="10" FontSize="14" Header="End Time"  Foreground="Black">
                     <toolkit:DateTimePicker Margin="10" Value="{Binding EndTime, Mode=TwoWay}"
                                         Width="300">
                     </toolkit:DateTimePicker>
                 </GroupBox>
 
-                <CheckBox Grid.Row="3" Grid.Column="0" Content="All Generators" Margin="10" Foreground="White" >
+                <CheckBox Grid.Row="3" Grid.Column="0" Content="All Generators" Margin="10" Foreground="Black" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
                             <i:InvokeCommandAction Command="{Binding DataContext.AllGeneratorsCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -162,7 +162,7 @@
                     </i:Interaction.Triggers>
                 </CheckBox>
 
-                <GroupBox Grid.Row="4" Grid.Column="0" Margin="10" FontSize="14" Header="Generators" Foreground="White">
+                <GroupBox Grid.Row="4" Grid.Column="0" Margin="10" FontSize="14" Header="Generators" Foreground="Black">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -174,7 +174,7 @@
                     </Grid>
                 </GroupBox>
 
-                <CheckBox Grid.Row="5" Grid.Column="0" Content="All Energy Consumers" Margin="10" Foreground="White" >
+                <CheckBox Grid.Row="5" Grid.Column="0" Content="All Energy Consumers" Margin="10" Foreground="Black" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
 							<i:InvokeCommandAction Command="{Binding DataContext.AllEnergyConsumersCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -187,7 +187,7 @@
                     </i:Interaction.Triggers>
                 </CheckBox>
 
-				<GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Energy Consumers" Foreground="White">
+				<GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Energy Consumers" Foreground="Black">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -214,7 +214,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Expander Grid.Row="0" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="White" Margin="10">
+                <Expander Grid.Row="0" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="Black" Margin="10">
                     <ItemsControl ItemsSource="{Binding GeneratorsContainer}" 
 								  ItemTemplate="{StaticResource GraphGeneratorTemplate}" >
                         <ItemsControl.ItemsPanel>
@@ -225,7 +225,7 @@
                     </ItemsControl>
                 </Expander>
 
-                <Expander Grid.Row="1" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="White">
+                <Expander Grid.Row="1" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="Black">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -235,7 +235,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-                            <CheckBox Content="All Generators" Margin="10" Foreground="White" IsChecked="True">
+                            <CheckBox Content="All Generators" Margin="10" Foreground="Black" IsChecked="True">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.TotalProductionGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -245,7 +245,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                            <CheckBox Content="Selected Generators" Margin="10" Foreground="White">
+                            <CheckBox Content="Selected Generators" Margin="10" Foreground="Black">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.ProductionForSelectedCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -256,7 +256,7 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-							<CheckBox Content="All Energy Consumers" Margin="10" Foreground="White" IsChecked="True">
+							<CheckBox Content="All Energy Consumers" Margin="10" Foreground="Black" IsChecked="True">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.TotaLoadGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -266,7 +266,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                            <CheckBox Content="Selected BS" Margin="10" Foreground="White">
+                            <CheckBox Content="Selected BS" Margin="10" Foreground="Black">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.LoadForSelectedCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
