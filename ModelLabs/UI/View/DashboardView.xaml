@@ -18,8 +18,16 @@
 		<converters:GidMapToVisibilityConverter x:Key="GidMapToVisibilityConverter" />
 		<converters:GidMapToBoolConverter x:Key="GidMapToBoolConverter" />
 		<converters:LastValueShowConverter x:Key="LastValueShowConverter" />
-
-		<DataTemplate x:Key="GraphGeneratorTemplate">
+		<Style
+			x:Key = "DateTimeAxisLabelStyle2" TargetType="chartingToolkit:DateTimeAxisLabel">
+			<Setter Property="RenderTransformOrigin" Value="0.80,0.20"></Setter>
+			<Setter Property="RenderTransform">
+				<Setter.Value>
+					<RotateTransform Angle="-90"></RotateTransform>
+				</Setter.Value>
+			</Setter>
+		</Style>
+				<DataTemplate x:Key="GraphGeneratorTemplate">
 			<Grid>
 				<Grid.Visibility>
 					<MultiBinding Converter="{StaticResource GidMapToVisibilityConverter}">
@@ -104,7 +112,7 @@
 		<DataTemplate x:Key="GraphTotalGeneration">
 			<Grid Width="1000">
 				<TextBlock TextWrapping="WrapWithOverflow">
-                        <chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600" Width="900">
+                        <chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600" Width="980">
 						
                             <chartingToolkit:LineSeries ItemsSource="{Binding Path=GenerationList}" 
 												DependentValueBinding="{Binding Path=Value}" 
@@ -119,12 +127,13 @@
                                         <Setter Property="Template" Value="{StaticResource LineDataPointPowerTemplate}"/>
                                     </Style>
                                 </chartingToolkit:LineSeries.DataPointStyle>
+								
                                 <!--<chartingToolkit:LineSeries.IndependentAxis>
-                                    <chartingToolkit:DateTimeAxis Orientation="X" Title="Time"  />
+                                    <chartingToolkit:DateTimeAxis GridLineStyle="{StaticResource lineStyle}" Orientation="X" Title="Time"  />
                                 </chartingToolkit:LineSeries.IndependentAxis>
 
                                 <chartingToolkit:LineSeries.DependentRangeAxis>
-                                    <chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)" Minimum="0"/>
+                                    <chartingToolkit:LinearAxis GridLineStyle="{StaticResource lineStyle}"  Orientation="Y" Title="Power (kW)" Minimum="0"/>
                                 </chartingToolkit:LineSeries.DependentRangeAxis>-->
                             </chartingToolkit:LineSeries>
                         </chartingToolkit:Chart>
@@ -144,30 +153,48 @@
 			<Expander IsExpanded="True" Header="Total Generation/Demand graph" Foreground="Black" Margin="10,5">
 				<Grid Width="1000">
 					<TextBlock TextWrapping="WrapWithOverflow">
-							<chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600" Width="1000">
-						
+							<chartingToolkit:Chart Grid.Row="1" Margin="10"  FontWeight="Bold" Style="{StaticResource DashboardChartStyle}" Height="600" Width="810">
+						    
+								<chartingToolkit:LineSeries ItemsSource="{Binding Path=DemandList}" 
+													DependentValueBinding="{Binding Path=Value}" 
+													IndependentValueBinding="{Binding Path=Key}" 
+													IsSelectionEnabled="False"
+													Style="{StaticResource LineSeriesStyle}"
+															Title="Total Demand  ">
+									<chartingToolkit:LineSeries.DataPointStyle>
+										<Style TargetType="chartingToolkit:LineDataPoint">
+											<Setter Property="Background" Value="DarkOrange"/>
+											<Setter Property="Template" Value="{StaticResource LineDataPointPowerTemplate}"/>
+										</Style>										
+									</chartingToolkit:LineSeries.DataPointStyle>
+									</chartingToolkit:LineSeries>
+								
 								<chartingToolkit:LineSeries ItemsSource="{Binding Path=GenerationList}" 
 													DependentValueBinding="{Binding Path=Value}" 
 													IndependentValueBinding="{Binding Path=Key}"
 													IsSelectionEnabled="False"
 													Style="{StaticResource LineSeriesStyle}"
-													Title="Total Generation [kW]"
+													Title="Total Generation" Margin="0,10,0,0" 
 													>
 									<chartingToolkit:LineSeries.DataPointStyle>
 										<Style TargetType="chartingToolkit:LineDataPoint">
 											<Setter Property="Background" Value="DarkGreen"/>
 											<Setter Property="Template" Value="{StaticResource LineDataPointPowerTemplate}"/>
 										</Style>
+										
 									</chartingToolkit:LineSeries.DataPointStyle>
-									<!--<chartingToolkit:LineSeries.IndependentAxis>
-										<chartingToolkit:DateTimeAxis Orientation="X" Title="Time"  />
+									
+									<chartingToolkit:LineSeries.IndependentAxis>									
+										<chartingToolkit:DateTimeAxis   ShowGridLines="True" GridLineStyle="{StaticResource lineStyle}" Orientation="X" Title="Time (s)" Foreground="Black" FontWeight="Bold" />
+									<!--IntervalType="Seconds" Interval="2" Minimum="0:00:00" Maximum="0:00:15" AxisLabelStyle="{DynamicResource DateTimeAxisLabelStyle2}"-->
 									</chartingToolkit:LineSeries.IndependentAxis>
 
 									<chartingToolkit:LineSeries.DependentRangeAxis>
-										<chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)" Minimum="0"/>
-									</chartingToolkit:LineSeries.DependentRangeAxis>-->
+										<chartingToolkit:LinearAxis ShowGridLines="True" GridLineStyle="{StaticResource lineStyle}" Orientation="Y" Title="Power (mW)" Minimum="0" Foreground="Black" FontWeight="Bold"/>
+									</chartingToolkit:LineSeries.DependentRangeAxis>
 								</chartingToolkit:LineSeries>
 							</chartingToolkit:Chart>
+						
 					</TextBlock>
 				</Grid>
 			</Expander>
@@ -176,13 +203,13 @@
 
 			<Expander IsExpanded="False" Header="Generation graphs" Foreground="Black" Margin="10,5">
 				<StackPanel>
-					<GroupBox Header="Generators" Foreground="Black">
+					<DockPanel>
+						<GroupBox Header="Generators" Foreground="Black">
 						<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MaxHeight="175">
 							<ItemsControl ItemsSource="{Binding GeneratorsContainer}"
 										  ItemTemplate="{StaticResource VisibilityCheckbox}" />
 						</ScrollViewer>
 					</GroupBox>
-					<DockPanel>
 					<ItemsControl  ItemsSource="{Binding GeneratorsContainer}"
 									ItemTemplate="{StaticResource GraphGeneratorTemplate}">
 						<ItemsControl.ItemsPanel>

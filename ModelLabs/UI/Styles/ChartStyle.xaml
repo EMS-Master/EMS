@@ -215,9 +215,10 @@
 
 	<!-- charting:DashboardChartStyle -->
 	<Style x:Key="DashboardChartStyle" TargetType="charting:Chart">
-		<Setter Property="BorderBrush" Value="Transparent" />
+		<Setter Property="BorderBrush" Value="Gray" />
+		<Setter Property="Background" Value="LightGray" />
 		<Setter Property="Foreground" Value="Black"/>
-		<Setter Property="BorderThickness" Value="0" />
+		<Setter Property="BorderThickness" Value="2" />
 		<Setter Property="IsTabStop" Value="False" />
 		<Setter Property="Padding" Value="10" />
 		<Setter Property="SnapsToDevicePixels" Value="True" />
@@ -363,15 +364,26 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	
+	<Style TargetType="Line" x:Key="lineStyle">
+
+		<Setter Property="StrokeThickness" Value="1"/>
+
+		<Setter Property="Stroke" Value="Gray"/>
+
+		<Setter Property="StrokeDashArray" Value="1,5"/>
+
+	</Style>
 
 
 	<!--  charting:LineSeries  -->
 	<Style x:Key="LineSeriesStyle" TargetType="charting:LineSeries">
 		<Setter Property="IsTabStop" Value="False" />
+
 		<Setter Property="PolylineStyle">
 			<Setter.Value>
 				<Style TargetType="Polyline">
-					<Setter Property="StrokeThickness" Value="2" />
+					<Setter Property="StrokeThickness" Value="3" />
 					<Setter Property="StrokeMiterLimit" Value="1" />
 				</Style>
 			</Setter.Value>
@@ -406,8 +418,8 @@
 			<Setter.Value>
 				<Style TargetType="Line">
 					<Setter Property="Stroke" Value="{StaticResource AxisLineBrush}" />
-					<Setter Property="X2" Value="4" />
-					<Setter Property="Y2" Value="4" />
+					<Setter Property="X2" Value="10" />
+					<Setter Property="Y2" Value="10" />
 				</Style>
 			</Setter.Value>
 		</Setter>

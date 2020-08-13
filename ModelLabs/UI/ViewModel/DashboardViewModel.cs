@@ -16,7 +16,7 @@ namespace UI.ViewModel
     {
 
 		private int MAX_DISPLAY_NUMBER = 10;
-		private int MAX_DISPLAY_TOTAL_NUMBER = 20;
+		private int MAX_DISPLAY_TOTAL_NUMBER = 15;
 		private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
 		private int attemptsCount = 0;
 		private double sizeValue;
@@ -24,11 +24,17 @@ namespace UI.ViewModel
 
 		private CeSubscribeProxy ceSubscribeProxy;
         private float currentProduction;
+        private float currentConsumption;
+        
 
-		private readonly double graphSizeOffset = 18;
+        private readonly double graphSizeOffset = 18;
 
 		private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+        private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> energyConsumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+
         private ObservableCollection<KeyValuePair<DateTime, float>> generationList = new ObservableCollection<KeyValuePair<DateTime, float>>();
+        private ObservableCollection<KeyValuePair<DateTime, float>> demandList = new ObservableCollection<KeyValuePair<DateTime, float>>();
+
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
 		private double graphWidth;
 		private double graphHeight;
@@ -51,7 +57,21 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
+        
 
+        public float CurrentConsumption
+        {
+            get
+            {
+                return currentConsumption;
+            }
+
+            set
+            {
+                currentConsumption = value;
+                OnPropertyChanged();
+            }
+        }
 
         public double GraphWidth
 		{
@@ -126,7 +146,12 @@ namespace UI.ViewModel
         }
 
         public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
+        public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
+
         public ObservableCollection<KeyValuePair<DateTime, float>> GenerationList { get => generationList; set => generationList = value; }
+        public ObservableCollection<KeyValuePair<DateTime, float>> DemandList { get => demandList; set => demandList = value; }
+
+
         public Dictionary<long, bool> GidToBoolMap { get => gidToBoolMap; set => gidToBoolMap = value; }
 
         private void SubsrcibeToCE()
@@ -164,17 +189,41 @@ namespace UI.ViewModel
             {
                 return;
             }
-
-            App.Current.Dispatcher.Invoke((Action)delegate
+            try
             {
-                AddMeasurmentTo(GeneratorsContainer, measUIs);
-                CurrentProduction = measUIs.Sum(x => x.CurrentValue);
-                GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
-				if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
-				{
-					GenerationList.RemoveAt(0);
-				}
-			});
+                if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(measUIs[0].Gid) == DMSType.ENERGY_CONSUMER)
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        AddMeasurmentTo(EnergyConsumersContainer, measUIs);
+                        CurrentConsumption = measUIs.Sum(x => x.CurrentValue);
+                        DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentConsumption));
+                        if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                        {
+                            DemandList.RemoveAt(0);
+                        }
+                    });
+                }
+                else
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        AddMeasurmentTo(GeneratorsContainer, measUIs);
+
+                        CurrentProduction = measUIs.Sum(x => x.CurrentValue);
+                        GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
+                        if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                        {
+                            GenerationList.RemoveAt(0);
+                        }
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CES can not update measurement values on UI because UI instance does not exist. Message: {0}", e.Message);
+
+            }
         }
 
         private void AddMeasurmentTo(ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> container, List<MeasurementUI> measUIs)
@@ -218,7 +267,15 @@ namespace UI.ViewModel
 				}
 			}
 
-		}
+            foreach (var keyPair in EnergyConsumersContainer)
+            {
+                while (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+                {
+                    keyPair.Value.RemoveAt(0);
+                }
+            }
+
+        }
 
 		protected override void OnDispose()
         {
