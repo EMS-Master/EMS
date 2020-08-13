@@ -32,5 +32,20 @@ namespace CalculationEngineServ
             return retList;
         }
 
+        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                retList = ce.ReadTotalProductionsFromDb(startTime, endTime);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+            }
+
+            return retList;
+        }
     }
 }

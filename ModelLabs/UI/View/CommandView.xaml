@@ -9,48 +9,57 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid Grid.Column="0">
-            <GroupBox Grid.Row="1" Grid.Column="0" Margin="10" FontSize="14" Header="Generators" Foreground="White">
-                <Grid>
-                    <ListBox ItemsSource="{Binding Gens}" >
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="150"></ColumnDefinition>
-										<ColumnDefinition Width="80"></ColumnDefinition>
-									</Grid.ColumnDefinitions>
-									<CheckBox IsChecked="{Binding IsActive}" Content="{Binding Id}"
-                                          Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                          CommandParameter="{Binding}" Grid.Column="0"/>
-									<TextBox Text ="{Binding InputValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" IsEnabled="{Binding  Path=IsActive}" >
-										<TextBox.InputBindings>
-											<KeyBinding Command="{Binding DataContext.CommandGen, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter"  CommandParameter="{Binding}"/>
-										</TextBox.InputBindings>
-									</TextBox>
-								</Grid>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
-                </Grid>
-            </GroupBox>
-
-            <!--<GroupBox Grid.Row="1" Grid.Column="0" Margin="10" FontSize="14" Header="Energy consumers" Foreground="White">
-                <Grid>
-                    <ListBox ItemsSource="{Binding EnergyConsumer}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsActive}" Content="{Binding Id}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </GroupBox>-->
+        <Grid Grid.Column="0" Height="auto">
+            <StackPanel>
+                <Label Content="Command ANALOG values" HorizontalAlignment="Left" Width="530"  HorizontalContentAlignment="Center"/>
+                <DataGrid x:Name="CommandingDataGrid" 
+                      ItemsSource="{Binding Path = Gens}"
+                      CanUserDeleteRows="False" CanUserAddRows="False"
+                      AutoGenerateColumns="False" Width="530" HorizontalAlignment="Left" Height="auto" HorizontalContentAlignment="Center">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True" Width="120"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="100"/>
+                        <DataGridTextColumn Header="Element" Binding="{Binding Element}" IsReadOnly="True"  Width="100"/>
+                        <DataGridTemplateColumn Header="Value"   Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text ="{Binding InputValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" IsEnabled="{Binding  Path=IsActive}" >
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding DataContext.CommandGen, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter"  CommandParameter="{Binding}"/>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
 
         </Grid>
 
-        <Grid Grid.Column="1">
-            
+        <Grid Grid.Column="1"  Height="auto">
+            <StackPanel>
+                <Label Content="Command DIGITAL values" HorizontalAlignment="Right"  HorizontalContentAlignment="Center"  Width="530" />
+                <DataGrid x:Name="CommandingDataGrid2" 
+                      ItemsSource="{Binding Path = Gens}"
+                      CanUserDeleteRows="False" CanUserAddRows="False"
+                      AutoGenerateColumns="False" Width="530" HorizontalAlignment="Right" Height="auto" HorizontalContentAlignment="Center">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True" Width="120"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"  Width="100"/>
+                        <DataGridTextColumn Header="Element" Binding="{Binding Element}" IsReadOnly="True"  Width="100"/>
+                        <DataGridTemplateColumn Header="Active"   Width="70" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsActive}"
+                                          Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                          CommandParameter="{Binding}" Grid.Column="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
         </Grid>
 
     </Grid>

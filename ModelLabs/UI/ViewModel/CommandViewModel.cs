@@ -32,26 +32,6 @@ namespace UI.ViewModel
 		private ICommand commandGen;
 		public ICommand CommandGen => commandGen ?? (commandGen = new RelayCommand<object>(CommandGenExecute));
 
-		private ICommand checkedCommand;
-        private ICommand uncheckedCommand;
-
-        public ICommand CheckedCommand => checkedCommand ?? (checkedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
-
-        public ICommand UncheckedCommand => uncheckedCommand ?? (uncheckedCommand = new RelayCommand<long>(VisibilityUncheckedCommandExecute));
-
-
-        private void VisibilityCheckedCommandExecute(long gid)
-        {
-            long l;
-        }
-
-        private void VisibilityUncheckedCommandExecute(long gid)
-        {
-            long l;
-        }
-
-
-
         private void ActivateGenExecute(object obj)
         {
             ModelForCheckboxes model = (ModelForCheckboxes)obj;
@@ -138,7 +118,7 @@ namespace UI.ViewModel
 
                     bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
                     float inputValue = _context.HistoryMeasurements.Where(x => x.Gid == rd.Id).OrderByDescending(x => x.MeasurementTime).First().MeasurementValue;
-                    Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active, InputValue = inputValue });
+                    Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active, InputValue = inputValue, Name = rd.Properties[6].ToString(), Element = "Generator", Gid=rd.Id});
 
                 }
                 OnPropertyChanged(nameof(Gens));
@@ -186,7 +166,9 @@ namespace UI.ViewModel
     {
         public long Id { get; set; }
         public bool IsActive { get; set; }
-
+        public string Element { get; set; }
+        public long Gid { get; set; }
+        public string Name { get; set; }
 		public float InputValue { get; set; }
     }
 }

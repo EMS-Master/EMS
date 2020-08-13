@@ -394,15 +394,6 @@ namespace UI.ViewModel
             GeneratorsContainer.Clear();
             GraphTotalProductionForSelected.Clear();
 
-			//GidToBoolMap.Add(12884901889, true);
-			//GidToBoolMap.Add(12884901891, true);
-			//GidToBoolMap.Add(12884901892, true);
-			//GidToBoolMap.Add(12884901893, true);
-			//GidToBoolMap.Add(12884901894, true);
-			//GidToBoolMap.Add(12884901895, true);
-			//GidToBoolMap.Add(12884901896, true);
-			//GidToBoolMap.Add(12884901897, true);
-
 			foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
             {
                 if (keyPair.Value == true)
@@ -484,7 +475,7 @@ namespace UI.ViewModel
                 GraphTotalProductionForSelected.Add(new Tuple<double, DateTime>(production, measTime));
             }
 
-            //TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetTotalProduction(StartTime, EndTime));
+            TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetTotalProduction(StartTime, EndTime));
             GraphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
 
             if (graphSampling != GraphSample.None)
@@ -496,7 +487,7 @@ namespace UI.ViewModel
 
                 while (tempEndTime <= endTime)
                 {
-                    tempData = new ObservableCollection<Tuple<double, DateTime>>(GraphTotalProductionForSelected.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
+                    tempData = new ObservableCollection<Tuple<double, DateTime>>(TotalProduction.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
                     if (tempData != null && tempData.Count != 0)
                     {
                         averageProduction = tempData.Average(x => x.Item1);

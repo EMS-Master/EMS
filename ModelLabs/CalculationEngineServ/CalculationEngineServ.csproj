@@ -93,6 +93,7 @@
     <Compile Include="DataBaseModels\Alarm.cs" />
     <Compile Include="DataBaseModels\DiscreteCounter.cs" />
     <Compile Include="DataBaseModels\HistoryMeasurement.cs" />
+    <Compile Include="DataBaseModels\TotalProduction.cs" />
     <Compile Include="EmsContext.cs" />
     <Compile Include="GeneticAlgorithm\DNA.cs" />
     <Compile Include="GeneticAlgorithm\GA.cs" />
@@ -104,6 +105,10 @@
     <Compile Include="Migrations\202007121742428_HistoryTable.cs" />
     <Compile Include="Migrations\202007121742428_HistoryTable.designer.cs">
       <DependentUpon>202007121742428_HistoryTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202008121120449_addTotalProduction.cs" />
+    <Compile Include="Migrations\202008121120449_addTotalProduction.designer.cs">
+      <DependentUpon>202008121120449_addTotalProduction.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ProcessingToCalculation.cs" />
@@ -163,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202007121742428_HistoryTable.resx">
       <DependentUpon>202007121742428_HistoryTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202008121120449_addTotalProduction.resx">
+      <DependentUpon>202008121120449_addTotalProduction.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

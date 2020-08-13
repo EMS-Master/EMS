@@ -20,11 +20,13 @@ namespace CalculationEngineServ
     {
 		private PublisherService publisher = null;
 
-		public CalculationEngine()
+        private float totalProduction = 0;
+
+        public CalculationEngine()
 		{
 			publisher = new PublisherService();
 		}
-			public bool Commit()
+		public bool Commit()
         {
             throw new NotImplementedException();
         }
@@ -32,6 +34,8 @@ namespace CalculationEngineServ
         public bool Optimize(List<MeasurementUnit> measEnergyConsumer, List<MeasurementUnit> measGenerators, float windData, float sunData)
         {
             bool result = false;
+            totalProduction = 0;
+
             foreach (var m in measGenerators)
             {
                 Console.WriteLine("masx value: " + m.MaxValue);
@@ -50,6 +54,15 @@ namespace CalculationEngineServ
 
 			try
             {
+                if (measurementsOptimized != null && measurementsOptimized.Count > 0)
+                {
+                    totalProduction = measurementsOptimized.Sum(x => x.CurrentValue);
+
+                    if (WriteTotalProductionIntoDb(totalProduction, DateTime.Now))
+                    {
+                        Console.WriteLine("The total production is recorded into history database.");
+                    }
+                }
                 if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
                 {
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measurementsOptimized.Count);
@@ -57,7 +70,7 @@ namespace CalculationEngineServ
 
                     result = true;
                 }
-               // ScadaCommandingProxy.Instance.CommandDiscreteValues(25769803777,true);
+                // ScadaCommandingProxy.Instance.CommandDiscreteValues(25769803777,true);
             }
             catch (Exception ex)
             {
@@ -147,5 +160,56 @@ namespace CalculationEngineServ
 			}
 			publisher.PublishOptimizationResults(measListUI);
 		}
-	}
+
+        public bool WriteTotalProductionIntoDb(float totalProduction, DateTime dateTime)
+        {
+            bool retVal = false;
+            using (var db = new EmsContext())
+            {
+                try
+                {
+                    TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime };
+                    db.TotalProductions.Add(total);
+                    db.SaveChanges();
+
+                    retVal = true;
+                }
+                catch (Exception e)
+                {
+                    retVal = false;
+                    string message = string.Format("Failed to insert total production into database. {0}", e.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                    Console.WriteLine(message);
+                }
+            }
+
+            return retVal;
+        }
+
+        public List<Tuple<double, DateTime>> ReadTotalProductionsFromDb(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+            using (var db = new EmsContext())
+            {
+                try
+                {
+                    var list = db.TotalProductions.Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime);
+                    foreach (var item in list)
+                    {
+                        retVal.Add(new Tuple<double, DateTime>(item.TotalGeneration, item.TimeOfCalculation));
+                    }
+                }
+                catch (Exception e)
+                {
+                    string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                    Console.WriteLine(message);
+                }
+            }
+
+            return retVal;
+        }
+
+
+    }
 }

@@ -13,5 +13,7 @@ namespace CalculationEngineServ
         public DbSet<Alarm> Alarms { get; set; }
         public DbSet<DiscreteCounter> DiscreteCounters { get; set; }
         public DbSet<HistoryMeasurement> HistoryMeasurements { get; set; }
+        public DbSet<TotalProduction> TotalProductions { get; set; }
+
     }
 }

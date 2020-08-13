@@ -58,5 +58,10 @@ namespace CalculationEngineContracts
         {
             return proxy.GetHistoryMeasurements(gid, startTime, endTime);
         }
+
+        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+        {
+            return proxy.GetTotalProduction(startTime, endTime);
+        }
     }
 }

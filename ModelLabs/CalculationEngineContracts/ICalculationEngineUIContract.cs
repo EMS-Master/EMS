@@ -12,5 +12,8 @@ namespace CalculationEngineContracts
     {
         [OperationContract]
         List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime);
+
+        [OperationContract]
+        List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime);
     }
 }

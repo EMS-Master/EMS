@@ -78,7 +78,7 @@
                                                 >
 						<chartingToolkit:LineSeries.DataPointStyle>
 							<Style TargetType="chartingToolkit:LineDataPoint">
-								<Setter Property="Background" Value="DarkGreen"/>
+								<Setter Property="Background" Value="LightGreen"/>
 								<Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
 							</Style>
 						</chartingToolkit:LineSeries.DataPointStyle>
@@ -214,18 +214,9 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Expander Grid.Row="0" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="Black" Margin="10">
-                    <ItemsControl ItemsSource="{Binding GeneratorsContainer}" 
-								  ItemTemplate="{StaticResource GraphGeneratorTemplate}" >
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
-                </Expander>
 
-                <Expander Grid.Row="1" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="Black">
+
+                <Expander Grid.Row="0" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="Black">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -290,7 +281,7 @@
                                                 Visibility="{Binding Path=TotalProductionGraphVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <chartingToolkit:LineSeries.DataPointStyle>
                                     <Style TargetType="chartingToolkit:LineDataPoint">
-                                        <Setter Property="Background" Value="DarkGreen"/>
+                                        <Setter Property="Background" Value="Green"/>
                                         <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
                                     </Style>
                                 </chartingToolkit:LineSeries.DataPointStyle>
@@ -314,18 +305,25 @@
                                                 Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <chartingToolkit:LineSeries.DataPointStyle>
                                     <Style TargetType="chartingToolkit:LineDataPoint">
-                                        <Setter Property="Background" Value="DarkOrange"/>
+                                        <Setter Property="Background" Value="LightGreen"/>
                                         <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
                                     </Style>
                                 </chartingToolkit:LineSeries.DataPointStyle>
                             </chartingToolkit:LineSeries>
 
                         </chartingToolkit:Chart>
-
-
-
-
                     </Grid>
+                </Expander>
+
+                <Expander Grid.Row="1" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="Black" Margin="10">
+                    <ItemsControl ItemsSource="{Binding GeneratorsContainer}" 
+								  ItemTemplate="{StaticResource GraphGeneratorTemplate}" >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
                 </Expander>
             </Grid>
         </Grid>
