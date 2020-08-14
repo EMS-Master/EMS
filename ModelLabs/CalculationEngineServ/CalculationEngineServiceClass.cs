@@ -94,6 +94,9 @@ namespace CalculationEngineServ
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             Console.WriteLine("\n\n{0}", message);
         }
-        
+        public bool IntegrityUpdate()
+        {
+            return ce.InitiateIntegrityUpdate();
+        }
     }
 }

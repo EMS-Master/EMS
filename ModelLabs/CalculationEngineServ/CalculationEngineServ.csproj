@@ -111,6 +111,7 @@
       <DependentUpon>202008121120449_addTotalProduction.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="OptimisationModel.cs" />
     <Compile Include="ProcessingToCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PubSub\OptimizationEventArgs.cs" />
@@ -132,6 +133,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
+      <Project>{ADE96497-7C11-40B6-AE82-57F956C9F104}</Project>
+      <Name>DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
       <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
