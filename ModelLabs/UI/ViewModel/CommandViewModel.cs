@@ -33,6 +33,7 @@ namespace UI.ViewModel
 		private ICommand commandGenMessBox;
 		public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
 
+        private TestGDA testGda;
 
         private void ActivateGenExecute(object obj)
         {
@@ -88,6 +89,8 @@ namespace UI.ViewModel
         public CommandViewModel()
         {
             Title = "Command";
+            testGda = new TestGDA();
+
             IntegrityUpdate();
         }
 
@@ -109,6 +112,8 @@ namespace UI.ViewModel
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
                 iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                var retExtentValues = testGda.GetExtentValues(ModelCode.ANALOG, properties.ToList());
+
                 while (resourcesLeft > 0)
                 {
                     List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);

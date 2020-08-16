@@ -16,12 +16,13 @@
 		<Grid Grid.Column="0" Grid.Row="0" Height="auto">
 
 			<StackPanel>
-				<Label Content="Command ANALOG values" HorizontalAlignment="Left" Width="530"  HorizontalContentAlignment="Center"/>
+                <Label Content="Command analog and discrete values" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Style="{StaticResource heading}"/>
+                <TextBox x:Name="TxtSearchText" HorizontalAlignment="Center"   TextChanged="TxtSearchText_TextChanged" Margin="0,10" Height="30" Width="200"  Style="{StaticResource placeHolder}" Tag="Search..."/>
 
-				<DataGrid x:Name="CommandingDataGrid" 
+                <DataGrid x:Name="CommandingDataGrid" 
                       ItemsSource="{Binding Path = Gens}"
                       CanUserDeleteRows="False" CanUserAddRows="False"
-                      AutoGenerateColumns="False" Width="530" HorizontalAlignment="Left" Height="auto" HorizontalContentAlignment="Center">
+                      AutoGenerateColumns="False"  HorizontalAlignment="Center" Height="auto" HorizontalContentAlignment="Center">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True" Width="120"/>
 						<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" Width="100"/>
@@ -37,13 +38,25 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-					</DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Active"   Width="70" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsActive}"
+                                          Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                          CommandParameter="{Binding}" Grid.Column="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                    
 				</DataGrid>
-			</StackPanel>
+
+            </StackPanel>
 
 		</Grid>
 
-		<Grid Grid.Column="1" Grid.Row="0" Height="auto">
+		<!--<Grid Grid.Column="1" Grid.Row="0" Height="auto">
 			<StackPanel>
 				<Label Content="Command DIGITAL values" HorizontalAlignment="Right"  HorizontalContentAlignment="Center"  Width="530" />
 				<DataGrid x:Name="CommandingDataGrid2" 
@@ -66,9 +79,9 @@
 					</DataGrid.Columns>
 				</DataGrid>
 			</StackPanel>
-		</Grid>
-		<Grid Grid.Column="0" Grid.Row="1">
-			<TextBox x:Name="TxtSearchText" TextChanged="TxtSearchText_TextChanged" Margin="0,26,683,52" Height="20" Width="100" Text="Search..."/>
-		</Grid>
+		</Grid>-->
+		<!--<Grid Grid.Column="0" Grid.Row="1">
+            <TextBox x:Name="TxtSearchText2" HorizontalAlignment="Center"  TextChanged="TxtSearchText_TextChanged" Margin="0,26,683,52" Height="20" Width="100"  Style="{StaticResource placeHolder}" Tag="Search..."/>
+        </Grid>-->
 	</Grid>
 </UserControl>

@@ -59,28 +59,28 @@ namespace CalculationEngineServ
             {
                 Console.WriteLine("masx value: " + m.MaxValue);
             }
-            if (InsertMeasurementsIntoDb(measurementsOptimized))
+            if (InsertMeasurementsIntoDb(measGenerators))
             {
-                Console.WriteLine("Inserted {0} Measurement(s) into history database.", measurementsOptimized.Count);
+                Console.WriteLine("Inserted {0} Measurement(s) into history database.", measGenerators.Count);
             }
 
-			PublishGeneratorsToUI(measurementsOptimized);
+			PublishGeneratorsToUI(measGenerators);
 
 			try
             {
-                if (measurementsOptimized != null && measurementsOptimized.Count > 0)
+                if (measGenerators != null && measGenerators.Count > 0)
                 {
-                    totalProduction = measurementsOptimized.Sum(x => x.CurrentValue);
+                    totalProduction = measGenerators.Sum(x => x.CurrentValue);
 
                     if (WriteTotalProductionIntoDb(totalProduction, DateTime.Now))
                     {
                         Console.WriteLine("The total production is recorded into history database.");
                     }
                 }
-                if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
+                if (ScadaCommandingProxy.Instance.SendDataToSimulator(measGenerators))
                 {
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measurementsOptimized.Count);
-                    Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measurementsOptimized.Count);
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
+                    Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
 
                     result = true;
                 }

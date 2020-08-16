@@ -30,7 +30,7 @@ namespace UI.View
         }
         private void TxtSearchText_TextChanged(object sender, TextChangedEventArgs e)
         {
-            FindControlItem(this.CommandingDataGrid2);
+            FindControlItem(this.CommandingDataGrid);
           
         }
         public void FindControlItem(DependencyObject obj)

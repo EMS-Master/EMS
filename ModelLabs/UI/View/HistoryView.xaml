@@ -296,7 +296,7 @@
 
                             </chartingToolkit:LineSeries>
 
-                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProductionForSelected}" 
+                            <!--<chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProductionForSelected}" 
 												DependentValueBinding="{Binding Path=Item1}" 
 												IndependentValueBinding="{Binding Path=Item2}"
 												IsSelectionEnabled="False"
@@ -309,8 +309,149 @@
                                         <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
                                     </Style>
                                 </chartingToolkit:LineSeries.DataPointStyle>
-                            </chartingToolkit:LineSeries>
+                            </chartingToolkit:LineSeries>-->
 
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[0].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                Title="{Binding Path=GeneratorsContainer[0].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="GreenYellow"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[1].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                 Title="{Binding Path=GeneratorsContainer[1].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="LightSeaGreen"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[2].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[2].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Red"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[3].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[3].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Blue"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[4].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[4].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Black"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[5].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[5].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Purple"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[6].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[6].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Pink"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[7].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[7].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Yellow"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[8].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[8].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="RosyBrown"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[9].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[9].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <chartingToolkit:LineSeries.DataPointStyle>
+                                    <Style TargetType="chartingToolkit:LineDataPoint">
+                                        <Setter Property="Background" Value="Orange"/>
+                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                    </Style>
+                                </chartingToolkit:LineSeries.DataPointStyle>
+                            </chartingToolkit:LineSeries>
+                            
                         </chartingToolkit:Chart>
                     </Grid>
                 </Expander>
