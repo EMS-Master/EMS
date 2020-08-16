@@ -29,8 +29,8 @@ namespace ScadaProcessingSevice
         private static List<AnalogLocation> generatorAnalogs;
 		private static List<DiscreteLocation> energyConsumerDiscretes;
 		private static List<DiscreteLocation> generatorDscretes;
-		private readonly int START_ADDRESS_GENERATOR = 20;
-		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 10;
+		private readonly int START_ADDRESS_GENERATOR = 40;
+		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 20;
         private ConvertorHelper convertorHelper;
 		private static Dictionary<long, float> previousGeneratorDiscretes;
 		private static Dictionary<long, int> DiscretMaxVal;

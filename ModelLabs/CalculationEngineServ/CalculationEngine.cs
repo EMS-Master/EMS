@@ -139,21 +139,16 @@ namespace CalculationEngineServ
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
         {
-            Dictionary<long, OptimisationModel> optModelMapOptimizied;
+            //Dictionary<long, OptimisationModel> optModelMapOptimizied;
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
 
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
-            windProductionkW = 0;
             foreach (var item in optModelMap)
             {
                 if (item.Value.Renewable)
                 {
                     item.Value.GenericOptimizedValue = item.Value.MaxPower;
                     powerOfConsumersWithoutRenewable -= item.Value.MaxPower;
-                    if (item.Value.TypeGenerator.Equals(GeneratorType.Wind))
-                    {
-                        windProductionkW += item.Value.MaxPower;
-                    }
                 }
                 else
                 {
@@ -161,12 +156,7 @@ namespace CalculationEngineServ
                 }
             }
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
-
-            //GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
-            //optModelMapOptimizied = gaoRenewable.StartAlgorithmWithReturn();
-
-
-
+            
             return optModelMap;
         }
         public UpdateResult Prepare(ref Delta delta)
@@ -304,7 +294,7 @@ namespace CalculationEngineServ
             {
                 ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
 
-                List<ModelCode> properties = new List<ModelCode>(10);
+                List<ModelCode> properties = new List<ModelCode>(20);
                 List<ResourceDescription> retList = new List<ResourceDescription>(5);
 
                 int iteratorId = 0;

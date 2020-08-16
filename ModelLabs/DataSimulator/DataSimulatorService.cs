@@ -47,81 +47,161 @@ namespace DataSimulator
 			}
 		}
 
-		public void SimulateSunData()
+		public float SimulateSunData()
 		{
-			TimeSpan time = DateTime.Now.TimeOfDay;
+            // u 12 popodne sunce je pod uglom od 90 stepeni nad povrsinom. U tom trenutku insolacija je 1000 W/m na kvadrat
+            // koeficijent je srazmeran Povrsina panela / alfa (ugao pod kojim je postavljen panel)
+            // u nasem slucaju bice 15% tj. 0.15
+            // pa je snaga u 12h sa insolacijom od 1000 jenaka 1000 * 0.15 = 150 W za jedan panel
+            // Solarni generatori se razlikuju po broju panela
+            // Imamo 4 solarnih generatora:
+            // 1. 1000000 W = 1000 kW = 1 MW  = 6666 metara kvadratnih panela
+            // 2. 1200000 W = 1200 kW = 1.2 MW = 8000 metara kvadratnih panela
+            // 3. 1500000 W = 1500 kW = 1.5 MW = 10000 metara kvadratnih panela
+            // 4. 1800000 W = 1800 kW = 1.8 MW = 12000 metara kvadratnih panela
+            // 5. 1000000 W = 1000 kW = 1MW = 6666 metara kvadratnih panela
+
+            float k = 0.15f; //koeficijent
+            TimeSpan time = DateTime.Now.TimeOfDay;
 			var range = insolationRange.ContainsKey(time.Hours) ? insolationRange[time.Hours] : new Tuple<int, int>(0,0);
 			var random = new Random();
-			float insolation = (float)random.NextDouble() + random.Next(range.Item1, range.Item2);
-			float powerForGenerator1 = (random.Next(95, 105) / 100f) * insolation;
-			float powerForGenerator2 = (random.Next(95, 105) / 100f) * insolation;
-			float powerForGenerator3 = (random.Next(95, 105) / 100f) * insolation;
+			float insolation = (float)random.NextDouble() + random.Next(range.Item1, range.Item2); // insolacija u datom trenutku
+            float powerPerPV = insolation * k;
+           
+            float powerForGenerator1 = (random.Next(95, 105) / 100f) * powerPerPV * 6666;
+			float powerForGenerator2 = (random.Next(95, 105) / 100f) * powerPerPV * 80000;
+			float powerForGenerator3 = (random.Next(95, 105) / 100f) * powerPerPV * 10000;
+            float powerForGenerator4 = (random.Next(95, 105) / 100f) * powerPerPV * 12000;
+            float powerForGenerator5 = (random.Next(95, 105) / 100f) * powerPerPV * 6666;
 
-			mdbClient.WriteSingleRegister(49, insolation);
-			mdbClient.WriteSingleRegister(20, powerForGenerator1);
-			mdbClient.WriteSingleRegister(22, powerForGenerator2);
-			mdbClient.WriteSingleRegister(24, powerForGenerator3);
+            if (range.Item1 == 0 && range.Item2 == 0)
+            {
+                powerForGenerator1 = 0;
+                powerForGenerator2 = 0;
+                powerForGenerator3 = 0;
+                powerForGenerator4 = 0;
+                powerForGenerator5 = 0;
+            }
 
-			Console.WriteLine(insolation);
-			Console.WriteLine(powerForGenerator1);
-			Console.WriteLine(powerForGenerator2);
-			Console.WriteLine(powerForGenerator3);
-			Console.WriteLine();
-			
+            mdbClient.WriteSingleRegister(100, insolation);
+			mdbClient.WriteSingleRegister(40, powerForGenerator1);
+			mdbClient.WriteSingleRegister(42, powerForGenerator2);
+			mdbClient.WriteSingleRegister(44, powerForGenerator3);
+            mdbClient.WriteSingleRegister(46, powerForGenerator4);
+            mdbClient.WriteSingleRegister(48, powerForGenerator5);
+
+            Console.WriteLine("Insolation: " + insolation);
+            Console.WriteLine("PoverPerPV: " + powerPerPV);
+			Console.WriteLine("Sun generator 1: " + powerForGenerator1 + " W");
+			Console.WriteLine("Sun generator 2: " +  powerForGenerator2 + " W");
+			Console.WriteLine("Sun generator 3: " +  powerForGenerator3 + " W");
+            Console.WriteLine("Sun generator 4: " +  powerForGenerator4 + " W");
+            Console.WriteLine("Sun generator 5: " +  powerForGenerator5 + " W");
+            Console.WriteLine();
+
+            float sum = powerForGenerator1 + powerForGenerator2 + powerForGenerator3 + powerForGenerator4 + powerForGenerator5;
+            return sum;
 		}
 
-		public void SimulateWindData()
+		public float SimulateWindData()
 		{
+            // Podrazumeva se da su sve vetrenjace istog precnika, na istom mestu postavljene, gustina vazduha i brzina vetra su iste
+            // formula Pw = Vw na treci * povrsina turbina * gusttina vazduha
+            // ~ Vw na treci * koeficijent
+            // Jedna vetroturbina od 1MW : povrsina rotora 2827m na kvadrat
+            // Cut-in speed: 3.6 m/s
+            // Cut-out speed: 20 m/s
+            // Rated wind speed: 12.5 m/s
+            // gustina vazduha: 1.2 kg/m kubni
 			Random random = new Random();
 			float windSpeed = random.Next(80, 120) / 100f * oldWindSpeed;
 			float powerGenerator1 = 0;
 			float powerGenerator2 = 0;
 			float powerGenerator3 = 0;
+			float powerGenerator4 = 0;
+			float powerGenerator5 = 0;
 
-			float k1 = 932.896f;
-			float k2 = 1119.475f;
-			float k3 = 597.053f;
+            // 1MW = k * (rated wind speed) na treci
+            //  k = 1000000 W / (12.5) na treci
+            //  k = 1000000 / 1953.125 = 521
 
+			float k = 521f;
+			
 			if(windSpeed > 35)
 			{
 				windSpeed = random.Next(80, 82) / 100f * windSpeed;
 			}
 
-			if(windSpeed >= 3.61 && windSpeed <= 13.89)
+            float oneWindTurbine = k * (float)Math.Pow(windSpeed, 3);
+            float oneRatedWindTurbine = k * (float)Math.Pow(12.5, 3);
+
+            if (windSpeed >= 3.6 && windSpeed <= 12.5)
 			{
-				powerGenerator1 = k1 * (float)Math.Pow(windSpeed, 3);
-				powerGenerator2 = k2 * (float)Math.Pow(windSpeed, 3);
-				powerGenerator3 = k3 * (float)Math.Pow(windSpeed, 3);
+				powerGenerator1 = oneWindTurbine * 5;
+				powerGenerator2 = oneWindTurbine * 8;
+				powerGenerator3 = oneWindTurbine * 10;
+				powerGenerator4 = oneWindTurbine * 14;
+				powerGenerator5 = oneWindTurbine * 18;
 			}
-			else if(windSpeed < 3.61 || windSpeed > 27.78)
+			else if(windSpeed < 3.6 || windSpeed > 20)
 			{
 				powerGenerator1 = 0;
 				powerGenerator2 = 0;
 				powerGenerator3 = 0;
+				powerGenerator4 = 0;
+				powerGenerator5 = 0;
 			}
 			else
 			{
-				powerGenerator1 = k1 * (float)Math.Pow(13.89f, 3);
-				powerGenerator2 = k2 * (float)Math.Pow(13.89f, 3);
-				powerGenerator3 = k3 * (float)Math.Pow(13.89f, 3);
+				powerGenerator1 = oneRatedWindTurbine * 5;
+				powerGenerator2 = oneRatedWindTurbine * 8;
+				powerGenerator3 = oneRatedWindTurbine * 10;
+				powerGenerator4 = oneRatedWindTurbine * 14;
+				powerGenerator5 = oneRatedWindTurbine * 18;
 			}
 
 			Console.WriteLine("Wind data");
-			Console.WriteLine(windSpeed);
-			Console.WriteLine(powerGenerator1/1000000f);	//W -> MW
-			Console.WriteLine(powerGenerator2/1000000f);
-			Console.WriteLine(powerGenerator3/1000000f);
+			Console.WriteLine("Wind speed: " + windSpeed);
+			Console.WriteLine("Wind gen 1: " + (powerGenerator1/1000000f) + " MW");	//W -> MW
+			Console.WriteLine("Wind gen 2: " +  (powerGenerator2 /1000000f) + " MW");
+			Console.WriteLine("Wind gen 3: " +  (powerGenerator3 /1000000f) + " MW");
+			Console.WriteLine("Wind gen 4: " +  (powerGenerator4 /1000000f) + " MW");
+			Console.WriteLine("Wind gen 5: " +  (powerGenerator5 /1000000f) + " MW");
 			Console.WriteLine();
 
-			mdbClient.WriteSingleRegister(51, windSpeed);
-			mdbClient.WriteSingleRegister(26, powerGenerator1 / 1000000f);
-			mdbClient.WriteSingleRegister(28, powerGenerator2 / 1000000f);
-			mdbClient.WriteSingleRegister(30, powerGenerator3 / 1000000f);
-
+			mdbClient.WriteSingleRegister(102, windSpeed);
+			mdbClient.WriteSingleRegister(50, powerGenerator1 / 1000000f);
+			mdbClient.WriteSingleRegister(52, powerGenerator2 / 1000000f);
+			mdbClient.WriteSingleRegister(54, powerGenerator3 / 1000000f);
+			mdbClient.WriteSingleRegister(56, powerGenerator4 / 1000000f);
+			mdbClient.WriteSingleRegister(58, powerGenerator5 / 1000000f);
+            
 			oldWindSpeed = windSpeed;
-		}
+            float sum = powerGenerator1 + powerGenerator2 + powerGenerator3 + powerGenerator4 + powerGenerator5;
+            return sum;
+        }
 
-		private void PopulateInsolationRange()
+        public float SimulateHydroData()
+        {
+            float powerGenerator1 = 100000000;
+            float powerGenerator2 = 120000000;
+            float powerGenerator3 = 130000000;
+
+            mdbClient.WriteSingleRegister(60, powerGenerator1 / 1000000f);
+            mdbClient.WriteSingleRegister(62, powerGenerator2 / 1000000f);
+            mdbClient.WriteSingleRegister(64, powerGenerator3 / 1000000f);
+
+            Console.WriteLine("Hydro data");
+            Console.WriteLine("Hydro gen 1: " + (powerGenerator1 / 1000000f) + " MW"); //W -> MW
+            Console.WriteLine("Hydro gen 2: " + (powerGenerator2 / 1000000f) + " MW");
+            Console.WriteLine("Hydro gen 3: " + (powerGenerator3 / 1000000f) + " MW");
+            Console.WriteLine();
+
+            float sum = powerGenerator1 + powerGenerator2 + powerGenerator3;
+            return sum;
+        }
+
+        private void PopulateInsolationRange()
 		{
 			insolationRange = new Dictionary<int, Tuple<int, int>>();
 
@@ -141,49 +221,41 @@ namespace DataSimulator
 			insolationRange.Add(18, new Tuple<int, int>(7, 100));
 		}
 
-        public void SimulateConsumption()
+        public void SimulateConsumption(float sunGeneration, float windGeneration, float hydroGeneration)
         {
             TimeSpan time = DateTime.Now.TimeOfDay;
             var range = consumptionRange[time.Hours];
 
             Random random = new Random();
 
-            float consumption1 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption2 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption3 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption4 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption5 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption6 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption7 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption8 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption9 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-            float consumption10 = random.Next((int)(range.Item1 * 100), (int)(range.Item2 * 100))/100f;
-
-
-            mdbClient.WriteSingleRegister(0, consumption1); //W
-            mdbClient.WriteSingleRegister(2, consumption2); //W
-            mdbClient.WriteSingleRegister(4, consumption3); //W
-            mdbClient.WriteSingleRegister(6, consumption4); //W
-            mdbClient.WriteSingleRegister(8, consumption5); //W
-            mdbClient.WriteSingleRegister(10, consumption6); //W
-            mdbClient.WriteSingleRegister(12, consumption7); //W
-            mdbClient.WriteSingleRegister(14, consumption8); //W
-            mdbClient.WriteSingleRegister(16, consumption9); //W
-            mdbClient.WriteSingleRegister(18, consumption10); //W
-
+            List<float> consumptions = new List<float>();
             Console.WriteLine("Consumption:");
-            Console.WriteLine(consumption1);
-            Console.WriteLine(consumption2);
-            Console.WriteLine(consumption3);
-            Console.WriteLine(consumption4);
-            Console.WriteLine(consumption5);
-            Console.WriteLine(consumption6);
-            Console.WriteLine(consumption7);
-            Console.WriteLine(consumption8);
-            Console.WriteLine(consumption9);
-            Console.WriteLine(consumption10);
 
+            for(int i = 0; i < 20; i++)
+            {
+                consumptions.Add(random.Next((int)(range.Item1 * 1000), (int)(range.Item2 * 1000))); //kW indutries
+            }
 
+            float sumOfConsumption = consumptions.Sum();
+
+            float renewableGeneration = (sunGeneration + windGeneration + hydroGeneration) / 1000; //kW
+            if(renewableGeneration > sumOfConsumption)
+            {
+                float difference = renewableGeneration - sumOfConsumption;
+                float valueToAdd = difference + 10;
+                float valueToAddForEachConsumer = valueToAdd / 20;
+                for(var i = 0; i < 20; i++)
+                {
+                    consumptions[i] += valueToAddForEachConsumer;
+                }
+            }
+
+            for (int i = 0; i < 20; i++)
+            { 
+                mdbClient.WriteSingleRegister((ushort)(i * 2), consumptions[i]); // kW
+                Console.WriteLine("Consumer " + (i+1) + ": " + consumptions[i] + " kW");
+            }
+            
         }
 
         private void PopulateConsumptionRange()
@@ -216,9 +288,9 @@ namespace DataSimulator
             consumptionRange.Add(23, new Tuple<double, double>(0.8, 0.98));
         }
 
-        public void TurnOnRenewableGenerators()
+        public void TurnOnRenewableConsumersAndRenewableGenerators()
         {
-            for(int i = 0; i<16; i++)
+            for(int i = 0; i<33; i++) //20 consumers and 5 sun generators and 5 wind generators and 3 hydro generators
             {
                 mdbClient.WriteSingleCoil((ushort)i, true);
             }

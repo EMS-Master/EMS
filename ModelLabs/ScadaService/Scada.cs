@@ -15,8 +15,8 @@ namespace ScadaService
     {
 
         private MdbClient mdbClient;
-        private ushort numberOfHoldingRegisters = 42;    //in bytes
-		private ushort numberOfCoils = 20;
+        private ushort numberOfHoldingRegisters = 82;    //in bytes
+		private ushort numberOfCoils = 40;
         private ushort numberOfHRegistersWS = 6;
 		public Scada()
         {
@@ -61,30 +61,9 @@ namespace ScadaService
 
         public bool GetDataFromSimulator()
         {
-            //mdbClient.WriteSingleRegister(5, 567);
-            //mdbClient.WriteSingleCoil(10, true);
-
-            //byte[] val = mdbClient.ReadHoldingRegisters(0, 10);
-            //bool[] val1 = mdbClient.ReadCoils(0, 13);
-            
-            //ushort[] retVal = ModbusHelper.GetUShortValuesFromByteArray(val, val.Length, 0);
-            //for (int i = 0; i < retVal.Length; i++)
-            //{
-
-            //    Console.WriteLine("Value of HoldingRegister " + (i + 1) + ": " + Convert.ToString((int)retVal[i]));
-                
-            //}
-
-            //for(int i = 0; i < val1.Length; i++)
-            //{
-            //    Console.WriteLine("Value of DiscreteInput " + (i + 1) + ": " + val1[i]);
-            //}
-
-            //Console.WriteLine();
-
             var values = mdbClient.ReadHoldingRegisters(0, numberOfHoldingRegisters);
 			var valuesDiscrete = mdbClient.ReadCoils(0, numberOfCoils);
-            var valuesWindSun = mdbClient.ReadHoldingRegisters(49, numberOfHRegistersWS);
+            var valuesWindSun = mdbClient.ReadHoldingRegisters(100, numberOfHRegistersWS);
             bool isSuccess = false;
             try
             {

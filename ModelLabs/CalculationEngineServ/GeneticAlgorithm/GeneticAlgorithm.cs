@@ -52,13 +52,13 @@ namespace CalculationEngineServ.GeneticAlgorithm
         {
             for (int i = 0; i < numOfIterations; i++)
             {
-                NewGeneration(5);
+                NewGeneration(20);
             }
 
             return BestGenes;
         }
         //dodavanje novih elemenata u generaciju
-        public void NewGeneration(int numNewDNA = 0 /*,bool crossoverNewDNA = false*/)//broj elemenata generacije, ako nije zadato = 0
+        public void NewGeneration(int numNewDNA = 0)//broj elemenata generacije, ako nije zadato = 0
         {
             int finalCount = Population.Count + numNewDNA; //ukupan broj elemnata, ako vec u populaciji ima elemenata
 
@@ -104,37 +104,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
                     newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: true));
                 }
             }
-            /*
-            for (int i = 0; i < Population.Count; i++)
-            { 
-             if (i < Elitism)
-                {                                      
-                    newPopulation.Add(Population[i]); 
-                }
-            else
-             {
-                    DNA<T> parent1 = ChooseParent();
-                    DNA<T> parent2 = ChooseParent();
-                    DNA<T> child = null;
-
-                    if (parent1 == null || parent2 == null)
-                    {
-                        child = new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: true);
-                    }
-                    else
-                    {
-                        child = parent1.Crossover(parent2);
-                    }
-
-                    child.Mutate(MutationRate);
-
-                    newPopulation.Add(child);
-             }
-            }
-            for (int i = 0; i <numNewDNA ; i++){
-                newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: true));
-            }
-             */
+            
 
             List<DNA<T>> tmpList = Population;
             Population = newPopulation;
@@ -159,8 +129,8 @@ namespace CalculationEngineServ.GeneticAlgorithm
                 return 0;
             }
         }
-        //kada pravimo novu generaciju prethodna se pregazi, pa ovdje racunamo najbolju fitness piredhodne
-        //i pamtimo je u best.
+        
+        //fitness funkcija: cost funkcija
         private void CalculateFitness()
         {
             fitnessSum = 0;
@@ -180,7 +150,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
             best.Genes.CopyTo(BestGenes, 0);
         }
 
-        private DNA<T> ChooseParent()
+        private DNA<T> ChooseParent() //odabir roditelja za ukrstanje iz elite prebacene u sledecu generaciju
         {
             int randomNumber = random.Next(0, Elitism);
 
