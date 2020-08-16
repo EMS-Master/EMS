@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace UI.ViewModel
@@ -29,16 +30,26 @@ namespace UI.ViewModel
         private ICommand activateGen;
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
 
-		private ICommand commandGen;
-		public ICommand CommandGen => commandGen ?? (commandGen = new RelayCommand<object>(CommandGenExecute));
+		private ICommand commandGenMessBox;
+		public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
+
 
         private void ActivateGenExecute(object obj)
         {
             ModelForCheckboxes model = (ModelForCheckboxes)obj;
             ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Id, model.IsActive);
         }
+        private void CommandGenMessBoxExecute(object obj)
+        {
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to command this element?", "Command", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                CommandGenExecute(obj);
+            }
+        }
 
-		private void CommandGenExecute(object obj)
+   
+        private void CommandGenExecute(object obj)
 		{
 			ModelForCheckboxes model = (ModelForCheckboxes)obj;
 			if(model.IsActive)

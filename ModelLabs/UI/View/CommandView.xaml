@@ -31,7 +31,7 @@
 								<DataTemplate>
 									<TextBox Text ="{Binding InputValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" IsEnabled="{Binding  Path=IsActive}" >
 										<TextBox.InputBindings>
-											<KeyBinding Command="{Binding DataContext.CommandGen, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter"  CommandParameter="{Binding}"/>
+											<KeyBinding Command="{Binding DataContext.CommandGenMessBox, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter"  CommandParameter="{Binding}"/>
 										</TextBox.InputBindings>
 									</TextBox>
 								</DataTemplate>
