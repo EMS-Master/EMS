@@ -112,7 +112,7 @@ namespace UI.ViewModel
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
                 iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
-                var retExtentValues = testGda.GetExtentValues(ModelCode.ANALOG, properties.ToList());
+                //var retExtentValues = testGda.GetExtentValues(ModelCode.ANALOG, properties.ToList());
 
                 while (resourcesLeft > 0)
                 {

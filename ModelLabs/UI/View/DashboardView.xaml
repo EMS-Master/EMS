@@ -226,8 +226,8 @@
 			<Expander IsExpanded="False" Header="Generation graphs" Foreground="Black" Margin="10,5">
 				<StackPanel>
 					<DockPanel>
-						<GroupBox Header="Generators" Foreground="Black">
-						<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" MaxHeight="175">
+						<GroupBox Header="Generators" Foreground="Black" Height="400" VerticalAlignment="Top">
+						<ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Width="150" HorizontalScrollBarVisibility="Auto" MaxHeight="300">
 							<ItemsControl ItemsSource="{Binding GeneratorsContainer}"
 										  ItemTemplate="{StaticResource VisibilityCheckbox}" />
 						</ScrollViewer>

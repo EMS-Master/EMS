@@ -1,11 +1,11 @@
-﻿using System;
+﻿using FTN.ServiceContracts;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using UIContract;
 
 namespace UI.Converters
 {
@@ -13,6 +13,15 @@ namespace UI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            //IEnumerable<object> m1 = values[0] as IEnumerable<object>;
+            //List<MeasurementUI> m2 = new List<MeasurementUI>();
+            //foreach (var item in m1)
+            //{
+            //    MeasurementUI m = (MeasurementUI)item;
+            //    MeasurementUI mm = item as MeasurementUI;
+
+            //    m2.Add(m);
+            //}
             IEnumerable<MeasurementUI> measUIs = values[0] as IEnumerable<MeasurementUI>;
             if (measUIs != null)
             {
@@ -27,4 +36,5 @@ namespace UI.Converters
             throw new NotImplementedException();
         }
     }
+
 }
