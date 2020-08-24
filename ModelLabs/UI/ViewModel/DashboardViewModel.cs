@@ -1,5 +1,6 @@
 ﻿using FTN.Common;
 using FTN.ServiceContracts;
+using ScadaContracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,44 +8,106 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using UI.PubSub;
+using UI.View;
 
 namespace UI.ViewModel
 {
     public class DashboardViewModel : ViewModelBase
     {
+       public CommandViewModel cwm = new CommandViewModel();
 
-		private int MAX_DISPLAY_NUMBER = 10;
-		private int MAX_DISPLAY_TOTAL_NUMBER = 15;
-		private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
-		private int attemptsCount = 0;
-		private double sizeValue;
+        private int MAX_DISPLAY_NUMBER = 10;
+        private int MAX_DISPLAY_TOTAL_NUMBER = 15;
+        private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
+        private int attemptsCount = 0;
+        private double sizeValue;
 
 
-		private CeSubscribeProxy ceSubscribeProxy;
+        private CeSubscribeProxy ceSubscribeProxy;
         private float currentProduction;
         private float currentConsumption;
-        
+
 
         private readonly double graphSizeOffset = 18;
 
-		private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+        private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
         private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> energyConsumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+
+        private ObservableCollection<ModelForCheckboxes> gen = new ObservableCollection<ModelForCheckboxes>();
 
         private ObservableCollection<KeyValuePair<DateTime, float>> generationList = new ObservableCollection<KeyValuePair<DateTime, float>>();
         private ObservableCollection<KeyValuePair<DateTime, float>> demandList = new ObservableCollection<KeyValuePair<DateTime, float>>();
 
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
-		private double graphWidth;
-		private double graphHeight;
+        private double graphWidth;
+        private double graphHeight;
 
         private ICommand visibilityCheckedCommand;
         private ICommand visibilityUncheckedCommand;
 
+        private ICommand openHistory;
+
+
         public ICommand VisibilityCheckedCommand => visibilityCheckedCommand ?? (visibilityCheckedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
 
         public ICommand VisibilityUncheckedCommand => visibilityUncheckedCommand ?? (visibilityUncheckedCommand = new RelayCommand<long>(VisibilityUncheckedCommandExecute));
+
+        private ICommand commandGenMessBox;
+        public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
+
+        private ICommand activateGen;
+        public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
+
+        private void ActivateGenExecute(object obj)
+        {
+            KeyValuePair<long, ObservableCollection<MeasurementUI>> model = (KeyValuePair<long, ObservableCollection<MeasurementUI>>)obj;
+            bool active = false;
+            ModelForCheckboxes model2 = new ModelForCheckboxes();
+            
+            foreach(var id in cwm.Gens)
+            {
+                if (model.Key == id.Id)
+                {
+                    if (id.IsActive == false)
+                    {
+                        id.IsActive = true;
+                        active = id.IsActive;
+                    }
+                    else
+                    {
+                        id.IsActive = false;
+                        active = id.IsActive;
+
+                    }
+                }
+            }
+           
+           // ModelForCheckboxes model = (ModelForCheckboxes)obj;
+            ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Key, active);
+        }
+
+        private void CommandGenMessBoxExecute(object obj)
+        {
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to command this element?", "Command", System.Windows.MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                CommandGenExecute(obj);
+            }
+        }
+
+
+        private void CommandGenExecute(object obj)
+        {
+            ModelForCheckboxes model = (ModelForCheckboxes)obj;
+            if (model.IsActive)
+            {
+                ScadaCommandingProxy.Instance.CommandAnalogValues(model.Id, model.InputValue);
+            }
+        }
+
         private void VisibilityCheckedCommandExecute(long gid)
         {
             GidToBoolMap[gid] = true;
@@ -57,7 +120,23 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
-        
+        public ICommand OpenHistory
+        {
+            get
+            {
+                if (openHistory == null)
+                {
+                    openHistory = new RelayCommand(param => this.OpenH());
+                }
+                return openHistory;
+            }
+        }
+
+        public void OpenH()
+        {
+            new HistoryView();
+        }
+
 
         public float CurrentConsumption
         {
@@ -74,61 +153,63 @@ namespace UI.ViewModel
         }
 
         public double GraphWidth
-		{
-			get
-			{
-				return graphWidth;
-			}
-
-			set
-			{
-				graphWidth = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public double GraphHeight
-		{
-			get
-			{
-				return graphHeight;
-			}
-
-			set
-			{
-				graphHeight = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public double SizeValue
-		{
-			get
-			{
-				return sizeValue;
-			}
-
-			set
-			{
-				sizeValue = value;
-				OnPropertyChanged();
-				UpdateSizeWidget(value);
-			}
-		}
-
-
-
-		public DashboardViewModel()
         {
+            get
+            {
+                return graphWidth;
+            }
+
+            set
+            {
+                graphWidth = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double GraphHeight
+        {
+            get
+            {
+                return graphHeight;
+            }
+
+            set
+            {
+                graphHeight = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double SizeValue
+        {
+            get
+            {
+                return sizeValue;
+            }
+
+            set
+            {
+                sizeValue = value;
+                OnPropertyChanged();
+                UpdateSizeWidget(value);
+            }
+        }
+
+
+
+        public DashboardViewModel()
+        {
+
+
             SubsrcibeToCE();
-			ceSubscribeProxy.Optimization();
+            ceSubscribeProxy.Optimization();
 
-			SizeValue = 0;
+            SizeValue = 0;
 
-			GraphWidth = 16 * graphSizeOffset;
-			GraphHeight = 9 * graphSizeOffset;
+            GraphWidth = 16 * graphSizeOffset;
+            GraphHeight = 9 * graphSizeOffset;
 
-			Title = "Dashboard";
+            Title = "Dashboard";
         }
 
         public float CurrentProduction
@@ -147,6 +228,9 @@ namespace UI.ViewModel
 
         public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
         public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
+
+        public ObservableCollection<ModelForCheckboxes> Gen { get => gen; set => gen = value; }
+
 
         public ObservableCollection<KeyValuePair<DateTime, float>> GenerationList { get => generationList; set => generationList = value; }
         public ObservableCollection<KeyValuePair<DateTime, float>> DemandList { get => demandList; set => demandList = value; }
@@ -284,4 +368,6 @@ namespace UI.ViewModel
         }
 
     }
+
+  
 }

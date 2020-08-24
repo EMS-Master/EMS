@@ -27,61 +27,102 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-				<DataTemplate x:Key="GraphGeneratorTemplate">
-			<Grid>
-				<Grid.Visibility>
-					<MultiBinding Converter="{StaticResource GidMapToVisibilityConverter}">
-						<Binding Path="DataContext.GidToBoolMap" RelativeSource="{RelativeSource AncestorType=UserControl}"></Binding>
-						<Binding Path="Key"></Binding>
-					</MultiBinding>
-				</Grid.Visibility>
-				<chartingToolkit:Chart Style="{StaticResource RealTimeDashboardStyle}"
+		
+		<DataTemplate x:Key="GraphGeneratorTemplate" >
+			<Border BorderBrush="Gray" BorderThickness="1">
+				<Grid Background="LightGray" >
+					<Grid.Visibility>
+						<MultiBinding Converter="{StaticResource GidMapToVisibilityConverter}">
+							<Binding Path="DataContext.GidToBoolMap" RelativeSource="{RelativeSource AncestorType=UserControl}"></Binding>
+							<Binding Path="Key"></Binding>
+						</MultiBinding>
+					</Grid.Visibility>
+
+					<CheckBox IsChecked="{Binding IsActive}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                          CommandParameter="{Binding}" Style="{StaticResource CheckBoxStyle}" Margin="2,3,0,0">
+						<CheckBox.ToolTip>
+							<ToolTip>
+								On/off generator.
+							</ToolTip>
+						</CheckBox.ToolTip>
+					</CheckBox>
+					
+					<Grid Width="23" Height="20" Margin="-210, -139, 0, 0">
+						<Grid.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Set point">
+									<TextBox Tag="Input..." Style="{StaticResource placeHolder}" Height="20"  Text ="{Binding InputValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+										<TextBox.InputBindings>
+											<KeyBinding Command="{Binding DataContext.CommandGenMessBox, RelativeSource={RelativeSource AncestorType=UserControl}}" Key="Enter"  CommandParameter="{Binding}"/>
+										</TextBox.InputBindings>
+									</TextBox>
+								</MenuItem>
+								<MenuItem Header="History"  Command="{Binding DataContext.OpenHistory,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+								<MenuItem Header="Fuel economy"/>
+							</ContextMenu>
+						</Grid.ContextMenu>
+						<Ellipse Style="{StaticResource AlarmGen}" Fill="{Binding Severity}" Stroke="Black" StrokeThickness="1">
+						</Ellipse>
+						
+						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="G" FontWeight="Bold"/>
+					</Grid>
+					<TextBlock Height="25" Width="50" Margin="-130, -130,0,0" Foreground="Red">
+						<TextBlock.Text>
+							<MultiBinding Converter="{StaticResource LastValueShowConverter}" >
+								<Binding Path="Value"/>
+								<Binding Path="Value[0].CurrentValue"></Binding>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				
+					<chartingToolkit:Chart Style="{StaticResource RealTimeDashboardStyle}"
 									   Width="{Binding DataContext.GraphWidth,RelativeSource={RelativeSource AncestorType=UserControl}}"
 									   Height="{Binding DataContext.GraphHeight,RelativeSource={RelativeSource AncestorType=UserControl}}"
                                        Template="{StaticResource GeneratorChartTemplate}"
 									   >
-					<chartingToolkit:Chart.Tag>
-						<MultiBinding Converter="{StaticResource LastValueShowConverter}">
-							<Binding Path="Value"></Binding>
-							<Binding Path="Value[0].CurrentValue"></Binding>
-						</MultiBinding>
-					</chartingToolkit:Chart.Tag>
-					<chartingToolkit:Chart.Title>
-						<MultiBinding Converter="{StaticResource GidToMridConverter}">
-							<Binding Path="Key"></Binding>
-							<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
-						</MultiBinding>
-					</chartingToolkit:Chart.Title>
+						<!--<chartingToolkit:Chart.Tag >
+							<MultiBinding Converter="{StaticResource LastValueShowConverter}" >
+								<Binding Path="Value"></Binding>
+								<Binding Path="Value[0].CurrentValue"></Binding>
+							</MultiBinding>
+						</chartingToolkit:Chart.Tag>-->
+						<!--<chartingToolkit:Chart.Title>
+							<MultiBinding Converter="{StaticResource GidToMridConverter}">
+								<Binding Path="Key"></Binding>
+								<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+							</MultiBinding>
+						</chartingToolkit:Chart.Title>-->
 
-					<chartingToolkit:LineSeries Title="Power"
+						<chartingToolkit:LineSeries Title="Power"
 												ItemsSource="{Binding Path=Value}"
 												DependentValueBinding="{Binding Path=CurrentValue}"
 												IndependentValueBinding="{Binding Path=TimeStamp.Second}"
 												IsSelectionEnabled="False"
 												Style="{StaticResource LineSeriesStyle}">
-						<chartingToolkit:LineSeries.DataPointStyle>
-							<Style TargetType="chartingToolkit:LineDataPoint">
-								<Setter Property="Background" Value="DarkGreen" />
-								<Setter Property="Template" Value="{StaticResource LineNoDataPointTemplate}" />
-							</Style>
-						</chartingToolkit:LineSeries.DataPointStyle>
+							<chartingToolkit:LineSeries.DataPointStyle>
+								<Style TargetType="chartingToolkit:LineDataPoint">
+									<Setter Property="Background" Value="DarkGreen" />
+									<Setter Property="Template" Value="{StaticResource LineNoDataPointTemplate}" />
+								</Style>
+							</chartingToolkit:LineSeries.DataPointStyle>
 
-						<chartingToolkit:LineSeries.IndependentAxis>
-							<chartingToolkit:CategoryAxis Orientation="X" Title="Time (s)" />
-						</chartingToolkit:LineSeries.IndependentAxis>
+							<chartingToolkit:LineSeries.IndependentAxis>
+								<chartingToolkit:CategoryAxis Orientation="X" Title="Time (s)" />
+							</chartingToolkit:LineSeries.IndependentAxis>
 
-						<chartingToolkit:LineSeries.DependentRangeAxis>
-							<chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)" Minimum="0">
-							</chartingToolkit:LinearAxis>
+							<chartingToolkit:LineSeries.DependentRangeAxis>
+								<chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)" Minimum="0">
+								</chartingToolkit:LinearAxis>
 
-						</chartingToolkit:LineSeries.DependentRangeAxis>
-					</chartingToolkit:LineSeries>
-				</chartingToolkit:Chart>
-			</Grid>
+							</chartingToolkit:LineSeries.DependentRangeAxis>
+						</chartingToolkit:LineSeries>
+					</chartingToolkit:Chart>
+				</Grid>
+			</Border>
 		</DataTemplate>
 
 		<DataTemplate x:Key="VisibilityCheckbox">
-			<CheckBox Foreground="Black" Margin="1,0,0,2">
+			<CheckBox Foreground="Black" Margin="1,0,0,2" >
 
 				<CheckBox.Content>
 					<MultiBinding Converter="{StaticResource GidToMridConverter}">
@@ -234,15 +275,17 @@
 					</GroupBox>
 					<ItemsControl  ItemsSource="{Binding GeneratorsContainer}"
 									ItemTemplate="{StaticResource GraphGeneratorTemplate}">
-						<ItemsControl.ItemsPanel>
+						
+							<ItemsControl.ItemsPanel>
 							<ItemsPanelTemplate>
 								<WrapPanel IsItemsHost="True" Orientation="Horizontal" />
-							
-							
 							</ItemsPanelTemplate>
+								
 						</ItemsControl.ItemsPanel>
+						
 					</ItemsControl>
-				</DockPanel>
+						
+					</DockPanel>
 				</StackPanel>
 			</Expander>
 		</StackPanel>	

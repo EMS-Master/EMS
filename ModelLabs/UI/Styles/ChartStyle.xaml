@@ -292,8 +292,8 @@
 				</TextBlock>
 				<Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="LightGray" Margin="20,0,0,5" BorderThickness="0">
 					<StackPanel Orientation="Horizontal" Margin="1">
-						<TextBlock Text="{TemplateBinding Tag}" Foreground="Black"  VerticalAlignment="Center" />
-						<TextBlock Text="kW" Foreground="Black" VerticalAlignment="Center" />
+						<!--<TextBlock Text="{TemplateBinding Tag}" Foreground="Black"  VerticalAlignment="Center" />
+						<TextBlock Text="kW" Foreground="Black" VerticalAlignment="Center" />-->
 						<!--<Button Command="{Binding DataContext.GoToCommand,RelativeSource={RelativeSource AncestorType={x:Type view:DashboardView}}}"
 											CommandParameter="{Binding DataContext.Key,RelativeSource={RelativeSource AncestorType={x:Type charting:Chart}}}"
                                             Margin="3,0,0,0"

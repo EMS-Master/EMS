@@ -9,9 +9,36 @@
 	<Style TargetType="CheckBox"  x:Key="CheckBoxDarkStyle">
 		<Setter Property="Foreground" Value="Black" ></Setter>
 	</Style>
-
 	
-		<LinearGradientBrush x:Key="GrayBlueGardientBrush"  
+	<Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Border BorderBrush="White" BorderThickness="1">
+						<Grid Width="15" Height="15" >
+							<Rectangle Fill="{TemplateBinding Background}"/>
+							<TextBlock Foreground="{TemplateBinding Foreground}"/>
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsChecked" Value="True">
+				<Setter Property="Background" Value="Green" />
+			</Trigger>
+			<Trigger Property="IsChecked" Value="False">
+				<Setter Property="Background" Value="Red" />
+			</Trigger>
+
+		</Style.Triggers>
+	</Style>
+
+	<LinearGradientBrush x:Key="GrayBlueGardientBrush"  
                             StartPoint="0,0" EndPoint="1,1">
 		<GradientStop Color="#88888c" Offset="0"/>
 		<GradientStop Color="#c7c7c9" Offset="0.5"/>
@@ -53,6 +80,35 @@
 						<SolidColorBrush Color="ForestGreen" Opacity="0.7"/>
 					</Setter.Value>
 				</Setter>
+			</DataTrigger>
+		</Style.Triggers>
+	</Style>
+
+	<Style x:Key="AlarmGen" TargetType="Ellipse" >
+
+		<Style.Triggers>
+			<DataTrigger Binding="{Binding Severity}" Value="CRITICAL">
+				<Setter Property="Fill" Value="Magenta"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="HIGH">
+				<Setter Property="Fill" Value="Red"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="MAJOR">
+				<Setter Property="Fill" Value="Orange"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="MEDIUM">
+				<Setter Property="Fill" Value="Yellow"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="LOW">
+				<Setter Property="Fill" Value="Green"></Setter>
+			</DataTrigger>
+
+			<DataTrigger Binding="{Binding Severity}" Value="MINOR">
+				<Setter Property="Fill" Value="Cyan"></Setter>
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>
