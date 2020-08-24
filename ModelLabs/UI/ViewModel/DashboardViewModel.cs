@@ -120,22 +120,26 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
-        public ICommand OpenHistory
-        {
-            get
-            {
-                if (openHistory == null)
-                {
-                    openHistory = new RelayCommand(param => this.OpenH());
-                }
-                return openHistory;
-            }
-        }
+        //public ICommand OpenHistory
+        //{
+        //    get
+        //    {
+        //        if (openHistory == null)
+        //        {
+        //            openHistory = new RelayCommand(param => this.OpenH());
+        //        }
+        //        return openHistory;
+        //    }
+        //}
 
-        public void OpenH()
-        {
-            new HistoryView();
-        }
+        //public ICommand OpenHistory => openHistory ?? (openHistory = new RelayCommand<object>(OpenH));
+
+
+        //public void OpenH(object obj)
+        //{
+        //    HistoryWindow historyWindow = new HistoryWindow();
+        //    historyWindow.Show();
+        //}
 
 
         public float CurrentConsumption

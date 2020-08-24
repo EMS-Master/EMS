@@ -57,7 +57,7 @@
 										</TextBox.InputBindings>
 									</TextBox>
 								</MenuItem>
-								<MenuItem Header="History"  Command="{Binding DataContext.OpenHistory,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                <MenuItem x:Name="MenuItemHistory" Header="History" Click="MenuItemHistory_Click"/>
 								<MenuItem Header="Fuel economy"/>
 							</ContextMenu>
 						</Grid.ContextMenu>

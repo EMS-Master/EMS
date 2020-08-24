@@ -19,12 +19,26 @@ namespace UI.ViewModel
         private readonly EmsContext _context = new EmsContext();
 
         private int resourcesLeft;
+        private int resourcesLeft2;
+
+
         private List<ModelCode> properties;
+        private List<ModelCode> properties2;
+
+
         private static List<ResourceDescription> internalGen;
         private ModelResourcesDesc modelResourcesDesc;
+        private ModelResourcesDesc modelResourcesDesc2;
+
+
         private int numberOfResources = 2;
         private int iteratorId;
+        private int iteratorId2;
+
         private List<ResourceDescription> retList;
+        private List<ResourceDescription> retList2;
+
+
         private ObservableCollection<ModelForCheckboxes> gens =  new ObservableCollection<ModelForCheckboxes>();
         private ObservableCollection<ModelForCheckboxes> baterry = new ObservableCollection<ModelForCheckboxes>();
         private ICommand activateGen;
@@ -99,19 +113,48 @@ namespace UI.ViewModel
             string message = string.Empty;
             internalGen = new List<ResourceDescription>(5);
             modelResourcesDesc = new ModelResourcesDesc();
+            modelResourcesDesc2 = new ModelResourcesDesc();
+
+
             retList = new List<ResourceDescription>(5);
+            retList2 = new List<ResourceDescription>(5);
+
+
             properties = new List<ModelCode>(10);
+            properties2 = new List<ModelCode>(10);
+
+
             ModelCode modelCodeGenerator = ModelCode.GENERATOR;
             ModelCode modelCodeEnergyConsumer = ModelCode.ENERGY_CONSUMER;
+            ModelCode modelCodeAnalog= ModelCode.ANALOG;
+
+
             iteratorId = 0;
+            iteratorId2 = 0;
+
+
             resourcesLeft = 0;
+            resourcesLeft2 = 0;
+
+
             numberOfResources = 2;
 
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
+                properties2 = modelResourcesDesc.GetAllPropertyIds(modelCodeAnalog);
+
+
                 iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
+                iteratorId2 = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeAnalog, properties2);
+
+
+
+
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                resourcesLeft2 = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId2);
+
+
                 //var retExtentValues = testGda.GetExtentValues(ModelCode.ANALOG, properties.ToList());
 
                 while (resourcesLeft > 0)
@@ -120,6 +163,19 @@ namespace UI.ViewModel
                     retList.AddRange(rds);
                     resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
                 }
+
+                //while (resourcesLeft2 > 0)
+                //{
+                //    List<ResourceDescription> rds2 = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId2);
+                //    retList2.AddRange(rds2);
+                //    foreach (var item in rds2)
+                //    {
+                //        if (retList.Where(x => x.Id == item.Id).FirstOrDefault() != null)
+                //            retList.Where(x => x.Id == item.Id).FirstOrDefault().Properties[6] = item.Properties[6];
+                //    }
+                //    resourcesLeft2 = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId2);
+                //}
+
                 NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
                 internalGen.AddRange(retList);
 
