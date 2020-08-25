@@ -52,22 +52,19 @@ namespace CalculationEngineServ.GeneticAlgorithm
         {
             for (int i = 0; i < numOfIterations; i++)
             {
-                NewGeneration(20);
+                NewGeneration();
             }
 
             return BestGenes;
         }
         //dodavanje novih elemenata u generaciju
-        public void NewGeneration(int numNewDNA = 0)//broj elemenata generacije, ako nije zadato = 0
+        public void NewGeneration()
         {
-            int finalCount = Population.Count + numNewDNA; //ukupan broj elemnata, ako vec u populaciji ima elemenata
-
-            if (finalCount <= 0)
+            if (Population.Count <= 0)
             {
                 return;
             }
-
-            if (Population.Count > 0)//ako vec imamo nesto u ppopuaciji prvoooooo izracunati fitness
+            else if(Population.Count > 0)//ako vec imamo nesto u ppopuaciji prvoooooo izracunati fitness
             {
                 CalculateFitness();
                 Population.Sort(CompareDNA); //individue sa najboljin fitness-om idu na pocetak

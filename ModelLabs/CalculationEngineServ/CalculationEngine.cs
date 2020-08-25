@@ -139,7 +139,7 @@ namespace CalculationEngineServ
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
         {
-            //Dictionary<long, OptimisationModel> optModelMapOptimizied;
+            Dictionary<long, OptimisationModel> optModelMapOptimizied;
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
 
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
@@ -147,8 +147,9 @@ namespace CalculationEngineServ
             {
                 if (item.Value.Renewable)
                 {
-                    item.Value.GenericOptimizedValue = item.Value.MaxPower;
-                    powerOfConsumersWithoutRenewable -= item.Value.MaxPower;
+                    //item.Value.GenericOptimizedValue = item.Value.MaxPower;
+                    item.Value.GenericOptimizedValue = item.Value.MeasuredValue;
+                    powerOfConsumersWithoutRenewable -= item.Value.MeasuredValue;
                 }
                 else
                 {
@@ -156,7 +157,10 @@ namespace CalculationEngineServ
                 }
             }
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
-            
+
+            GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
+            optModelMapOptimizied = gaoRenewable.StartAlgorithmWithReturn();
+
             return optModelMap;
         }
         public UpdateResult Prepare(ref Delta delta)
