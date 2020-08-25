@@ -18,7 +18,10 @@ namespace UI.ViewModel
     public class DashboardViewModel : ViewModelBase
     {
        public CommandViewModel cwm = new CommandViewModel();
-
+        private bool onOff;
+        
+        public bool OnOff { get { return onOff; } set { onOff = value; OnPropertyChanged(); } }
+       
         private int MAX_DISPLAY_NUMBER = 10;
         private int MAX_DISPLAY_TOTAL_NUMBER = 15;
         private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
@@ -214,6 +217,8 @@ namespace UI.ViewModel
             GraphHeight = 9 * graphSizeOffset;
 
             Title = "Dashboard";
+        
+
         }
 
         public float CurrentProduction
@@ -269,6 +274,18 @@ namespace UI.ViewModel
         {
             List<MeasurementUI> measUIs = obj as List<MeasurementUI>;
 
+
+            foreach(var item in measUIs)
+            {
+                if (item.CurrentValue <= 0)
+                {
+                    OnOff = false;
+                }
+                else
+                {
+                    OnOff = true;
+                }
+            }
             if (obj == null)
             {
                 throw new Exception("CallbackAction receive wrong parameter");

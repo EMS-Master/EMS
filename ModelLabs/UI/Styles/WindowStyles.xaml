@@ -9,8 +9,8 @@
 	<Style TargetType="CheckBox"  x:Key="CheckBoxDarkStyle">
 		<Setter Property="Foreground" Value="Black" ></Setter>
 	</Style>
-	
-	<Style x:Key="CheckBoxStyle" TargetType="CheckBox">
+
+	<Style x:Key="CheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
 		<Setter Property="Background" Value="White"/>
 		<Setter Property="Foreground" Value="Black"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
@@ -28,12 +28,18 @@
 			</Setter.Value>
 		</Setter>
 		<Style.Triggers>
-			<Trigger Property="IsChecked" Value="True">
+			<DataTrigger Binding="{Binding OnOff}" Value="true">
+				<Setter Property="Background" Value="Green"></Setter>
+			</DataTrigger>
+			<DataTrigger Binding="{Binding OnOff}" Value="false">
+				<Setter Property="Background" Value="Red"></Setter>
+			</DataTrigger>
+			<!--<Trigger Property="IsChecked" Value="True">
 				<Setter Property="Background" Value="Green" />
 			</Trigger>
 			<Trigger Property="IsChecked" Value="False">
 				<Setter Property="Background" Value="Red" />
-			</Trigger>
+			</Trigger>-->
 
 		</Style.Triggers>
 	</Style>

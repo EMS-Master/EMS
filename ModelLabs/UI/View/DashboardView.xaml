@@ -38,7 +38,7 @@
 						</MultiBinding>
 					</Grid.Visibility>
 
-					<CheckBox IsChecked="{Binding IsActive}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+					<CheckBox  IsChecked="{Binding OnOff}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                           CommandParameter="{Binding}" Style="{StaticResource CheckBoxStyle}" Margin="2,3,0,0">
 						<CheckBox.ToolTip>
 							<ToolTip>
