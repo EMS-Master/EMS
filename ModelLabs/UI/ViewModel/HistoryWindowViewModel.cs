@@ -44,8 +44,8 @@ namespace UI.ViewModel
             Generator.Clear();
             if(startTime == DateTime.MinValue || endTime == DateTime.MinValue)
                 measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(this.globalId, DateTime.Now.AddHours(-1), DateTime.Now));
-
-            measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(this.globalId, startTime, endTime));
+            else
+                measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(this.globalId, startTime, endTime));
 
 
             if (graphSampling != GraphSample.None)
