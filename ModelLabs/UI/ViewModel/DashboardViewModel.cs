@@ -4,6 +4,7 @@ using ScadaContracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -21,8 +22,19 @@ namespace UI.ViewModel
         private bool onOff;
         
         public bool OnOff { get { return onOff; } set { onOff = value; OnPropertyChanged(); } }
-       
-        private int MAX_DISPLAY_NUMBER = 10;
+		bool _isChecked;
+
+		public bool IsChecked
+		{
+			get { return _isChecked; }
+			set
+			{
+				_isChecked = value;
+				OnPropertyChanged("IsChecked");
+			}
+		}
+
+		private int MAX_DISPLAY_NUMBER = 10;
         private int MAX_DISPLAY_TOTAL_NUMBER = 15;
         private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
         private int attemptsCount = 0;
@@ -37,7 +49,9 @@ namespace UI.ViewModel
         private readonly double graphSizeOffset = 18;
 
         private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
-        private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> energyConsumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+        private ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> generatorsContainer2 = new ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>>();
+
+		private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> energyConsumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
 
         private ObservableCollection<ModelForCheckboxes> gen = new ObservableCollection<ModelForCheckboxes>();
 
@@ -235,8 +249,9 @@ namespace UI.ViewModel
             }
         }
 
-        public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
-        public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
+		//public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
+		public ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> GeneratorsContainer { get => generatorsContainer2; set => generatorsContainer2 = value; }
+		public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
 
         public ObservableCollection<ModelForCheckboxes> Gen { get => gen; set => gen = value; }
 
@@ -300,7 +315,7 @@ namespace UI.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        AddMeasurmentTo(EnergyConsumersContainer, measUIs);
+                        //AddMeasurmentTo(EnergyConsumersContainer, measUIs);
                         CurrentConsumption = measUIs.Sum(x => x.CurrentValue);
                         DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentConsumption));
                         if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
@@ -331,16 +346,28 @@ namespace UI.ViewModel
             }
         }
 
-        private void AddMeasurmentTo(ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> container, List<MeasurementUI> measUIs)
+        private void AddMeasurmentTo(ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> container, List<MeasurementUI> measUIs)
         {
             foreach (var measUI in measUIs)
             {
                 var keyPair = container.FirstOrDefault(x => x.Key == measUI.Gid);
-                if (keyPair.Value == null)
+				
+
+				if (keyPair.Value.Value == null)
                 {
-                    var tempQueue = new ObservableCollection<MeasurementUI>();
+					if (measUIs[0].CurrentValue > 0)
+					{
+						IsChecked = true;
+						measUI.IsActive = true;
+					}
+					else
+					{
+						IsChecked = false;
+						measUI.IsActive = false;
+					}
+					var tempQueue = new ObservableCollection<MeasurementUI>();
                     tempQueue.Add(measUI);
-                    container.Add(new KeyValuePair<long, ObservableCollection<MeasurementUI>>(measUI.Gid, tempQueue));
+                    container.Add(new KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>(measUI.Gid, new KeyValuePair<bool, ObservableCollection<MeasurementUI>>(IsChecked, tempQueue)));
                     if (!GidToBoolMap.ContainsKey(measUI.Gid))
                     {
                         GidToBoolMap.Add(measUI.Gid, true);
@@ -349,10 +376,21 @@ namespace UI.ViewModel
                 }
                 else
                 {
-                    keyPair.Value.Add(measUI);
-					if (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+					if (keyPair.Value.Value[0].CurrentValue > 0)
 					{
-						keyPair.Value.RemoveAt(0);
+						IsChecked = true;
+						measUI.IsActive = true;
+					}
+					else
+					{
+						IsChecked = false;
+						measUI.IsActive = false;
+					}
+
+					keyPair.Value.Value.Add(measUI);
+					if (keyPair.Value.Value.Count > MAX_DISPLAY_NUMBER)
+					{
+						keyPair.Value.Value.RemoveAt(0);
 					}
 				}
             }
@@ -366,9 +404,9 @@ namespace UI.ViewModel
 
 			foreach (var keyPair in GeneratorsContainer)
 			{
-				while (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+				while (keyPair.Value.Value.Count > MAX_DISPLAY_NUMBER)
 				{
-					keyPair.Value.RemoveAt(0);
+					keyPair.Value.Value.RemoveAt(0);
 				}
 			}
 

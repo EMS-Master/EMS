@@ -18,8 +18,28 @@
 		</Grid.RowDefinitions>
 
 		<Grid Grid.Row="0">
+
+			<!--<maps:SfMaps >
+				<maps:SfMaps.Layers>
+					<maps:ImageryLayer x:Name="imageryLayer" ZoomLevelChanging="ImageryLayer_ZoomLevelChanging">
+						<maps:ImageryLayer.MarkerTemplate>
+							<OnPlatform x:TypeArguments="DataTemplate">
+								<On Platform="UWP">
+									<DataTemplate>
+										<Grid Padding="-14,-14, 0, 0">
+											<Image Source="{Binding ImageName}" HorizontalOptions="Start" VerticalOptions="Center"
+                                       HeightRequest="30" WidthRequest="30"/>
+										</Grid>
+									</DataTemplate>
+								</On>
+							</OnPlatform>
+						</maps:ImageryLayer.MarkerTemplate>
+					</maps:ImageryLayer>
+				</maps:SfMaps.Layers>
+			</maps:SfMaps>-->
 			<WindowsFormsHost>
-				<gmf:GMapControl x:Name="mapa" />
+				<gmf:GMapControl x:Name="mapa"
+								 />
 			</WindowsFormsHost>
 		</Grid>
 

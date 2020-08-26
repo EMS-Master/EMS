@@ -52,7 +52,7 @@ namespace CalculationEngineServ
             bool result = false;
             Dictionary<long, OptimisationModel> optModelMap = GetOptimizationModelMap(measGenerators, windSpeed, sunlight);
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
-            List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
+            //List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
             totalProduction = 0;
 
             foreach (var m in measGenerators)

@@ -18,6 +18,7 @@
 		<converters:GidMapToVisibilityConverter x:Key="GidMapToVisibilityConverter" />
 		<converters:GidMapToBoolConverter x:Key="GidMapToBoolConverter" />
 		<converters:LastValueShowConverter x:Key="LastValueShowConverter" />
+		<converters:BoolToColorConverter x:Key="BoolToColorConverter" />
 		<Style
 			x:Key = "DateTimeAxisLabelStyle2" TargetType="chartingToolkit:DateTimeAxisLabel">
 			<Setter Property="RenderTransformOrigin" Value="0.80,0.20"></Setter>
@@ -38,14 +39,24 @@
 						</MultiBinding>
 					</Grid.Visibility>
 
-					<CheckBox  IsChecked="{Binding OnOff}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+					<!--<CheckBox  IsChecked="{Binding OnOff}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                           CommandParameter="{Binding}" Style="{StaticResource CheckBoxStyle}" Margin="2,3,0,0">
 						<CheckBox.ToolTip>
 							<ToolTip>
 								On/off generator.
 							</ToolTip>
 						</CheckBox.ToolTip>
-					</CheckBox>
+					</CheckBox>-->
+
+					<StackPanel Background="{Binding Path=Value.Key, Converter={StaticResource BoolToColorConverter}}">
+						<CheckBox IsChecked="{Binding Path=Value.Key, Mode=OneWay}" Margin="2,3,0,0">
+							<CheckBox.ToolTip>
+								<ToolTip>
+									On/off generator.
+								</ToolTip>
+							</CheckBox.ToolTip>
+						</CheckBox>
+					</StackPanel>
 					
 					<Grid Width="23" Height="20" Margin="-210, -139, 0, 0">
 						<Grid.ContextMenu>
@@ -69,8 +80,8 @@
 					<TextBlock Height="25" Width="50" Margin="-130, -130,0,0" Foreground="Red">
 						<TextBlock.Text>
 							<MultiBinding Converter="{StaticResource LastValueShowConverter}" >
-								<Binding Path="Value"/>
-								<Binding Path="Value[0].CurrentValue"></Binding>
+								<Binding Path="Value.Value"/>
+								<Binding Path="Value.Value[0].CurrentValue"></Binding>
 							</MultiBinding>
 						</TextBlock.Text>
 					</TextBlock>
@@ -94,7 +105,7 @@
 						</chartingToolkit:Chart.Title>-->
 
 						<chartingToolkit:LineSeries Title="Power"
-												ItemsSource="{Binding Path=Value}"
+												ItemsSource="{Binding Path=Value.Value}"
 												DependentValueBinding="{Binding Path=CurrentValue}"
 												IndependentValueBinding="{Binding Path=TimeStamp.Second}"
 												IsSelectionEnabled="False"

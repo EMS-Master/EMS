@@ -13,5 +13,6 @@ namespace FTN.ServiceContracts
         public float CurrentValue { get; set; }
         public string AlarmType { get; set; }
         public DateTime TimeStamp { get; set; }
+		public bool IsActive { get; set; }
     }
 }
