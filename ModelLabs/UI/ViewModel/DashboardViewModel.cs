@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using UI.Model;
 using UI.PubSub;
 using UI.View;
 
@@ -44,7 +45,7 @@ namespace UI.ViewModel
         private CeSubscribeProxy ceSubscribeProxy;
         private float currentProduction;
         private float currentConsumption;
-
+        private WindSpeed w;
 
         private readonly double graphSizeOffset = 18;
 
@@ -61,8 +62,8 @@ namespace UI.ViewModel
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
         private double graphWidth;
         private double graphHeight;
-
-        private ICommand visibilityCheckedCommand;
+        private ObservableCollection<WindSpeed> windspeed = new ObservableCollection<WindSpeed>();
+         private ICommand visibilityCheckedCommand;
         private ICommand visibilityUncheckedCommand;
 
         private ICommand openHistory;
@@ -77,7 +78,7 @@ namespace UI.ViewModel
 
         private ICommand activateGen;
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
-
+        public WindSpeed W { get => w; set => w = value; }
         private void ActivateGenExecute(object obj)
         {
             KeyValuePair<long, ObservableCollection<MeasurementUI>> model = (KeyValuePair<long, ObservableCollection<MeasurementUI>>)obj;
@@ -170,6 +171,7 @@ namespace UI.ViewModel
             {
                 currentConsumption = value;
                 OnPropertyChanged();
+                
             }
         }
 
@@ -213,6 +215,7 @@ namespace UI.ViewModel
                 sizeValue = value;
                 OnPropertyChanged();
                 UpdateSizeWidget(value);
+                
             }
         }
 
@@ -220,8 +223,6 @@ namespace UI.ViewModel
 
         public DashboardViewModel()
         {
-
-
             SubsrcibeToCE();
             ceSubscribeProxy.Optimization();
 
@@ -229,10 +230,10 @@ namespace UI.ViewModel
 
             GraphWidth = 16 * graphSizeOffset;
             GraphHeight = 9 * graphSizeOffset;
-
+            
+            W = new WindSpeed();
+            Windspeed.Add(W);
             Title = "Dashboard";
-        
-
         }
 
         public float CurrentProduction
@@ -253,6 +254,16 @@ namespace UI.ViewModel
 		public ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> GeneratorsContainer { get => generatorsContainer2; set => generatorsContainer2 = value; }
 		public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
 
+        public ObservableCollection<WindSpeed> Windspeed
+        {
+            get => windspeed;
+            set
+            {
+                windspeed = value;
+                OnPropertyChanged();
+                
+            }
+        }
         public ObservableCollection<ModelForCheckboxes> Gen { get => gen; set => gen = value; }
 
 
@@ -288,9 +299,9 @@ namespace UI.ViewModel
         private void CallbackAction(object obj)
         {
             List<MeasurementUI> measUIs = obj as List<MeasurementUI>;
+            UpdateWindSpeed();
 
-
-            foreach(var item in measUIs)
+            foreach (var item in measUIs)
             {
                 if (item.CurrentValue <= 0)
                 {
@@ -328,8 +339,8 @@ namespace UI.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
+                        
                         AddMeasurmentTo(GeneratorsContainer, measUIs);
-
                         CurrentProduction = measUIs.Sum(x => x.CurrentValue);
                         GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
                         if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
@@ -420,6 +431,17 @@ namespace UI.ViewModel
 
         }
 
+        private void UpdateWindSpeed()
+        {
+            Random r = new Random();
+            float a = r.Next(0, 70);
+            a = a + (float)r.NextDouble();
+            W.Speed = a;
+            ObservableCollection<WindSpeed> newList = new ObservableCollection<WindSpeed>();
+            newList.Add(W);
+
+            Windspeed = newList;
+        }
 		protected override void OnDispose()
         {
             ceSubscribeProxy.Unsubscribe();

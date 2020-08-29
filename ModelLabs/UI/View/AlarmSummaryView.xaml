@@ -7,12 +7,12 @@
 			 xmlns:root ="clr-namespace:UI"
 			 xmlns:converters ="clr-namespace:UI.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="780" d:DesignWidth="1250">
     <UserControl.Resources>
         <converters:GidToMridConverter x:Key="GidToMridConverter"/>
         <converters:AckStateToBoolConverter x:Key="AckStateToBoolConverter"/>
     </UserControl.Resources>
-    <Grid Background="Beige">
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="62*"/>
             <ColumnDefinition Width="13*"/>

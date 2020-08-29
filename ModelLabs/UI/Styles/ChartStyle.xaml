@@ -216,7 +216,7 @@
 	<!-- charting:DashboardChartStyle -->
 	<Style x:Key="DashboardChartStyle" TargetType="charting:Chart">
 		<Setter Property="BorderBrush" Value="Gray" />
-		<Setter Property="Background" Value="LightGray" />
+		<Setter Property="Background" Value="White" />
 		<Setter Property="Foreground" Value="Black"/>
 		<Setter Property="BorderThickness" Value="2" />
 		<Setter Property="IsTabStop" Value="False" />

@@ -13,7 +13,7 @@
 	  xmlns:root ="clr-namespace:UI"
       xmlns:system="clr-namespace:System;assembly=mscorlib"
 	  mc:Ignorable="d"
-	  d:DesignHeight="900" d:DesignWidth="500">
+	  d:DesignHeight="780" d:DesignWidth="1250">
 
 	<UserControl.Resources>
 		<converters:TestConverter x:Key="TestConvetrer"/>

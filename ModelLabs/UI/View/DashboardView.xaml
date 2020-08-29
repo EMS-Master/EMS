@@ -8,9 +8,9 @@
              xmlns:converters="clr-namespace:UI.Converters"
              xmlns:i = "http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-             
+              xmlns:MetroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="780" d:DesignWidth="1250">
 	<UserControl.Resources>
 		<converters:TestConverter x:Key="TestConverter" />
 		<converters:GidToMridConverter x:Key="GidToMridConverter" />
@@ -192,41 +192,89 @@
 				</TextBlock>
 			</Grid>
 		</DataTemplate>
+
+        <DataTemplate x:Key="MetroChartTemplate">
+            
+        </DataTemplate>
 	</UserControl.Resources>
 
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
 
-	<Grid>
-	
-			<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
 
-		</Grid.RowDefinitions>
-		<DockPanel Grid.Row="0">
-			<Menu DockPanel.Dock="Top">
-				<MenuItem Header="Options">
-					<MenuItem Header="Algorithm type">
-						<MenuItem Header="Genetic"/>
-						<MenuItem Header="Linear"/>
-					</MenuItem>
-					<MenuItem Header="Number chromosomes "/>
-					<MenuItem Header="Number iterations "/>
-					<MenuItem Header="Elitism percent"/>
-					<MenuItem Header="Mutation rate "/>
-					<MenuItem Header="Number chromosomes "/>
-					<MenuItem Header="Initial population "/>
-					<MenuItem Header="Number chromosomes "/>
-					<Separator/>
-					<MenuItem Header="Exit"/>
-				</MenuItem>
-			</Menu>
-		</DockPanel>
-		<StackPanel Grid.Row="1" DockPanel.Dock="Top" Margin="10,10,10,0">
-			<Expander IsExpanded="False" Header="Total Generation/Demand graph" Foreground="Black" Margin="10,5">
-				<Grid Width="1000">
-					<TextBlock TextWrapping="WrapWithOverflow">
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="Options">
+                        <MenuItem Header="Algorithm type">
+                            <MenuItem Header="Genetic"/>
+                            <MenuItem Header="Linear"/>
+                        </MenuItem>
+                        <MenuItem Header="Number chromosomes "/>
+                        <MenuItem Header="Number iterations "/>
+                        <MenuItem Header="Elitism percent"/>
+                        <MenuItem Header="Mutation rate "/>
+                        <MenuItem Header="Number chromosomes "/>
+                        <MenuItem Header="Initial population "/>
+                        <MenuItem Header="Number chromosomes "/>
+                        <Separator/>
+                        <MenuItem Header="Exit"/>
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
+            <StackPanel Grid.Row="1" DockPanel.Dock="Top" Margin="10,10,10,0">
+                <Expander IsExpanded="False" Header="Widgets" Foreground="Black" Margin="10,5">
+                    <DockPanel>
+                        <Grid Width="Auto">
+                            <TextBlock TextWrapping="WrapWithOverflow">
+					 <Grid >
+                         <!--<StackPanel>
+                             <ItemsControl  ItemsSource="{Binding windspeed}"
+									ItemTemplate="{StaticResource MetroChartTemplate}">
+						
+							    <ItemsControl.ItemsPanel>
+							        <ItemsPanelTemplate>
+								        <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+							        </ItemsPanelTemplate>
+								
+						        </ItemsControl.ItemsPanel>
+						
+					        </ItemsControl>
+                         </StackPanel>-->
+                          
+                
+                        <Grid.OpacityMask>
+                            <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
+                        </Grid.OpacityMask>
+                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.3" Background="#212F3C"/>
+
+                        <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="CO2 reduction" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
+                            <MetroChart:RadialGaugeChart.Series>
+                                <MetroChart:ChartSeries
+                                                    Background="#212F3C"
+                                                    DisplayMember="Name"
+                                                    ItemsSource="{Binding Path= Windspeed}"
+                                                    SeriesTitle="Name"
+                                                    ValueMember="Speed" HorizontalAlignment="Center"/>
+                            </MetroChart:RadialGaugeChart.Series>
+                        </MetroChart:RadialGaugeChart>
+                        </Grid>
+
+
+                            </TextBlock>
+                        </Grid>
+                    </DockPanel>
+                </Expander>
+            </StackPanel>
+            <StackPanel Grid.Row="2" DockPanel.Dock="Top" Margin="10,10,10,0">
+                <Expander IsExpanded="False" Header="Total Generation/Demand graph" Foreground="Black" Margin="10,5">
+                    <Grid Width="1000">
+                        <TextBlock TextWrapping="WrapWithOverflow">
 							<chartingToolkit:Chart Grid.Row="2" Margin="10"  FontWeight="Bold" Style="{StaticResource DashboardChartStyle}" Height="600" Width="810">
 						    
 								<chartingToolkit:LineSeries ItemsSource="{Binding Path=DemandList}" 
@@ -268,38 +316,39 @@
 									</chartingToolkit:LineSeries.DependentRangeAxis>
 								</chartingToolkit:LineSeries>
 							</chartingToolkit:Chart>
-						
-					</TextBlock>
-				</Grid>
-			</Expander>
-		</StackPanel>
-		<StackPanel Grid.Row="2" DockPanel.Dock="Top" Margin="10,10,10,0">
 
-			<Expander IsExpanded="False" Header="Generation graphs" Foreground="Black" Margin="10,5">
-				<StackPanel>
-					<DockPanel>
-						<GroupBox Header="Generators" Foreground="Black" Height="400" VerticalAlignment="Top">
-						<ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Width="150" HorizontalScrollBarVisibility="Auto" MaxHeight="300">
-							<ItemsControl ItemsSource="{Binding GeneratorsContainer}"
+                        </TextBlock>
+                    </Grid>
+                </Expander>
+            </StackPanel>
+            <StackPanel Grid.Row="3" DockPanel.Dock="Top" Margin="10,10,10,0">
+
+                <Expander IsExpanded="False" Header="Generation graphs" Foreground="Black" Margin="10,5">
+                    <StackPanel>
+                        <DockPanel>
+                            <GroupBox Header="Generators" Foreground="Black" Height="400" VerticalAlignment="Top">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Width="150" HorizontalScrollBarVisibility="Auto" MaxHeight="300">
+                                    <ItemsControl ItemsSource="{Binding GeneratorsContainer}"
 										  ItemTemplate="{StaticResource VisibilityCheckbox}" />
-						</ScrollViewer>
-					</GroupBox>
-					<ItemsControl  ItemsSource="{Binding GeneratorsContainer}"
+                                </ScrollViewer>
+                            </GroupBox>
+                            <ItemsControl  ItemsSource="{Binding GeneratorsContainer}"
 									ItemTemplate="{StaticResource GraphGeneratorTemplate}">
-						
-							<ItemsControl.ItemsPanel>
-							<ItemsPanelTemplate>
-								<WrapPanel IsItemsHost="True" Orientation="Horizontal" />
-							</ItemsPanelTemplate>
-								
-						</ItemsControl.ItemsPanel>
-						
-					</ItemsControl>
-						
-					</DockPanel>
-				</StackPanel>
-			</Expander>
-		</StackPanel>	
-			
-	</Grid>
+
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+
+                                </ItemsControl.ItemsPanel>
+
+                            </ItemsControl>
+
+                        </DockPanel>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+
+        </Grid>
+    </ScrollViewer>
 </UserControl>

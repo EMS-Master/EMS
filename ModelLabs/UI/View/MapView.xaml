@@ -8,7 +8,7 @@
 			 xmlns:gm="clr-namespace:GMap.NET;assembly=GMap.NET.Core"
              xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="780" d:DesignWidth="1250">
 	<Grid>
 		<!--<m:Map CredentialsProvider="AgmvupjxJiYd7Sc1O1brCngUQg4lhNdKztjb7UUfv3196tLM-bb6_wAOB7MLXmg9"  Center="45.2671,19.8335" ZoomLevel="12" />
         Mode="AerialWithLabels"-->

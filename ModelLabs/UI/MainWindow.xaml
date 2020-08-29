@@ -11,55 +11,55 @@
 		xmlns:dock="http://schemas.xceed.com/wpf/xaml/avalondock"
 		xmlns:dock1="clr-namespace:AvalonDock.Themes.VS2013;assembly=AvalonDock.Themes.VS2013"
 		mc:Ignorable="d"
-        Title="Energy management system" Height="750" Width="1100"
+        Title="Energy management system" Height="780" Width="1250"
        
 	    Icon="Resources/emsicon.jpg">
     <!--WindowState="Normal"  WindowStyle="None"-->
     <Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<dock:DockingManager Grid.Row="1" Name="dockingManager"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <dock:DockingManager Grid.Row="1" Name="dockingManager"
 							 DataContext="{Binding DockManagerViewModel}"
 							 DocumentsSource="{Binding Documents}"
 							 AnchorablesSource="{Binding Anchorables}" 
 							 AllowMixedOrientation="True">
-			<dock:DockingManager.DocumentHeaderTemplate>
-				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
-						<TextBlock TextAlignment="Center" Width="100"  Text="{Binding Content.Title}" TextTrimming="CharacterEllipsis">
+            <dock:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock TextAlignment="Center" Width="100"  Text="{Binding Content.Title}" TextTrimming="CharacterEllipsis">
 							<!--<Image  Width="18" Source="Resources/import.jpg"/>-->
-						</TextBlock>
-					</StackPanel>
-				</DataTemplate>
-			</dock:DockingManager.DocumentHeaderTemplate>
-			<dock:DockingManager.Resources>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </dock:DockingManager.DocumentHeaderTemplate>
+            <dock:DockingManager.Resources>
                 <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
                     <view:DashboardView DataContext="{Binding Path=DataContext.DashboardViewModel,RelativeSource={RelativeSource AncestorType=Window}}"/>
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:ImporterViewModel}">
-					<view:ImporterView></view:ImporterView>
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type vm:NMSViewModel}">
-					<view:NMSView></view:NMSView>
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type vm:MapViewModel}">
-					<view:MapView></view:MapView>
-				</DataTemplate>
-                <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
-                    <view:HistoryView></view:HistoryView>                    
+                    <view:ImporterView></view:ImporterView>
                 </DataTemplate>
-				<DataTemplate DataType="{x:Type vm:AlarmSummaryViewModel}">
-					<view:AlarmSummaryView Style="{StaticResource AlarmSummaryStyle}" DataContext="{Binding Path = DataContext.AlarmSummaryViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
-				</DataTemplate>
+                <DataTemplate DataType="{x:Type vm:NMSViewModel}">
+                    <view:NMSView></view:NMSView>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:MapViewModel}">
+                    <view:MapView></view:MapView>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
+                    <view:HistoryView></view:HistoryView>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type vm:AlarmSummaryViewModel}">
+                    <view:AlarmSummaryView Style="{StaticResource AlarmSummaryStyle}" DataContext="{Binding Path = DataContext.AlarmSummaryViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type vm:CommandViewModel}">
                     <view:CommandView  DataContext="{Binding Path = DataContext.CommandViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
                 </DataTemplate>
             </dock:DockingManager.Resources>
-			<dock:DockingManager.Theme>
-				<dock:MetroTheme/>
-			</dock:DockingManager.Theme>
-		</dock:DockingManager>
-	</Grid>
+            <dock:DockingManager.Theme>
+                <dock:MetroTheme/>
+            </dock:DockingManager.Theme>
+        </dock:DockingManager>
+    </Grid>
 </Window>
