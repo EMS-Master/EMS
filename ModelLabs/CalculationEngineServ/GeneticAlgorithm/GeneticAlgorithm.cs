@@ -10,8 +10,9 @@ namespace CalculationEngineServ.GeneticAlgorithm
     {
         public List<DNA<T>> Population { get; set; }
         public int Generation { get; private set; }
-        public float BestFitness { get; private set; } //iz predhodne gen.
-        public T[] BestGenes { get; private set; }  // i njeni geni.
+        public float BestFitness { get; private set; }
+        public T[] BestGenes { get; private set; }
+		public float NecessaryEnergy { get; set; }
 
         public int Elitism;
         public float MutationRate;
@@ -23,20 +24,23 @@ namespace CalculationEngineServ.GeneticAlgorithm
         private Func<int, T> getRandomGene;
         private Func<DNA<T>, float> fitnessFunction;
         private Func<T, float, T> mutateFunction;
+		private Func<DNA<T>,int,DNA<T>> scaleDNA;
 
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<int, T> getRandomGene, Func<DNA<T>, float> fitnessFunction,
-            Func<T, float, T> mutateFunction, int elitism, float mutationRate = 0.01f, bool shoudlInitPopulation = true)
+		public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<int, T> getRandomGene, Func<DNA<T>, float> fitnessFunction,
+            Func<T, float, T> mutateFunction, int elitism, float necessaryEnergy, Func<DNA<T>,int,DNA<T>> scaleDNA, float mutationRate = 0.01f, bool shoudlInitPopulation = true)
         {
             Generation = 1;
             Elitism = elitism;
             MutationRate = mutationRate;
             Population = new List<DNA<T>>(populationSize);
             newPopulation = new List<DNA<T>>(populationSize);
-            this.random = random;
+			NecessaryEnergy = necessaryEnergy;
+			this.random = random;
             this.dnaSize = dnaSize;
             this.getRandomGene = getRandomGene;
             this.fitnessFunction = fitnessFunction;
             this.mutateFunction = mutateFunction;
+			this.scaleDNA = scaleDNA;
 
             BestGenes = new T[dnaSize];
 
@@ -60,27 +64,29 @@ namespace CalculationEngineServ.GeneticAlgorithm
         //dodavanje novih elemenata u generaciju
         public void NewGeneration()
         {
+			int geneToMutate = random.Next(0, dnaSize - 1);
             if (Population.Count <= 0)
             {
                 return;
             }
-            else if(Population.Count > 0)//ako vec imamo nesto u ppopuaciji prvoooooo izracunati fitness
+            else if(Population.Count > 0)
             {
                 CalculateFitness();
-                Population.Sort(CompareDNA); //individue sa najboljin fitness-om idu na pocetak
+                Population.Sort(CompareDNA);
             }
             newPopulation.Clear();
-
+			int numberOfElite = Population.Count * Elitism / 100;
             for (int i = 0; i < Population.Count; i++)
-            {                                           //dodatni uslov ako ima gen. npr samo 3 el.
-                if (i < Elitism && i < Population.Count)//ako zelimo najboljih 5 individua iz predhodne gen.
-                {                                       //stavljamo za Elitisam=5
-                    newPopulation.Add(Population[i]);   // iterator ce ici do 5 i stavljati individue u newPopulation
+            {                                          
+                if (i < numberOfElite )
+                {                          
+                    newPopulation.Add(Population[i]);
                 }
-                else if (i < Population.Count /*|| crossoverNewDNA*/)
+                else if (i < Population.Count - numberOfElite)
                 {
-                    DNA<T> parent1 = ChooseParent();
-                    DNA<T> parent2 = ChooseParent();
+					List<DNA<T>> listOfParents = ChooseParents();
+                    DNA<T> parent1 = listOfParents[0];
+                    DNA<T> parent2 = listOfParents[1];
                     DNA<T> child = null;
 
                     if (parent1 == null || parent2 == null)
@@ -92,17 +98,19 @@ namespace CalculationEngineServ.GeneticAlgorithm
                         child = parent1.Crossover(parent2);
                     }
 
-                    child.Mutate(MutationRate);
-
-                    newPopulation.Add(child);
+                    child.Mutate(MutationRate, geneToMutate);
+					scaleDNA(child, geneToMutate);
+				
+					newPopulation.Add(child);
                 }
                 else
                 {
-                    newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: true));
+					DNA<T> dna1 = new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: true);
+					scaleDNA(dna1, -1);
+                    newPopulation.Add(dna1);
                 }
             }
             
-
             List<DNA<T>> tmpList = Population;
             Population = newPopulation;
             newPopulation = tmpList;
@@ -126,8 +134,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
                 return 0;
             }
         }
-        
-        //fitness funkcija: cost funkcija
+      
         private void CalculateFitness()
         {
             fitnessSum = 0;
@@ -137,7 +144,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
             {
                 fitnessSum += Population[i].CalculateFitness();
 
-                if (Population[i].Fitness > best.Fitness)//trazimo najbolju fitness iz gen.
+                if (Population[i].Fitness < best.Fitness)
                 {
                     best = Population[i];
                 }
@@ -147,12 +154,22 @@ namespace CalculationEngineServ.GeneticAlgorithm
             best.Genes.CopyTo(BestGenes, 0);
         }
 
-        private DNA<T> ChooseParent() //odabir roditelja za ukrstanje iz elite prebacene u sledecu generaciju
+        private List<DNA<T>> ChooseParents()
         {
-            int randomNumber = random.Next(0, Elitism);
+			int numberOfElite = Population.Count * Elitism / 100;
+            int randomNumber1 = random.Next(1, numberOfElite);
+			int randomNumber2 = 0;
+			do
+			{
+				randomNumber2 = random.Next(1, numberOfElite);
+			}
+			while (randomNumber2 == randomNumber1);
 
-            return Population[randomNumber];
+			return new List<DNA<T>>
+			{
+				Population[randomNumber1],
+				Population[randomNumber2]
+			};
         }
-
     }
 }

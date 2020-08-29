@@ -77,9 +77,14 @@ namespace ScadaProcessingSevice
 			List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
 
             List<MeasurementUnit> energyConsumerActive = SelectActive(energyConsumerMeasUnits, energyConsumerMeasUnitsDiscrete);
-            List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
+			List<float> sumOfConsumers = energyConsumerMeasUnits.Select(x => x.CurrentValue).ToList();
+			float sss = sumOfConsumers.Sum();
 
-            float windSpeed = GetWindSpeed(windData, 4);
+			List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
+			List<float> sumOfGen = generatorMeasUnits.Select(x => x.CurrentValue).ToList();
+			float sssGen = sumOfGen.Sum();
+
+			float windSpeed = GetWindSpeed(windData, 4);
             float sunlight = GetSunlight(sunData, 4);
 
             LoadXMLFile();

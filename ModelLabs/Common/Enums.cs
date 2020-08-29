@@ -33,12 +33,12 @@ namespace FTN.Common
     public enum GeneratorType : short
     {
         Wind = 1,
-        Sollar = 2,
+        Solar = 2,
         Oil = 3,
         Hydro = 4,
-        Gas = 4,
-        Coal = 5,
-        Unknown = 6
+        Gas = 5,
+        Coal = 6,
+        Unknown = 7
     }
 
     public enum MeasurementType: short

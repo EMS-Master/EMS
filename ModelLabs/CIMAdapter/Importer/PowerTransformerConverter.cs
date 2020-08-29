@@ -258,7 +258,7 @@
                 case FTN.GeneratorType.wind:
                     return GeneratorType.Wind;
                 case FTN.GeneratorType.solar:
-                    return GeneratorType.Sollar;
+                    return GeneratorType.Solar;
                 case FTN.GeneratorType.oil:
                     return GeneratorType.Oil;
                 case FTN.GeneratorType.hydro:

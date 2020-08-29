@@ -43,26 +43,37 @@ namespace CalculationEngineServ.GeneticAlgorithm
 
         public DNA<T> Crossover(DNA<T> otherParent)
         {
-            DNA<T> child = new DNA<T>(Genes.Length, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: false);
+			DNA<T> child = new DNA<T>(Genes.Length, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: false);
+			for (int i = 0; i < Genes.Length; i++)
+			{
+				child.Genes[i] = random.NextDouble() < 0.5 ? Genes[i] : otherParent.Genes[i];
+			}
+			return child;
 
-            for (int i = 0; i < Genes.Length; i++)
-            {
-                child.Genes[i] = random.NextDouble() < 0.5 ? Genes[i] : otherParent.Genes[i];
-                //child.Genes[i] = ((Genes[i] + otherParent.Genes[i]) / 2);
-            }
-            return child;
+   //         DNA<T> child = new DNA<T>(Genes.Length, random, getRandomGene, fitnessFunction, mutateFunction, shouldInitGenes: false);
+			//dynamic ch = child;
+			//Tuple<long, float> chTuple = ch;
+   //         for (int i = 0; i < Genes.Length; i++)
+   //         {
+			//	dynamic t1 = Genes[i];
+			//	Tuple<long, float> t2 = t1;
+
+			//	dynamic t3 = otherParent.Genes[i];
+			//	Tuple<long, float> t4 = t1;
+
+			//	float genes1 = t2.Item2;
+			//	float genes2 = t4.Item2;
+				
+			//	float retVal = (genes1 + genes2) / 2;
+			//	chTuple = new Tuple<long, float>(chTuple.Item1, retVal);
+
+			//}
+   //         return (dynamic)chTuple;
         }
 
-        public void Mutate(float mutationRate)
+        public void Mutate(float mutationRate, int geneToMutate)
         {
-            int loop = random.Next(1, Size-1);
-            int index = 0;
-
-            for (int i = 0; i < loop; i++)
-            {
-                index = random.Next(0, loop);
-                Genes[index] = mutateFunction(Genes[index], mutationRate);
-            }
-        }
+			Genes[geneToMutate] = mutateFunction(Genes[geneToMutate], mutationRate);
+		}
     }
 }

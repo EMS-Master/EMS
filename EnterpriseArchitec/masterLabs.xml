@@ -672,7 +672,7 @@
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_5"/>
-		<cim:Measurement.scadaAddress>address_15</cim:Measurement.scadaAddress>
+		<cim:Measurement.scadaAddress>address_25</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_25</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_25</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>Analog_25</cim:IdentifiedObject.name>

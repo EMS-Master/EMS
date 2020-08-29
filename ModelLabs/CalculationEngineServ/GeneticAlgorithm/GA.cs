@@ -46,18 +46,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
         }
         private float FitnessFunction(DNA<Tuple<long, float>> dna)
         {
-            float sum = CalculateEnergy(dna.Genes);
-            float k = 0;
-            if(sum > necessaryEnergy)
-            {
-                k = necessaryEnergy / sum;
-                foreach(var item in dna.Genes)
-                {
-                    //item.Item2 = item.Item2 *  k;
-                }
-            }
-            float rez = CalculateCost(dna.Genes);
-            return rez;
+            return CalculateCost(dna.Genes);
         }
         private Tuple<long, float> MutateFunction(Tuple<long, float> gene, float mutateRate)
         {
@@ -87,17 +76,20 @@ namespace CalculationEngineServ.GeneticAlgorithm
             }
             return new Tuple<long, float>(gid, mutatedGeneValue);
         }
-        public Dictionary<long, OptimisationModel> StartAlgorithmWithReturn()
+        public Dictionary<long, OptimisationModel> StartAlgorithm()
         {
             random = new Random();
-            ga = new GeneticAlgorithm<Tuple<long, float>>(NUMBER_OF_POPULATION, optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, ELITIMS_PERCENTAGE, mutationRate, false);
+            ga = new GeneticAlgorithm<Tuple<long, float>>(NUMBER_OF_POPULATION, 
+				optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, 
+				ELITIMS_PERCENTAGE, necessaryEnergy, ScaleDNA, mutationRate, false);
             ga.Population = PopulateFirstPopulation();
             Tuple<long, float>[] bestGenes = ga.StartAndReturnBest(NUMBER_OF_ITERATION);
 
             for (int i = 0; i < bestGenes.Length; i++)
             {
                 optModelMap[indexToGid[i]].GenericOptimizedValue = bestGenes[i].Item2;
-            }
+				optModelMap[indexToGid[i]].measurementUnit.CurrentValue = bestGenes[i].Item2;
+			}
             TotalCost = CalculateCost(bestGenes);
             GeneratedPower = CalculateEnergy(bestGenes);
 
@@ -107,19 +99,22 @@ namespace CalculationEngineServ.GeneticAlgorithm
         {
             List<DNA<Tuple<long, float>>> firstPopulation = new List<DNA<Tuple<long, float>>>();
 
-            DNA<Tuple<long, float>> previousBest = new DNA<Tuple<long, float>>(optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, shouldInitGenes: false);
+            DNA<Tuple<long, float>> previousBest = new DNA<Tuple<long, float>>(optModelMap.Count, random, 
+				GetRandomGene, FitnessFunction, MutateFunction, shouldInitGenes: false);
             previousBest.Genes = new Tuple<long, float>[optModelMap.Count];
 
-            for (int i = 0; i < optModelMap.Count; i++)
-            {
-                long gid = indexToGid[i];
-                previousBest.Genes[i] = new Tuple<long, float>(gid, optModelMap[gid].MeasuredValue);
-            }
-            firstPopulation.Add(previousBest);
+            //for (int i = 0; i < optModelMap.Count; i++)
+            //{
+            //    long gid = indexToGid[i];
+            //    previousBest.Genes[i] = new Tuple<long, float>(gid, optModelMap[gid].MeasuredValue);
+            //}
+            //firstPopulation.Add(previousBest);
 
-            for (int i = 1; i < NUMBER_OF_POPULATION; i++)
+            for (int i = 0; i < NUMBER_OF_POPULATION; i++)
             {
-                firstPopulation.Add(new DNA<Tuple<long, float>>(optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, shouldInitGenes: true));
+				DNA<Tuple<long, float>> dna1 = new DNA<Tuple<long, float>>(optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, shouldInitGenes: true);
+				ScaleDNA(dna1, -1);
+				firstPopulation.Add(dna1);
             }
 
             return firstPopulation;
@@ -147,5 +142,35 @@ namespace CalculationEngineServ.GeneticAlgorithm
 
             return energySum;
         }
-    }
+
+		private DNA<Tuple<long, float>> ScaleDNA(DNA<Tuple<long,float>> dna, int mutatedGene)
+		{
+			List<dynamic> t = new List<dynamic>();
+			dynamic mutatedGen = null;
+			if (mutatedGene != -1)
+			{
+				mutatedGen = dna.Genes[mutatedGene];
+			}
+			dynamic sumOfDna = 0;
+
+			for (int i = 0; i < dna.Size; i++)
+			{
+				if (i != mutatedGene)
+				{
+					t.Add(dna.Genes[i]);
+					sumOfDna += dna.Genes[i].Item2;
+				}
+			}
+
+			float k = (necessaryEnergy - (mutatedGen?.Item2 ?? 0f)) / (float)sumOfDna;
+			for (int i = 0; i < dna.Size; i++)
+			{
+				if (i != mutatedGene)
+				{
+					dna.Genes[i] = new Tuple<long, float>(dna.Genes[i].Item1, dna.Genes[i].Item2 * k);
+				}
+			}
+			return dna;
+		}
+	}
 }

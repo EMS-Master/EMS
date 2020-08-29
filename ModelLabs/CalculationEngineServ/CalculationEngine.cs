@@ -52,7 +52,7 @@ namespace CalculationEngineServ
             bool result = false;
             Dictionary<long, OptimisationModel> optModelMap = GetOptimizationModelMap(measGenerators, windSpeed, sunlight);
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
-            //List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
+            List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
             totalProduction = 0;
 
             foreach (var m in measGenerators)
@@ -77,7 +77,7 @@ namespace CalculationEngineServ
                         Console.WriteLine("The total production is recorded into history database.");
                     }
                 }
-                if (ScadaCommandingProxy.Instance.SendDataToSimulator(measGenerators))
+                if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
                 {
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
                     Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
@@ -125,17 +125,17 @@ namespace CalculationEngineServ
         }
         private List<MeasurementUnit> DoOptimization(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers, float windSpeed, float sunlight)
         {
-            try
-            {
+            //try
+            //{
                 Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
 
                 optModelMapOptimizied = CalculateWithGeneticAlgorithm(optModelMap, powerOfConsumers);
-                return null;
-            }
-            catch (Exception e)
-            {
-                throw new Exception("[Method = DoOptimization] Exception = " + e.Message);
-            }
+				return optModelMapOptimizied.Select(x => x.Value.measurementUnit).ToList();
+            //}
+            //catch (Exception e)
+            //{
+            //    throw new Exception("[Method = DoOptimization] Exception = " + e.Message);
+            //}
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
         {
@@ -147,7 +147,6 @@ namespace CalculationEngineServ
             {
                 if (item.Value.Renewable)
                 {
-                    //item.Value.GenericOptimizedValue = item.Value.MaxPower;
                     item.Value.GenericOptimizedValue = item.Value.MeasuredValue;
                     powerOfConsumersWithoutRenewable -= item.Value.MeasuredValue;
                 }
@@ -159,9 +158,9 @@ namespace CalculationEngineServ
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
 
             GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
-            optModelMapOptimizied = gaoRenewable.StartAlgorithmWithReturn();
+            optModelMapOptimizied = gaoRenewable.StartAlgorithm();
 
-            return optModelMap;
+            return optModelMapOptimizied;
         }
         public UpdateResult Prepare(ref Delta delta)
         {

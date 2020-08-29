@@ -20,6 +20,8 @@ namespace CalculationEngineServ
         public bool Renewable { get; set; }
         public Tuple<GeneratorType, float> Fuel { get; set; } // gorivo i cena po jedinici
         public GeneratorType TypeGenerator { get; set; }
+		public float EmissionFactor { get; set; }
+		public MeasurementUnit measurementUnit { get; set; }
         public OptimisationModel(Generator g, MeasurementUnit mu, float windSpeed, float sunlight)
         {
             GlobalId = g.GlobalId;
@@ -27,31 +29,24 @@ namespace CalculationEngineServ
             Fuel = new Tuple<GeneratorType, float>(g.GeneratorType, GetUnitPrice(g.GeneratorType)); //gorivo i cena po jedinici kolicine
             GenericOptimizedValue = 0;
             TypeGenerator = g.GeneratorType;
-            Renewable = (g.GeneratorType.Equals(GeneratorType.Wind) || g.GeneratorType.Equals(GeneratorType.Sollar) || g.GeneratorType.Equals(GeneratorType.Hydro)) ? true : false;
+            Renewable = (g.GeneratorType.Equals(GeneratorType.Wind) || g.GeneratorType.Equals(GeneratorType.Solar) || g.GeneratorType.Equals(GeneratorType.Hydro)) ? true : false;
+			measurementUnit = mu;
 
             Price = 0;
             MaxPower = g.MaxQ;
+			MinPower = g.MinQ;
+			EmissionFactor = SetEmissionFactor(g.GeneratorType);
         }
         public float CalculatePrice(float energy)
         {
             if (Renewable)
             {
-                return 1;
+                return 0;
             }
             float price = 0;
-
-            if (TypeGenerator.Equals(GeneratorType.Coal))
-            {
-                price = energy * 10;
-            }
-            else if (TypeGenerator.Equals(GeneratorType.Gas))
-            {
-                price = energy * 20;
-            }
-            else if (TypeGenerator.Equals(GeneratorType.Oil))
-            {
-                price = energy * 30;
-            }
+			float fuelQuantity = energy / 1000f;
+			price = Fuel.Item2 * fuelQuantity;
+		
             return price;
         }
         public float GetUnitPrice(GeneratorType gType)
@@ -74,5 +69,19 @@ namespace CalculationEngineServ
             }
         }
 
-    }
+		public float SetEmissionFactor(GeneratorType generatorType)
+		{
+			switch (generatorType)
+			{
+				case GeneratorType.Coal:
+					return 0.30f;
+				case GeneratorType.Oil:
+					return 0.25f;
+				case GeneratorType.Gas:
+					return 0.25f;
+				default:		//Wind, Solar, Hydro
+					return 0f;
+			}
+		}
+	}
 }

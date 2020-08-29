@@ -14,7 +14,7 @@ namespace DataSimulator
 		static void Main(string[] args)
 		{
 			DataSimulatorService dss = new DataSimulatorService();
-            dss.TurnOnRenewableConsumersAndRenewableGenerators();
+            dss.TurnOnConsumersAndGenerators();
 			Task task = new Task(() =>
 			{
 				while (true)
@@ -23,7 +23,7 @@ namespace DataSimulator
 					float windGeneration = dss.SimulateWindData();
                     float hydroGeneration = dss.SimulateHydroData();
                     dss.SimulateConsumption(sunGeneration,windGeneration,hydroGeneration);
-					Thread.Sleep(3000);
+					Thread.Sleep(10000);
 				}
 			});
 			task.Start();

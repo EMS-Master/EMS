@@ -226,13 +226,13 @@ namespace ScadaCommandingService
                     modbusClient.WriteSingleRegister((ushort)((mes.ScadaAddress-1) * 2), rawValue);
 
                 }
-                else
-                {
-                    if (CheckIfGenerator(item.StartAddress))
-                    {
-                        modbusClient.WriteSingleRegister((ushort)((item.StartAddress-1) * 2), (float)0);
-                    }
-                }
+            //    else
+            //    {
+            //        if (CheckIfGenerator(item.StartAddress))
+            //        {
+            //            modbusClient.WriteSingleRegister((ushort)((item.StartAddress-1) * 2), (float)0);
+            //        }
+            //    }
             }
 
             //modbusClient.WriteSingleRegister((ushort)12, (float)94.8);
