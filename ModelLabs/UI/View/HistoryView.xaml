@@ -267,7 +267,10 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
-                        </StackPanel>
+							<CheckBox Margin="10" Content="CO2" Foreground="Black"/>
+							<CheckBox Margin="10" Content="Price" Foreground="Black"/>
+
+						</StackPanel>
 
                         <!--GRAPH-->
                         <chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600">

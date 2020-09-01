@@ -39,7 +39,7 @@
 						</MultiBinding>
 					</Grid.Visibility>
 
-					<!--<CheckBox  IsChecked="{Binding OnOff}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+					<!--<CheckBox   Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.OnOff}" Command="{Binding DataContext.ActivateGen, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                           CommandParameter="{Binding}" Style="{StaticResource CheckBoxStyle}" Margin="2,3,0,0">
 						<CheckBox.ToolTip>
 							<ToolTip>
@@ -47,8 +47,7 @@
 							</ToolTip>
 						</CheckBox.ToolTip>
 					</CheckBox>-->
-
-					<StackPanel Background="{Binding Path=Value.Key, Converter={StaticResource BoolToColorConverter}}">
+					<StackPanel Background="{Binding Path=Value.Key, Converter={StaticResource BoolToColorConverter}}" >
 						<CheckBox IsChecked="{Binding Path=Value.Key, Mode=OneWay}" Margin="2,3,0,0">
 							<CheckBox.ToolTip>
 								<ToolTip>
@@ -74,7 +73,7 @@
 						</Grid.ContextMenu>
 						<Ellipse Style="{StaticResource AlarmGen}" Fill="{Binding Severity}" Stroke="Black" StrokeThickness="1">
 						</Ellipse>
-						
+
 						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="G" FontWeight="Bold"/>
 					</Grid>
 					<TextBlock Height="25" Width="50" Margin="-130, -130,0,0" Foreground="Red">
@@ -274,7 +273,13 @@
             <StackPanel Grid.Row="2" DockPanel.Dock="Top" Margin="10,10,10,0">
                 <Expander IsExpanded="False" Header="Total Generation/Demand graph" Foreground="Black" Margin="10,5">
                     <Grid Width="1000">
-                        <TextBlock TextWrapping="WrapWithOverflow">
+						<StackPanel Orientation="Vertical" Margin="-60, 10, 1000,0">
+							<CheckBox  Content="CO2" Foreground="Black"/>
+							<CheckBox  Margin="0,5,0,0" Content="Pp" Foreground="Black" />
+							<CheckBox  Margin="0,5,0,0" Content="Pg" Foreground="Black"/>
+							<CheckBox  Margin="0,5,0,0" Content="$" Foreground="Black"/>
+						</StackPanel>
+						<TextBlock TextWrapping="WrapWithOverflow">
 							<chartingToolkit:Chart Grid.Row="2" Margin="10"  FontWeight="Bold" Style="{StaticResource DashboardChartStyle}" Height="600" Width="810">
 						    
 								<chartingToolkit:LineSeries ItemsSource="{Binding Path=DemandList}" 
