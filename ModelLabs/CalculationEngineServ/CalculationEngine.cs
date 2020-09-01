@@ -230,15 +230,32 @@ namespace CalculationEngineServ
 		private void PublishGeneratorsToUI(List<MeasurementUnit> measurementsFromGenerators)
 		{
 			List<MeasurementUI> measListUI = new List<MeasurementUI>();
-			foreach (var meas in measurementsFromGenerators)
+			foreach (var gens in generators)
 			{
-				MeasurementUI measUI = new MeasurementUI();
-				measUI.Gid = meas.Gid;
-				measUI.CurrentValue = meas.CurrentValue;
-				measUI.TimeStamp = meas.TimeStamp;
-				//measUI.OptimizationType = 1;
-				//measUI.Price = meas.CurrentPrice;
-				measListUI.Add(measUI);
+                if(measurementsFromGenerators.Any(x => x.Gid== gens.Key))
+                {
+                    var k = measurementsFromGenerators.Where(x => x.Gid == gens.Key).FirstOrDefault();
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = gens.Key;
+                    measUI.CurrentValue = k.CurrentValue;
+                    measUI.TimeStamp = k.TimeStamp;
+                    measUI.IsActive = true;
+                    //measUI.OptimizationType = 1;
+                    //measUI.Price = meas.CurrentPrice;
+                    measListUI.Add(measUI);
+                }
+                else
+                {
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = gens.Key;
+                    measUI.CurrentValue = 0;
+                    measUI.TimeStamp = DateTime.Now;
+                    measUI.IsActive = false;
+                    //measUI.OptimizationType = 1;
+                    //measUI.Price = meas.CurrentPrice;
+                    measListUI.Add(measUI);
+                }
+				
 			}
 			publisher.PublishOptimizationResults(measListUI);
 		}

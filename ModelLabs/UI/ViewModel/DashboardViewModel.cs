@@ -19,23 +19,23 @@ namespace UI.ViewModel
 {
     public class DashboardViewModel : ViewModelBase
     {
-       public CommandViewModel cwm = new CommandViewModel();
+        public CommandViewModel cwm = new CommandViewModel();
         private bool onOff;
-        
+        private bool genDigitalCommand;
         public bool OnOff { get { return onOff; } set { onOff = value; OnPropertyChanged(); } }
-		bool _isChecked;
+        bool _isChecked;
 
-		public bool IsChecked
-		{
-			get { return _isChecked; }
-			set
-			{
-				_isChecked = value;
-				OnPropertyChanged("IsChecked");
-			}
-		}
+        public bool IsChecked
+        {
+            get { return _isChecked; }
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged("IsChecked");
+            }
+        }
 
-		private int MAX_DISPLAY_NUMBER = 10;
+        private int MAX_DISPLAY_NUMBER = 10;
         private int MAX_DISPLAY_TOTAL_NUMBER = 15;
         private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
         private int attemptsCount = 0;
@@ -52,7 +52,7 @@ namespace UI.ViewModel
         private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
         private ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> generatorsContainer2 = new ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>>();
 
-		private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> energyConsumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
+        private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> energyConsumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
 
         private ObservableCollection<ModelForCheckboxes> gen = new ObservableCollection<ModelForCheckboxes>();
 
@@ -63,7 +63,7 @@ namespace UI.ViewModel
         private double graphWidth;
         private double graphHeight;
         private ObservableCollection<WindSpeed> windspeed = new ObservableCollection<WindSpeed>();
-         private ICommand visibilityCheckedCommand;
+        private ICommand visibilityCheckedCommand;
         private ICommand visibilityUncheckedCommand;
 
         private ICommand openHistory;
@@ -78,33 +78,22 @@ namespace UI.ViewModel
 
         private ICommand activateGen;
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
+        private ICommand deactivateGen;
+        public ICommand DeactivateGen => deactivateGen ?? (deactivateGen = new RelayCommand<object>(DeactivateGenExecute));
+
+
+
         public WindSpeed W { get => w; set => w = value; }
         private void ActivateGenExecute(object obj)
         {
-            KeyValuePair<long, ObservableCollection<MeasurementUI>> model = (KeyValuePair<long, ObservableCollection<MeasurementUI>>)obj;
-            bool active = false;
-            ModelForCheckboxes model2 = new ModelForCheckboxes();
-            
-            foreach(var id in cwm.Gens)
-            {
-                if (model.Key == id.Id)
-                {
-                    if (id.IsActive == false)
-                    {
-                        id.IsActive = true;
-                        active = id.IsActive;
-                    }
-                    else
-                    {
-                        id.IsActive = false;
-                        active = id.IsActive;
 
-                    }
-                }
-            }
-           
-           // ModelForCheckboxes model = (ModelForCheckboxes)obj;
-            ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Key, active);
+            long gid = (long)obj;
+            ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, true);
+        }
+        private void DeactivateGenExecute(object obj)
+        {
+            long gid = (long)obj;
+            ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, false);
         }
 
         private void CommandGenMessBoxExecute(object obj)
@@ -171,7 +160,7 @@ namespace UI.ViewModel
             {
                 currentConsumption = value;
                 OnPropertyChanged();
-                
+
             }
         }
 
@@ -215,7 +204,7 @@ namespace UI.ViewModel
                 sizeValue = value;
                 OnPropertyChanged();
                 UpdateSizeWidget(value);
-                
+
             }
         }
 
@@ -230,7 +219,7 @@ namespace UI.ViewModel
 
             GraphWidth = 16 * graphSizeOffset;
             GraphHeight = 9 * graphSizeOffset;
-            
+
             W = new WindSpeed();
             Windspeed.Add(W);
             Title = "Dashboard";
@@ -250,9 +239,9 @@ namespace UI.ViewModel
             }
         }
 
-		//public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
-		public ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> GeneratorsContainer { get => generatorsContainer2; set => generatorsContainer2 = value; }
-		public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
+        //public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
+        public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
+        public ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> EnergyConsumersContainer { get => energyConsumersContainer; set => energyConsumersContainer = value; }
 
         public ObservableCollection<WindSpeed> Windspeed
         {
@@ -261,7 +250,7 @@ namespace UI.ViewModel
             {
                 windspeed = value;
                 OnPropertyChanged();
-                
+
             }
         }
         public ObservableCollection<ModelForCheckboxes> Gen { get => gen; set => gen = value; }
@@ -272,6 +261,7 @@ namespace UI.ViewModel
 
 
         public Dictionary<long, bool> GidToBoolMap { get => gidToBoolMap; set => gidToBoolMap = value; }
+        public bool GenDigitalCommand { get => genDigitalCommand; set { genDigitalCommand = value; OnPropertyChanged("GenDigitalCommand"); CommandDigitalValues(value); } }
 
         private void SubsrcibeToCE()
         {
@@ -285,33 +275,23 @@ namespace UI.ViewModel
                 CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Could not connect to Publisher Service! \n ");
                 Thread.Sleep(1000);
 
-				if (attemptsCount++ < NUMBER_OF_ALLOWED_ATTEMPTS)
-				{
-					SubsrcibeToCE();
-				}
-				else
-				{
-					CommonTrace.WriteTrace(CommonTrace.TraceError, "Could not connect to Publisher Service!  \n {0}", e.Message);
-				}
+                if (attemptsCount++ < NUMBER_OF_ALLOWED_ATTEMPTS)
+                {
+                    SubsrcibeToCE();
+                }
+                else
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Could not connect to Publisher Service!  \n {0}", e.Message);
+                }
 
-			}
+            }
         }
         private void CallbackAction(object obj)
         {
             List<MeasurementUI> measUIs = obj as List<MeasurementUI>;
             UpdateWindSpeed();
 
-            foreach (var item in measUIs)
-            {
-                if (item.CurrentValue <= 0)
-                {
-                    OnOff = false;
-                }
-                else
-                {
-                    OnOff = true;
-                }
-            }
+            
             if (obj == null)
             {
                 throw new Exception("CallbackAction receive wrong parameter");
@@ -339,7 +319,7 @@ namespace UI.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        
+
                         AddMeasurmentTo(GeneratorsContainer, measUIs);
                         CurrentProduction = measUIs.Sum(x => x.CurrentValue);
                         GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
@@ -357,28 +337,19 @@ namespace UI.ViewModel
             }
         }
 
-        private void AddMeasurmentTo(ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> container, List<MeasurementUI> measUIs)
+        private void AddMeasurmentTo(ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> container, List<MeasurementUI> measUIs)
         {
             foreach (var measUI in measUIs)
             {
                 var keyPair = container.FirstOrDefault(x => x.Key == measUI.Gid);
-				
 
-				if (keyPair.Value.Value == null)
+
+                if (keyPair.Value == null)
                 {
-					if (measUIs[0].CurrentValue > 0)
-					{
-						IsChecked = true;
-						measUI.IsActive = true;
-					}
-					else
-					{
-						IsChecked = false;
-						measUI.IsActive = false;
-					}
-					var tempQueue = new ObservableCollection<MeasurementUI>();
+                    
+                    var tempQueue = new ObservableCollection<MeasurementUI>();
                     tempQueue.Add(measUI);
-                    container.Add(new KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>(measUI.Gid, new KeyValuePair<bool, ObservableCollection<MeasurementUI>>(IsChecked, tempQueue)));
+                    container.Add(new KeyValuePair<long, ObservableCollection<MeasurementUI>>(measUI.Gid, tempQueue));
                     if (!GidToBoolMap.ContainsKey(measUI.Gid))
                     {
                         GidToBoolMap.Add(measUI.Gid, true);
@@ -387,39 +358,30 @@ namespace UI.ViewModel
                 }
                 else
                 {
-					if (keyPair.Value.Value[0].CurrentValue > 0)
-					{
-						IsChecked = true;
-						measUI.IsActive = true;
-					}
-					else
-					{
-						IsChecked = false;
-						measUI.IsActive = false;
-					}
+                    
 
-					keyPair.Value.Value.Add(measUI);
-					if (keyPair.Value.Value.Count > MAX_DISPLAY_NUMBER)
-					{
-						keyPair.Value.Value.RemoveAt(0);
-					}
-				}
+                    keyPair.Value.Add(measUI);
+                    if (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+                    {
+                        keyPair.Value.RemoveAt(0);
+                    }
+                }
             }
         }
 
-		private void UpdateSizeWidget(double sliderValue)
-		{
-			GraphWidth = (sliderValue + 1) * 16 * graphSizeOffset;
-			GraphHeight = (sliderValue + 1) * 9 * graphSizeOffset;
-			MAX_DISPLAY_NUMBER = 10 * ((int)sliderValue + 1);
+        private void UpdateSizeWidget(double sliderValue)
+        {
+            GraphWidth = (sliderValue + 1) * 16 * graphSizeOffset;
+            GraphHeight = (sliderValue + 1) * 9 * graphSizeOffset;
+            MAX_DISPLAY_NUMBER = 10 * ((int)sliderValue + 1);
 
-			foreach (var keyPair in GeneratorsContainer)
-			{
-				while (keyPair.Value.Value.Count > MAX_DISPLAY_NUMBER)
-				{
-					keyPair.Value.Value.RemoveAt(0);
-				}
-			}
+            foreach (var keyPair in GeneratorsContainer)
+            {
+                while (keyPair.Value.Count > MAX_DISPLAY_NUMBER)
+                {
+                    keyPair.Value.RemoveAt(0);
+                }
+            }
 
             foreach (var keyPair in EnergyConsumersContainer)
             {
@@ -442,12 +404,16 @@ namespace UI.ViewModel
 
             Windspeed = newList;
         }
-		protected override void OnDispose()
+        protected override void OnDispose()
         {
             ceSubscribeProxy.Unsubscribe();
             base.OnDispose();
         }
 
+        private void CommandDigitalValues(bool v)
+        {
+          //  ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Key, v);
+        }
     }
 
   

@@ -1,0 +1,22 @@
+﻿<Window x:Class="UI.SetPointWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="SetPointWindow" Height="100" Width="250" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="5,20,0,20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0"  Text="{Binding Path=globalId}"/>
+        <TextBox Grid.Column="1"   Text ="{Binding newValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding Path=CommandGenMessBox}" Key="Enter"  CommandParameter="{Binding}"/>
+            </TextBox.InputBindings>
+        </TextBox>
+
+    </Grid>
+</Window>

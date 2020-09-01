@@ -37,5 +37,15 @@ namespace UI.View
             historyWindow.Show();
         }
 
+        private void MenuItemSetPoint_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menu = (MenuItem)sender;
+            var dataCOntext = menu.DataContext;
+            var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
+            long gid = v.Key;
+
+            SetPointWindow setPointWindow = new SetPointWindow(gid);
+            setPointWindow.Show();
+        }
     }
 }
