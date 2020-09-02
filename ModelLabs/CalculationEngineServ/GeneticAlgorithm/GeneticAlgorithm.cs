@@ -121,11 +121,11 @@ namespace CalculationEngineServ.GeneticAlgorithm
 
         private int CompareDNA(DNA<T> a, DNA<T> b)
         {
-            if (a.Fitness > b.Fitness)
+            if (a.Fitness < b.Fitness)
             {
                 return -1;
             }
-            else if (a.Fitness < b.Fitness)
+            else if (a.Fitness > b.Fitness)
             {
                 return 1;
             }

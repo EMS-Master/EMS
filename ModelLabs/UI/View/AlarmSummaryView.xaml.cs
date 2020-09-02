@@ -173,49 +173,55 @@ namespace UI.View
             if (ComboBox1.SelectedValue.ToString().Contains("Type Alarm"))
             {
                 string str = ComboBox2.SelectedValue.ToString();
-                Enum.TryParse(str, out AlarmType alarmType);
-                List<Alarm> alarms = new List<Alarm>();
-                using (var db = new EmsContext())
+                if (str.Equals("NORMAL") || str.Equals("HIGH") || str.Equals("LOW") || str.Equals("DOM"))
                 {
-                    foreach (var alarm in db.Alarms)
+                    Enum.TryParse(str, out AlarmType alarmType);
+                    List<Alarm> alarms = new List<Alarm>();
+                    using (var db = new EmsContext())
                     {
-                        if (alarm.AlarmType == alarmType)
-                            alarms.Add(alarm);
+                        foreach (var alarm in db.Alarms)
+                        {
+                            if (alarm.AlarmType == alarmType)
+                                alarms.Add(alarm);
+                        }
+                        AlarmSummaryDataGrid.ItemsSource = alarms;
                     }
-                    AlarmSummaryDataGrid.ItemsSource = alarms;
                 }
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("Severity"))
             {
                 string str = ComboBox2.SelectedValue.ToString();
-                Enum.TryParse(str, out SeverityLevel severityLevel);
-                List<Alarm> alarms = new List<Alarm>();
-                using (var db = new EmsContext())
+                if (str.Equals("HIGH") || str.Equals("LOW") || str.Equals("MEDIUM"))
                 {
-                    foreach (var alarm in db.Alarms)
+                    Enum.TryParse(str, out SeverityLevel severityLevel);
+                    List<Alarm> alarms = new List<Alarm>();
+                    using (var db = new EmsContext())
                     {
-                        if (alarm.Severity == severityLevel)
-                            alarms.Add(alarm);
+                        foreach (var alarm in db.Alarms)
+                        {
+                            if (alarm.Severity == severityLevel)
+                                alarms.Add(alarm);
+                        }
+                        AlarmSummaryDataGrid.ItemsSource = alarms;
                     }
-                    AlarmSummaryDataGrid.ItemsSource = alarms;
                 }
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("GID"))
             {
-                if (ComboBox2.SelectedValue == null)
+                string str = ComboBox2.SelectedValue.ToString();
+                if (!str.Equals("NORMAL") && !str.Equals("LOW") && !str.Equals("MEDIUM") && !str.Equals("DOM") && !str.Equals("HIGH"))
                 {
-                    return;
-                }
-                long gid =(long)ComboBox2.SelectedValue;
-                List<Alarm> alarms = new List<Alarm>();
-                using (var db = new EmsContext())
-                {
-                    foreach (var alarm in db.Alarms)
+                    long gid = (long)ComboBox2.SelectedValue;
+                    List<Alarm> alarms = new List<Alarm>();
+                    using (var db = new EmsContext())
                     {
-                        if (alarm.Gid == gid)
-                            alarms.Add(alarm);
+                        foreach (var alarm in db.Alarms)
+                        {
+                            if (alarm.Gid == gid)
+                                alarms.Add(alarm);
+                        }
+                        AlarmSummaryDataGrid.ItemsSource = alarms;
                     }
-                    AlarmSummaryDataGrid.ItemsSource = alarms;
                 }
             }
         }
