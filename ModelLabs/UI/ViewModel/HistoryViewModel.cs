@@ -1,6 +1,8 @@
 ﻿using CalculationEngineContracts;
+using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
+using FTN.Services.NetworkModelService.DataModel.Wires;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -301,10 +303,11 @@ namespace UI.ViewModel
 
                 foreach (ResourceDescription rd in internalGen)
                 {
+                    Generator generator = ResourcesDescriptionConverter.ConvertTo<Generator>(rd);
                     //if (rd.ContainsProperty(ModelCode.IDOBJ))
                     //{
-                        //long gid = rd.GetProperty(ModelCode.IDOBJ_GID).AsLong();
-                        if (GeneratorsFromNms.Contains(rd.Id))
+                    //long gid = rd.GetProperty(ModelCode.IDOBJ_GID).AsLong();
+                    if (GeneratorsFromNms.Contains(rd.Id))
                         {
                             continue;
                         }

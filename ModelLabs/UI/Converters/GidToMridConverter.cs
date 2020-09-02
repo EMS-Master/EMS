@@ -24,7 +24,7 @@ namespace UI.Converters
             IdentifiedObject idObj = null;
             if (nmsModelMap.TryGetValue(gid, out idObj))
             {
-                return idObj.GlobalId;
+                return idObj.Name;
             }
 
             return gid;

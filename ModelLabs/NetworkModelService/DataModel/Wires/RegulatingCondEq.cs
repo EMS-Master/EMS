@@ -39,7 +39,16 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             }
         }
 
-
+        public override void GetProperty(Property prop)
+        {
+            switch (prop.Id)
+            {
+                
+                default:
+                    base.GetProperty(prop);
+                    break;
+            }
+        }
 
 
         #endregion IAccess implementation

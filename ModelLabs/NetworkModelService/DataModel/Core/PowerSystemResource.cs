@@ -60,6 +60,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                 case ModelCode.PSR_MEASUREMENTS:
                     prop.SetValue(measurements);
                     break;
+                default:
+                    base.GetProperty(prop);
+                    break;
             }
         }
 
