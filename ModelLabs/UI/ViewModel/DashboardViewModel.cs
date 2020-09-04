@@ -36,10 +36,15 @@ namespace UI.ViewModel
         }
 
         private int MAX_DISPLAY_NUMBER = 10;
-        private int MAX_DISPLAY_TOTAL_NUMBER = 15;
+        private int MAX_DISPLAY_TOTAL_NUMBER = 20;
         private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
         private int attemptsCount = 0;
         private double sizeValue;
+
+        private float maxValue = 10; 
+        private float minValue = 0;
+        public float MinValue { get { return minValue; } set {minValue = value; OnPropertyChanged(); } }
+        public float MaxValue { get { return maxValue; } set { maxValue = value; OnPropertyChanged(); } }
 
 
         private CeSubscribeProxy ceSubscribeProxy;
@@ -306,7 +311,7 @@ namespace UI.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        //AddMeasurmentTo(EnergyConsumersContainer, measUIs);
+                        AddMeasurmentTo(EnergyConsumersContainer, measUIs);
                         CurrentConsumption = measUIs.Sum(x => x.CurrentValue);
                         DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentConsumption));
                         if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
@@ -322,11 +327,16 @@ namespace UI.ViewModel
 
                         AddMeasurmentTo(GeneratorsContainer, measUIs);
                         CurrentProduction = measUIs.Sum(x => x.CurrentValue);
+
                         GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
                         if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
                         {
                             GenerationList.RemoveAt(0);
                         }
+                        MaxValue = GenerationList.Max(x => x.Value) + 20;
+                        MinValue = GenerationList.Min(x => x.Value) - 20;
+                        
+
                     });
                 }
             }

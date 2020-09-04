@@ -258,7 +258,7 @@
             </DockPanel>
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <!--<Expander IsExpanded="False" Header="Widgets" Foreground="Black" Margin="10,5">-->
@@ -284,7 +284,7 @@
                         <Grid.OpacityMask>
                             <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
                         </Grid.OpacityMask>
-                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.3" Background="#212F3C"/>
+                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.5" Background="#212F3C"/>
 
                         <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="CO2 reduction" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
                             <MetroChart:RadialGaugeChart.Series>
@@ -349,8 +349,8 @@
 									</chartingToolkit:LineSeries.IndependentAxis>
 
 									<chartingToolkit:LineSeries.DependentRangeAxis>
-										<chartingToolkit:LinearAxis ShowGridLines="True" GridLineStyle="{StaticResource lineStyle}" Orientation="Y" Title="Power (mW)" Minimum="0" Foreground="Black" FontWeight="Bold"/>
-									</chartingToolkit:LineSeries.DependentRangeAxis>
+										<chartingToolkit:LinearAxis ShowGridLines="True" GridLineStyle="{StaticResource lineStyle}"  Orientation="Y" Title="Power (MW)"   Foreground="Black" FontWeight="Bold"/>
+                                    </chartingToolkit:LineSeries.DependentRangeAxis>
 								</chartingToolkit:LineSeries>
 							</chartingToolkit:Chart>
 
@@ -363,7 +363,7 @@
             <StackPanel Grid.Row="2" DockPanel.Dock="Top" Margin="10,10,10,0">
 
                 <!--<Expander IsExpanded="False" Header="Generation graphs" Foreground="Black" Margin="10,5">-->
-                <StackPanel>
+               
                     <DockPanel>
                         <GroupBox Header="Generators" Foreground="Black" Height="400" VerticalAlignment="Top">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Width="150" HorizontalScrollBarVisibility="Auto" MaxHeight="300">
@@ -380,7 +380,7 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </DockPanel>
-                </StackPanel>
+              
                 <!--</Expander>-->
             </StackPanel>
 

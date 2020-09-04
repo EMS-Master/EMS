@@ -54,7 +54,7 @@ namespace CalculationEngineServ
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
             List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
             totalProduction = 0;
-
+            PublishConsumersToUI(measEnergyConsumer);
             foreach (var m in measGenerators)
             {
                 Console.WriteLine("masx value: " + m.MaxValue);
@@ -64,13 +64,13 @@ namespace CalculationEngineServ
                 Console.WriteLine("Inserted {0} Measurement(s) into history database.", measGenerators.Count);
             }
 
-			PublishGeneratorsToUI(measGenerators);
+			PublishGeneratorsToUI(measurementsOptimized);
 
 			try
             {
-                if (measGenerators != null && measGenerators.Count > 0)
+                if (measurementsOptimized != null && measurementsOptimized.Count > 0)
                 {
-                    totalProduction = measGenerators.Sum(x => x.CurrentValue);
+                    totalProduction = measurementsOptimized.Sum(x => x.CurrentValue);
 
                     if (WriteTotalProductionIntoDb(totalProduction, DateTime.Now))
                     {
@@ -237,7 +237,7 @@ namespace CalculationEngineServ
                     var k = measurementsFromGenerators.Where(x => x.Gid == gens.Key).FirstOrDefault();
                     MeasurementUI measUI = new MeasurementUI();
                     measUI.Gid = gens.Key;
-                    measUI.CurrentValue = k.CurrentValue;
+                    measUI.CurrentValue = k.CurrentValue/1000;
                     measUI.TimeStamp = k.TimeStamp;
                     measUI.IsActive = true;
                     //measUI.OptimizationType = 1;
@@ -259,6 +259,36 @@ namespace CalculationEngineServ
 			}
 			publisher.PublishOptimizationResults(measListUI);
 		}
+
+        private void PublishConsumersToUI(List<MeasurementUnit> measurementsFromConsumers)
+        {
+            List<MeasurementUI> measUIList = new List<MeasurementUI>();
+            foreach (var meas in energyConsumers)
+            {
+                if (measurementsFromConsumers.Any(x => x.Gid == meas.Key))
+                {
+                    var k = measurementsFromConsumers.Where(x => x.Gid == meas.Key).FirstOrDefault();
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = k.Gid;
+                    measUI.CurrentValue = k.CurrentValue/1000;
+
+                    measUI.TimeStamp = k.TimeStamp;
+                    measUIList.Add(measUI);
+                }
+                else
+                {
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = meas.Key;
+                    measUI.CurrentValue = 0;
+                    measUI.TimeStamp = DateTime.Now;
+                    measUI.IsActive = false;
+                    //measUI.OptimizationType = 1;
+                    //measUI.Price = meas.CurrentPrice;
+                    measUIList.Add(measUI);
+                }
+            }
+            publisher.PublishOptimizationResults(measUIList);
+        }
 
         public bool WriteTotalProductionIntoDb(float totalProduction, DateTime dateTime)
         {
