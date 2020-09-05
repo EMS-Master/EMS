@@ -19,6 +19,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
         private float necessaryEnergy;
         public float TotalCost { get; private set; }
         public float GeneratedPower { get; private set; }
+        public float EmissionCO2 { get; private set; }
         public GA(float necessaryEnergy, Dictionary<long, OptimisationModel> optModelMap)
         {
             indexToGid = new Dictionary<int, long>();
@@ -90,8 +91,16 @@ namespace CalculationEngineServ.GeneticAlgorithm
                 optModelMap[indexToGid[i]].GenericOptimizedValue = bestGenes[i].Item2;
 				optModelMap[indexToGid[i]].measurementUnit.CurrentValue = bestGenes[i].Item2;
 			}
+
+            float emCO2 = CalculationEngine.CalculateCO2(optModelMap);
+
+            EmissionCO2 = emCO2;
+
             TotalCost = CalculateCost(bestGenes);
             GeneratedPower = CalculateEnergy(bestGenes);
+
+            Console.WriteLine("Necessery energy: " + necessaryEnergy);
+            Console.WriteLine("Total power: " + GeneratedPower);
 
             return optModelMap;
         }

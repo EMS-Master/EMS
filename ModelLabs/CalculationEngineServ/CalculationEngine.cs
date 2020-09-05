@@ -27,8 +27,12 @@ namespace CalculationEngineServ
 
         private static IDictionary<long, Generator> generators;
         private static IDictionary<long, EnergyConsumer> energyConsumers;
+        private float previousEmissionCO2 = 0;
+        private float currentEmissionCO2 = 0;
+        private float totalCost = 0;
 
         private float windProductionkW = 0;
+        
         private float totalProduction = 0;
 
         public CalculationEngine()
@@ -54,12 +58,10 @@ namespace CalculationEngineServ
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
             List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
             totalProduction = 0;
+
             PublishConsumersToUI(measEnergyConsumer);
-            foreach (var m in measGenerators)
-            {
-                Console.WriteLine("masx value: " + m.MaxValue);
-            }
-            if (InsertMeasurementsIntoDb(measGenerators))
+           
+            if (InsertMeasurementsIntoDb(measurementsOptimized))
             {
                 Console.WriteLine("Inserted {0} Measurement(s) into history database.", measGenerators.Count);
             }
@@ -72,9 +74,13 @@ namespace CalculationEngineServ
                 {
                     totalProduction = measurementsOptimized.Sum(x => x.CurrentValue);
 
-                    if (WriteTotalProductionIntoDb(totalProduction, DateTime.Now))
+                    if (WriteTotalProductionIntoDb(totalProduction, totalCost, DateTime.Now))
                     {
                         Console.WriteLine("The total production is recorded into history database.");
+                    }
+                    if (WriteCO2EmissionIntoDb(previousEmissionCO2, currentEmissionCO2))
+                    {
+                        Console.WriteLine("The CO2 emission is recorded into history database.");
                     }
                 }
                 if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
@@ -157,10 +163,24 @@ namespace CalculationEngineServ
             }
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
 
+            previousEmissionCO2 = CalculateCO2(optModelMapNonRenewable);
+            var previousCost = CalculateCost(optModelMapNonRenewable); 
+
             GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
             optModelMapOptimizied = gaoRenewable.StartAlgorithm();
+            // calculate power of each
 
-            return optModelMapOptimizied;
+            //new
+            totalCost= gaoRenewable.TotalCost;
+            currentEmissionCO2 = gaoRenewable.EmissionCO2;
+
+            foreach(var item in optModelMapOptimizied)
+            {
+                if (optModelMap.ContainsKey(item.Key))
+                    optModelMap[item.Key] = item.Value;
+            }
+
+            return optModelMap;
         }
         public UpdateResult Prepare(ref Delta delta)
         {
@@ -290,14 +310,14 @@ namespace CalculationEngineServ
             publisher.PublishOptimizationResults(measUIList);
         }
 
-        public bool WriteTotalProductionIntoDb(float totalProduction, DateTime dateTime)
+        public bool WriteTotalProductionIntoDb(float totalProduction,float totalCost, DateTime dateTime)
         {
             bool retVal = false;
             using (var db = new EmsContext())
             {
                 try
                 {
-                    TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime };
+                    TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime , TotalCost = totalCost};
                     db.TotalProductions.Add(total);
                     db.SaveChanges();
 
@@ -307,6 +327,31 @@ namespace CalculationEngineServ
                 {
                     retVal = false;
                     string message = string.Format("Failed to insert total production into database. {0}", e.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                    Console.WriteLine(message);
+                }
+            }
+
+            return retVal;
+        }
+
+        public bool WriteCO2EmissionIntoDb(float previousEmissionCO2, float currentEmissionCO2)
+        {
+            bool retVal = false;
+            using (var db = new EmsContext())
+            {
+                try
+                {
+                    CO2Emission total = new CO2Emission() { PreviousEmission = previousEmissionCO2, CurrentEmission = currentEmissionCO2, Timestamp = DateTime.Now };
+                    db.CO2Emissions.Add(total);
+                    db.SaveChanges();
+
+                    retVal = true;
+                }
+                catch (Exception e)
+                {
+                    retVal = false;
+                    string message = string.Format("Failed to insert CO2 emission into database. {0}", e.Message);
                     CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                     Console.WriteLine(message);
                 }
@@ -465,6 +510,28 @@ namespace CalculationEngineServ
             }
         }
 
+        private static float CalculateCost(Dictionary<long, OptimisationModel> optModelMap)
+        {
+            float cost = 0;
+            foreach (var optModel in optModelMap.Values)
+            {
+                float price = optModel.CalculatePrice(optModel.GenericOptimizedValue);
+                cost += price;
+            }
+
+            return cost;
+        }
+
+        public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
+        {
+            //CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
+            float emCO2 = 0;
+            foreach (var optModel in optModelMap.Values)
+            {
+                emCO2 += optModel.GenericOptimizedValue * optModel.EmissionFactor * 0.001f;
+            }
+            return emCO2;
+        }
 
     }
 }

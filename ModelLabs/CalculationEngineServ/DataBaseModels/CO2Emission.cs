@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CalculationEngineServ.DataBaseModels
 {
-    public class TotalProduction
+    public class CO2Emission
     {
         [Key]
         public int Id { get; set; }
-        public float TotalGeneration { get; set; }
-        public float TotalCost { get; set; }
-        public DateTime TimeOfCalculation { get; set; }
+        public float PreviousEmission { get; set; }
+        public float CurrentEmission { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

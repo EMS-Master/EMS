@@ -91,6 +91,7 @@
     <Compile Include="CalculationEngineServiceClass.cs" />
     <Compile Include="CeToUI.cs" />
     <Compile Include="DataBaseModels\Alarm.cs" />
+    <Compile Include="DataBaseModels\CO2Emission.cs" />
     <Compile Include="DataBaseModels\DiscreteCounter.cs" />
     <Compile Include="DataBaseModels\HistoryMeasurement.cs" />
     <Compile Include="DataBaseModels\TotalProduction.cs" />
@@ -109,6 +110,10 @@
     <Compile Include="Migrations\202008121120449_addTotalProduction.cs" />
     <Compile Include="Migrations\202008121120449_addTotalProduction.designer.cs">
       <DependentUpon>202008121120449_addTotalProduction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009051218039_EmissionCO2.cs" />
+    <Compile Include="Migrations\202009051218039_EmissionCO2.designer.cs">
+      <DependentUpon>202009051218039_EmissionCO2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OptimisationModel.cs" />
@@ -176,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202008121120449_addTotalProduction.resx">
       <DependentUpon>202008121120449_addTotalProduction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009051218039_EmissionCO2.resx">
+      <DependentUpon>202009051218039_EmissionCO2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
