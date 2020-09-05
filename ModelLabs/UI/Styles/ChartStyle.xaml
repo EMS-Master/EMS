@@ -99,7 +99,15 @@
 		<Setter Property="SnapsToDevicePixels" Value="True"/>
 	</Style>
 
-	<!-- LegendTitleStyle-->
+    <Style x:Key="Title" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="16"/>
+    </Style>
+    <Style x:Key="SubTitle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Bottom"></Setter>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!-- LegendTitleStyle-->
 	<Style x:Key="LegendTitleStyle" TargetType="datavis:Title">
 		<Setter Property="FontSize" Value="12" />
 		<!--<Setter Property="Foreground" Value="{DynamicResource LabelBrush}"/>-->

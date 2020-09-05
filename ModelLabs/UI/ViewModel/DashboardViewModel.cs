@@ -313,10 +313,13 @@ namespace UI.ViewModel
                     {
                         AddMeasurmentTo(EnergyConsumersContainer, measUIs);
                         CurrentConsumption = measUIs.Sum(x => x.CurrentValue);
-                        DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentConsumption));
-                        if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                        lock (DemandList)
                         {
-                            DemandList.RemoveAt(0);
+                            DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentConsumption));
+                            if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                            {
+                                DemandList.RemoveAt(0);
+                            }
                         }
                     });
                 }
@@ -328,11 +331,15 @@ namespace UI.ViewModel
                         AddMeasurmentTo(GeneratorsContainer, measUIs);
                         CurrentProduction = measUIs.Sum(x => x.CurrentValue);
 
-                        GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
-                        if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                        lock (GenerationList)
                         {
-                            GenerationList.RemoveAt(0);
+                            GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
+                            if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                            {
+                                GenerationList.RemoveAt(0);
+                            }
                         }
+                       
                         MaxValue = GenerationList.Max(x => x.Value) + 20;
                         MinValue = GenerationList.Min(x => x.Value) - 20;
                         

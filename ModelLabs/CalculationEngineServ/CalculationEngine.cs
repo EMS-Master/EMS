@@ -59,7 +59,6 @@ namespace CalculationEngineServ
             List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
             totalProduction = 0;
 
-            PublishConsumersToUI(measEnergyConsumer);
            
             if (InsertMeasurementsIntoDb(measurementsOptimized))
             {
@@ -67,8 +66,10 @@ namespace CalculationEngineServ
             }
 
 			PublishGeneratorsToUI(measurementsOptimized);
+            PublishConsumersToUI(measEnergyConsumer);
 
-			try
+
+            try
             {
                 if (measurementsOptimized != null && measurementsOptimized.Count > 0)
                 {
