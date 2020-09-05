@@ -187,12 +187,15 @@
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DMSTypeToStringConverter.cs" />
+    <Compile Include="Converters\GeneratorTypeToVIsibility.cs" />
     <Compile Include="Converters\GidMapToBoolConverter.cs" />
     <Compile Include="Converters\GidMapToVisibilityConverter.cs" />
     <Compile Include="Converters\GidToIdObjectConverter.cs" />
     <Compile Include="Converters\GidToMridConverter.cs" />
     <Compile Include="Converters\GlobalIdToEMSTypeStringConverter.cs" />
     <Compile Include="Converters\HexadecimalConverter.cs" />
+    <Compile Include="Converters\LastNameShowConverter.cs" />
+    <Compile Include="Converters\LastTypeShowConverter.cs" />
     <Compile Include="Converters\LastValueShowConverter.cs" />
     <Compile Include="Converters\LastValueToBool.cs" />
     <Compile Include="Converters\ModelCodeToStringConverter.cs" />

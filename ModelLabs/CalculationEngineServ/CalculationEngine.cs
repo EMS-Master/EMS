@@ -261,8 +261,8 @@ namespace CalculationEngineServ
                     measUI.CurrentValue = k.CurrentValue/1000;
                     measUI.TimeStamp = k.TimeStamp;
                     measUI.IsActive = true;
-                    //measUI.OptimizationType = 1;
-                    //measUI.Price = meas.CurrentPrice;
+                    measUI.GeneratorType = gens.Value.GeneratorType;
+                    measUI.Name = gens.Value.Name;
                     measListUI.Add(measUI);
                 }
                 else
@@ -272,8 +272,8 @@ namespace CalculationEngineServ
                     measUI.CurrentValue = 0;
                     measUI.TimeStamp = DateTime.Now;
                     measUI.IsActive = false;
-                    //measUI.OptimizationType = 1;
-                    //measUI.Price = meas.CurrentPrice;
+                    measUI.GeneratorType = gens.Value.GeneratorType;
+                    measUI.Name = gens.Value.Name;
                     measListUI.Add(measUI);
                 }
 				
@@ -292,7 +292,8 @@ namespace CalculationEngineServ
                     MeasurementUI measUI = new MeasurementUI();
                     measUI.Gid = k.Gid;
                     measUI.CurrentValue = k.CurrentValue/1000;
-
+                    measUI.GeneratorType = GeneratorType.Unknown;
+                    measUI.Name = meas.Value.Name;
                     measUI.TimeStamp = k.TimeStamp;
                     measUIList.Add(measUI);
                 }
@@ -303,8 +304,8 @@ namespace CalculationEngineServ
                     measUI.CurrentValue = 0;
                     measUI.TimeStamp = DateTime.Now;
                     measUI.IsActive = false;
-                    //measUI.OptimizationType = 1;
-                    //measUI.Price = meas.CurrentPrice;
+                    measUI.GeneratorType = GeneratorType.Unknown;
+                    measUI.Name = meas.Value.Name;
                     measUIList.Add(measUI);
                 }
             }

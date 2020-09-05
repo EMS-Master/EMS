@@ -20,6 +20,10 @@
         <converters:LastValueShowConverter x:Key="LastValueShowConverter" />
         <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
         <converters:LastValueToBool x:Key="LastValueToBool" />
+        <converters:LastNameShowConverter x:Key="LastNameShowConverter" />
+        <converters:LastTypeShowConverter x:Key="LastTypeShowConverter" />
+        <converters:GeneratorTypeToVIsibility x:Key="GeneratorTypeToVIsibility" /> 
+
 
         <Style
 			x:Key = "DateTimeAxisLabelStyle2" TargetType="chartingToolkit:DateTimeAxisLabel">
@@ -42,7 +46,11 @@
                     </Grid.Visibility>
 
                     <StackPanel >
-                        <CheckBox x:Name="GenDigital" Margin="2,3,0,0" >
+                        <CheckBox x:Name="GenDigital" Margin="10,13,0,0" >
+                            <CheckBox.Visibility>
+                                <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                </Binding>
+                            </CheckBox.Visibility>
                             <CheckBox.IsChecked>
 
                                 <Binding Path="Value" Converter="{StaticResource LastValueToBool}" ConverterParameter="Key" Mode="OneWay"  >
@@ -69,6 +77,10 @@
                     <Grid Width="23" Height="20" Margin="-210, -139, 0, 0">
                         <Grid.ContextMenu>
                             <ContextMenu>
+                                <ContextMenu.Visibility>
+                                    <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                    </Binding>
+                                </ContextMenu.Visibility>
                                 <MenuItem x:Name="MenuItemSetPoint" Click="MenuItemSetPoint_Click" Header="Set point">
                                 </MenuItem>
                                 <MenuItem x:Name="MenuItemHistory" Header="History" Click="MenuItemHistory_Click"/>
@@ -80,9 +92,27 @@
                         </Ellipse>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="G" FontWeight="Bold" Foreground="{Binding Path=OnOff, Converter={StaticResource BoolToColorConverter}}"/>
                     </Grid>
-                    <TextBlock Height="25" Width="50" Margin="-130, -130,0,0" Foreground="Red">
+
+                    <TextBlock Margin="0,0,15,0" HorizontalAlignment="Right" Foreground="Black" FontSize="16">
                         <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource LastValueShowConverter}" >
+                            <MultiBinding Converter="{StaticResource LastNameShowConverter}" >
+                                <Binding Path="Value"/>
+                                <Binding Path="Value[0].CurrentValue"></Binding>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Right" Margin="20,20,20, 20" Foreground="Black" FontSize="11">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource LastTypeShowConverter}" >
+                                <Binding Path="Value"/>
+                                <Binding Path="Value[0].CurrentValue"></Binding>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <TextBlock Height="25" Margin="50, -130,0,0" Foreground="Red">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource LastValueShowConverter}">
                                 <Binding Path="Value"/>
                                 <Binding Path="Value[0].CurrentValue"></Binding>
                             </MultiBinding>
@@ -93,7 +123,7 @@
 									   Width="{Binding DataContext.GraphWidth,RelativeSource={RelativeSource AncestorType=UserControl}}"
 									   Height="{Binding DataContext.GraphHeight,RelativeSource={RelativeSource AncestorType=UserControl}}"
                                        Template="{StaticResource GeneratorChartTemplate}"
-									   >
+									   Margin="0,10">
                         <chartingToolkit:LineSeries Title="Power"
 												ItemsSource="{Binding Path=Value}"
 												DependentValueBinding="{Binding Path=CurrentValue}"
@@ -262,7 +292,7 @@
 													>
 									<chartingToolkit:LineSeries.DataPointStyle>
 										<Style TargetType="chartingToolkit:LineDataPoint">
-											<Setter Property="Background" Value="DarkGreen"/>
+											<Setter Property="Background" Value="LightGreen"/>
 											<Setter Property="Template" Value="{StaticResource LineDataPointPowerTemplate}"/>
 										</Style>
 										
