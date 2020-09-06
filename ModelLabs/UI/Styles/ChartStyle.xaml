@@ -538,7 +538,33 @@
 	<Style TargetType="charting:CategoryAxis" BasedOn="{StaticResource DisplayAxisStyle}">
 	</Style>
 
-	<ControlTemplate x:Key="LineDataPointTemplate" TargetType="charting:LineDataPoint">
+    <Style TargetType="Button" x:Key="ExpButtonStyle">
+        <Setter Property="Background" Value="Gray"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="10"/>
+        <!--<Setter Property="Margin" Value="0,0,-5,0"/>-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid >
+                        <Rectangle Fill="{TemplateBinding Background}"></Rectangle>
+                        <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Margin="1"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource BlueMouseOver}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <ControlTemplate x:Key="LineDataPointTemplate" TargetType="charting:LineDataPoint">
 		<Grid x:Name="Root" Background="Transparent">
 			<ToolTipService.ToolTip>
 				<Grid Margin="-5" Background="{TemplateBinding Background}">

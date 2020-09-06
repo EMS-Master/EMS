@@ -41,9 +41,9 @@ namespace UI.ViewModel
         private int attemptsCount = 0;
         private double sizeValue;
 
-        private float maxValue = 10; 
+        private float maxValue = 10;
         private float minValue = 0;
-        public float MinValue { get { return minValue; } set {minValue = value; OnPropertyChanged(); } }
+        public float MinValue { get { return minValue; } set { minValue = value; OnPropertyChanged(); } }
         public float MaxValue { get { return maxValue; } set { maxValue = value; OnPropertyChanged(); } }
 
 
@@ -51,8 +51,15 @@ namespace UI.ViewModel
         private float currentProduction;
         private float currentConsumption;
         private WindSpeed w;
-
+        private float currentWindProduction;
+        private float currentSolarProduction;
+        private float currentHydroProduction;
+        private float currentCoalProduction;
+        private float currentOilProduction;
+        private float currentGasProduction;
+       
         private readonly double graphSizeOffset = 18;
+        private bool isOptionsExpanded = false;
 
         private ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<MeasurementUI>>>();
         private ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>> generatorsContainer2 = new ObservableCollection<KeyValuePair<long, KeyValuePair<bool, ObservableCollection<MeasurementUI>>>>();
@@ -62,6 +69,7 @@ namespace UI.ViewModel
         private ObservableCollection<ModelForCheckboxes> gen = new ObservableCollection<ModelForCheckboxes>();
 
         private ObservableCollection<KeyValuePair<DateTime, float>> generationList = new ObservableCollection<KeyValuePair<DateTime, float>>();
+        private ObservableCollection<KeyValuePair<string, float>> generationByTypeList = new ObservableCollection<KeyValuePair<string, float>> () { new KeyValuePair<string, float>("Wind [kW]", 0) , new KeyValuePair<string, float>("Solar [kW]", 0 ), new KeyValuePair<string, float>("Hydro [MW]", 0 ),new KeyValuePair<string, float>("Coal [kW]", 0 ), new KeyValuePair<string, float>("Oil [kW]", 0 ), new KeyValuePair<string, float>("Gas [kW]", 0 ), };
         private ObservableCollection<KeyValuePair<DateTime, float>> demandList = new ObservableCollection<KeyValuePair<DateTime, float>>();
 
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
@@ -70,9 +78,8 @@ namespace UI.ViewModel
         private ObservableCollection<WindSpeed> windspeed = new ObservableCollection<WindSpeed>();
         private ICommand visibilityCheckedCommand;
         private ICommand visibilityUncheckedCommand;
-
-        private ICommand openHistory;
-
+        
+        private ICommand expandCommand;
 
         public ICommand VisibilityCheckedCommand => visibilityCheckedCommand ?? (visibilityCheckedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
 
@@ -86,7 +93,7 @@ namespace UI.ViewModel
         private ICommand deactivateGen;
         public ICommand DeactivateGen => deactivateGen ?? (deactivateGen = new RelayCommand<object>(DeactivateGenExecute));
 
-
+        public ICommand ExpandCommand => expandCommand ?? (expandCommand = new RelayCommand(ExpandCommandExecute));
 
         public WindSpeed W { get => w; set => w = value; }
         private void ActivateGenExecute(object obj)
@@ -132,28 +139,20 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
-        //public ICommand OpenHistory
-        //{
-        //    get
-        //    {
-        //        if (openHistory == null)
-        //        {
-        //            openHistory = new RelayCommand(param => this.OpenH());
-        //        }
-        //        return openHistory;
-        //    }
-        //}
+       
+        public bool IsOptionsExpanded
+        {
+            get
+            {
+                return isOptionsExpanded;
+            }
 
-        //public ICommand OpenHistory => openHistory ?? (openHistory = new RelayCommand<object>(OpenH));
-
-
-        //public void OpenH(object obj)
-        //{
-        //    HistoryWindow historyWindow = new HistoryWindow();
-        //    historyWindow.Show();
-        //}
-
-
+            set
+            {
+                isOptionsExpanded = value;
+                OnPropertyChanged();
+            }
+        }
         public float CurrentConsumption
         {
             get
@@ -268,6 +267,15 @@ namespace UI.ViewModel
         public Dictionary<long, bool> GidToBoolMap { get => gidToBoolMap; set => gidToBoolMap = value; }
         public bool GenDigitalCommand { get => genDigitalCommand; set { genDigitalCommand = value; OnPropertyChanged("GenDigitalCommand"); CommandDigitalValues(value); } }
 
+        public float CurrentWindProduction { get => currentWindProduction; set  { currentWindProduction = value; OnPropertyChanged(); } }
+        public float CurrentSolarProduction { get => currentSolarProduction; set { currentSolarProduction = value; OnPropertyChanged(); } }
+        public float CurrentHydroProduction { get => currentHydroProduction; set { currentHydroProduction = value; OnPropertyChanged(); } }
+        public float CurrentCoalProduction { get => currentCoalProduction; set { currentCoalProduction = value; OnPropertyChanged(); } }
+        public float CurrentOilProduction { get => currentOilProduction; set { currentOilProduction = value; OnPropertyChanged(); } }
+        public float CurrentGasProduction { get => currentGasProduction; set { currentGasProduction = value; OnPropertyChanged(); } }
+
+        public ObservableCollection<KeyValuePair<string, float>> GenerationByTypeList { get => generationByTypeList; set { generationByTypeList = value; OnPropertyChanged(); } }
+
         private void SubsrcibeToCE()
         {
             try
@@ -330,7 +338,6 @@ namespace UI.ViewModel
 
                         AddMeasurmentTo(GeneratorsContainer, measUIs);
                         CurrentProduction = measUIs.Sum(x => x.CurrentValue);
-
                         lock (GenerationList)
                         {
                             GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, CurrentProduction));
@@ -339,7 +346,30 @@ namespace UI.ViewModel
                                 GenerationList.RemoveAt(0);
                             }
                         }
-                       
+
+                        CurrentWindProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Wind).Sum(x => x.CurrentValue)*1000;
+                        CurrentSolarProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Solar).Sum(x => x.CurrentValue) * 1000;
+                        CurrentHydroProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Hydro).Sum(x => x.CurrentValue);
+                        CurrentCoalProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Coal).Sum(x => x.CurrentValue) * 1000;
+                        CurrentOilProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Oil).Sum(x => x.CurrentValue) * 1000;
+                        CurrentGasProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Gas).Sum(x => x.CurrentValue) * 1000;
+                        lock (GenerationByTypeList)
+                        {
+                            GenerationByTypeList[0] = new KeyValuePair<string,float>("Wind [kW]",CurrentWindProduction );
+                            GenerationByTypeList[1] = new KeyValuePair<string, float>("Solar [kW]", CurrentSolarProduction);
+                            GenerationByTypeList[2] = new KeyValuePair<string, float>("Hydro [MW]", CurrentHydroProduction);
+                            GenerationByTypeList[3] = new KeyValuePair<string, float>("Coal [kW]", CurrentCoalProduction);
+                            GenerationByTypeList[4] = new KeyValuePair<string, float>("Oil [kW]", CurrentOilProduction);
+                            GenerationByTypeList[5] = new KeyValuePair<string, float>("Gas [kW]", CurrentGasProduction);
+                            
+
+                        }
+                        //if (GenerationListWind.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                        //{
+                        //    GenerationListWind.RemoveAt(0);
+                        //}
+
+
                         MaxValue = GenerationList.Max(x => x.Value) + 20;
                         MinValue = GenerationList.Min(x => x.Value) - 20;
                         
@@ -431,7 +461,21 @@ namespace UI.ViewModel
         {
           //  ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Key, v);
         }
+        private void ExpandCommandExecute(object obj)
+        {
+            if (IsOptionsExpanded)
+            {
+                IsOptionsExpanded = false;
+            }
+            else
+            {
+                IsOptionsExpanded = true;
+            }
+        }
+
     }
 
-  
+   
+
+
 }
