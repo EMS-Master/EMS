@@ -17,6 +17,11 @@ namespace CalculationEngineServ
 
         public static CalculationEngine Ce { set => ce = value; }
 
+        public Tuple<int, int, int, float> GetAlgorithmOptions()
+        {
+            return CalculationEngine.GetAlgorithmParams();
+        }
+
         public List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime)
         {
             List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
