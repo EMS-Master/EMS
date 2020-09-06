@@ -18,6 +18,7 @@ namespace ScadaService
         private ushort numberOfHoldingRegisters = 82;    //in bytes
 		private ushort numberOfCoils = 40;
         private ushort numberOfHRegistersWS = 6;
+		private readonly object lockObj = new object();
 		public Scada()
         {
             ConnectToSimulator();
@@ -61,9 +62,17 @@ namespace ScadaService
 
         public bool GetDataFromSimulator()
         {
-            var values = mdbClient.ReadHoldingRegisters(0, numberOfHoldingRegisters);
-			var valuesDiscrete = mdbClient.ReadCoils(0, numberOfCoils);
-            var valuesWindSun = mdbClient.ReadHoldingRegisters(100, numberOfHRegistersWS);
+			byte[] values;
+			bool[] valuesDiscrete;
+			byte[] valuesWindSun;
+
+			lock (lockObj)
+			{
+				values = mdbClient.ReadHoldingRegisters(0, numberOfHoldingRegisters);
+				valuesDiscrete = mdbClient.ReadCoils(0, numberOfCoils);
+				valuesWindSun = mdbClient.ReadHoldingRegisters(100, numberOfHRegistersWS);
+			}
+            
             bool isSuccess = false;
             try
             {
@@ -78,9 +87,6 @@ namespace ScadaService
             }
 
             return isSuccess;
-
-
-            //return true;
         }
     }
 }

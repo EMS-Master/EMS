@@ -26,8 +26,9 @@ namespace ScadaCommandingService
         private static List<DiscreteLocation> listOfDiscretes;
         private UpdateResult updateResult;
         private ConvertorHelper convertorHelper;
+		private readonly object lockObj = new object();
 
-        private ModelResourcesDesc modelResourcesDesc;
+		private ModelResourcesDesc modelResourcesDesc;
 
         private string message = string.Empty;
         private readonly int START_ADDRESS_GENERATOR = 20;
@@ -216,24 +217,26 @@ namespace ScadaCommandingService
 
         public bool SendDataToSimulator(List<MeasurementUnit> measurements)
         {
+			lock (lockObj)
+			{
+				foreach (var item in listOfAnalog)
+				{
+					var mes = measurements.Find(x => x.Gid == item.Analog.PowerSystemResource);
+					if (mes != null)
+					{
+						float rawValue = convertorHelper.ConvertFromEGUToRawValue(mes.CurrentValue, 1, 0);
+						modbusClient.WriteSingleRegister((ushort)((mes.ScadaAddress - 1) * 2), rawValue);
 
-            foreach (var item in listOfAnalog)
-            {
-                var mes = measurements.Find(x => x.Gid == item.Analog.PowerSystemResource);
-                if (mes != null)
-                {
-                    float rawValue = convertorHelper.ConvertFromEGUToRawValue(mes.CurrentValue, 1, 0);
-                    modbusClient.WriteSingleRegister((ushort)((mes.ScadaAddress-1) * 2), rawValue);
-
-                }
-            //    else
-            //    {
-            //        if (CheckIfGenerator(item.StartAddress))
-            //        {
-            //            modbusClient.WriteSingleRegister((ushort)((item.StartAddress-1) * 2), (float)0);
-            //        }
-            //    }
-            }
+					}
+					//    else
+					//    {
+					//        if (CheckIfGenerator(item.StartAddress))
+					//        {
+					//            modbusClient.WriteSingleRegister((ushort)((item.StartAddress-1) * 2), (float)0);
+					//        }
+					//    }
+				}
+			}
 
             //modbusClient.WriteSingleRegister((ushort)12, (float)94.8);
 

@@ -116,7 +116,6 @@ namespace CalculationEngineServ.GeneticAlgorithm
             newPopulation = tmpList;
 
             Generation++;
-            Console.WriteLine(Generation);
         }
 
         private int CompareDNA(DNA<T> a, DNA<T> b)
