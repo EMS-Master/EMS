@@ -69,7 +69,7 @@ namespace DataSimulator
             float powerPerPV = insolation * k;
            
             float powerForGenerator1 = ((random.Next(95, 105) / 100f) * powerPerPV * 6666) / 1000;
-			float powerForGenerator2 = ((random.Next(95, 105) / 100f) * powerPerPV * 80000)/1000;
+			float powerForGenerator2 = ((random.Next(95, 105) / 100f) * powerPerPV * 8000)/1000;
 			float powerForGenerator3 = ((random.Next(95, 105) / 100f) * powerPerPV * 10000)/1000;
             float powerForGenerator4 = ((random.Next(95, 105) / 100f) * powerPerPV * 12000)/1000;
             float powerForGenerator5 = ((random.Next(95, 105) / 100f) * powerPerPV * 6666 )/1000;

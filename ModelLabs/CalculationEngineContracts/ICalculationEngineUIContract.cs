@@ -15,5 +15,11 @@ namespace CalculationEngineContracts
 
         [OperationContract]
         List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime);
+
+        [OperationContract]
+        bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate);
+
+        [OperationContract]
+        bool SetAlgorithmOptionsDefault();
     }
 }

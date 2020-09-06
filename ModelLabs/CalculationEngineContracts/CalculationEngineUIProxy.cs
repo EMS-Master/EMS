@@ -63,5 +63,15 @@ namespace CalculationEngineContracts
         {
             return proxy.GetTotalProduction(startTime, endTime);
         }
+
+        public bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate)
+        {
+            return proxy.SetAlgorithmOptions(iterationCount, populationCount,  elitisamPct, mutationRate);
+        }
+        
+        public bool SetAlgorithmOptionsDefault()
+        {
+            return proxy.SetAlgorithmOptionsDefault();
+        }
     }
 }

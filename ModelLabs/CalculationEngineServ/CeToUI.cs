@@ -47,5 +47,14 @@ namespace CalculationEngineServ
 
             return retList;
         }
+
+        public bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate)
+        {
+           return CalculationEngine.SetAlgorithmParams(iterationCount, populationCount, elitisamPct, mutationRate);
+        }
+        public bool SetAlgorithmOptionsDefault()
+        {
+            return CalculationEngine.SetAlgorithmParamsDefault();
+        }
     }
 }

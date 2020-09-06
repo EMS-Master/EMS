@@ -8,10 +8,10 @@ namespace CalculationEngineServ.GeneticAlgorithm
 {
     public class GA
     {
-        private readonly int ELITIMS_PERCENTAGE = 5;
-        private readonly int NUMBER_OF_ITERATION = 200;
-        private readonly int NUMBER_OF_POPULATION = 100;
-        private readonly float mutationRate = 1f;
+        private  int ELITIMS_PERCENTAGE;
+        private  int NUMBER_OF_ITERATION ;
+        private  int NUMBER_OF_POPULATION;
+        private  float mutationRate;
         private Random random;
         private GeneticAlgorithm<Tuple<long, float>> ga;
         private Dictionary<long, OptimisationModel> optModelMap;
@@ -77,8 +77,9 @@ namespace CalculationEngineServ.GeneticAlgorithm
             }
             return new Tuple<long, float>(gid, mutatedGeneValue);
         }
-        public Dictionary<long, OptimisationModel> StartAlgorithm()
+        public Dictionary<long, OptimisationModel> StartAlgorithm(int iterationsCount, int populationNumber, int elitisam, float mutationRat)
         {
+            SetAlgorithmOptions(iterationsCount, populationNumber, elitisam, mutationRat);
             random = new Random();
             ga = new GeneticAlgorithm<Tuple<long, float>>(NUMBER_OF_POPULATION, 
 				optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, 
@@ -181,5 +182,13 @@ namespace CalculationEngineServ.GeneticAlgorithm
 			}
 			return dna;
 		}
+
+        private void SetAlgorithmOptions(int iteationsCount, int populationCount, int elit, float mutationRat)
+        {
+            ELITIMS_PERCENTAGE = elit;
+            NUMBER_OF_ITERATION = iteationsCount;
+            NUMBER_OF_POPULATION = populationCount;
+            mutationRate = mutationRat;
+        }
 	}
 }

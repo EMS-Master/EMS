@@ -32,11 +32,17 @@ namespace CalculationEngineServ
         private float totalCost = 0;
 
         private float windProductionkW = 0;
-        
         private float totalProduction = 0;
+
+        private static int ELITIMS_PERCENTAGE;
+        private static int NUMBER_OF_ITERATION;
+        private static int NUMBER_OF_POPULATION;
+        private static float mutationRate;
 
         public CalculationEngine()
         {
+            SetAlgorithmParamsDefault();
+
             publisher = new PublisherService();
             internalGenerators = new List<ResourceDescription>();
             internalEnergyConsumers = new List<ResourceDescription>();
@@ -46,10 +52,7 @@ namespace CalculationEngineServ
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
         }
-        public bool Commit()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public bool Optimize(List<MeasurementUnit> measEnergyConsumer, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
         {
@@ -120,16 +123,7 @@ namespace CalculationEngineServ
                 return optModelMap;
             }
         }
-        public float CalculateConsumption(IEnumerable<MeasurementUnit> measurements)
-        {
-            float retVal = 0;
-            foreach (var item in measurements)
-            {
-                retVal += item.CurrentValue;
-            }
-
-            return retVal;
-        }
+        
         private List<MeasurementUnit> DoOptimization(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers, float windSpeed, float sunlight)
         {
             //try
@@ -168,7 +162,7 @@ namespace CalculationEngineServ
             var previousCost = CalculateCost(optModelMapNonRenewable); 
 
             GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
-            optModelMapOptimizied = gaoRenewable.StartAlgorithm();
+            optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION,NUMBER_OF_POPULATION,ELITIMS_PERCENTAGE,mutationRate);
             // calculate power of each
 
             //new
@@ -183,15 +177,23 @@ namespace CalculationEngineServ
 
             return optModelMap;
         }
+
+        #region Transaction
         public UpdateResult Prepare(ref Delta delta)
         {
             throw new NotImplementedException();
         }
-
+        public bool Commit()
+        {
+            throw new NotImplementedException();
+        }
         public bool Rollback()
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region DataBase
 
         public bool InsertMeasurementsIntoDb(List<MeasurementUnit> measurements)
         {
@@ -248,78 +250,14 @@ namespace CalculationEngineServ
             return retVal;
         }
 
-		private void PublishGeneratorsToUI(List<MeasurementUnit> measurementsFromGenerators)
-		{
-			List<MeasurementUI> measListUI = new List<MeasurementUI>();
-			foreach (var gens in generators)
-			{
-                if(measurementsFromGenerators.Any(x => x.Gid== gens.Key))
-                {
-                    var k = measurementsFromGenerators.Where(x => x.Gid == gens.Key).FirstOrDefault();
-                    MeasurementUI measUI = new MeasurementUI();
-                    measUI.Gid = gens.Key;
-                    measUI.CurrentValue = k.CurrentValue/1000;
-                    measUI.TimeStamp = k.TimeStamp;
-                    measUI.IsActive = true;
-                    measUI.GeneratorType = gens.Value.GeneratorType;
-                    measUI.Name = gens.Value.Name;
-                    measListUI.Add(measUI);
-                }
-                else
-                {
-                    MeasurementUI measUI = new MeasurementUI();
-                    measUI.Gid = gens.Key;
-                    measUI.CurrentValue = 0;
-                    measUI.TimeStamp = DateTime.Now;
-                    measUI.IsActive = false;
-                    measUI.GeneratorType = gens.Value.GeneratorType;
-                    measUI.Name = gens.Value.Name;
-                    measListUI.Add(measUI);
-                }
-				
-			}
-			publisher.PublishOptimizationResults(measListUI);
-		}
-
-        private void PublishConsumersToUI(List<MeasurementUnit> measurementsFromConsumers)
-        {
-            List<MeasurementUI> measUIList = new List<MeasurementUI>();
-            foreach (var meas in energyConsumers)
-            {
-                if (measurementsFromConsumers.Any(x => x.Gid == meas.Key))
-                {
-                    var k = measurementsFromConsumers.Where(x => x.Gid == meas.Key).FirstOrDefault();
-                    MeasurementUI measUI = new MeasurementUI();
-                    measUI.Gid = k.Gid;
-                    measUI.CurrentValue = k.CurrentValue/1000;
-                    measUI.GeneratorType = GeneratorType.Unknown;
-                    measUI.Name = meas.Value.Name;
-                    measUI.TimeStamp = k.TimeStamp;
-                    measUIList.Add(measUI);
-                }
-                else
-                {
-                    MeasurementUI measUI = new MeasurementUI();
-                    measUI.Gid = meas.Key;
-                    measUI.CurrentValue = 0;
-                    measUI.TimeStamp = DateTime.Now;
-                    measUI.IsActive = false;
-                    measUI.GeneratorType = GeneratorType.Unknown;
-                    measUI.Name = meas.Value.Name;
-                    measUIList.Add(measUI);
-                }
-            }
-            publisher.PublishOptimizationResults(measUIList);
-        }
-
-        public bool WriteTotalProductionIntoDb(float totalProduction,float totalCost, DateTime dateTime)
+        public bool WriteTotalProductionIntoDb(float totalProduction, float totalCost, DateTime dateTime)
         {
             bool retVal = false;
             using (var db = new EmsContext())
             {
                 try
                 {
-                    TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime , TotalCost = totalCost};
+                    TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime, TotalCost = totalCost };
                     db.TotalProductions.Add(total);
                     db.SaveChanges();
 
@@ -385,6 +323,77 @@ namespace CalculationEngineServ
 
             return retVal;
         }
+
+        #endregion
+
+        #region Publish to UI
+
+        private void PublishGeneratorsToUI(List<MeasurementUnit> measurementsFromGenerators)
+		{
+			List<MeasurementUI> measListUI = new List<MeasurementUI>();
+			foreach (var gens in generators)
+			{
+                if(measurementsFromGenerators.Any(x => x.Gid== gens.Key))
+                {
+                    var k = measurementsFromGenerators.Where(x => x.Gid == gens.Key).FirstOrDefault();
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = gens.Key;
+                    measUI.CurrentValue = k.CurrentValue/1000;
+                    measUI.TimeStamp = k.TimeStamp;
+                    measUI.IsActive = true;
+                    measUI.GeneratorType = gens.Value.GeneratorType;
+                    measUI.Name = gens.Value.Name;
+                    measListUI.Add(measUI);
+                }
+                else
+                {
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = gens.Key;
+                    measUI.CurrentValue = 0;
+                    measUI.TimeStamp = DateTime.Now;
+                    measUI.IsActive = false;
+                    measUI.GeneratorType = gens.Value.GeneratorType;
+                    measUI.Name = gens.Value.Name;
+                    measListUI.Add(measUI);
+                }
+				
+			}
+			publisher.PublishOptimizationResults(measListUI);
+		}
+
+        private void PublishConsumersToUI(List<MeasurementUnit> measurementsFromConsumers)
+        {
+            List<MeasurementUI> measUIList = new List<MeasurementUI>();
+            foreach (var meas in energyConsumers)
+            {
+                if (measurementsFromConsumers.Any(x => x.Gid == meas.Key))
+                {
+                    var k = measurementsFromConsumers.Where(x => x.Gid == meas.Key).FirstOrDefault();
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = k.Gid;
+                    measUI.CurrentValue = k.CurrentValue/1000;
+                    measUI.GeneratorType = GeneratorType.Unknown;
+                    measUI.Name = meas.Value.Name;
+                    measUI.TimeStamp = k.TimeStamp;
+                    measUIList.Add(measUI);
+                }
+                else
+                {
+                    MeasurementUI measUI = new MeasurementUI();
+                    measUI.Gid = meas.Key;
+                    measUI.CurrentValue = 0;
+                    measUI.TimeStamp = DateTime.Now;
+                    measUI.IsActive = false;
+                    measUI.GeneratorType = GeneratorType.Unknown;
+                    measUI.Name = meas.Value.Name;
+                    measUIList.Add(measUI);
+                }
+            }
+            publisher.PublishOptimizationResults(measUIList);
+        }
+
+        #endregion
+
         public bool InitiateIntegrityUpdate()
         {
             //lock (lockObj)
@@ -535,5 +544,33 @@ namespace CalculationEngineServ
             return emCO2;
         }
 
+        private float CalculateConsumption(IEnumerable<MeasurementUnit> measurements)
+        {
+            float retVal = 0;
+            foreach (var item in measurements)
+            {
+                retVal += item.CurrentValue;
+            }
+
+            return retVal;
+        }
+
+        public static bool SetAlgorithmParams(int iterationCount, int populationCount, int elitisamPct, float mutationRat)
+        {
+            ELITIMS_PERCENTAGE = elitisamPct;
+            NUMBER_OF_ITERATION = iterationCount;
+            NUMBER_OF_POPULATION = populationCount;
+            mutationRate = mutationRat;
+            return true;
+        }
+
+        public static bool SetAlgorithmParamsDefault()
+        {
+            ELITIMS_PERCENTAGE = 5;
+            NUMBER_OF_ITERATION = 200;
+            NUMBER_OF_POPULATION = 100;
+            mutationRate = 1f;
+            return true;
+        }
     }
 }
