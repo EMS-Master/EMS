@@ -54,6 +54,11 @@ namespace CalculationEngineContracts
             }
         }
 
+        public Tuple<int, int, int, float> GetAlgorithmOptions()
+        {
+            return proxy.GetAlgorithmOptions();
+        }
+
         public List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime)
         {
             return proxy.GetHistoryMeasurements(gid, startTime, endTime);

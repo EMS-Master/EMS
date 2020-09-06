@@ -21,5 +21,8 @@ namespace CalculationEngineContracts
 
         [OperationContract]
         bool SetAlgorithmOptionsDefault();
+
+        [OperationContract]
+        Tuple<int,int,int,float> GetAlgorithmOptions();
     }
 }

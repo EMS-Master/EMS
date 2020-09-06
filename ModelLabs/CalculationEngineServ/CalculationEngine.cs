@@ -572,5 +572,10 @@ namespace CalculationEngineServ
             mutationRate = 1f;
             return true;
         }
+
+        public static Tuple<int, int, int, float> GetAlgorithmParams()
+        {
+            return new Tuple<int, int, int, float>(NUMBER_OF_ITERATION, NUMBER_OF_POPULATION, ELITIMS_PERCENTAGE, mutationRate);
+        }
     }
 }
