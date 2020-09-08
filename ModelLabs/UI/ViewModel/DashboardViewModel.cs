@@ -1,4 +1,5 @@
-﻿using FTN.Common;
+﻿using CalculationEngineContracts;
+using FTN.Common;
 using FTN.ServiceContracts;
 using ScadaContracts;
 using System;
@@ -40,12 +41,20 @@ namespace UI.ViewModel
         private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
         private int attemptsCount = 0;
         private double sizeValue;
-
+        private int numOfIterations;
+        private int numOfPuplation;
+        private int elitsmPercent;
+        private float mutationRate;
         private float maxValue = 10;
         private float minValue = 0;
         public float MinValue { get { return minValue; } set { minValue = value; OnPropertyChanged(); } }
         public float MaxValue { get { return maxValue; } set { maxValue = value; OnPropertyChanged(); } }
-
+        public int NumOfIterations { get { return numOfIterations; } set { numOfIterations = value; OnPropertyChanged(); } }
+        public int NumOfPuplation { get { return numOfPuplation; } set { numOfPuplation = value; OnPropertyChanged(); } }
+        public int ElitsmPercent { get { return elitsmPercent; } set { elitsmPercent = value; OnPropertyChanged(); } }
+        public float MutationRate { get { return mutationRate; } set { mutationRate = value; OnPropertyChanged(); } }
+        private ICommand changeNumOfIterations;
+        public ICommand ChangeNumOfIterations => changeNumOfIterations ?? (changeNumOfIterations = new RelayCommand<object>(ChangeNumOfIterationsExecute));
 
         private CeSubscribeProxy ceSubscribeProxy;
         private float currentProduction;
@@ -91,21 +100,28 @@ namespace UI.ViewModel
         private ICommand activateGen;
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
         private ICommand deactivateGen;
+        private ICommand defaultParamValues;
         public ICommand DeactivateGen => deactivateGen ?? (deactivateGen = new RelayCommand<object>(DeactivateGenExecute));
 
         public ICommand ExpandCommand => expandCommand ?? (expandCommand = new RelayCommand(ExpandCommandExecute));
 
+        public ICommand DefaultParamValues => defaultParamValues ?? (defaultParamValues = new RelayCommand(DefaultParamValuesExecute));
         public WindSpeed W { get => w; set => w = value; }
         private void ActivateGenExecute(object obj)
         {
+            
+                long gid = (long)obj;
+                ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, true);
+            
+                
 
-            long gid = (long)obj;
-            ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, true);
         }
         private void DeactivateGenExecute(object obj)
         {
-            long gid = (long)obj;
-            ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, false);
+            
+                long gid = (long)obj;
+                ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, false);
+            
         }
 
         private void CommandGenMessBoxExecute(object obj)
@@ -219,10 +235,17 @@ namespace UI.ViewModel
             SubsrcibeToCE();
             ceSubscribeProxy.Optimization();
 
+            var para = CalculationEngineUIProxy.Instance.GetAlgorithmOptions();
+            NumOfIterations = para.Item1;
+            NumOfPuplation = para.Item2;
+            ElitsmPercent = para.Item3;
+            MutationRate = para.Item4;
+
             SizeValue = 0;
 
             GraphWidth = 16 * graphSizeOffset;
             GraphHeight = 9 * graphSizeOffset;
+
 
             W = new WindSpeed();
             Windspeed.Add(W);
@@ -472,7 +495,24 @@ namespace UI.ViewModel
                 IsOptionsExpanded = true;
             }
         }
+        private void ChangeNumOfIterationsExecute(object obj)
+        {
 
+
+            CalculationEngineUIProxy.Instance.SetAlgorithmOptions(NumOfIterations, NumOfPuplation, ElitsmPercent, MutationRate);
+
+
+        }
+        private void DefaultParamValuesExecute(object obj)
+        {
+            CalculationEngineUIProxy.Instance.SetAlgorithmOptionsDefault();
+            var para = CalculationEngineUIProxy.Instance.GetAlgorithmOptions();
+            NumOfIterations = para.Item1;
+            NumOfPuplation = para.Item2;
+            ElitsmPercent = para.Item3;
+            MutationRate = para.Item4;
+
+        }
     }
 
    

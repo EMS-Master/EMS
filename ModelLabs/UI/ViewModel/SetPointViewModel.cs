@@ -16,7 +16,7 @@ namespace UI.ViewModel
 
         private ICommand commandGenMessBox;
         public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
-
+       
         public SetPointViewModel(long gid)
         {
             globalId = gid;
@@ -28,6 +28,12 @@ namespace UI.ViewModel
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 CommandGenExecute(obj);
+                if (obj != null)
+                {
+                    var window = (Window)obj;
+
+                    window.Close();
+                }
             }
         }
 

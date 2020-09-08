@@ -231,16 +231,33 @@
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <StackPanel>
                                 <TextBox Text =" Number of iterations" />
-                                <TextBlock />
+                                <TextBox    Text ="{Binding NumOfIterations, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
                                 <TextBox Text =" Number of population" />
-                                <TextBlock />
+                                <TextBox    Text ="{Binding NumOfPuplation, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
                                 <TextBox Text =" Elitsm percentage" />
-                                <TextBlock />
-                                <TextBox Text =" Mutation rate" />
-                                <TextBlock />
+                                <TextBox    Text ="{Binding ElitsmPercent, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                    </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBox Text =" Mutation rate" />
+                                <TextBox    Text ="{Binding MutationRate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <Button Content='Reset to default algorithm parameters' Command="{Binding DefaultParamValues}" Width="205" Height="26"/>
                             </StackPanel>
-                          
                             
+
                         </ScrollViewer>
                     </Grid>
 

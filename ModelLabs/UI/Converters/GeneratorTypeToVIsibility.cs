@@ -18,7 +18,7 @@ namespace UI.Converters
             if (measUIs != null)
             {
                 var genType = measUIs.LastOrDefault().GeneratorType;
-                if (genType == FTN.Common.GeneratorType.Wind || genType == FTN.Common.GeneratorType.Solar)
+                if (genType == FTN.Common.GeneratorType.Wind || genType == FTN.Common.GeneratorType.Solar || genType == FTN.Common.GeneratorType.Hydro)
                     return Visibility.Collapsed;
                 else
                     return Visibility.Visible;
