@@ -265,11 +265,13 @@ namespace ScadaProcessingSevice
 
 		private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
 		{
+            float sumSum = 0;
 			List<MeasurementUnit> retList = new List<MeasurementUnit>();
             foreach (AnalogLocation analogLoc in analogList)
             {
                 float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
                 Console.WriteLine("Broj: {0}", values[0]);
+                sumSum += values[0];
                 float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
                 float MAX = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MaxValue, 1, 1);
                 float MIN = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MinValue, 1, 1);
@@ -310,7 +312,7 @@ namespace ScadaProcessingSevice
 				retList.Add(measUnit);
 				
 			}
-
+            Console.WriteLine("Rez: " + sumSum);
 			return retList;
 		}
 

@@ -13,7 +13,6 @@ namespace CalculationEngineServ
     public class ProcessingToCalculation : ICalculationEngineContract, ICalculationEngineRepository
     {
         private static CalculationEngine ce = null;
-        private readonly EmsContext _context = new EmsContext();
 
         public ProcessingToCalculation()
         {
@@ -41,7 +40,7 @@ namespace CalculationEngineServ
         
         public List<DiscreteCounterModel> GetAllDiscreteCounters()
         {
-            var list =  _context.DiscreteCounters.ToList();
+            var list =  DbManager.Instance.GetDiscreteCounters().ToList();
             List<DiscreteCounterModel> returnList = new List<DiscreteCounterModel>();
 
             returnList = list.Select(x => new DiscreteCounterModel()
@@ -59,17 +58,17 @@ namespace CalculationEngineServ
         {
             if(model.Id == 0)
             {
-                _context.DiscreteCounters.Add(new DiscreteCounter() { Gid = model.Gid, Counter = model.Counter, CurrentValue = model.CurrentValue });
+               DbManager.Instance.AddDiscreteCounter(new DiscreteCounter() { Gid = model.Gid, Counter = model.Counter, CurrentValue = model.CurrentValue });
             }
             else
             {
-                var dc = _context.DiscreteCounters.FirstOrDefault(x => x.Id == model.Id);
+                var dc = DbManager.Instance.GetDiscreteCounters().FirstOrDefault(x => x.Id == model.Id);
                 dc.CurrentValue = model.CurrentValue;
                 dc.Counter = model.Counter;
-                _context.Entry(dc).State = System.Data.Entity.EntityState.Modified;
+                DbManager.Instance.UpdateDiscreteCounter(dc);
             }
 
-            _context.SaveChanges();
+            DbManager.Instance.SaveChanges();
         }
     }
 }

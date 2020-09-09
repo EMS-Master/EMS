@@ -53,17 +53,17 @@ namespace FTN.Services.AlarmsEventsService
                 if (alarm.AlarmType == AlarmType.DOM)
                 {
                     Alarm al = new Alarm();
-                    using (var db = new EmsContext())
+                    List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
+                    
+                    foreach (var all in alarms)
                     {
-                        foreach (var all in db.Alarms)
+                        if (all.AlarmType == AlarmType.DOM && all.Gid == alarm.Gid)
                         {
-                            if (all.AlarmType == AlarmType.DOM && all.Gid == alarm.Gid)
-                            {
-                                al = all;
-                                break;
-                            }
+                            al = all;
+                            break;
                         }
                     }
+                    
                     if (al.Gid != 0)
                     {
                         UpdateAlarmStatusIntoDb(alarm);
@@ -72,18 +72,18 @@ namespace FTN.Services.AlarmsEventsService
                 }
                 else
                 {
-                    using (var db = new EmsContext())
+                    List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
+                    
+                    foreach (Alarm item in alarms)
                     {
-                        foreach (Alarm item in db.Alarms)
+                        if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()) && item.AlarmType == alarm.AlarmType)
                         {
-                            if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()) && item.AlarmType == alarm.AlarmType)
-                            {
-                                UpdateAlarmStatusIntoDb(alarm);
-                                updated = true;
-                                break;
-                            }                            
-                        }
+                            UpdateAlarmStatusIntoDb(alarm);
+                            updated = true;
+                            break;
+                        }                            
                     }
+                    
                     //ako se prvi put pojavio i nije .NORMAL
                     if (!updated /* && !alarm.AlarmType.Equals(AlarmType.NORMAL)*/)
                     {
@@ -130,11 +130,9 @@ namespace FTN.Services.AlarmsEventsService
             bool success = true;
             try
             {
-                using (var db = new EmsContext())
-                {
-                    db.Alarms.Add(new Alarm { Gid = alarm.Gid, AlarmValue = alarm.AlarmValue, MinValue = alarm.MinValue, MaxValue = alarm.MaxValue, AlarmTimeStamp = alarm.AlarmTimeStamp, AckState = alarm.AckState, AlarmType = alarm.AlarmType, AlarmMessage = alarm.AlarmMessage, Severity = alarm.Severity, CurrentState=alarm.CurrentState });
-                    db.SaveChanges();
-                };
+                DbManager.Instance.AddAlarm(new Alarm { Gid = alarm.Gid, AlarmValue = alarm.AlarmValue, MinValue = alarm.MinValue, MaxValue = alarm.MaxValue, AlarmTimeStamp = alarm.AlarmTimeStamp, AckState = alarm.AckState, AlarmType = alarm.AlarmType, AlarmMessage = alarm.AlarmMessage, Severity = alarm.Severity, CurrentState=alarm.CurrentState });
+                DbManager.Instance.SaveChanges();
+               
             }
             catch (Exception e)
             {
@@ -151,17 +149,14 @@ namespace FTN.Services.AlarmsEventsService
             string message = string.Format("UI client requested integirty update for existing alarms.");
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
 
-            using (var db = new EmsContext())
-            {
-               return db.Alarms.ToList();
-            }
+            return DbManager.Instance.GetAlarms().ToList();
         }
 
         public void UpdateStatus(Alarm analogLoc, State state)
         {
-            using (var db = new EmsContext())
-            {
-                foreach (Alarm alarm in db.Alarms)
+            List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
+            
+                foreach (Alarm alarm in alarms)
                 {
                     if (alarm.Gid.Equals(analogLoc.Gid) && alarm.CurrentState.Contains(State.Active.ToString()) && alarm.AlarmType != AlarmType.DOM && alarm.AlarmType != AlarmType.NORMAL)
                     {
@@ -182,18 +177,17 @@ namespace FTN.Services.AlarmsEventsService
                         }
                     }
                 }
-            }
+            
         }
         private bool UpdateAlarmStatus(Alarm alarm)
         {
             bool success = true;
             try{
-                using (var db = new EmsContext())
-                {
-                    var tmpAlarm = db.Alarms.First(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
-                    tmpAlarm.CurrentState = string.Format("{0}", State.Cleared);
-                    db.SaveChanges();
-                }
+                
+                var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
+                tmpAlarm.CurrentState = string.Format("{0}", State.Cleared);
+                DbManager.Instance.SaveChanges();
+                
             }
             catch (Exception e)
             {
@@ -210,13 +204,11 @@ namespace FTN.Services.AlarmsEventsService
             
                 try
                 {
-                    using (var db = new EmsContext())
-                    {
-                        var tmpAlarm = db.Alarms.First(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
-                        tmpAlarm.AlarmValue = alarm.AlarmValue;
-                        tmpAlarm.Severity = alarm.Severity;
-                        db.SaveChanges();                       
-                    }
+                    var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
+                    tmpAlarm.AlarmValue = alarm.AlarmValue;
+                    tmpAlarm.Severity = alarm.Severity;
+                    DbManager.Instance.SaveChanges();                       
+                    
                 }
                 catch (Exception e)
                 {
@@ -231,24 +223,20 @@ namespace FTN.Services.AlarmsEventsService
         }
         private List<Alarm> SelectAlarmsFromDatabase()
         {
-            using (var db = new EmsContext())
-            {
-                return db.Alarms.ToList();
-            }
+            return DbManager.Instance.GetAlarms().ToList();
         }
         private List<Alarm> SelectDiscretAlarmsFromDatabase()
         {
             List<Alarm> discret = new List<Alarm>();
-            using (var db = new EmsContext())
+            List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
+            foreach(var a in alarms)
             {
-                foreach(var a in db.Alarms)
+                if (a.AlarmMessage.Contains("discret"))
                 {
-                    if (a.AlarmMessage.Contains("discret"))
-                    {
-                        discret.Add(a);
-                    }
+                    discret.Add(a);
                 }
             }
+            
             return discret;
         }
         

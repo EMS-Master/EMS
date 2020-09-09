@@ -16,8 +16,6 @@ namespace UI.ViewModel
 {
     public class CommandViewModel : ViewModelBase
     {
-        private readonly EmsContext _context = new EmsContext();
-
         private int resourcesLeft;
         private int resourcesLeft2;
 
@@ -179,7 +177,7 @@ namespace UI.ViewModel
                 NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
                 internalGen.AddRange(retList);
 
-                var descrete = _context.DiscreteCounters.ToList();
+                var descrete = DbManager.Instance.GetDiscreteCounters().ToList();
 
                 foreach (ResourceDescription rd in internalGen)
                 {
@@ -189,7 +187,7 @@ namespace UI.ViewModel
                     }
 
                     bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
-                    float inputValue = _context.HistoryMeasurements.Where(x => x.Gid == rd.Id).OrderByDescending(x => x.MeasurementTime).First().MeasurementValue;
+                    float inputValue = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == rd.Id).OrderByDescending(x => x.MeasurementTime).First().MeasurementValue;
                     Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active, InputValue = inputValue, Name = rd.Properties[6].ToString(), Element = "Generator", Gid=rd.Id});
 
                 }

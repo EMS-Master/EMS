@@ -21,13 +21,17 @@ namespace DataSimulator
 			{
 				while (true)
 				{
-					lock (lockObj)
-					{
-						float sunGeneration = dss.SimulateSunData();
-						float windGeneration = dss.SimulateWindData();
-						float hydroGeneration = dss.SimulateHydroData();
-						dss.SimulateConsumption(sunGeneration, windGeneration, hydroGeneration);
-					}
+					
+					List<float> sunGeneration = dss.SimulateSunData();
+                    List<float> windGeneration = dss.SimulateWindData();
+                    List<float> hydroGeneration = dss.SimulateHydroData();
+                    float generationSum = sunGeneration.Sum() + windGeneration.Sum() + hydroGeneration.Sum();
+                    Console.WriteLine("Generation sum: " + generationSum);
+                    List<float> consum = dss.SimulateConsumption(sunGeneration.Sum(), windGeneration.Sum(), hydroGeneration.Sum());
+                    float consumSum = consum.Sum();
+                    float diff = consumSum - generationSum;
+                    dss.WriteToSimulatorEverything(sunGeneration, windGeneration, hydroGeneration, consum);
+					
 					Thread.Sleep(10000);
 				}
 			});

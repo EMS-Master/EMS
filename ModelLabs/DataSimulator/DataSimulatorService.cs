@@ -15,6 +15,7 @@ namespace DataSimulator
 		private Dictionary<int, Tuple<int, int>> insolationRange;
         private Dictionary<int, Tuple<double, double>> consumptionRange;
         private float oldWindSpeed = 5f;
+        private readonly object lockObj = new object();
 		 
 		
 		public DataSimulatorService()
@@ -47,7 +48,7 @@ namespace DataSimulator
 			}
 		}
 
-		public float SimulateSunData()
+		public List<float> SimulateSunData()
 		{
             // u 12 popodne sunce je pod uglom od 90 stepeni nad povrsinom. U tom trenutku insolacija je 1000 W/m na kvadrat
             // koeficijent je srazmeran Povrsina panela / alfa (ugao pod kojim je postavljen panel)
@@ -83,12 +84,12 @@ namespace DataSimulator
                 powerForGenerator5 = 0;
             }
 
-            mdbClient.WriteSingleRegister(100, insolation);
-			mdbClient.WriteSingleRegister(40, powerForGenerator1);
-			mdbClient.WriteSingleRegister(42, powerForGenerator2);
-			mdbClient.WriteSingleRegister(44, powerForGenerator3);
-            mdbClient.WriteSingleRegister(46, powerForGenerator4);
-            mdbClient.WriteSingleRegister(48, powerForGenerator5);
+   //         mdbClient.WriteSingleRegister(100, insolation);
+			//mdbClient.WriteSingleRegister(40, powerForGenerator1);
+			//mdbClient.WriteSingleRegister(42, powerForGenerator2);
+			//mdbClient.WriteSingleRegister(44, powerForGenerator3);
+   //         mdbClient.WriteSingleRegister(46, powerForGenerator4);
+   //         mdbClient.WriteSingleRegister(48, powerForGenerator5);
 
             Console.WriteLine("Insolation: " + insolation);
             Console.WriteLine("PoverPerPV: " + powerPerPV);
@@ -100,10 +101,10 @@ namespace DataSimulator
             Console.WriteLine();
 
             float sum = powerForGenerator1 + powerForGenerator2 + powerForGenerator3 + powerForGenerator4 + powerForGenerator5;
-            return sum;
+            return new List<float>() { insolation, powerForGenerator1, powerForGenerator2, powerForGenerator3, powerForGenerator4, powerForGenerator5 };
 		}
 
-		public float SimulateWindData()
+		public List<float> SimulateWindData()
 		{
             // Podrazumeva se da su sve vetrenjace istog precnika, na istom mestu postavljene, gustina vazduha i brzina vetra su iste
             // formula Pw = Vw na treci * povrsina turbina * gusttina vazduha
@@ -169,27 +170,27 @@ namespace DataSimulator
 			Console.WriteLine("Wind gen 5: " +  powerGenerator5 + " KW");
 			Console.WriteLine();
 
-			mdbClient.WriteSingleRegister(102, windSpeed);
-			mdbClient.WriteSingleRegister(50, powerGenerator1);
-			mdbClient.WriteSingleRegister(52, powerGenerator2);
-			mdbClient.WriteSingleRegister(54, powerGenerator3);
-			mdbClient.WriteSingleRegister(56, powerGenerator4);
-			mdbClient.WriteSingleRegister(58, powerGenerator5);
+			//mdbClient.WriteSingleRegister(102, windSpeed);
+			//mdbClient.WriteSingleRegister(50, powerGenerator1);
+			//mdbClient.WriteSingleRegister(52, powerGenerator2);
+			//mdbClient.WriteSingleRegister(54, powerGenerator3);
+			//mdbClient.WriteSingleRegister(56, powerGenerator4);
+			//mdbClient.WriteSingleRegister(58, powerGenerator5);
             
 			oldWindSpeed = windSpeed;
             float sum = powerGenerator1 + powerGenerator2 + powerGenerator3 + powerGenerator4 + powerGenerator5;
-            return sum;
+            return new List<float>() { windSpeed, powerGenerator1, powerGenerator2, powerGenerator3, powerGenerator4, powerGenerator5};
         }
 
-        public float SimulateHydroData()
+        public List<float> SimulateHydroData()
         {
             float powerGenerator1 = 100000; //KW
             float powerGenerator2 = 120000;
             float powerGenerator3 = 130000;
 
-            mdbClient.WriteSingleRegister(60, powerGenerator1);
-            mdbClient.WriteSingleRegister(62, powerGenerator2);
-            mdbClient.WriteSingleRegister(64, powerGenerator3);
+            //mdbClient.WriteSingleRegister(60, powerGenerator1);
+            //mdbClient.WriteSingleRegister(62, powerGenerator2);
+            //mdbClient.WriteSingleRegister(64, powerGenerator3);
 
             Console.WriteLine("Hydro data");
             Console.WriteLine("Hydro gen 1: " + powerGenerator1 + " KW");
@@ -198,7 +199,7 @@ namespace DataSimulator
             Console.WriteLine();
 
             float sum = powerGenerator1 + powerGenerator2 + powerGenerator3;
-            return sum;
+            return new List<float>() { powerGenerator1, powerGenerator2, powerGenerator3};
         }
 
         private void PopulateInsolationRange()
@@ -221,7 +222,7 @@ namespace DataSimulator
 			insolationRange.Add(18, new Tuple<int, int>(7, 100));
 		}
 
-        public void SimulateConsumption(float sunGeneration, float windGeneration, float hydroGeneration)
+        public List<float> SimulateConsumption(float sunGeneration, float windGeneration, float hydroGeneration)
         {
             TimeSpan time = DateTime.Now.TimeOfDay;
             var range = consumptionRange[time.Hours];
@@ -251,14 +252,14 @@ namespace DataSimulator
             }
 
 			float consumptionsSum = consumptions.Sum();
+            Console.WriteLine("Consumption sum: " + consumptionsSum);
 
-
-			for (int i = 0; i < 20; i++)
-            { 
-                mdbClient.WriteSingleRegister((ushort)(i * 2), consumptions[i]); // kW
-                Console.WriteLine("Consumer " + (i+1) + ": " + consumptions[i] + " kW");
-            }
-            
+            //for (int i = 0; i < 20; i++)
+            //         { 
+            //             mdbClient.WriteSingleRegister((ushort)(i * 2), consumptions[i]); // kW
+            //             Console.WriteLine("Consumer " + (i+1) + ": " + consumptions[i] + " kW");
+            //         }
+            return consumptions;
         }
 
         private void PopulateConsumptionRange()
@@ -299,5 +300,34 @@ namespace DataSimulator
             }
             
         }
-	}
+
+        public void WriteToSimulatorEverything(List<float> solar, List<float> wind, List<float> hydro, List<float> consumers)
+        {
+            lock(lockObj)
+            {
+                mdbClient.WriteSingleRegister(100, solar[0]);
+                mdbClient.WriteSingleRegister(40, solar[1]);
+                mdbClient.WriteSingleRegister(42, solar[2]);
+                mdbClient.WriteSingleRegister(44, solar[3]);
+                mdbClient.WriteSingleRegister(46, solar[4]);
+                mdbClient.WriteSingleRegister(48, solar[5]);
+
+                mdbClient.WriteSingleRegister(102, wind[0]);
+                mdbClient.WriteSingleRegister(50, wind[1]);
+                mdbClient.WriteSingleRegister(52, wind[2]);
+                mdbClient.WriteSingleRegister(54, wind[3]);
+                mdbClient.WriteSingleRegister(56, wind[4]);
+                mdbClient.WriteSingleRegister(58, wind[5]);
+
+                mdbClient.WriteSingleRegister(60, hydro[0]);
+                mdbClient.WriteSingleRegister(62, hydro[1]);
+                mdbClient.WriteSingleRegister(64, hydro[2]);
+
+                for (int i = 0; i < 20; i++)
+                {
+                    mdbClient.WriteSingleRegister((ushort)(i * 2), consumers[i]); // kW
+                }
+            }
+        }
+    }
 }

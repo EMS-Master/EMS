@@ -212,34 +212,33 @@ namespace UI.ViewModel
 
         private void AcknowledgeCommandExecute(Alarm alarmHelper)
         {
-            using (var db = new EmsContext())
+            List<Alarm> alarmsList = DbManager.Instance.GetAlarms().ToList();
+            foreach (Alarm alarm in alarmsList)
             {
-                foreach (Alarm alarm in db.Alarms.ToList())
+                if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
                 {
-                    if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
-                    {
-                        //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid).FirstOrDefault();                        
-                        //al.AckState = AckState.Acknowledged;
-                        alarm.AckState = AckState.Acknowledged;
-                        OnPropertyChanged(nameof(db.Alarms));
+                    //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid).FirstOrDefault();                        
+                    //al.AckState = AckState.Acknowledged;
+                    alarm.AckState = AckState.Acknowledged;
+                    OnPropertyChanged(nameof(alarmsList));
                       
-                        // db.Alarms.Add(alarm);
-                        db.SaveChanges();
-                    }
-                    if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid == alarmHelper.Gid && alarmHelper.AlarmMessage.Contains("discret"))
-                    {
-                        //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid && a.AlarmMessage.Contains("discret")).FirstOrDefault();
-                        //al.AckState = AckState.Acknowledged;
-                        alarm.AckState = AckState.Acknowledged;
+                    // db.Alarms.Add(alarm);
+                    DbManager.Instance.SaveChanges();
+                }
+                if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid == alarmHelper.Gid && alarmHelper.AlarmMessage.Contains("discret"))
+                {
+                    //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid && a.AlarmMessage.Contains("discret")).FirstOrDefault();
+                    //al.AckState = AckState.Acknowledged;
+                    alarm.AckState = AckState.Acknowledged;
 
-                        OnPropertyChanged(nameof(db.Alarms));
+                    OnPropertyChanged(nameof(alarmsList));
                         
-                        // db.Alarms.Add(alarm);
-                        db.SaveChanges();
+                    // db.Alarms.Add(alarm);
+                    DbManager.Instance.SaveChanges();
 
-                    }
-                }                
-            }
+                }
+            }                
+            
 
            
             //using (var db = new EmsContext())

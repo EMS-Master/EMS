@@ -64,36 +64,34 @@ namespace UI.View
 
         public void DisplayData()
         {
-            using (var db = new EmsContext())
+            
+            List<Alarm> al = new List<Alarm>();
+            List<Alarm> alRemove = new List<Alarm>();
+            List<Alarm> dbAlarms = DbManager.Instance.GetAlarms().ToList();
+            foreach (var alarm in dbAlarms)
             {
-                List<Alarm> al = new List<Alarm>();
-                List<Alarm> alRemove = new List<Alarm>();
-
-                foreach (var alarm in db.Alarms)
+                if (alarm.AckState == AckState.Acknowledged)
                 {
-                    if (alarm.AckState == AckState.Acknowledged)
-                    {
-                        alRemove.Add(alarm);
-                    }
-                    else
-                    {
-                        al.Add(alarm);
-                    }
+                    alRemove.Add(alarm);
                 }
-                var alSort = al.OrderByDescending(x => x.AlarmTimeStamp).ToList();
-                var alRemoveSort = alRemove.OrderByDescending(x => x.AlarmTimeStamp).ToList();
-
-                foreach (var alarm in alRemoveSort)
+                else
                 {
-                    alSort.Add(alarm);
+                    al.Add(alarm);
                 }
-
-                this.Dispatcher.Invoke(() =>
-                {
-                    AlarmSummaryDataGrid.ItemsSource = alSort;
-                });
-
             }
+            var alSort = al.OrderByDescending(x => x.AlarmTimeStamp).ToList();
+            var alRemoveSort = alRemove.OrderByDescending(x => x.AlarmTimeStamp).ToList();
+
+            foreach (var alarm in alRemoveSort)
+            {
+                alSort.Add(alarm);
+            }
+
+            this.Dispatcher.Invoke(() =>
+            {
+                AlarmSummaryDataGrid.ItemsSource = alSort;
+            });
+            
         }
 
         
@@ -101,13 +99,13 @@ namespace UI.View
         {
 
             dispatcherTimer.Stop();
+
+            List<Alarm> dbAlarms = DbManager.Instance.GetAlarms().ToList();
             
-            using (var db = new EmsContext())
-            {
                 List<Alarm> al = new List<Alarm>();
                 List<Alarm> alRemove = new List<Alarm>();
 
-                foreach (var alarm in db.Alarms)
+                foreach (var alarm in dbAlarms)
                 {
                     al.Add(alarm);
                 }
@@ -126,9 +124,6 @@ namespace UI.View
                     AlarmSummaryDataGrid.ItemsSource = al;
 
                 }
-            }
-
-
         }
 
 
@@ -140,14 +135,14 @@ namespace UI.View
             {
                 dispatcherTimer.Start();
                 List<Alarm> alarms = new List<Alarm>();
-                using (var db = new EmsContext())
+                List<Alarm> dbAlarms = DbManager.Instance.GetAlarms().ToList();
+               
+                foreach (var alarm in dbAlarms)
                 {
-                    foreach (var alarm in db.Alarms)
-                    {
-                        alarms.Add(alarm);
-                    }
-                    AlarmSummaryDataGrid.ItemsSource = alarms;
+                    alarms.Add(alarm);
                 }
+                AlarmSummaryDataGrid.ItemsSource = alarms;
+                
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("Type Alarm"))
             {
@@ -159,11 +154,10 @@ namespace UI.View
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("GID"))
             {
-                using (var db = new EmsContext())
-                {
-                    var database = db.Alarms.Select(col => col.Gid).ToList();
-                    ComboBox2.ItemsSource = database;
-                }
+                
+                var database = DbManager.Instance.GetAlarms().Select(col => col.Gid).ToList();
+                ComboBox2.ItemsSource = database;
+                
             }
         }
 
@@ -177,15 +171,15 @@ namespace UI.View
                 {
                     Enum.TryParse(str, out AlarmType alarmType);
                     List<Alarm> alarms = new List<Alarm>();
-                    using (var db = new EmsContext())
+                    List<Alarm> dbAlarms = DbManager.Instance.GetAlarms().ToList();
+                    
+                    foreach (var alarm in dbAlarms)
                     {
-                        foreach (var alarm in db.Alarms)
-                        {
-                            if (alarm.AlarmType == alarmType)
-                                alarms.Add(alarm);
-                        }
-                        AlarmSummaryDataGrid.ItemsSource = alarms;
+                        if (alarm.AlarmType == alarmType)
+                            alarms.Add(alarm);
                     }
+                    AlarmSummaryDataGrid.ItemsSource = alarms;
+                    
                 }
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("Severity"))
@@ -195,15 +189,15 @@ namespace UI.View
                 {
                     Enum.TryParse(str, out SeverityLevel severityLevel);
                     List<Alarm> alarms = new List<Alarm>();
-                    using (var db = new EmsContext())
+                    List<Alarm> dbAlarms = DbManager.Instance.GetAlarms().ToList();
+                    
+                    foreach (var alarm in dbAlarms)
                     {
-                        foreach (var alarm in db.Alarms)
-                        {
-                            if (alarm.Severity == severityLevel)
-                                alarms.Add(alarm);
-                        }
-                        AlarmSummaryDataGrid.ItemsSource = alarms;
+                        if (alarm.Severity == severityLevel)
+                            alarms.Add(alarm);
                     }
+                    AlarmSummaryDataGrid.ItemsSource = alarms;
+                    
                 }
             }
             else if (ComboBox1.SelectedValue.ToString().Contains("GID"))
@@ -213,15 +207,15 @@ namespace UI.View
                 {
                     long gid = (long)ComboBox2.SelectedValue;
                     List<Alarm> alarms = new List<Alarm>();
-                    using (var db = new EmsContext())
+                    List<Alarm> dbAlarms = DbManager.Instance.GetAlarms().ToList();
+                    
+                    foreach (var alarm in dbAlarms)
                     {
-                        foreach (var alarm in db.Alarms)
-                        {
-                            if (alarm.Gid == gid)
-                                alarms.Add(alarm);
-                        }
-                        AlarmSummaryDataGrid.ItemsSource = alarms;
+                        if (alarm.Gid == gid)
+                            alarms.Add(alarm);
                     }
+                    AlarmSummaryDataGrid.ItemsSource = alarms;
+                    
                 }
             }
         }

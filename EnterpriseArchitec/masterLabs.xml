@@ -19,8 +19,8 @@
 	</cim:Substation>
 	<cim:Generator rdf:ID="Generator_1">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
-		<cim:Generator.maxQ>351 </cim:Generator.maxQ>
-		<cim:Generator.minQ>141 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000 </cim:Generator.maxQ>
+		<cim:Generator.minQ>0 </cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>301</cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_1</cim:IdentifiedObject.aliasName>
@@ -29,9 +29,9 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_2">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
-		<cim:Generator.maxQ>352 </cim:Generator.maxQ>
-		<cim:Generator.minQ>142 </cim:Generator.minQ>
-		<cim:RotatingMachine.ratedS>302 </cim:RotatingMachine.ratedS>
+		<cim:Generator.maxQ>1200</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
+		<cim:RotatingMachine.ratedS>302</cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_2</cim:IdentifiedObject.mRID>
@@ -39,8 +39,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_3">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
-		<cim:Generator.maxQ>353 </cim:Generator.maxQ>
-		<cim:Generator.minQ>143 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1500</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>303 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_3</cim:IdentifiedObject.aliasName>
@@ -49,8 +49,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_4">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
-		<cim:Generator.maxQ>354 </cim:Generator.maxQ>
-		<cim:Generator.minQ>144 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1800</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>304 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_4</cim:IdentifiedObject.aliasName>
@@ -59,8 +59,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_5">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
-		<cim:Generator.maxQ>355 </cim:Generator.maxQ>
-		<cim:Generator.minQ>145 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>305 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_5</cim:IdentifiedObject.aliasName>
@@ -69,8 +69,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_6">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
-		<cim:Generator.maxQ>356 </cim:Generator.maxQ>
-		<cim:Generator.minQ>146 </cim:Generator.minQ>
+		<cim:Generator.maxQ>5000 </cim:Generator.maxQ>
+		<cim:Generator.minQ>0 </cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>306 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_6</cim:IdentifiedObject.aliasName>
@@ -79,8 +79,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_7">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
-		<cim:Generator.maxQ>357 </cim:Generator.maxQ>
-		<cim:Generator.minQ>147 </cim:Generator.minQ>
+		<cim:Generator.maxQ>8000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>307 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_7</cim:IdentifiedObject.aliasName>
@@ -89,8 +89,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_8">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
-		<cim:Generator.maxQ>358 </cim:Generator.maxQ>
-		<cim:Generator.minQ>148 </cim:Generator.minQ>
+		<cim:Generator.maxQ>10000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>308 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_8</cim:IdentifiedObject.aliasName>
@@ -99,8 +99,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_9">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
-		<cim:Generator.maxQ>359 </cim:Generator.maxQ>
-		<cim:Generator.minQ>149 </cim:Generator.minQ>
+		<cim:Generator.maxQ>14000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>309 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_9</cim:IdentifiedObject.aliasName>
@@ -109,8 +109,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_10">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
-		<cim:Generator.maxQ>360 </cim:Generator.maxQ>
-		<cim:Generator.minQ>150 </cim:Generator.minQ>
+		<cim:Generator.maxQ>18000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>310 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_10</cim:IdentifiedObject.aliasName>
@@ -119,8 +119,8 @@
 	</cim:Generator>
 		<cim:Generator rdf:ID="Generator_11">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
-		<cim:Generator.maxQ>351 </cim:Generator.maxQ>
-		<cim:Generator.minQ>141 </cim:Generator.minQ>
+		<cim:Generator.maxQ>100000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>301</cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_11</cim:IdentifiedObject.aliasName>
@@ -129,8 +129,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_12">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
-		<cim:Generator.maxQ>352 </cim:Generator.maxQ>
-		<cim:Generator.minQ>142 </cim:Generator.minQ>
+		<cim:Generator.maxQ>120000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>302 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_12</cim:IdentifiedObject.aliasName>
@@ -139,8 +139,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_13">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
-		<cim:Generator.maxQ>353 </cim:Generator.maxQ>
-		<cim:Generator.minQ>143 </cim:Generator.minQ>
+		<cim:Generator.maxQ>130000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>303 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_13</cim:IdentifiedObject.aliasName>
@@ -149,8 +149,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_14">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
-		<cim:Generator.maxQ>354 </cim:Generator.maxQ>
-		<cim:Generator.minQ>144 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>304 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_14</cim:IdentifiedObject.aliasName>
@@ -159,8 +159,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_15">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
-		<cim:Generator.maxQ>355 </cim:Generator.maxQ>
-		<cim:Generator.minQ>145 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>305 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_15</cim:IdentifiedObject.aliasName>
@@ -169,8 +169,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_16">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
-		<cim:Generator.maxQ>356 </cim:Generator.maxQ>
-		<cim:Generator.minQ>146 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>306 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_16</cim:IdentifiedObject.aliasName>
@@ -179,8 +179,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_17">
 		<cim:Generator.generatorType>gas</cim:Generator.generatorType>
-		<cim:Generator.maxQ>357 </cim:Generator.maxQ>
-		<cim:Generator.minQ>147 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>307 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_17</cim:IdentifiedObject.aliasName>
@@ -189,8 +189,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_18">
 		<cim:Generator.generatorType>gas</cim:Generator.generatorType>
-		<cim:Generator.maxQ>358 </cim:Generator.maxQ>
-		<cim:Generator.minQ>148 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>308 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_18</cim:IdentifiedObject.aliasName>
@@ -199,8 +199,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_19">
 		<cim:Generator.generatorType>coal</cim:Generator.generatorType>
-		<cim:Generator.maxQ>359 </cim:Generator.maxQ>
-		<cim:Generator.minQ>149 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>309 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_19</cim:IdentifiedObject.aliasName>
@@ -209,8 +209,8 @@
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_20">
 		<cim:Generator.generatorType>coal</cim:Generator.generatorType>
-		<cim:Generator.maxQ>360 </cim:Generator.maxQ>
-		<cim:Generator.minQ>150 </cim:Generator.minQ>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
 		<cim:RotatingMachine.ratedS>310 </cim:RotatingMachine.ratedS>
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_20</cim:IdentifiedObject.aliasName>
@@ -378,8 +378,8 @@
 		<cim:IdentifiedObject.name>EnergyConsumer_20</cim:IdentifiedObject.name>
 	</cim:EnergyConsumer>
 	<cim:Analog rdf:ID="Analog_1">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -390,8 +390,8 @@
 		<cim:IdentifiedObject.name>Analog_1</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_2">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -402,8 +402,8 @@
 		<cim:IdentifiedObject.name>Analog_2</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_3">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -414,8 +414,8 @@
 		<cim:IdentifiedObject.name>Analog_3</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_4">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -426,8 +426,8 @@
 		<cim:IdentifiedObject.name>Analog_4</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_5">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -438,8 +438,8 @@
 		<cim:IdentifiedObject.name>Analog_5</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_6">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -450,8 +450,8 @@
 		<cim:IdentifiedObject.name>Analog_6</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_7">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -462,8 +462,8 @@
 		<cim:IdentifiedObject.name>Analog_7</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_8">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -474,8 +474,8 @@
 		<cim:IdentifiedObject.name>Analog_8</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_9">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -486,8 +486,8 @@
 		<cim:IdentifiedObject.name>Analog_9</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_10">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -498,8 +498,8 @@
 		<cim:IdentifiedObject.name>Analog_10</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_11">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -510,8 +510,8 @@
 		<cim:IdentifiedObject.name>Analog_11</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_12">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -522,8 +522,8 @@
 		<cim:IdentifiedObject.name>Analog_12</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_13">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -534,8 +534,8 @@
 		<cim:IdentifiedObject.name>Analog_13</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_14">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -546,8 +546,8 @@
 		<cim:IdentifiedObject.name>Analog_14</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_15">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -558,8 +558,8 @@
 		<cim:IdentifiedObject.name>Analog_15</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_16">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -570,8 +570,8 @@
 		<cim:IdentifiedObject.name>Analog_16</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_17">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -582,8 +582,8 @@
 		<cim:IdentifiedObject.name>Analog_17</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_18">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -594,8 +594,8 @@
 		<cim:IdentifiedObject.name>Analog_18</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_19">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -606,8 +606,8 @@
 		<cim:IdentifiedObject.name>Analog_19</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_20">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>2</cim:Analog.minValue>
+		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -618,8 +618,8 @@
 		<cim:IdentifiedObject.name>Analog_20</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_21">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -630,8 +630,8 @@
 		<cim:IdentifiedObject.name>Analog_21</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_22">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>1200</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -642,8 +642,8 @@
 		<cim:IdentifiedObject.name>Analog_22</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_23">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>1500</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -654,8 +654,8 @@
 		<cim:IdentifiedObject.name>Analog_23</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_24">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>1800</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -666,8 +666,8 @@
 		<cim:IdentifiedObject.name>Analog_24</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_25">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -678,8 +678,8 @@
 		<cim:IdentifiedObject.name>Analog_25</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_26">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>5000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -690,8 +690,8 @@
 		<cim:IdentifiedObject.name>Analog_26</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_27">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>8000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -702,8 +702,8 @@
 		<cim:IdentifiedObject.name>Analog_27</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_28">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -714,8 +714,8 @@
 		<cim:IdentifiedObject.name>Analog_28</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_29">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>14000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -726,8 +726,8 @@
 		<cim:IdentifiedObject.name>Analog_29</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_30">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>18000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -738,8 +738,8 @@
 		<cim:IdentifiedObject.name>Analog_30</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_31">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>100000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -750,8 +750,8 @@
 		<cim:IdentifiedObject.name>Analog_31</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_32">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>120000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -762,8 +762,8 @@
 		<cim:IdentifiedObject.name>Analog_32</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_33">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>130000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -774,8 +774,8 @@
 		<cim:IdentifiedObject.name>Analog_33</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_34">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -786,8 +786,8 @@
 		<cim:IdentifiedObject.name>Analog_34</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_35">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -798,8 +798,8 @@
 		<cim:IdentifiedObject.name>Analog_35</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_36">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -810,8 +810,8 @@
 		<cim:IdentifiedObject.name>Analog_36</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_37">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -822,8 +822,8 @@
 		<cim:IdentifiedObject.name>Analog_37</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_38">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -834,8 +834,8 @@
 		<cim:IdentifiedObject.name>Analog_38</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_39">
-		<cim:Analog.maxValue>150</cim:Analog.maxValue>
-		<cim:Analog.minValue>-1</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>75</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
@@ -846,8 +846,8 @@
 		<cim:IdentifiedObject.name>Analog_39</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_40">
-		<cim:Analog.maxValue>160</cim:Analog.maxValue>
-		<cim:Analog.minValue>-2</cim:Analog.minValue>
+		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
+		<cim:Analog.minValue>0</cim:Analog.minValue>
 		<cim:Analog.normalValue>80</cim:Analog.normalValue>
 		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
 		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>

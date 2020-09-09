@@ -32,12 +32,17 @@ namespace CalculationEngineServ
         private float totalCost = 0;
 
         private float windProductionkW = 0;
+        private float windProductionPct = 0;
         private float totalProduction = 0;
 
         private static int ELITIMS_PERCENTAGE;
         private static int NUMBER_OF_ITERATION;
         private static int NUMBER_OF_POPULATION;
         private static float mutationRate;
+
+        private float GenRenewable = 0;
+        private float GenAll = 0;
+        private float Diff = 0;
 
         public CalculationEngine()
         {
@@ -59,6 +64,9 @@ namespace CalculationEngineServ
             bool result = false;
             Dictionary<long, OptimisationModel> optModelMap = GetOptimizationModelMap(measGenerators, windSpeed, sunlight);
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
+
+            float consMinusGenRen = powerOfConsumers - GenRenewable; 
+
             List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
             totalProduction = 0;
 
@@ -105,8 +113,10 @@ namespace CalculationEngineServ
         }
         private Dictionary<long, OptimisationModel> GetOptimizationModelMap(List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
         {
-            lock (lockObj)
-            {
+            float sumInGetOptModelMap = 0;
+            float wholeSum = 0;
+            //lock (lockObj)
+            //{
                 Dictionary<long, OptimisationModel> optModelMap = new Dictionary<long, OptimisationModel>();
 
                 foreach (var measUnit in measGenerators)
@@ -114,29 +124,35 @@ namespace CalculationEngineServ
                     if (generators.ContainsKey(measUnit.Gid))
                     {
                         Generator g = generators[measUnit.Gid];
+                        wholeSum += measUnit.CurrentValue;
+                        if (g.GeneratorType == GeneratorType.Hydro || g.GeneratorType == GeneratorType.Solar || g.GeneratorType == GeneratorType.Wind)
+                            sumInGetOptModelMap += measUnit.CurrentValue;
                         OptimisationModel om = new OptimisationModel(g, measUnit, windSpeed, sunlight);
 
                         optModelMap.Add(om.GlobalId, om);
                     }
                 }
 
+                GenAll = wholeSum;
+                GenRenewable = sumInGetOptModelMap;
+                Diff = wholeSum - sumInGetOptModelMap;
+
+                Console.WriteLine("WholeSUm: " + wholeSum);
+                Console.WriteLine("sumInGetOptModelMap: " + sumInGetOptModelMap);
+                Console.WriteLine("Difference: " + (wholeSum - sumInGetOptModelMap));
+
                 return optModelMap;
-            }
+            //}
         }
         
         private List<MeasurementUnit> DoOptimization(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers, float windSpeed, float sunlight)
         {
-            //try
-            //{
+          
                 Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
 
                 optModelMapOptimizied = CalculateWithGeneticAlgorithm(optModelMap, powerOfConsumers);
 				return optModelMapOptimizied.Select(x => x.Value.measurementUnit).ToList();
-            //}
-            //catch (Exception e)
-            //{
-            //    throw new Exception("[Method = DoOptimization] Exception = " + e.Message);
-            //}
+           
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
         {
@@ -150,6 +166,10 @@ namespace CalculationEngineServ
                 {
                     item.Value.GenericOptimizedValue = item.Value.MeasuredValue;
                     powerOfConsumersWithoutRenewable -= item.Value.MeasuredValue;
+                    if(item.Value.TypeGenerator == GeneratorType.Wind)
+                    {
+                        windProductionkW += item.Value.MeasuredValue;
+                    }
                 }
                 else
                 {
@@ -157,6 +177,8 @@ namespace CalculationEngineServ
                 }
             }
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
+
+            windProductionPct = windProductionkW / powerOfConsumers * 100;
 
             previousEmissionCO2 = CalculateCO2(optModelMapNonRenewable);
             var previousCost = CalculateCost(optModelMapNonRenewable); 
@@ -200,20 +222,19 @@ namespace CalculationEngineServ
             bool success = true;
             try
             {
-                using (var db = new EmsContext())
+                
+                foreach (var item in measurements)
                 {
-                    foreach (var item in measurements)
+                    HistoryMeasurement h = new HistoryMeasurement
                     {
-                        HistoryMeasurement h = new HistoryMeasurement
-                        {
-                            Gid = item.Gid,
-                            MeasurementTime = item.TimeStamp,
-                            MeasurementValue = item.CurrentValue
-                        };
-                        db.HistoryMeasurements.Add(h);
-                    }
-                    db.SaveChanges();   
+                        Gid = item.Gid,
+                        MeasurementTime = item.TimeStamp,
+                        MeasurementValue = item.CurrentValue
+                    };
+                    DbManager.Instance.AddHistoryMeasurement(h);
                 }
+                DbManager.Instance.SaveChanges();   
+                
             }
             catch (Exception e)
             {
@@ -231,14 +252,12 @@ namespace CalculationEngineServ
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
             try
             {
-                using (var db = new EmsContext())
+                 var dataFromDb = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == gid && x.MeasurementTime >= startTime && x.MeasurementTime <= endTime).ToList();
+                foreach (var item in dataFromDb)
                 {
-                    var dataFromDb = db.HistoryMeasurements.Where(x => x.Gid == gid && x.MeasurementTime >= startTime && x.MeasurementTime <= endTime).ToList();
-                    foreach (var item in dataFromDb)
-                    {
-                        retVal.Add(new Tuple<double, DateTime>(item.MeasurementValue, item.MeasurementTime));
-                    }
+                    retVal.Add(new Tuple<double, DateTime>(item.MeasurementValue, item.MeasurementTime));
                 }
+                
             }
             catch (Exception e)
             {
@@ -253,24 +272,23 @@ namespace CalculationEngineServ
         public bool WriteTotalProductionIntoDb(float totalProduction, float totalCost, DateTime dateTime)
         {
             bool retVal = false;
-            using (var db = new EmsContext())
+            
+            try
             {
-                try
-                {
-                    TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime, TotalCost = totalCost };
-                    db.TotalProductions.Add(total);
-                    db.SaveChanges();
+                TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime, TotalCost = totalCost };
+                DbManager.Instance.AddTotalProduction(total);
+                DbManager.Instance.SaveChanges();
 
-                    retVal = true;
-                }
-                catch (Exception e)
-                {
-                    retVal = false;
-                    string message = string.Format("Failed to insert total production into database. {0}", e.Message);
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                    Console.WriteLine(message);
-                }
+                retVal = true;
             }
+            catch (Exception e)
+            {
+                retVal = false;
+                string message = string.Format("Failed to insert total production into database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+            
 
             return retVal;
         }
@@ -278,24 +296,23 @@ namespace CalculationEngineServ
         public bool WriteCO2EmissionIntoDb(float previousEmissionCO2, float currentEmissionCO2)
         {
             bool retVal = false;
-            using (var db = new EmsContext())
+            
+            try
             {
-                try
-                {
-                    CO2Emission total = new CO2Emission() { PreviousEmission = previousEmissionCO2, CurrentEmission = currentEmissionCO2, Timestamp = DateTime.Now };
-                    db.CO2Emissions.Add(total);
-                    db.SaveChanges();
+                CO2Emission total = new CO2Emission() { PreviousEmission = previousEmissionCO2, CurrentEmission = currentEmissionCO2, Timestamp = DateTime.Now };
+                DbManager.Instance.AddCO2Emission(total);
+                DbManager.Instance.SaveChanges();
 
-                    retVal = true;
-                }
-                catch (Exception e)
-                {
-                    retVal = false;
-                    string message = string.Format("Failed to insert CO2 emission into database. {0}", e.Message);
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                    Console.WriteLine(message);
-                }
+                retVal = true;
             }
+            catch (Exception e)
+            {
+                retVal = false;
+                string message = string.Format("Failed to insert CO2 emission into database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+            
 
             return retVal;
         }
@@ -303,23 +320,22 @@ namespace CalculationEngineServ
         public List<Tuple<double, DateTime>> ReadTotalProductionsFromDb(DateTime startTime, DateTime endTime)
         {
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
-            using (var db = new EmsContext())
+            
+            try
             {
-                try
+                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                foreach (var item in list)
                 {
-                    var list = db.TotalProductions.Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime);
-                    foreach (var item in list)
-                    {
-                        retVal.Add(new Tuple<double, DateTime>(item.TotalGeneration, item.TimeOfCalculation));
-                    }
-                }
-                catch (Exception e)
-                {
-                    string message = string.Format("Failed read Measurements from database. {0}", e.Message);
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                    Console.WriteLine(message);
+                    retVal.Add(new Tuple<double, DateTime>(item.TotalGeneration, item.TimeOfCalculation));
                 }
             }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+            
 
             return retVal;
         }
