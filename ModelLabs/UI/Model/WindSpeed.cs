@@ -16,7 +16,11 @@ namespace UI.Model
             Name = "CO2 Reduction";
             Speed = (float)21.34;
         }
-
+        public WindSpeed(string n, float s)
+        {
+            Name = n;
+            Speed = s;
+        }
         //private int CalcularPorcentagem()
         //{
         //    return 47; //Calculo da porcentagem de consumo

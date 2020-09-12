@@ -21,11 +21,13 @@ namespace UI
     public partial class SetPointWindow : Window
     {
         long globalGid;
-        public SetPointWindow (long gid)
+        string globalName;
+        public SetPointWindow (long gid, string name)
         {
             InitializeComponent();
             this.globalGid = gid;
-            this.DataContext = new SetPointViewModel(gid);
+            this.globalName = name;
+            this.DataContext = new SetPointViewModel(gid, name);
     }
     }
 }

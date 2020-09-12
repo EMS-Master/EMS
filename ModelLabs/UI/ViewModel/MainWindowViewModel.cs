@@ -46,7 +46,7 @@ namespace UI.ViewModel
             documents.Add(DashboardViewModel);
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
-            documents.Add(new MapViewModel(new View.MapView()) { Title = "Map" });
+           
             documents.Add(HistoryViewModel);
             documents.Add(AlarmSummaryViewModel);
             documents.Add(CommandViewModel);
@@ -276,17 +276,17 @@ namespace UI.ViewModel
                     return false;
                 }
 
-                //foreach (var resDesc in retList)
-                //{
-                //    if (NmsModelMap.ContainsKey(resDesc.Id))
-                //    {
-                //        NmsModelMap[resDesc.Id] = ResourcesDescriptionConverter.ConvertTo<BatteryStorage>(resDesc);
-                //    }
-                //    else
-                //    {
-                //        NmsModelMap.Add(resDesc.Id, ResourcesDescriptionConverter.ConvertTo<BatteryStorage>(resDesc));
-                //    }
-                //}
+                foreach (var resDesc in retList)
+                {
+                    if (NmsModelMap.ContainsKey(resDesc.Id))
+                    {
+                        NmsModelMap[resDesc.Id] = ResourcesDescriptionConverter.ConvertTo<EnergyConsumer>(resDesc);
+                    }
+                    else
+                    {
+                        NmsModelMap.Add(resDesc.Id, ResourcesDescriptionConverter.ConvertTo<EnergyConsumer>(resDesc));
+                    }
+                }
 
                 // clear retList
                 retList.Clear();

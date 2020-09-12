@@ -6,18 +6,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="SetPointWindow" Height="100" Width="250" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid Margin="5,20,0,20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0"  Text="{Binding Path=globalId}"/>
-        <TextBox Grid.Column="1"   Text ="{Binding newValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.InputBindings>
+        Title="SetPointWindow" Height="200" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid >
+        
+        <TextBlock Margin="10,40,250,100"   Text="{Binding Path=globalName}"/>
+        <TextBox  Margin="150,40,10,100" Text ="{Binding newValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+            <!--<TextBox.InputBindings>
                 <KeyBinding Command="{Binding Path=CommandGenMessBox}" Key="Enter"  CommandParameter="{Binding ElementName=SetWindow}"/>
-            </TextBox.InputBindings>
+            </TextBox.InputBindings>-->
         </TextBox>
+        <Button Margin="100,100,100,40" Content="Apply" Command="{Binding Path=CommandGenMessBox}" CommandParameter="{Binding ElementName=SetWindow}"/>
 
     </Grid>
 </Window>

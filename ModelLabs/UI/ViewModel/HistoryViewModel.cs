@@ -59,6 +59,7 @@ namespace UI.ViewModel
         private ObservableCollection<Tuple<double, DateTime>> totalProduction = new ObservableCollection<Tuple<double, DateTime>>();
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
         private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
+        private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> consumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProductionForSelected = new ObservableCollection<Tuple<double, DateTime>>();
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
 
@@ -121,6 +122,7 @@ namespace UI.ViewModel
         }
 
         public ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
+        public ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> ConsumersContainer { get => consumersContainer; set => consumersContainer = value; }
 
         public bool IsExpandedTotalProduction
         {
@@ -273,6 +275,7 @@ namespace UI.ViewModel
             SelectedPeriod = PeriodValues.None;
 
             IntegrityUpdateForGenerators();
+            IntegrityUpdateForEnergyConsumer();
         }
         public void IntegrityUpdateForGenerators()
         {
@@ -316,6 +319,55 @@ namespace UI.ViewModel
                     //}
                 }
                 OnPropertyChanged(nameof(GeneratorsFromNms));
+
+            }
+            catch (Exception e)
+            {
+                message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCodeGenerator, e.Message);
+                Console.WriteLine(message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                //return false;
+            }
+
+            retList.Clear();
+        }
+
+        public void IntegrityUpdateForEnergyConsumer()
+        {
+            internalGen = new List<ResourceDescription>(5);
+            modelResourcesDesc = new ModelResourcesDesc();
+            retList = new List<ResourceDescription>(5);
+            properties = new List<ModelCode>(10);
+            ModelCode modelCodeGenerator = ModelCode.ENERGY_CONSUMER;
+            iteratorId = 0;
+            resourcesLeft = 0;
+            numberOfResources = 2;
+            string message = string.Empty;
+
+            try
+            {
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                internalGen.AddRange(retList);
+
+                foreach (ResourceDescription rd in internalGen)
+                {
+                    if (EnergyConsumersFromNms.Contains(rd.Id))
+                    {
+                        continue;
+                    }
+                    EnergyConsumersFromNms.Add(rd.Id);
+                    GidToBoolMap.Add(rd.Id, false);
+                }
+                OnPropertyChanged(nameof(EnergyConsumersFromNms));
 
             }
             catch (Exception e)
@@ -391,10 +443,12 @@ namespace UI.ViewModel
             ObservableCollection<Tuple<double, DateTime>> measurementsFromDb;
             ObservableCollection<Tuple<double, DateTime>> tempData;
             ObservableCollection<Tuple<double, DateTime>> tempContainer = new ObservableCollection<Tuple<double, DateTime>>();
+            ObservableCollection<Tuple<double, DateTime>> tempContainer1 = new ObservableCollection<Tuple<double, DateTime>>();
 
 
             GraphTotalProduction.Clear();
             GeneratorsContainer.Clear();
+            ConsumersContainer.Clear();
             GraphTotalProductionForSelected.Clear();
 
 			foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
@@ -422,7 +476,7 @@ namespace UI.ViewModel
                                 tempData = new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
                                 if (tempData != null && tempData.Count != 0)
                                 {
-                                    averageProduction = tempData.Average(x => x.Item1);
+                                    averageProduction = tempData.Average(x => x.Item1)/1000;
                                 }
                                 else
                                 {
@@ -472,7 +526,7 @@ namespace UI.ViewModel
                 List<Tuple<double, DateTime>> tuples = allProductionValues.Where(x => x.Item2 == measTime).ToList();
                 if (tuples != null)
                 {
-                    production = tuples.Sum(x => x.Item1);
+                    production = tuples.Sum(x => x.Item1)/1000;
                 }
                 tuples = null;
                 GraphTotalProductionForSelected.Add(new Tuple<double, DateTime>(production, measTime));
@@ -493,7 +547,7 @@ namespace UI.ViewModel
                     tempData = new ObservableCollection<Tuple<double, DateTime>>(TotalProduction.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
                     if (tempData != null && tempData.Count != 0)
                     {
-                        averageProduction = tempData.Average(x => x.Item1);
+                        averageProduction = tempData.Average(x => x.Item1)/1000;
                     }
                     else
                     {
@@ -520,25 +574,58 @@ namespace UI.ViewModel
 
         private void AllGeneratorsCheckedCommandExecute(object obj)
         {
-            GidToBoolMap = GidToBoolMap.ToDictionary(p => p.Key, p => true);
+            // GidToBoolMap = GidToBoolMap.Where(x=>).ToDictionary(p => p.Key, p => false);
+
+            //foreach (var v in GidToBoolMap)
+            for (int i = 0; i < GidToBoolMap.Count; i++)
+            {
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(GidToBoolMap.Keys.ElementAt(i));
+                if (type == DMSType.GENERATOR)
+                {
+                    GidToBoolMap[GidToBoolMap.Keys.ElementAt(i)] = true;
+                }
+            }
+
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
         private void AllGeneratorsUnheckedCommandExecute(object obj)
         {
-            GidToBoolMap = GidToBoolMap.ToDictionary(p => p.Key, p => false);
+            foreach (var v in GidToBoolMap)
+            {
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(v.Key);
+                if (type == DMSType.GENERATOR)
+                {
+                    GidToBoolMap[v.Key] = false;
+                }
+            }
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
         private void AllEnergyConsumersCheckedCommandExecute(object obj)
         {
-            GidToBoolMap = GidToBoolMap.ToDictionary(p => p.Key, p => true);
+            foreach(var v in GidToBoolMap)
+            {
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(v.Key);
+                if(type == DMSType.ENERGY_CONSUMER)
+                {
+                    GidToBoolMap[v.Key] = true;
+                }
+            }
+            
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 
         private void AllEnergyConsumersUnheckedCommandExecute(object obj)
         {
-            GidToBoolMap = GidToBoolMap.ToDictionary(p => p.Key, p => false);
+            foreach (var v in GidToBoolMap)
+            {
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(v.Key);
+                if (type == DMSType.ENERGY_CONSUMER)
+                {
+                    GidToBoolMap[v.Key] = false;
+                }
+            }
             OnPropertyChanged(nameof(GidToBoolMap));
         }
 

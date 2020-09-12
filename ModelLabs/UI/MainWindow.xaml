@@ -44,9 +44,7 @@
                 <DataTemplate DataType="{x:Type vm:NMSViewModel}">
                     <view:NMSView></view:NMSView>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:MapViewModel}">
-                    <view:MapView></view:MapView>
-                </DataTemplate>
+               
                 <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
                     <view:HistoryView></view:HistoryView>
                 </DataTemplate>

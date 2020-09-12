@@ -14,12 +14,15 @@ namespace UI.ViewModel
         public long globalId { get; private set; }
         public float newValue { get; set; }
 
+        public string globalName { get; private set; }
+
         private ICommand commandGenMessBox;
         public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
        
-        public SetPointViewModel(long gid)
+        public SetPointViewModel(long gid , string name)
         {
             globalId = gid;
+            globalName = name;
         }
 
         private void CommandGenMessBoxExecute(object obj)

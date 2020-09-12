@@ -60,13 +60,14 @@ namespace UI.ViewModel
         private float currentProduction;
         private float currentConsumption;
         private WindSpeed w;
+        private WindSpeed windPcnt;
         private float currentWindProduction;
         private float currentSolarProduction;
         private float currentHydroProduction;
         private float currentCoalProduction;
         private float currentOilProduction;
         private float currentGasProduction;
-       
+
         private readonly double graphSizeOffset = 18;
         private bool isOptionsExpanded = false;
 
@@ -78,16 +79,18 @@ namespace UI.ViewModel
         private ObservableCollection<ModelForCheckboxes> gen = new ObservableCollection<ModelForCheckboxes>();
 
         private ObservableCollection<KeyValuePair<DateTime, float>> generationList = new ObservableCollection<KeyValuePair<DateTime, float>>();
-        private ObservableCollection<KeyValuePair<string, float>> generationByTypeList = new ObservableCollection<KeyValuePair<string, float>> () { new KeyValuePair<string, float>("Wind [kW]", 0) , new KeyValuePair<string, float>("Solar [kW]", 0 ), new KeyValuePair<string, float>("Hydro [MW]", 0 ),new KeyValuePair<string, float>("Coal [kW]", 0 ), new KeyValuePair<string, float>("Oil [kW]", 0 ), new KeyValuePair<string, float>("Gas [kW]", 0 ), };
+        private ObservableCollection<KeyValuePair<string, float>> generationByTypeList = new ObservableCollection<KeyValuePair<string, float>>() { new KeyValuePair<string, float>("Wind [kW]", 0), new KeyValuePair<string, float>("Solar [kW]", 0), new KeyValuePair<string, float>("Hydro [MW]", 0), new KeyValuePair<string, float>("Coal [kW]", 0), new KeyValuePair<string, float>("Oil [kW]", 0), new KeyValuePair<string, float>("Gas [kW]", 0), };
         private ObservableCollection<KeyValuePair<DateTime, float>> demandList = new ObservableCollection<KeyValuePair<DateTime, float>>();
 
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
         private double graphWidth;
         private double graphHeight;
         private ObservableCollection<WindSpeed> windspeed = new ObservableCollection<WindSpeed>();
+        private ObservableCollection<WindSpeed> windPercent = new ObservableCollection<WindSpeed>();
+        private ObservableCollection<ColumChartData> totalProductionColumnChart = new ObservableCollection<ColumChartData>() { new ColumChartData("Wind [kW]", 0), new ColumChartData("Solar [kW]", 0), new ColumChartData("Hydro [MW]", 0), new ColumChartData("Coal [kW]", 0), new ColumChartData("Oil [kW]", 0), new ColumChartData("Gas [kW]", 0) };
         private ICommand visibilityCheckedCommand;
         private ICommand visibilityUncheckedCommand;
-        
+
         private ICommand expandCommand;
 
         public ICommand VisibilityCheckedCommand => visibilityCheckedCommand ?? (visibilityCheckedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
@@ -106,7 +109,12 @@ namespace UI.ViewModel
         public ICommand ExpandCommand => expandCommand ?? (expandCommand = new RelayCommand(ExpandCommandExecute));
 
         public ICommand DefaultParamValues => defaultParamValues ?? (defaultParamValues = new RelayCommand(DefaultParamValuesExecute));
+
+        private ICommand applyParamValues;
+        public ICommand ApplyParamValues => applyParamValues ?? (applyParamValues = new RelayCommand(ApplyParamValuesExecute));
+
         public WindSpeed W { get => w; set => w = value; }
+        public WindSpeed WindPcnt { get => windPcnt; set => windPcnt = value; }
         private void ActivateGenExecute(object obj)
         {
             
@@ -248,6 +256,7 @@ namespace UI.ViewModel
 
 
             W = new WindSpeed();
+            
             Windspeed.Add(W);
             Title = "Dashboard";
         }
@@ -276,6 +285,26 @@ namespace UI.ViewModel
             set
             {
                 windspeed = value;
+                OnPropertyChanged();
+
+            }
+        }
+        public ObservableCollection<WindSpeed> WindPercent
+        {
+            get => windPercent;
+            set
+            {
+                windPercent = value;
+                OnPropertyChanged();
+
+            }
+        }
+        public ObservableCollection<ColumChartData> TotalProductionColumnChart
+        {
+            get => totalProductionColumnChart;
+            set
+            {
+                totalProductionColumnChart = value;
                 OnPropertyChanged();
 
             }
@@ -376,17 +405,32 @@ namespace UI.ViewModel
                         CurrentCoalProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Coal).Sum(x => x.CurrentValue) * 1000;
                         CurrentOilProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Oil).Sum(x => x.CurrentValue) * 1000;
                         CurrentGasProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Gas).Sum(x => x.CurrentValue) * 1000;
-                        lock (GenerationByTypeList)
-                        {
-                            GenerationByTypeList[0] = new KeyValuePair<string,float>("Wind [kW]",CurrentWindProduction );
-                            GenerationByTypeList[1] = new KeyValuePair<string, float>("Solar [kW]", CurrentSolarProduction);
-                            GenerationByTypeList[2] = new KeyValuePair<string, float>("Hydro [MW]", CurrentHydroProduction);
-                            GenerationByTypeList[3] = new KeyValuePair<string, float>("Coal [kW]", CurrentCoalProduction);
-                            GenerationByTypeList[4] = new KeyValuePair<string, float>("Oil [kW]", CurrentOilProduction);
-                            GenerationByTypeList[5] = new KeyValuePair<string, float>("Gas [kW]", CurrentGasProduction);
+                        //lock (GenerationByTypeList)
+                        //{
+                        //    GenerationByTypeList[0] = new KeyValuePair<string,float>("Wind [kW]",CurrentWindProduction );
+                        //    GenerationByTypeList[1] = new KeyValuePair<string, float>("Solar [kW]", CurrentSolarProduction);
+                        //    GenerationByTypeList[2] = new KeyValuePair<string, float>("Hydro [MW]", CurrentHydroProduction);
+                        //    GenerationByTypeList[3] = new KeyValuePair<string, float>("Coal [kW]", CurrentCoalProduction);
+                        //    GenerationByTypeList[4] = new KeyValuePair<string, float>("Oil [kW]", CurrentOilProduction);
+                        //    GenerationByTypeList[5] = new KeyValuePair<string, float>("Gas [kW]", CurrentGasProduction);
                             
 
-                        }
+                        //}
+                        ObservableCollection<ColumChartData> newList = new ObservableCollection<ColumChartData>();
+                        newList.Add( new ColumChartData("Wind [kW]", CurrentWindProduction));
+                        newList.Add(new ColumChartData("Solar [kW]", CurrentSolarProduction));
+                        newList.Add( new ColumChartData("Hydro [MW]", CurrentHydroProduction));
+                        newList.Add(new ColumChartData("Coal [kW]", CurrentCoalProduction));
+                        newList.Add( new ColumChartData("Oil [kW]", CurrentOilProduction));
+                        newList.Add( new ColumChartData("Gas [kW]", CurrentGasProduction));
+
+                        TotalProductionColumnChart = newList;
+                        //TotalProductionColumnChart.Where(k => k.Type == "Wind [kW]").FirstOrDefault().Production = CurrentWindProduction;
+                        //TotalProductionColumnChart.Where(k => k.Type == "Solar [kW]").FirstOrDefault().Production = CurrentSolarProduction;
+                        //TotalProductionColumnChart.Where(k => k.Type == "Hydro [MW]").FirstOrDefault().Production = CurrentHydroProduction;
+                        //TotalProductionColumnChart.Where(k => k.Type == "Coal [kW]").FirstOrDefault().Production = CurrentCoalProduction;
+                        //TotalProductionColumnChart.Where(k => k.Type == "Oil [kW]").FirstOrDefault().Production = CurrentOilProduction;
+                        //TotalProductionColumnChart.Where(k => k.Type == "Gas [kW]").FirstOrDefault().Production = CurrentGasProduction;
                         //if (GenerationListWind.Count > MAX_DISPLAY_TOTAL_NUMBER)
                         //{
                         //    GenerationListWind.RemoveAt(0);
@@ -513,9 +557,10 @@ namespace UI.ViewModel
             MutationRate = para.Item4;
 
         }
+
+        private void ApplyParamValuesExecute(object obj)
+        {
+            CalculationEngineUIProxy.Instance.SetAlgorithmOptions(NumOfIterations, NumOfPuplation, ElitsmPercent, MutationRate);
+        }
     }
-
-   
-
-
 }

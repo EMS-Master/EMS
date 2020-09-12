@@ -212,8 +212,8 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <!--<RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />-->
                 </Grid.RowDefinitions>
 
                 
@@ -229,35 +229,51 @@
                     <Grid Background="White" Width="250"
 			  Visibility="{Binding IsOptionsExpanded,Converter={StaticResource BoolToVisibilityConverter}}">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <StackPanel>
-                                <TextBox Text =" Number of iterations" />
-                                <TextBox    Text ="{Binding NumOfIterations, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-                                <TextBox Text =" Number of population" />
-                                <TextBox    Text ="{Binding NumOfPuplation, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-                                <TextBox Text =" Elitsm percentage" />
-                                <TextBox    Text ="{Binding ElitsmPercent, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
-                                    </TextBox.InputBindings>
-                                    </TextBox>
-                                    <TextBox Text =" Mutation rate" />
-                                <TextBox    Text ="{Binding MutationRate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
-                                    </TextBox.InputBindings>
-                                </TextBox>
-                                <Button Content='Reset to default algorithm parameters' Command="{Binding DefaultParamValues}" Width="205" Height="26"/>
-                            </StackPanel>
-                            
+                            <GroupBox  FontSize="20" Header="Calculation parameters"  Foreground="Black">
+                                <StackPanel>
+                                    <GroupBox Margin="0,10,0,0"  FontSize="14" Header="Number of iterations"  Foreground="Black">
+                                        <TextBox Margin="10"   Text ="{Binding NumOfIterations, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                            </TextBox.InputBindings>
+                                        </TextBox>
+                                    </GroupBox>
+                                    <GroupBox  FontSize="14" Header="Number of populatios"  Foreground="Black">
+                                        <TextBox  Margin="10"  Text ="{Binding NumOfPuplation, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <!--<TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                        </TextBox.InputBindings>-->
+                                        </TextBox>
+                                    </GroupBox>
 
+                                    <GroupBox  FontSize="14" Header="Elitsm percentage"  Foreground="Black">
+                                        <TextBox  Margin="10"   Text ="{Binding ElitsmPercent, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <!--<TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                        </TextBox.InputBindings>-->
+                                        </TextBox>
+                                    </GroupBox>
+
+                                    <GroupBox FontSize="14" Header="Mutation rate"  Foreground="Black">
+                                        <TextBox Margin="10"   Text ="{Binding MutationRate, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <!--<TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                        </TextBox.InputBindings>-->
+                                        </TextBox>
+                                    </GroupBox>
+
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="115"/>
+                                            <ColumnDefinition Width="5"/>
+                                            <ColumnDefinition Width="116"/>
+                                        </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" FontSize="14" Content='Reset' Command="{Binding DefaultParamValues}" />
+                                    <Button Grid.Column="2" FontSize="14" Content='Apply' Command="{Binding ApplyParamValues}" />
+                                    </Grid>
+
+                                </StackPanel>
+                            </GroupBox>
                         </ScrollViewer>
                     </Grid>
 
@@ -289,58 +305,102 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <DockPanel Grid.Row="1"  Height="Auto" Margin="20,60,90,444.6">
+                    <Grid Grid.Row="0" Margin="20,60,0,0" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DockPanel Grid.Column="0"   Height="Auto" >
 
                             <Grid  Width="Auto">
-                                <TextBlock TextWrapping="WrapWithOverflow" Margin="0,0,221.2,-0.2">
-					 <Grid >
-                        <Grid.OpacityMask>
-                            <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
-                        </Grid.OpacityMask>
-                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
+                                <TextBlock TextWrapping="WrapWithOverflow" >
+					                <Grid >
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
+                                        </Grid.OpacityMask> 
+                                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
 
-                        <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="CO2 reduction" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
-                            <MetroChart:RadialGaugeChart.Series>
-                                <MetroChart:ChartSeries
-                                                    Background="#e0e0e0"
-                                                    DisplayMember="Name"
-                                                    ItemsSource="{Binding Path= Windspeed}"
-                                                    SeriesTitle="Name"
-                                                    ValueMember="Speed" HorizontalAlignment="Center"/>
-                            </MetroChart:RadialGaugeChart.Series>
-                        </MetroChart:RadialGaugeChart>
-                        </Grid>
+                                        <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="CO2 reduction" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
+                                            <MetroChart:RadialGaugeChart.Series>
+                                                <MetroChart:ChartSeries
+                                                                    
+                                                                    Background="#e0e0e0"
+                                                                    DisplayMember="Name"
+                                                                    ItemsSource="{Binding Path= Windspeed}"
+                                                                    SeriesTitle="Name"
+                                                                    ValueMember="Speed" HorizontalAlignment="Center"/>
+                                            </MetroChart:RadialGaugeChart.Series>
+                                        </MetroChart:RadialGaugeChart>  
+                                     </Grid>
+                                 </TextBlock>
+
+                            </Grid>
+                        </DockPanel>
+                        <DockPanel Grid.Column="2" Height="Auto" >
+
+                            <Grid  Width="Auto">
+                                <TextBlock TextWrapping="WrapWithOverflow" >
+					                <Grid >
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{ Binding ElementName=BorderG1 }"/>
+                                        </Grid.OpacityMask>     
+                                        <Border x:Name="BorderG1" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
+
+                                        <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="Wind contribution" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
+                                            <MetroChart:RadialGaugeChart.Series>
+                                                <MetroChart:ChartSeries
+                                                                    Background="#e0e0e0"
+                                                                    DisplayMember="Name"
+                                                                    ItemsSource="{Binding Path= Windspeed}"
+                                                                    SeriesTitle="Name"
+                                                                    ValueMember="Speed" HorizontalAlignment="Center"/>
+                                            </MetroChart:RadialGaugeChart.Series>
+                                        </MetroChart:RadialGaugeChart>
+                                  </Grid>
                                 </TextBlock>
 
                             </Grid>
                         </DockPanel>
-                        <DockPanel Grid.Row="1" Margin="0,430,0,0">
-                            <TextBlock TextWrapping="WrapWithOverflow">
-                    <chartingToolkit:Chart Height="230" Width="550">
-                        <chartingToolkit:Chart.LegendStyle>
-                                    <Style TargetType="Control">
-                                     <Setter Property="Width" Value="0"/>
-                                     <Setter Property="Height" Value="0"/>
-                                    </Style>
-                                   </chartingToolkit:Chart.LegendStyle> 
-							<chartingToolkit:ColumnSeries    FontWeight="Bold"  
-								                    ItemsSource="{Binding GenerationByTypeList, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, NotifyOnSourceUpdated=True }"
-													DependentValueBinding="{Binding Path=Value}" 
-													IndependentValueBinding="{Binding Path=Key}"
-													 > 
+                    </Grid>
+                    <DockPanel Grid.Row="1" Margin="0,40,0,0" >
+                        <TextBlock  TextWrapping="WrapWithOverflow">
+                                <!--<chartingToolkit:Chart Height="230" Width="550" Title="Total production by generator type" >
+                                   
+                                                <chartingToolkit:Chart.LegendStyle>
+                                                <Style TargetType="Control">
+                                                 <Setter Property="Width" Value="0"/>
+                                                 <Setter Property="Height" Value="0"/>
+                                                </Style>
+                                               </chartingToolkit:Chart.LegendStyle> 
+							            <chartingToolkit:ColumnSeries    FontWeight="Bold"  
+								                                ItemsSource="{Binding GenerationByTypeList, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, NotifyOnSourceUpdated=True }"
+													            DependentValueBinding="{Binding Path=Value}" 
+													            IndependentValueBinding="{Binding Path=Key}"
+													             Title="Total"> 
                                     
-							</chartingToolkit:ColumnSeries>
-                     </chartingToolkit:Chart>
+							            </chartingToolkit:ColumnSeries>
+                                 </chartingToolkit:Chart>-->   
+                            <MetroChart:ClusteredColumnChart  Background="{x:Null}" ChartTitle="Total production by generator type" ChartSubTitle=""  Foreground="Black" FontSize="7">
+                                <MetroChart:ClusteredColumnChart.Series>
+                                    <MetroChart:ChartSeries Background="#e0e0e0"
+                                                                    DisplayMember="Type"
+                                                                    ItemsSource="{Binding Path=TotalProductionColumnChart}"
+                                                                    SeriesTitle="Type"
+                                                                    ValueMember="Production" HorizontalAlignment="Center">
+                                        
+                                    </MetroChart:ChartSeries>
+                                </MetroChart:ClusteredColumnChart.Series>
+                            </MetroChart:ClusteredColumnChart>
                             </TextBlock>
                         </DockPanel>
                     </Grid>
                     <StackPanel Grid.Column="1" DockPanel.Dock="Top" Margin="10,10,10,0">
                         <Grid >
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox  Margin="40,-10,5,0" Content="CO2" Foreground="Black"/>
-                                <CheckBox  Margin="0,-10,5,0" Content="Pp" Foreground="Black" />
-                                <CheckBox  Margin="0,-10,5,0" Content="Pg" Foreground="Black"/>
-                                <CheckBox  Margin="0,-10,5,0" Content="$" Foreground="Black"/>
+                            <CheckBox  Margin="40,-10,5,0" Content="CO2" Foreground="Black"/>
+                            <CheckBox  Margin="0,-10,5,0" Content="$" Foreground="Black"/>
                             </StackPanel>
 
                             <StackPanel Margin="40,10,0,0">
@@ -363,7 +423,7 @@
 													IndependentValueBinding="{Binding Path=Key}"
 													IsSelectionEnabled="False"
 													Style="{StaticResource LineSeriesStyle}"
-													Title="Total Generation" Margin="0,10,0,0" 
+													Title="Total Generation   " Margin="0,10,0,0" 
 													>
 									<chartingToolkit:LineSeries.DataPointStyle>
 										<Style TargetType="chartingToolkit:LineDataPoint">
@@ -380,7 +440,7 @@
 													IndependentValueBinding="{Binding Path=Key}" 
 													IsSelectionEnabled="False"
 													Style="{StaticResource LineSeriesStyle}"
-															Title="Total Demand  ">
+															Title="Total Consumption  ">
 									<chartingToolkit:LineSeries.DataPointStyle>
 										<Style TargetType="chartingToolkit:LineDataPoint">
 											<Setter Property="Background" Value="DarkOrange"/>
@@ -394,7 +454,7 @@
                         </Grid>
                     </StackPanel>
                 </Grid>
-                <StackPanel Grid.Row="1" DockPanel.Dock="Top" Margin="10,10,10,0">
+                <StackPanel Grid.Row="1" DockPanel.Dock="Top" Margin="10,50,10,0">
                     <DockPanel>
                         <GroupBox Header="Generators" Foreground="Black" VerticalAlignment="Top">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Width="150" HorizontalScrollBarVisibility="Auto">

@@ -74,8 +74,7 @@
 												DependentValueBinding="{Binding Path=Item1}" 
 												IndependentValueBinding="{Binding Path=Item2}"
 												IsSelectionEnabled="False"
-												Style="{StaticResource LineSeriesStyle}"
-                                                >
+												Style="{StaticResource LineSeriesStyle}">
 						<chartingToolkit:LineSeries.DataPointStyle>
 							<Style TargetType="chartingToolkit:LineDataPoint">
 								<Setter Property="Background" Value="LightGreen"/>
@@ -83,7 +82,7 @@
 							</Style>
 						</chartingToolkit:LineSeries.DataPointStyle>
 
-						<chartingToolkit:LineSeries.IndependentAxis>
+						<!--<chartingToolkit:LineSeries.IndependentAxis>
 							<chartingToolkit:DateTimeAxis Orientation="X" Title="Time"  />
 						</chartingToolkit:LineSeries.IndependentAxis>
 
@@ -95,13 +94,15 @@
 							<Style TargetType="chartingToolkit:LegendItem">
 								<Setter Property="Width" Value="0"/>
 							</Style>
-						</chartingToolkit:LineSeries.LegendItemStyle>
+						</chartingToolkit:LineSeries.LegendItemStyle>-->
 
 					</chartingToolkit:LineSeries>
 				</chartingToolkit:Chart>
 			</Grid>
-		</DataTemplate>
+        </DataTemplate >
 
+       
+        
 	</UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -174,7 +175,7 @@
                     </Grid>
                 </GroupBox>
 
-                <CheckBox Grid.Row="5" Grid.Column="0" Content="All Energy Consumers" Margin="10" Foreground="Black" >
+                <!--<CheckBox Grid.Row="5" Grid.Column="0" Content="All Energy Consumers" Margin="10" Foreground="Black" >
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Checked">
 							<i:InvokeCommandAction Command="{Binding DataContext.AllEnergyConsumersCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -185,9 +186,9 @@
 											   />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </CheckBox>
+                </CheckBox>-->
 
-				<GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Energy Consumers" Foreground="Black">
+				<!--<GroupBox Grid.Row="6" Grid.Column="0" Margin="10" FontSize="14" Header="Energy Consumers" Foreground="Black">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -199,7 +200,7 @@
                             </ItemsControl>
                         </ScrollViewer>
                     </Grid>
-                </GroupBox>
+                </GroupBox>-->
 
                 <Button Grid.Row="7" Grid.Column="0" Content="View Data" Margin="10" 
 					Command="{Binding ShowDataCommand}"></Button>
@@ -216,7 +217,7 @@
 
 
 
-                <Expander Grid.Row="0" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="Black">
+                <!--<Expander Grid.Row="0" Margin="10" IsExpanded="{Binding IsExpandedTotalProduction}" Header="Total Production" Foreground="Black">-->
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -226,7 +227,7 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
-                            <CheckBox Content="All Generators" Margin="10" Foreground="Black" IsChecked="True">
+                            <CheckBox Content="Total production" Margin="10" Foreground="Black" IsChecked="True">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.TotalProductionGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -247,7 +248,7 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-							<CheckBox Content="All Energy Consumers" Margin="10" Foreground="Black" IsChecked="True">
+							<!--<CheckBox Content="All Energy Consumers" Margin="10" Foreground="Black" IsChecked="True">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.TotaLoadGraphCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -256,8 +257,8 @@
                                         <i:InvokeCommandAction Command="{Binding DataContext.TotalLoadGraphUnCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </CheckBox>
-                            <CheckBox Content="Selected BS" Margin="10" Foreground="Black">
+                            </CheckBox>-->
+                            <!--<CheckBox Content="Selected Consumers" Margin="10" Foreground="Black">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding DataContext.LoadForSelectedCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
@@ -266,21 +267,27 @@
                                         <i:InvokeCommandAction Command="{Binding DataContext.LoadForSelectedUnCheckedCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </CheckBox>
+                            </CheckBox>-->
 							<CheckBox Margin="10" Content="CO2" Foreground="Black"/>
 							<CheckBox Margin="10" Content="Price" Foreground="Black"/>
 
 						</StackPanel>
 
                         <!--GRAPH-->
-                        <chartingToolkit:Chart Grid.Row="1" Margin="10" Title="Total Production" Style="{StaticResource DashboardChartStyle}" Height="600">
-
-                            <chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProduction}" 
+                        <chartingToolkit:Chart Grid.Row="1" Margin="10"  Style="{StaticResource DashboardChartStyle}" Height="600">
+                        <chartingToolkit:Chart.LegendStyle>
+                            <Style TargetType="Control">
+                                <Setter Property="Width" Value="0"/>
+                                <Setter Property="Height" Value="0"/>
+                            </Style>
+                        </chartingToolkit:Chart.LegendStyle>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProduction}" 
 												DependentValueBinding="{Binding Path=Item1}" 
 												IndependentValueBinding="{Binding Path=Item2}"
 												IsSelectionEnabled="False"
 												Style="{StaticResource LineSeriesStyle}"
-                                                Title="Total Generation [kW]"
+                                                Title="Total Generation [MW]  "
+                                                
                                                 Visibility="{Binding Path=TotalProductionGraphVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <chartingToolkit:LineSeries.DataPointStyle>
                                     <Style TargetType="chartingToolkit:LineDataPoint">
@@ -289,30 +296,17 @@
                                     </Style>
                                 </chartingToolkit:LineSeries.DataPointStyle>
 
-                                <chartingToolkit:LineSeries.IndependentAxis>
+                                <!--<chartingToolkit:LineSeries.IndependentAxis>
                                     <chartingToolkit:DateTimeAxis Orientation="X" Title="Time"  />
                                 </chartingToolkit:LineSeries.IndependentAxis>
 
                                 <chartingToolkit:LineSeries.DependentRangeAxis>
                                     <chartingToolkit:LinearAxis Orientation="Y" Title="Power (kW)"/>
-                                </chartingToolkit:LineSeries.DependentRangeAxis>
+                                </chartingToolkit:LineSeries.DependentRangeAxis>-->
 
                             </chartingToolkit:LineSeries>
-
-                            <!--<chartingToolkit:LineSeries ItemsSource="{Binding Path=GraphTotalProductionForSelected}" 
-												DependentValueBinding="{Binding Path=Item1}" 
-												IndependentValueBinding="{Binding Path=Item2}"
-												IsSelectionEnabled="False"
-												Style="{StaticResource LineSeriesStyle}"
-                                                Title="Generation for selected generators [kW]"
-                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <chartingToolkit:LineSeries.DataPointStyle>
-                                    <Style TargetType="chartingToolkit:LineDataPoint">
-                                        <Setter Property="Background" Value="LightGreen"/>
-                                        <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
-                                    </Style>
-                                </chartingToolkit:LineSeries.DataPointStyle>
-                            </chartingToolkit:LineSeries>-->
+                        
+                           
 
                             <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[0].Value}" 
 												DependentValueBinding="{Binding Path=Item1}" 
@@ -454,12 +448,160 @@
                                     </Style>
                                 </chartingToolkit:LineSeries.DataPointStyle>
                             </chartingToolkit:LineSeries>
-                            
-                        </chartingToolkit:Chart>
-                    </Grid>
-                </Expander>
 
-                <Expander Grid.Row="1" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="Black" Margin="10">
+
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[10].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                Title="{Binding Path=GeneratorsContainer[10].Key, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="DarkSeaGreen"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[11].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                 Title="{Binding Path=GeneratorsContainer[11].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="DarkViolet"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[12].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[12].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="DarkTurquoise"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[13].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[13].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="Firebrick"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[14].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[14].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="Goldenrod"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[15].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[15].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="CadetBlue"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[16].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[16].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="Magenta"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[17].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[17].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="Khaki"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[18].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[18].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="DarkSlateGray"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+                        <chartingToolkit:LineSeries ItemsSource="{Binding Path=GeneratorsContainer[19].Value}" 
+												DependentValueBinding="{Binding Path=Item1}" 
+												IndependentValueBinding="{Binding Path=Item2}"
+												IsSelectionEnabled="False"
+												Style="{StaticResource LineSeriesStyle}"
+                                                        Title="{Binding Path=GeneratorsContainer[19].Key}"
+                                                Visibility="{Binding Path=TotalProductionForSelectedVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <chartingToolkit:LineSeries.DataPointStyle>
+                                <Style TargetType="chartingToolkit:LineDataPoint">
+                                    <Setter Property="Background" Value="ForestGreen"/>
+                                    <Setter Property="Template" Value="{StaticResource LineDataPointTemplate}"/>
+                                </Style>
+                            </chartingToolkit:LineSeries.DataPointStyle>
+                        </chartingToolkit:LineSeries>
+
+
+
+
+                      
+
+
+                    </chartingToolkit:Chart>
+                    </Grid>
+                <!--</Expander>-->
+
+                <!--<Expander Grid.Row="1" IsExpanded="{Binding IsExpandedSeparated}" Header="Production by separate generator" Foreground="Black" Margin="10">
                     <ItemsControl ItemsSource="{Binding GeneratorsContainer}" 
 								  ItemTemplate="{StaticResource GraphGeneratorTemplate}" >
                         <ItemsControl.ItemsPanel>
@@ -468,7 +610,7 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
-                </Expander>
+                </Expander>-->
             </Grid>
         </Grid>
     </ScrollViewer>

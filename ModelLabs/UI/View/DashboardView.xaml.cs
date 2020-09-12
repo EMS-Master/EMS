@@ -43,8 +43,9 @@ namespace UI.View
             var dataCOntext = menu.DataContext;
             var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
             long gid = v.Key;
+            string name = v.Value[0].Name;
 
-            SetPointWindow setPointWindow = new SetPointWindow(gid);
+            SetPointWindow setPointWindow = new SetPointWindow(gid, name);
             setPointWindow.Show();
         }
     }
