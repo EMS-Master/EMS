@@ -25,7 +25,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_1</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Ruma</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_2">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -35,7 +35,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_2</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_2</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Beograd</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_3">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -45,7 +45,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_3</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_3</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_3</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Zlatibor</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_4">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -55,7 +55,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_4</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_4</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_4</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Vranje</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_5">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -65,7 +65,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_5</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_5</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_5</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Nis</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_6">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -75,7 +75,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_6</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_6</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_6</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Devrec 1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_7">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -85,7 +85,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_7</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_7</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_7</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Kula 1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_8">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -95,7 +95,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_8</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_8</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_8</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Kula 2</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_9">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -105,7 +105,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_9</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_9</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_9</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Malibunar</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_10">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -115,7 +115,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_10</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_10</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_10</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Alibunar</cim:IdentifiedObject.name>
 	</cim:Generator>
 		<cim:Generator rdf:ID="Generator_11">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -125,7 +125,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_11</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_11</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_11</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_12">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -135,7 +135,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_12</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_12</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_12</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 2</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_13">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -145,7 +145,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_13</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_13</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_13</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Bajina Basta</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_14">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
@@ -155,7 +155,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_14</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_14</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_14</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_15">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
@@ -165,7 +165,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_15</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_15</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_15</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 2</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_16">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
@@ -175,7 +175,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_16</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_16</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_16</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 3</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_17">
 		<cim:Generator.generatorType>gas</cim:Generator.generatorType>
@@ -185,7 +185,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_17</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_17</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_17</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE-TO Pancevo 1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_18">
 		<cim:Generator.generatorType>gas</cim:Generator.generatorType>
@@ -195,7 +195,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_18</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_18</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_18</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE-TO Pancevo 2</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_19">
 		<cim:Generator.generatorType>coal</cim:Generator.generatorType>
@@ -205,7 +205,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_19</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_19</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_19</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE Kolubara A</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_20">
 		<cim:Generator.generatorType>coal</cim:Generator.generatorType>
@@ -215,7 +215,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_20</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_20</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Generator_20</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE Kolubara B</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:EnergyConsumer rdf:ID="EnergyConsumer_1">
 		<cim:EnergyConsumer.currentPower>21</cim:EnergyConsumer.currentPower>
