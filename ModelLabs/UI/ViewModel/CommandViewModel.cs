@@ -8,9 +8,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using UI.PubSub;
 
 namespace UI.ViewModel
 {
@@ -18,6 +20,8 @@ namespace UI.ViewModel
     {
         private int resourcesLeft;
         private int resourcesLeft2;
+
+        private CeSubscribeProxy ceSubscribeProxy;
 
 
         private List<ModelCode> properties;
@@ -37,7 +41,7 @@ namespace UI.ViewModel
         private List<ResourceDescription> retList2;
 
 
-        private ObservableCollection<ModelForCheckboxes> gens =  new ObservableCollection<ModelForCheckboxes>();
+        private ObservableCollection<MeasurementUI> gens =  new ObservableCollection<MeasurementUI>();
         private ObservableCollection<ModelForCheckboxes> baterry = new ObservableCollection<ModelForCheckboxes>();
         private ICommand activateGen;
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
@@ -49,8 +53,8 @@ namespace UI.ViewModel
 
         private void ActivateGenExecute(object obj)
         {
-            ModelForCheckboxes model = (ModelForCheckboxes)obj;
-            ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Id, model.IsActive);
+            MeasurementUI model = (MeasurementUI)obj;
+            ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Gid, !model.IsActive);
         }
         private void CommandGenMessBoxExecute(object obj)
         {
@@ -64,15 +68,15 @@ namespace UI.ViewModel
    
         private void CommandGenExecute(object obj)
 		{
-			ModelForCheckboxes model = (ModelForCheckboxes)obj;
+			MeasurementUI model = (MeasurementUI)obj;
 			if(model.IsActive)
 			{
-				ScadaCommandingProxy.Instance.CommandAnalogValues(model.Id, model.InputValue);
+				ScadaCommandingProxy.Instance.CommandAnalogValues(model.Gid, model.CurrentValue);
 			}
 		}
 
 
-		public ObservableCollection<ModelForCheckboxes> Gens
+		public ObservableCollection<MeasurementUI> Gens
         {
             get
             {
@@ -102,7 +106,7 @@ namespace UI.ViewModel
         {
             Title = "Command";
             testGda = new TestGDA();
-
+            SubsrcibeToCE();
             IntegrityUpdate();
         }
 
@@ -179,19 +183,19 @@ namespace UI.ViewModel
 
                 var descrete = DbManager.Instance.GetDiscreteCounters().ToList();
 
-                foreach (ResourceDescription rd in internalGen)
-                {
-                    if (Gens.Any(x=> x.Id == rd.Id))
-                    {
-                        continue;
-                    }
+                //foreach (ResourceDescription rd in internalGen)
+                //{
+                //    if (Gens.Any(x=> x.Id == rd.Id))
+                //    {
+                //        continue;
+                //    }
 
-                    bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
-                    float inputValue = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == rd.Id).OrderByDescending(x => x.MeasurementTime).First().MeasurementValue;
-                    Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active, InputValue = inputValue, Name = rd.Properties[6].ToString(), Element = "Generator", Gid=rd.Id});
+                //    bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
+                //    float inputValue = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == rd.Id).OrderByDescending(x => x.MeasurementTime).First().MeasurementValue;
+                //    Gens.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active, InputValue = inputValue, Name = rd.Properties[6].ToString(), Element = "Generator", Gid=rd.Id});
 
-                }
-                OnPropertyChanged(nameof(Gens));
+                //}
+                //OnPropertyChanged(nameof(Gens));
 
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
@@ -229,7 +233,59 @@ namespace UI.ViewModel
                 CommonTrace.WriteTrace(CommonTrace.TraceError, message);
             }
         }
+        private int attemptsCount = 0;
+        private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
 
+        private void SubsrcibeToCE()
+        {
+            try
+            {
+                ceSubscribeProxy = new CeSubscribeProxy(CallbackAction);
+                ceSubscribeProxy.Subscribe();
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Could not connect to Publisher Service! \n ");
+                Thread.Sleep(1000);
+
+                if (attemptsCount++ < NUMBER_OF_ALLOWED_ATTEMPTS)
+                {
+                    SubsrcibeToCE();
+                }
+                else
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, "Could not connect to Publisher Service!  \n {0}", e.Message);
+                }
+
+            }
+        }
+
+        private void CallbackAction(object obj)
+        {
+            List<MeasurementUI> measUIs = obj as List<MeasurementUI>;
+            if (obj == null)
+            {
+                throw new Exception("CallbackAction receive wrong parameter");
+            }
+            if (measUIs.Count == 0)
+            {
+                return;
+            }
+
+            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(measUIs[0].Gid) == DMSType.GENERATOR)
+            {
+                ObservableCollection<MeasurementUI> newList = new ObservableCollection<MeasurementUI>();
+
+                foreach (var item in measUIs)
+                {
+                    if (item.GeneratorType != GeneratorType.Hydro && item.GeneratorType != GeneratorType.Solar && item.GeneratorType != GeneratorType.Wind)
+                        newList.Add(item);
+                }
+
+                Gens = newList;
+                OnPropertyChanged(nameof(Gens));
+            }
+        }
     }
 
     public class ModelForCheckboxes

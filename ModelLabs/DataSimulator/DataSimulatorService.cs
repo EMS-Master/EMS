@@ -234,7 +234,7 @@ namespace DataSimulator
 
             for(int i = 0; i < 20; i++)
             {
-                consumptions.Add(random.Next((int)(range.Item1 * 10000), (int)(range.Item2 * 10000))); //kW indutries
+                consumptions.Add(random.Next((int)(range.Item1 * 100000), (int)(range.Item2 * 100000))); //kW indutries
             }
 
             float sumOfConsumption = consumptions.Sum();

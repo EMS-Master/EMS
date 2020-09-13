@@ -32,6 +32,9 @@ namespace UI.ViewModel
         public HistoryWindowViewModel(long gid)
         {
             globalId = gid;
+            startTime = DateTime.Now.AddMinutes(-1);
+            endTime = DateTime.Now;
+            SelectedPeriod = PeriodValues.None;
         }
 
         private void ShowDataCommandExecute(object obj)

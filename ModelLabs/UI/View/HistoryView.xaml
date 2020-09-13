@@ -168,7 +168,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" >
                             <ItemsControl ItemsSource="{Binding GeneratorsFromNms}"
 										  ItemTemplate="{StaticResource GensAndBSVisibilityCheckbox}"/>
                         </ScrollViewer>

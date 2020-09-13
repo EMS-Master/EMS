@@ -77,14 +77,28 @@
                     <Grid Width="23" Height="20" Margin="-210, -139, 0, 0">
                         <Grid.ContextMenu>
                             <ContextMenu>
-                                <ContextMenu.Visibility>
+                                <!--<ContextMenu.Visibility>
                                     <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
                                     </Binding>
-                                </ContextMenu.Visibility>
+                                </ContextMenu.Visibility>-->
                                 <MenuItem x:Name="MenuItemSetPoint" Click="MenuItemSetPoint_Click" Header="Set point">
+                                    <MenuItem.Visibility>
+                                        <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                        </Binding>
+                                    </MenuItem.Visibility>
                                 </MenuItem>
-                                <MenuItem x:Name="MenuItemHistory" Header="History" Click="MenuItemHistory_Click"/>
-                                <MenuItem Header="Fuel economy"/>
+                                <MenuItem x:Name="MenuItemHistory" Header="History" Click="MenuItemHistory_Click">
+                                    <!--<MenuItem.Visibility>
+                                        <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                        </Binding>
+                                    </MenuItem.Visibility>-->
+                                </MenuItem>
+                                <MenuItem Header="Fuel economy">
+                                    <MenuItem.Visibility>
+                                        <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                        </Binding>
+                                    </MenuItem.Visibility>
+                                </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
                         <Ellipse Fill="{Binding ElementName=GenDigital, Path=IsChecked, Converter={StaticResource BoolToColorConverter}}" Stroke="{Binding ElementName=GenDigital, Path=IsChecked, Converter={StaticResource BoolToColorConverter}}" StrokeThickness="2" >
@@ -183,7 +197,7 @@
 												IndependentValueBinding="{Binding Path=Key}"
 												IsSelectionEnabled="False"
 												Style="{StaticResource LineSeriesStyle}"
-                                                Title="Total Generation [kW]"
+                                                Title="Total Generation [MW]"
                                                 >
                                 <chartingToolkit:LineSeries.DataPointStyle>
                                     <Style TargetType="chartingToolkit:LineDataPoint">
@@ -382,7 +396,7 @@
                                     
 							            </chartingToolkit:ColumnSeries>
                                  </chartingToolkit:Chart>-->   
-                            <MetroChart:ClusteredColumnChart  Background="{x:Null}" ChartTitle="Total production by generator type" ChartSubTitle=""  Foreground="Black" FontSize="7">
+                            <MetroChart:ClusteredColumnChart  Background="{x:Null}" ChartTitle="Total production by generator type" ChartSubTitle=""  Foreground="Black" FontSize="14">
                                 <MetroChart:ClusteredColumnChart.Series>
                                     <MetroChart:ChartSeries Background="#e0e0e0"
                                                                     DisplayMember="Type"
@@ -405,7 +419,7 @@
 
                             <StackPanel Margin="40,10,0,0">
                                 <StackPanel Orientation="Horizontal"  DockPanel.Dock="Top">
-                                    <TextBlock  Style="{StaticResource Title}" Foreground="Green" Text="Generation:" />
+                                    <TextBlock  Style="{StaticResource Title}" Foreground="Green" Text="Production:" />
                                     <TextBlock  Style="{StaticResource SubTitle}" Foreground="Green" Text="{Binding CurrentProduction}" Margin="5,0,0,0" />
                                     <TextBlock  Style="{StaticResource SubTitle}" Foreground="Green" Text="MW" Margin="5,0,0,0" />
                                 </StackPanel>
@@ -456,7 +470,7 @@
                 </Grid>
                 <StackPanel Grid.Row="1" DockPanel.Dock="Top" Margin="10,50,10,0">
                     <DockPanel>
-                        <GroupBox Header="Generators" Foreground="Black" VerticalAlignment="Top">
+                        <GroupBox Margin="0,0,10,0" Header="Generators" Foreground="Black" VerticalAlignment="Top">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Width="150" HorizontalScrollBarVisibility="Auto">
                                 <ItemsControl ItemsSource="{Binding GeneratorsContainer}"
 										  ItemTemplate="{StaticResource VisibilityCheckbox}" />

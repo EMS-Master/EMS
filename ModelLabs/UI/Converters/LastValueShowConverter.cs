@@ -13,19 +13,10 @@ namespace UI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            //IEnumerable<object> m1 = values[0] as IEnumerable<object>;
-            //List<MeasurementUI> m2 = new List<MeasurementUI>();
-            //foreach (var item in m1)
-            //{
-            //    MeasurementUI m = (MeasurementUI)item;
-            //    MeasurementUI mm = item as MeasurementUI;
-
-            //    m2.Add(m);
-            //}
             IEnumerable<MeasurementUI> measUIs = values[0] as IEnumerable<MeasurementUI>;
             if (measUIs != null)
             {
-                return measUIs.LastOrDefault()?.CurrentValue.ToString();
+                return measUIs.LastOrDefault()?.CurrentValue.ToString("0.00") + " [MW]";
             }
 
             return "0";

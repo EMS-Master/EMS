@@ -591,12 +591,12 @@ namespace UI.ViewModel
 
         private void AllGeneratorsUnheckedCommandExecute(object obj)
         {
-            foreach (var v in GidToBoolMap)
+            for (int i = 0; i < GidToBoolMap.Count; i++)
             {
-                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(v.Key);
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(GidToBoolMap.Keys.ElementAt(i));
                 if (type == DMSType.GENERATOR)
                 {
-                    GidToBoolMap[v.Key] = false;
+                    GidToBoolMap[GidToBoolMap.Keys.ElementAt(i)] = false;
                 }
             }
             OnPropertyChanged(nameof(GidToBoolMap));

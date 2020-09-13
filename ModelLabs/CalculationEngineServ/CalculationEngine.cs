@@ -233,8 +233,8 @@ namespace CalculationEngineServ
                     };
                     DbManager.Instance.AddHistoryMeasurement(h);
                 }
-                DbManager.Instance.SaveChanges();   
-                
+                DbManager.Instance.SaveChanges();
+
             }
             catch (Exception e)
             {
