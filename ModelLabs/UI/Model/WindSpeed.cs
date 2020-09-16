@@ -13,8 +13,8 @@ namespace UI.Model
 
         public WindSpeed()
         {
-            Name = "CO2 Reduction";
-            Speed = (float)21.34;
+            Name = "Wind production percent";
+            Speed = 0;
         }
         public WindSpeed(string n, float s)
         {

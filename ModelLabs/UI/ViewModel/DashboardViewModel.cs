@@ -352,59 +352,63 @@ namespace UI.ViewModel
         private void CallbackAction(object obj)
         {
             List<MeasurementUI> measUIs = obj as List<MeasurementUI>;
-            UpdateWindSpeed();
-
-            
-            if (obj == null)
+            if (measUIs == null)
             {
-                throw new Exception("CallbackAction receive wrong parameter");
+                float wind = (float)obj;
+                UpdateWindSpeed(wind);
             }
-            if (measUIs.Count == 0)
+            else
             {
-                return;
-            }
-            try
-            {
-                if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(measUIs[0].Gid) == DMSType.ENERGY_CONSUMER)
+                if (obj == null)
                 {
-                    App.Current.Dispatcher.Invoke((Action)delegate
-                    {
-                        AddMeasurmentTo(EnergyConsumersContainer, measUIs);
-                        CurrentConsumption = measUIs.Sum(x => x.CurrentValue).ToString("0.00");
-                        float curC = measUIs.Sum(x => x.CurrentValue);
-                        lock (DemandList)
-                        {
-                            DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, curC));
-                            if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
-                            {
-                                DemandList.RemoveAt(0);
-                            }
-                        }
-                    });
+                    throw new Exception("CallbackAction receive wrong parameter");
                 }
-                else
+                if (measUIs.Count == 0)
                 {
-                    App.Current.Dispatcher.Invoke((Action)delegate
+                    return;
+                }
+                try
+                {
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(measUIs[0].Gid) == DMSType.ENERGY_CONSUMER)
                     {
-
-                        AddMeasurmentTo(GeneratorsContainer, measUIs);
-                        CurrentProduction = measUIs.Sum(x => x.CurrentValue).ToString("0.00");
-                        float curP = measUIs.Sum(x => x.CurrentValue);
-                        lock (GenerationList)
+                        App.Current.Dispatcher.Invoke((Action)delegate
                         {
-                            GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, curP));
-                            if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                            AddMeasurmentTo(EnergyConsumersContainer, measUIs);
+                            CurrentConsumption = measUIs.Sum(x => x.CurrentValue).ToString("0.00");
+                            float curC = measUIs.Sum(x => x.CurrentValue);
+                            lock (DemandList)
                             {
-                                GenerationList.RemoveAt(0);
+                                DemandList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, curC));
+                                if (DemandList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                                {
+                                    DemandList.RemoveAt(0);
+                                }
                             }
-                        }
+                        });
+                    }
+                    else
+                    {
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
 
-                        CurrentWindProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Wind).Sum(x => x.CurrentValue);
-                        CurrentSolarProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Solar).Sum(x => x.CurrentValue);
-                        CurrentHydroProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Hydro).Sum(x => x.CurrentValue);
-                        CurrentCoalProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Coal).Sum(x => x.CurrentValue) ;
-                        CurrentOilProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Oil).Sum(x => x.CurrentValue);
-                        CurrentGasProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Gas).Sum(x => x.CurrentValue);
+                            AddMeasurmentTo(GeneratorsContainer, measUIs);
+                            CurrentProduction = measUIs.Sum(x => x.CurrentValue).ToString("0.00");
+                            float curP = measUIs.Sum(x => x.CurrentValue);
+                            lock (GenerationList)
+                            {
+                                GenerationList.Add(new KeyValuePair<DateTime, float>(measUIs.Last().TimeStamp, curP));
+                                if (GenerationList.Count > MAX_DISPLAY_TOTAL_NUMBER)
+                                {
+                                    GenerationList.RemoveAt(0);
+                                }
+                            }
+
+                            CurrentWindProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Wind).Sum(x => x.CurrentValue);
+                            CurrentSolarProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Solar).Sum(x => x.CurrentValue);
+                            CurrentHydroProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Hydro).Sum(x => x.CurrentValue);
+                            CurrentCoalProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Coal).Sum(x => x.CurrentValue);
+                            CurrentOilProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Oil).Sum(x => x.CurrentValue);
+                            CurrentGasProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Gas).Sum(x => x.CurrentValue);
                         //lock (GenerationByTypeList)
                         //{
                         //    GenerationByTypeList[0] = new KeyValuePair<string,float>("Wind [kW]",CurrentWindProduction );
@@ -413,18 +417,18 @@ namespace UI.ViewModel
                         //    GenerationByTypeList[3] = new KeyValuePair<string, float>("Coal [kW]", CurrentCoalProduction);
                         //    GenerationByTypeList[4] = new KeyValuePair<string, float>("Oil [kW]", CurrentOilProduction);
                         //    GenerationByTypeList[5] = new KeyValuePair<string, float>("Gas [kW]", CurrentGasProduction);
-                            
+
 
                         //}
                         ObservableCollection<ColumChartData> newList = new ObservableCollection<ColumChartData>();
-                        newList.Add( new ColumChartData("Wind [MW]", CurrentWindProduction));
-                        newList.Add(new ColumChartData("Solar [MW]", CurrentSolarProduction));
-                        newList.Add( new ColumChartData("Hydro [MW]", CurrentHydroProduction));
-                        newList.Add(new ColumChartData("Coal [MW]", CurrentCoalProduction));
-                        newList.Add( new ColumChartData("Oil [MW]", CurrentOilProduction));
-                        newList.Add( new ColumChartData("Gas [MW]", CurrentGasProduction));
+                            newList.Add(new ColumChartData("Wind [MW]", CurrentWindProduction));
+                            newList.Add(new ColumChartData("Solar [MW]", CurrentSolarProduction));
+                            newList.Add(new ColumChartData("Hydro [MW]", CurrentHydroProduction));
+                            newList.Add(new ColumChartData("Coal [MW]", CurrentCoalProduction));
+                            newList.Add(new ColumChartData("Oil [MW]", CurrentOilProduction));
+                            newList.Add(new ColumChartData("Gas [MW]", CurrentGasProduction));
 
-                        TotalProductionColumnChart = newList;
+                            TotalProductionColumnChart = newList;
                         //TotalProductionColumnChart.Where(k => k.Type == "Wind [kW]").FirstOrDefault().Production = CurrentWindProduction;
                         //TotalProductionColumnChart.Where(k => k.Type == "Solar [kW]").FirstOrDefault().Production = CurrentSolarProduction;
                         //TotalProductionColumnChart.Where(k => k.Type == "Hydro [MW]").FirstOrDefault().Production = CurrentHydroProduction;
@@ -438,16 +442,17 @@ namespace UI.ViewModel
 
 
                         MaxValue = GenerationList.Max(x => x.Value) + 20;
-                        MinValue = GenerationList.Min(x => x.Value) - 20;
-                        
+                            MinValue = GenerationList.Min(x => x.Value) - 20;
 
-                    });
+
+                        });
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CES can not update measurement values on UI because UI instance does not exist. Message: {0}", e.Message);
+                catch (Exception e)
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CES can not update measurement values on UI because UI instance does not exist. Message: {0}", e.Message);
 
+                }
             }
         }
 
@@ -507,12 +512,9 @@ namespace UI.ViewModel
 
         }
 
-        private void UpdateWindSpeed()
+        private void UpdateWindSpeed(float wind)
         {
-            Random r = new Random();
-            float a = r.Next(0, 70);
-            a = a + (float)r.NextDouble();
-            W.Speed = a;
+            W.Speed = wind;
             ObservableCollection<WindSpeed> newList = new ObservableCollection<WindSpeed>();
             newList.Add(W);
 

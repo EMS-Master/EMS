@@ -28,5 +28,8 @@ namespace FTN.ServiceContracts
     {
         [OperationContract(IsOneWay = false)]
         void OptimizationResults(List<MeasurementUI> result);
+
+        [OperationContract(IsOneWay = false)]
+        void WindPercentResult(float result);
     }
 }

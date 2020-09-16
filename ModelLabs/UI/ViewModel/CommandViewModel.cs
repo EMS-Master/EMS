@@ -267,23 +267,28 @@ namespace UI.ViewModel
             {
                 throw new Exception("CallbackAction receive wrong parameter");
             }
-            if (measUIs.Count == 0)
-            {
-                return;
-            }
 
-            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(measUIs[0].Gid) == DMSType.GENERATOR)
+            if (measUIs != null)
             {
-                ObservableCollection<MeasurementUI> newList = new ObservableCollection<MeasurementUI>();
 
-                foreach (var item in measUIs)
+                if (measUIs.Count == 0)
                 {
-                    if (item.GeneratorType != GeneratorType.Hydro && item.GeneratorType != GeneratorType.Solar && item.GeneratorType != GeneratorType.Wind)
-                        newList.Add(item);
+                    return;
                 }
 
-                Gens = newList;
-                OnPropertyChanged(nameof(Gens));
+                if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(measUIs[0].Gid) == DMSType.GENERATOR)
+                {
+                    ObservableCollection<MeasurementUI> newList = new ObservableCollection<MeasurementUI>();
+
+                    foreach (var item in measUIs)
+                    {
+                        if (item.GeneratorType != GeneratorType.Hydro && item.GeneratorType != GeneratorType.Solar && item.GeneratorType != GeneratorType.Wind)
+                            newList.Add(item);
+                    }
+
+                    Gens = newList;
+                    OnPropertyChanged(nameof(Gens));
+                }
             }
         }
     }

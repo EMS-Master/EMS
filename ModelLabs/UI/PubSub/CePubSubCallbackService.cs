@@ -30,5 +30,10 @@ namespace UI.PubSub
                                    result.ToString(), OperationContext.Current.SessionId);
             CallbackAction(result);
         }
+
+        public void WindPercentResult(float result)
+        {
+            CallbackAction(result);
+        }
     }
 }

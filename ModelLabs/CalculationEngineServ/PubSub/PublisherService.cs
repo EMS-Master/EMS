@@ -37,7 +37,10 @@ namespace CalculationEngineServ.PubSub
             {
                 if((client as ICommunicationObject).State.Equals(CommunicationState.Opened))
                 {
-                    client.OptimizationResults(e.OptimizationResult);
+                    if (e.Message == "wind percent")
+                        client.WindPercentResult(e.WindPercent);
+                    else
+                        client.OptimizationResults(e.OptimizationResult);
                 }
                 else
                 {
@@ -53,7 +56,7 @@ namespace CalculationEngineServ.PubSub
                 }
             }
         }
-            public void Subscribe()
+        public void Subscribe()
         {
             callback = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
             clientsToPublish.Add(callback);
@@ -83,7 +86,27 @@ namespace CalculationEngineServ.PubSub
                 Console.WriteLine(message);
             }
         }
-		public bool Optimization()
+
+        public void PublishWindPercent(float result)
+        {
+            OptimizationEventArgs e = new OptimizationEventArgs
+            {
+                WindPercent = result,
+                Message = "wind percent"
+            };
+            try
+            {
+                OptimizationResultEvent(this, e);
+            }
+            catch (Exception ex)
+            {
+                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+                Console.WriteLine(message);
+            }
+        }
+
+        public bool Optimization()
 		{
 			OptimizationType = "Genetic";
 			// ChangeOptimizationTypeAction?.Invoke(optimizationType);

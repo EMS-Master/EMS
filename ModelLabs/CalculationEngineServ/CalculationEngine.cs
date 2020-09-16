@@ -78,6 +78,7 @@ namespace CalculationEngineServ
 
 			PublishGeneratorsToUI(measurementsOptimized);
             PublishConsumersToUI(measEnergyConsumer);
+            PublishWindPercent(windProductionPct);
 
 
             try
@@ -406,6 +407,11 @@ namespace CalculationEngineServ
                 }
             }
             publisher.PublishOptimizationResults(measUIList);
+        }
+
+        private void PublishWindPercent(float windPercent)
+        {
+            publisher.PublishWindPercent(windPercent);
         }
 
         #endregion
