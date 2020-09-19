@@ -27,11 +27,12 @@ namespace CalculationEngineServ
 
         private static IDictionary<long, Generator> generators;
         private static IDictionary<long, EnergyConsumer> energyConsumers;
-        private float previousEmissionCO2 = 0;
+        private float reductionCO2 = 0;
         private float currentEmissionCO2 = 0;
         private float totalCost = 0;
+		private float profit = 0;
 
-        private float windProductionkW = 0;
+		private float windProductionkW = 0;
         private float windProductionPct = 0;
         private float totalProduction = 0;
 
@@ -43,6 +44,8 @@ namespace CalculationEngineServ
         private float GenRenewable = 0;
         private float GenAll = 0;
         private float Diff = 0;
+
+		private static Dictionary<GeneratorType, float> allTypes;
 
         public CalculationEngine()
         {
@@ -56,7 +59,9 @@ namespace CalculationEngineServ
 
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
-        }
+			allTypes = FillPricePerGeneratorType();
+
+		}
         
 
         public bool Optimize(List<MeasurementUnit> measEnergyConsumer, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
@@ -90,10 +95,6 @@ namespace CalculationEngineServ
                     if (WriteTotalProductionIntoDb(totalProduction, totalCost, DateTime.Now))
                     {
                         Console.WriteLine("The total production is recorded into history database.");
-                    }
-                    if (WriteCO2EmissionIntoDb(previousEmissionCO2, currentEmissionCO2))
-                    {
-                        Console.WriteLine("The CO2 emission is recorded into history database.");
                     }
                 }
                 if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
@@ -161,6 +162,8 @@ namespace CalculationEngineServ
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
 
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
+			Dictionary<long, OptimisationModel> renewableGenerators = new Dictionary<long, OptimisationModel>();
+
             foreach (var item in optModelMap)
             {
                 if (item.Value.Renewable)
@@ -171,6 +174,7 @@ namespace CalculationEngineServ
                     {
                         windProductionkW += item.Value.MeasuredValue;
                     }
+					renewableGenerators.Add(item.Key,item.Value);
                 }
                 else
                 {
@@ -179,26 +183,27 @@ namespace CalculationEngineServ
             }
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
 
-            windProductionPct = windProductionkW / powerOfConsumers * 100;
+            windProductionPct = (windProductionkW * 100) / powerOfConsumers;
+			windProductionkW = 0;
 
-            previousEmissionCO2 = CalculateCO2(optModelMapNonRenewable);
-            var previousCost = CalculateCost(optModelMapNonRenewable); 
+			reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
 
             GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
             optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION,NUMBER_OF_POPULATION,ELITIMS_PERCENTAGE,mutationRate);
-            // calculate power of each
+            
 
-            //new
-            totalCost= gaoRenewable.TotalCost;
-            currentEmissionCO2 = gaoRenewable.EmissionCO2;
-
-            foreach(var item in optModelMapOptimizied)
+            
+			foreach (var item in optModelMapOptimizied)
             {
                 if (optModelMap.ContainsKey(item.Key))
                     optModelMap[item.Key] = item.Value;
             }
 
-            return optModelMap;
+			totalCost = gaoRenewable.TotalCost;
+			currentEmissionCO2 = gaoRenewable.EmissionCO2;
+			profit = GetProfit(optModelMap);
+
+			return optModelMap;
         }
 
         #region Transaction
@@ -276,7 +281,16 @@ namespace CalculationEngineServ
             
             try
             {
-                TotalProduction total = new TotalProduction() { TotalGeneration = totalProduction, TimeOfCalculation = dateTime, TotalCost = totalCost };
+                TotalProduction total = new TotalProduction()
+				{
+					TotalGeneration = totalProduction,
+					CO2Reduction = reductionCO2,
+					CO2Emission = currentEmissionCO2,
+					TimeOfCalculation = dateTime,
+					TotalCost = totalCost,
+					Profit = profit
+				};
+
                 DbManager.Instance.AddTotalProduction(total);
                 DbManager.Instance.SaveChanges();
 
@@ -294,29 +308,29 @@ namespace CalculationEngineServ
             return retVal;
         }
 
-        public bool WriteCO2EmissionIntoDb(float previousEmissionCO2, float currentEmissionCO2)
-        {
-            bool retVal = false;
+        //public bool WriteCO2EmissionIntoDb(float previousEmissionCO2, float currentEmissionCO2)
+        //{
+        //    bool retVal = false;
             
-            try
-            {
-                CO2Emission total = new CO2Emission() { PreviousEmission = previousEmissionCO2, CurrentEmission = currentEmissionCO2, Timestamp = DateTime.Now };
-                DbManager.Instance.AddCO2Emission(total);
-                DbManager.Instance.SaveChanges();
+        //    try
+        //    {
+        //        CO2Emission total = new CO2Emission() { PreviousEmission = previousEmissionCO2, CurrentEmission = currentEmissionCO2, Timestamp = DateTime.Now };
+        //        DbManager.Instance.AddCO2Emission(total);
+        //        DbManager.Instance.SaveChanges();
 
-                retVal = true;
-            }
-            catch (Exception e)
-            {
-                retVal = false;
-                string message = string.Format("Failed to insert CO2 emission into database. {0}", e.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                Console.WriteLine(message);
-            }
+        //        retVal = true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        retVal = false;
+        //        string message = string.Format("Failed to insert CO2 emission into database. {0}", e.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+        //        Console.WriteLine(message);
+        //    }
             
 
-            return retVal;
-        }
+        //    return retVal;
+        //}
 
         public List<Tuple<double, DateTime>> ReadTotalProductionsFromDb(DateTime startTime, DateTime endTime)
         {
@@ -555,18 +569,61 @@ namespace CalculationEngineServ
             return cost;
         }
 
-        public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
-        {
-            //CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
-            float emCO2 = 0;
-            foreach (var optModel in optModelMap.Values)
-            {
-                emCO2 += optModel.GenericOptimizedValue * optModel.EmissionFactor * 0.001f;
-            }
-            return emCO2;
-        }
+		public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
+		{
+			//CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
+			float emCO2 = 0;
+			foreach (var optModel in optModelMap.Values)
+			{
+				emCO2 += optModel.GenericOptimizedValue * optModel.EmissionFactor * 0.001f;
+			}
+			return emCO2;
+		}
 
-        private float CalculateConsumption(IEnumerable<MeasurementUnit> measurements)
+		public float CalculateCO2WithKyotoProtocol(Dictionary<long, OptimisationModel> optModelMap)
+		{
+			float kyotoCoefficient = 0.008f; //	EU - 0.8%
+			return optModelMap.Values.Sum(x => x.GenericOptimizedValue * kyotoCoefficient);
+		}
+
+		public float GetProfit(Dictionary<long, OptimisationModel> allGenerators)
+		{
+			float profitValue = 0;
+			Dictionary<GeneratorType, float> maxPowerPerFuel = new Dictionary<GeneratorType, float>();
+			
+			float sumOfRenewables = allGenerators.Where(x => x.Value.Renewable).Select(u => u.Value.measurementUnit.CurrentValue).Sum();
+
+			maxPowerPerFuel.Add(GeneratorType.Oil, generators.Where(x => x.Value.GeneratorType == GeneratorType.Oil).Sum(y => y.Value.MaxQ));
+			maxPowerPerFuel.Add(GeneratorType.Coal, generators.Where(x => x.Value.GeneratorType == GeneratorType.Coal).Sum(y => y.Value.MaxQ));
+			maxPowerPerFuel.Add(GeneratorType.Gas, generators.Where(x => x.Value.GeneratorType == GeneratorType.Gas).Sum(y => y.Value.MaxQ));
+
+			maxPowerPerFuel[GeneratorType.Oil] -= allGenerators.Where(x => x.Value.TypeGenerator == GeneratorType.Oil).Sum(y => y.Value.MeasuredValue);
+			maxPowerPerFuel[GeneratorType.Coal] -= allGenerators.Where(x => x.Value.TypeGenerator == GeneratorType.Coal).Sum(y => y.Value.MeasuredValue);
+			maxPowerPerFuel[GeneratorType.Gas] -= allGenerators.Where(x => x.Value.TypeGenerator == GeneratorType.Gas).Sum(y => y.Value.MeasuredValue);
+			
+			
+			foreach(var item in allTypes)
+			{
+				if(maxPowerPerFuel[item.Key] >= sumOfRenewables)
+				{
+					profitValue += (item.Value * (sumOfRenewables/1000f));
+					break;
+				}
+				else
+				{
+					sumOfRenewables -= maxPowerPerFuel[item.Key];
+					profitValue += (item.Value * (sumOfRenewables / 1000f));
+				}
+			}
+			return profitValue;
+		}
+		
+		private float GetMaxPowerForCurrentGenerator(GeneratorType generatorType)
+		{
+			return generators.Where(x => x.Value.GeneratorType == generatorType).Select(x => x.Value.MaxQ).Sum();
+		}
+
+		private float CalculateConsumption(IEnumerable<MeasurementUnit> measurements)
         {
             float retVal = 0;
             foreach (var item in measurements)
@@ -599,5 +656,15 @@ namespace CalculationEngineServ
         {
             return new Tuple<int, int, int, float>(NUMBER_OF_ITERATION, NUMBER_OF_POPULATION, ELITIMS_PERCENTAGE, mutationRate);
         }
+
+		private Dictionary<GeneratorType,float> FillPricePerGeneratorType()
+		{
+			var ret = new Dictionary<GeneratorType, float>();
+
+			ret.Add(GeneratorType.Coal, 1f);
+			ret.Add(GeneratorType.Gas, 2f);
+			ret.Add(GeneratorType.Oil, 3f);
+			return ret;
+		}
     }
 }

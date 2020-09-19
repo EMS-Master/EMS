@@ -14,7 +14,5 @@ namespace CalculationEngineServ
         public DbSet<DiscreteCounter> DiscreteCounters { get; set; }
         public DbSet<HistoryMeasurement> HistoryMeasurements { get; set; }
         public DbSet<TotalProduction> TotalProductions { get; set; }
-        public DbSet<CO2Emission> CO2Emissions { get; set; }
-
     }
 }

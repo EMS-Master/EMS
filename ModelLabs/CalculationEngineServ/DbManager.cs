@@ -84,15 +84,6 @@ namespace CalculationEngineServ
         }
         #endregion
 
-        #region CO2Emission
-
-        public void AddCO2Emission(CO2Emission ems)
-        {
-            emsContext.CO2Emissions.Add(ems);
-        }
-
-        #endregion
-
         #region HistoryMeasurements
 
         public IQueryable<HistoryMeasurement> GetHistoryMeasurements()

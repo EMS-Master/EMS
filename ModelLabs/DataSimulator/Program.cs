@@ -32,7 +32,7 @@ namespace DataSimulator
                     float diff = consumSum - generationSum;
                     dss.WriteToSimulatorEverything(sunGeneration, windGeneration, hydroGeneration, consum);
 					
-					Thread.Sleep(10000);
+					Thread.Sleep(4000);
 				}
 			});
 			task.Start();
