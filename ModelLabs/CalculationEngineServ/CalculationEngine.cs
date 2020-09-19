@@ -35,6 +35,8 @@ namespace CalculationEngineServ
 		private float windProductionkW = 0;
         private float windProductionPct = 0;
         private float totalProduction = 0;
+		private float renewableConributionKW = 0;
+		private float renewableContributionPrct = 0;
 
         private static int ELITIMS_PERCENTAGE;
         private static int NUMBER_OF_ITERATION;
@@ -60,7 +62,6 @@ namespace CalculationEngineServ
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
 			allTypes = FillPricePerGeneratorType();
-
 		}
         
 
@@ -164,6 +165,8 @@ namespace CalculationEngineServ
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
 			Dictionary<long, OptimisationModel> renewableGenerators = new Dictionary<long, OptimisationModel>();
 
+			renewableConributionKW = optModelMap.Where(x => x.Value.Renewable).Select(y => y.Value.MeasuredValue).Sum();
+
             foreach (var item in optModelMap)
             {
                 if (item.Value.Renewable)
@@ -185,13 +188,9 @@ namespace CalculationEngineServ
 
             windProductionPct = (windProductionkW * 100) / powerOfConsumers;
 			windProductionkW = 0;
-
-			reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
-
+			
             GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
             optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION,NUMBER_OF_POPULATION,ELITIMS_PERCENTAGE,mutationRate);
-            
-
             
 			foreach (var item in optModelMapOptimizied)
             {
@@ -199,6 +198,8 @@ namespace CalculationEngineServ
                     optModelMap[item.Key] = item.Value;
             }
 
+			reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
+			renewableContributionPrct = (renewableConributionKW * 100) / powerOfConsumers;
 			totalCost = gaoRenewable.TotalCost;
 			currentEmissionCO2 = gaoRenewable.EmissionCO2;
 			profit = GetProfit(optModelMap);
