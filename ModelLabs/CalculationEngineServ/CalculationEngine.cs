@@ -49,7 +49,9 @@ namespace CalculationEngineServ
 
 		private static Dictionary<GeneratorType, float> allTypes;
 
-        public CalculationEngine()
+		private List<GeneratorCurveModel> generatorCurves;
+		
+		public CalculationEngine()
         {
             SetAlgorithmParamsDefault();
 
@@ -62,6 +64,7 @@ namespace CalculationEngineServ
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
 			allTypes = FillPricePerGeneratorType();
+			generatorCurves = LoadXMLFile.Load().Curves;
 		}
         
 
@@ -118,21 +121,29 @@ namespace CalculationEngineServ
         {
             float sumInGetOptModelMap = 0;
             float wholeSum = 0;
-            //lock (lockObj)
-            //{
-                Dictionary<long, OptimisationModel> optModelMap = new Dictionary<long, OptimisationModel>();
+			//lock (lockObj)
+			//{
+				Dictionary<long, OptimisationModel> optModelMap = new Dictionary<long, OptimisationModel>();
 
                 foreach (var measUnit in measGenerators)
                 {
-                    if (generators.ContainsKey(measUnit.Gid))
+					OptimisationModel om = null;
+
+					if (generators.ContainsKey(measUnit.Gid))
                     {
                         Generator g = generators[measUnit.Gid];
-                        wholeSum += measUnit.CurrentValue;
-                        if (g.GeneratorType == GeneratorType.Hydro || g.GeneratorType == GeneratorType.Solar || g.GeneratorType == GeneratorType.Wind)
-                            sumInGetOptModelMap += measUnit.CurrentValue;
-                        OptimisationModel om = new OptimisationModel(g, measUnit, windSpeed, sunlight);
 
-                        optModelMap.Add(om.GlobalId, om);
+					wholeSum += measUnit.CurrentValue;
+						if (g.GeneratorType == GeneratorType.Hydro || g.GeneratorType == GeneratorType.Solar || g.GeneratorType == GeneratorType.Wind)
+							sumInGetOptModelMap += measUnit.CurrentValue;
+					
+						float percentage = (100 * (measUnit.CurrentValue/1000f)) / (g.MaxQ/1000f);
+						percentage = percentage / 100f;
+
+						GeneratorCurveModel generatorCurveModel= generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Contains(g.GeneratorType.ToString()));
+						om = new OptimisationModel(g, measUnit, windSpeed, sunlight, generatorCurveModel);
+					
+						optModelMap.Add(om.GlobalId, om);
                     }
                 }
 
@@ -147,7 +158,7 @@ namespace CalculationEngineServ
                 return optModelMap;
             //}
         }
-        
+		
         private List<MeasurementUnit> DoOptimization(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers, float windSpeed, float sunlight)
         {
           
@@ -550,26 +561,15 @@ namespace CalculationEngineServ
                     Generator g = ResourcesDescriptionConverter.ConvertTo<Generator>(rd);
                     generators.Add(g.GlobalId, g);
                 }
-                foreach (ResourceDescription rd in internalEnergyConsumers)
+				
+				foreach (ResourceDescription rd in internalEnergyConsumers)
                 {
                     EnergyConsumer ec = ResourcesDescriptionConverter.ConvertTo<EnergyConsumer>(rd);
                     energyConsumers.Add(ec.GlobalId, ec);
                 }
             }
         }
-
-        private static float CalculateCost(Dictionary<long, OptimisationModel> optModelMap)
-        {
-            float cost = 0;
-            foreach (var optModel in optModelMap.Values)
-            {
-                float price = optModel.CalculatePrice(optModel.GenericOptimizedValue);
-                cost += price;
-            }
-
-            return cost;
-        }
-
+		
 		public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
 		{
 			//CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
@@ -602,18 +602,29 @@ namespace CalculationEngineServ
 			maxPowerPerFuel[GeneratorType.Coal] -= allGenerators.Where(x => x.Value.TypeGenerator == GeneratorType.Coal).Sum(y => y.Value.MeasuredValue);
 			maxPowerPerFuel[GeneratorType.Gas] -= allGenerators.Where(x => x.Value.TypeGenerator == GeneratorType.Gas).Sum(y => y.Value.MeasuredValue);
 			
-			
-			foreach(var item in allTypes)
+			foreach (var item in allTypes)
 			{
 				if(maxPowerPerFuel[item.Key] >= sumOfRenewables)
 				{
-					profitValue += (item.Value * (sumOfRenewables/1000f));
+					//profitValue += (item.Value * (sumOfRenewables/1000f));
+					float percentage = (100 * (sumOfRenewables / 1000f)) / (maxPowerPerFuel[item.Key]/1000f);
+					percentage = percentage / 100f;
+					GeneratorCurveModel genCurveModel = generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Contains(item.Key.ToString()));
+					float fuelQuantityPerMW = (float)genCurveModel.A * percentage + (float)genCurveModel.B;       //[t/MW]
+					float fuelQuantity = fuelQuantityPerMW * sumOfRenewables / 1000f;
+					profitValue += item.Value * fuelQuantity;
 					break;
 				}
 				else
 				{
 					sumOfRenewables -= maxPowerPerFuel[item.Key];
-					profitValue += (item.Value * (sumOfRenewables / 1000f));
+					float percentage = (100 * (sumOfRenewables / 1000f)) / (maxPowerPerFuel[item.Key] / 1000f);
+					percentage = percentage / 100f;
+					GeneratorCurveModel genCurveModel = generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Contains(item.Key.ToString()));
+					float fuelQuantityPerMW = (float)genCurveModel.A * percentage + (float)genCurveModel.B;       //[t/MW]
+					float fuelQuantity = fuelQuantityPerMW * sumOfRenewables / 1000f;
+					profitValue += item.Value * fuelQuantity;
+					//profitValue += (item.Value * (sumOfRenewables / 1000f));
 				}
 			}
 			return profitValue;
@@ -667,5 +678,5 @@ namespace CalculationEngineServ
 			ret.Add(GeneratorType.Oil, 3f);
 			return ret;
 		}
-    }
+	}
 }

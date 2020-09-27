@@ -96,9 +96,12 @@
     <Compile Include="DataBaseModels\TotalProduction.cs" />
     <Compile Include="DbManager.cs" />
     <Compile Include="EmsContext.cs" />
+    <Compile Include="GeneratorCurveModel.cs" />
+    <Compile Include="GeneratorCurveModels.cs" />
     <Compile Include="GeneticAlgorithm\DNA.cs" />
     <Compile Include="GeneticAlgorithm\GA.cs" />
     <Compile Include="GeneticAlgorithm\GeneticAlgorithm.cs" />
+    <Compile Include="LoadXMLFile.cs" />
     <Compile Include="Migrations\202007111111181_InitialMigration.cs" />
     <Compile Include="Migrations\202007111111181_InitialMigration.designer.cs">
       <DependentUpon>202007111111181_InitialMigration.cs</DependentUpon>

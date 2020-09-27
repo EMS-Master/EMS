@@ -22,7 +22,17 @@ namespace CalculationEngineServ
         public GeneratorType TypeGenerator { get; set; }
 		public float EmissionFactor { get; set; }
 		public MeasurementUnit measurementUnit { get; set; }
-        public OptimisationModel(Generator g, MeasurementUnit mu, float windSpeed, float sunlight)
+		private GeneratorCurveModel curve = new GeneratorCurveModel();
+		public GeneratorCurveModel Curve
+		{
+			get { return curve; }
+			set { curve = value; }
+		}
+		public OptimisationModel(Generator g,
+								 MeasurementUnit mu,
+								 float windSpeed,
+								 float sunlight,
+								 GeneratorCurveModel generatorCurveModel = null)
         {
             GlobalId = g.GlobalId;
             MeasuredValue = mu.CurrentValue;
@@ -36,7 +46,8 @@ namespace CalculationEngineServ
             MaxPower = g.MaxQ;
 			MinPower = g.MinQ;
 			EmissionFactor = SetEmissionFactor(g.GeneratorType);
-        }
+			Curve = generatorCurveModel ?? new GeneratorCurveModel();
+		}
         public float CalculatePrice(float energy)
         {
             if (Renewable)
@@ -44,7 +55,9 @@ namespace CalculationEngineServ
                 return 0;
             }
             float price = 0;
-			float fuelQuantity = energy / 1000f;
+			float percentage = (100 * (energy / 1000f)) / (MaxPower/1000f);
+			float fuelQuantityPerMW = (float)Curve.A * (percentage/100f) + (float)Curve.B;       //[t/MW]
+			float fuelQuantity = fuelQuantityPerMW * energy/1000f;
 			price = Fuel.Item2 * fuelQuantity;
 		
             return price;
