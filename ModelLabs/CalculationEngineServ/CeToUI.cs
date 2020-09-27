@@ -61,5 +61,21 @@ namespace CalculationEngineServ
         {
             return CalculationEngine.SetAlgorithmParamsDefault();
         }
-    }
+
+		public bool SetPricePerGeneratorType(float oilPrice, float coalPrice, float gasPrice)
+		{
+			return CalculationEngine.SetPricePerGeneratorType(oilPrice, coalPrice, gasPrice);
+		}
+
+		public bool SetPricePerGeneratorTypeDefault()
+		{
+			return CalculationEngine.SetPricePerGeneratorTypeDefault();
+		}
+
+		public Tuple<float, float, float> GetPricePerGeneratorType()
+		{
+			return CalculationEngine.GetPricePerGeneratorTypes();
+		}
+		
+	}
 }

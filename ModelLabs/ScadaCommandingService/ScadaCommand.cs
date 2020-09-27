@@ -228,13 +228,13 @@ namespace ScadaCommandingService
 						modbusClient.WriteSingleRegister((ushort)((mes.ScadaAddress - 1) * 2), rawValue);
 
 					}
-					//    else
-					//    {
-					//        if (CheckIfGenerator(item.StartAddress))
-					//        {
-					//            modbusClient.WriteSingleRegister((ushort)((item.StartAddress-1) * 2), (float)0);
-					//        }
-					//    }
+					else
+					{
+						if (CheckIfGenerator(item.StartAddress))
+						{
+							modbusClient.WriteSingleRegister((ushort)((item.StartAddress - 1) * 2), (float)0);
+						}
+					}
 				}
 			}
 
@@ -276,7 +276,7 @@ namespace ScadaCommandingService
 
         private bool CheckIfGenerator(int number)
         {
-            return number > 10 ? true : false;
+            return number > 33 ? true : false;
         }
 
         //public void FillSimulatorFirstTime()

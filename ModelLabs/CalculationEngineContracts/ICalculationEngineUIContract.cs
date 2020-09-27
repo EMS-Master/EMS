@@ -24,5 +24,14 @@ namespace CalculationEngineContracts
 
         [OperationContract]
         Tuple<int,int,int,float> GetAlgorithmOptions();
-    }
+
+		[OperationContract]
+		bool SetPricePerGeneratorType(float oilPrice, float coalPrice, float gasPrice);
+
+		[OperationContract]
+		bool SetPricePerGeneratorTypeDefault();
+
+		[OperationContract]
+		Tuple<float, float, float> GetPricePerGeneratorType();
+	}
 }

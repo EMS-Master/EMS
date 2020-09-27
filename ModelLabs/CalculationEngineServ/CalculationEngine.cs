@@ -54,8 +54,9 @@ namespace CalculationEngineServ
 		public CalculationEngine()
         {
             SetAlgorithmParamsDefault();
+			SetPricePerGeneratorTypeDefault();
 
-            publisher = new PublisherService();
+			publisher = new PublisherService();
             internalGenerators = new List<ResourceDescription>();
             internalEnergyConsumers = new List<ResourceDescription>();
 
@@ -63,7 +64,6 @@ namespace CalculationEngineServ
 
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
-			allTypes = FillPricePerGeneratorType();
 			generatorCurves = LoadXMLFile.Load().Curves;
 		}
         
@@ -74,12 +74,14 @@ namespace CalculationEngineServ
             Dictionary<long, OptimisationModel> optModelMap = GetOptimizationModelMap(measGenerators, windSpeed, sunlight);
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
 
-            float consMinusGenRen = powerOfConsumers - GenRenewable; 
+            float consMinusGenRen = powerOfConsumers - GenRenewable;
+			List<MeasurementUnit> measurementsOptimized = optModelMap.Select(x => x.Value.measurementUnit).ToList();
+			if (optModelMap.Count>13)
+				measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
 
-            List<MeasurementUnit> measurementsOptimized = DoOptimization(optModelMap, powerOfConsumers, windSpeed, sunlight);
-            totalProduction = 0;
 
-           
+			totalProduction = 0;
+			
             if (InsertMeasurementsIntoDb(measurementsOptimized))
             {
                 Console.WriteLine("Inserted {0} Measurement(s) into history database.", measGenerators.Count);
@@ -161,7 +163,6 @@ namespace CalculationEngineServ
 		
         private List<MeasurementUnit> DoOptimization(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers, float windSpeed, float sunlight)
         {
-          
                 Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
 
                 optModelMapOptimizied = CalculateWithGeneticAlgorithm(optModelMap, powerOfConsumers);
@@ -319,31 +320,7 @@ namespace CalculationEngineServ
 
             return retVal;
         }
-
-        //public bool WriteCO2EmissionIntoDb(float previousEmissionCO2, float currentEmissionCO2)
-        //{
-        //    bool retVal = false;
-            
-        //    try
-        //    {
-        //        CO2Emission total = new CO2Emission() { PreviousEmission = previousEmissionCO2, CurrentEmission = currentEmissionCO2, Timestamp = DateTime.Now };
-        //        DbManager.Instance.AddCO2Emission(total);
-        //        DbManager.Instance.SaveChanges();
-
-        //        retVal = true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        retVal = false;
-        //        string message = string.Format("Failed to insert CO2 emission into database. {0}", e.Message);
-        //        CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-        //        Console.WriteLine(message);
-        //    }
-            
-
-        //    return retVal;
-        //}
-
+		
         public List<Tuple<double, DateTime>> ReadTotalProductionsFromDb(DateTime startTime, DateTime endTime)
         {
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
@@ -629,7 +606,7 @@ namespace CalculationEngineServ
 			}
 			return profitValue;
 		}
-		
+
 		private float GetMaxPowerForCurrentGenerator(GeneratorType generatorType)
 		{
 			return generators.Where(x => x.Value.GeneratorType == generatorType).Select(x => x.Value.MaxQ).Sum();
@@ -664,10 +641,37 @@ namespace CalculationEngineServ
             return true;
         }
 
-        public static Tuple<int, int, int, float> GetAlgorithmParams()
+		public static bool SetPricePerGeneratorType(float oilPrice, float coalPrice, float gasPrice)
+		{
+			allTypes[GeneratorType.Coal] = coalPrice < 0 ? 0 : coalPrice;
+			allTypes[GeneratorType.Gas] = gasPrice < 0 ? 0 : gasPrice;
+			allTypes[GeneratorType.Oil] = oilPrice < 0 ? 0 : oilPrice;
+
+			var myList = allTypes.ToList();
+			myList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+			allTypes = myList.ToDictionary(pair => pair.Key, pair => pair.Value);
+			return true;
+		}
+
+		public static bool SetPricePerGeneratorTypeDefault()
+		{
+			allTypes = new Dictionary<GeneratorType, float>();
+
+			allTypes[GeneratorType.Coal] = 1;
+			allTypes[GeneratorType.Gas] = 2;
+			allTypes[GeneratorType.Oil] = 3;
+			return true;
+		}
+
+		public static Tuple<int, int, int, float> GetAlgorithmParams()
         {
             return new Tuple<int, int, int, float>(NUMBER_OF_ITERATION, NUMBER_OF_POPULATION, ELITIMS_PERCENTAGE, mutationRate);
         }
+
+		public static Tuple<float, float, float> GetPricePerGeneratorTypes()
+		{
+			return new Tuple<float, float, float>(allTypes[GeneratorType.Oil], allTypes[GeneratorType.Coal], allTypes[GeneratorType.Gas]);
+		}
 
 		private Dictionary<GeneratorType,float> FillPricePerGeneratorType()
 		{

@@ -64,7 +64,12 @@ namespace CalculationEngineContracts
             return proxy.GetHistoryMeasurements(gid, startTime, endTime);
         }
 
-        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+		public Tuple<float, float, float> GetPricePerGeneratorType()
+		{
+			return proxy.GetPricePerGeneratorType(); 
+		}
+
+		public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
         {
             return proxy.GetTotalProduction(startTime, endTime);
         }
@@ -78,5 +83,15 @@ namespace CalculationEngineContracts
         {
             return proxy.SetAlgorithmOptionsDefault();
         }
-    }
+
+		public bool SetPricePerGeneratorType(float oilPrice, float coalPrice, float gasPrice)
+		{
+			return proxy.SetPricePerGeneratorType(oilPrice, coalPrice, gasPrice);
+		}
+
+		public bool SetPricePerGeneratorTypeDefault()
+		{
+			return proxy.SetPricePerGeneratorTypeDefault();
+		}
+	}
 }
