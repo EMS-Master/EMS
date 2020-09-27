@@ -8,6 +8,8 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CalculationEngineServ;
+using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
@@ -265,9 +267,15 @@ namespace ScadaCommandingService
 
             if (anLoc != null)
             {
+				value = value * 1000f;
                 float rawValue = convertorHelper.ConvertFromEGUToRawValue(value, 1, 0);
                 modbusClient.WriteSingleRegister((ushort)((anLoc.StartAddress - 1) * 2), rawValue);
-            }
+				var commandedGeneratorFromDB = DbManager.Instance.GetCommandedGenerator(gid);
+				commandedGeneratorFromDB.CommandingFlag = true;
+
+				DbManager.Instance.UpdateCommandedGenerator(commandedGeneratorFromDB);
+				DbManager.Instance.SaveChanges();
+			}
 
             Console.WriteLine("SendDataToSimulator executed...\n");
 

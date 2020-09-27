@@ -70,10 +70,50 @@ namespace CalculationEngineServ
             emsContext.Entry(dc).State = System.Data.Entity.EntityState.Modified;
         }
 
-        #endregion
+		#endregion
 
-        #region TotalProduction
-        public IQueryable<TotalProduction> GetTotalProductions()
+		#region CommandedGenerators
+		public IQueryable<CommandedGenerator> GetCommandedGenerators()
+		{
+			lock (emsContext)
+			{
+				return emsContext.CommandedGenerators;
+			}
+		}
+		
+		public CommandedGenerator GetCommandedGenerator(long gid)
+		{
+			lock (emsContext)
+			{
+				return emsContext.CommandedGenerators.FirstOrDefault(x => x.Gid == gid);
+			}
+		}
+
+		public void AddCommandedGenerator(CommandedGenerator cg)
+		{
+			lock (emsContext)
+			{
+				emsContext.CommandedGenerators.Add(cg);
+			}
+		}
+
+		public void AddListCommandedGenerators(List<CommandedGenerator> listCG)
+		{
+			lock(emsContext)
+			{
+				emsContext.CommandedGenerators.AddRange(listCG);
+			}
+		}
+
+		public void UpdateCommandedGenerator(CommandedGenerator cg)
+		{
+			emsContext.Entry(cg).State = System.Data.Entity.EntityState.Modified;
+		}
+
+		#endregion
+
+		#region TotalProduction
+		public IQueryable<TotalProduction> GetTotalProductions()
         {
             return emsContext.TotalProductions;
         }

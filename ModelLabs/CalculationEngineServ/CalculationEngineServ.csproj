@@ -91,6 +91,7 @@
     <Compile Include="CalculationEngineServiceClass.cs" />
     <Compile Include="CeToUI.cs" />
     <Compile Include="DataBaseModels\Alarm.cs" />
+    <Compile Include="DataBaseModels\CommandedGenerator.cs" />
     <Compile Include="DataBaseModels\DiscreteCounter.cs" />
     <Compile Include="DataBaseModels\HistoryMeasurement.cs" />
     <Compile Include="DataBaseModels\TotalProduction.cs" />
@@ -121,6 +122,10 @@
     <Compile Include="Migrations\202009191147199_ProfitAndCO2Reduction.cs" />
     <Compile Include="Migrations\202009191147199_ProfitAndCO2Reduction.designer.cs">
       <DependentUpon>202009191147199_ProfitAndCO2Reduction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202009271418271_CommandedGenerator.cs" />
+    <Compile Include="Migrations\202009271418271_CommandedGenerator.designer.cs">
+      <DependentUpon>202009271418271_CommandedGenerator.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OptimisationModel.cs" />
@@ -194,6 +199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009191147199_ProfitAndCO2Reduction.resx">
       <DependentUpon>202009191147199_ProfitAndCO2Reduction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202009271418271_CommandedGenerator.resx">
+      <DependentUpon>202009271418271_CommandedGenerator.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

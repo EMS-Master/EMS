@@ -135,7 +135,7 @@ namespace CalculationEngineServ
                     {
                         Generator g = generators[measUnit.Gid];
 
-					wholeSum += measUnit.CurrentValue;
+						wholeSum += measUnit.CurrentValue;
 						if (g.GeneratorType == GeneratorType.Hydro || g.GeneratorType == GeneratorType.Solar || g.GeneratorType == GeneratorType.Wind)
 							sumInGetOptModelMap += measUnit.CurrentValue;
 					
@@ -171,15 +171,16 @@ namespace CalculationEngineServ
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
         {
-            Dictionary<long, OptimisationModel> optModelMapOptimizied;
+            Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
+			float powerOfCommandedGen = 0;
 
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
 			Dictionary<long, OptimisationModel> renewableGenerators = new Dictionary<long, OptimisationModel>();
 
 			renewableConributionKW = optModelMap.Where(x => x.Value.Renewable).Select(y => y.Value.MeasuredValue).Sum();
-
-            foreach (var item in optModelMap)
+			List<long> generatorsCommandedFromUI = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).Select(y => y.Gid).ToList();
+			foreach (var item in optModelMap)
             {
                 if (item.Value.Renewable)
                 {
@@ -193,17 +194,19 @@ namespace CalculationEngineServ
                 }
                 else
                 {
-                    optModelMapNonRenewable.Add(item.Key, item.Value);
+					optModelMapNonRenewable.Add(item.Key, item.Value);
                 }
             }
+			
             float powerOfRenewable = powerOfConsumers - powerOfConsumersWithoutRenewable;
-
+			
             windProductionPct = (windProductionkW * 100) / powerOfConsumers;
 			windProductionkW = 0;
 			
-            GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
-            optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION,NUMBER_OF_POPULATION,ELITIMS_PERCENTAGE,mutationRate);
-            
+			
+			GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
+			optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION, NUMBER_OF_POPULATION, ELITIMS_PERCENTAGE, mutationRate);
+			
 			foreach (var item in optModelMapOptimizied)
             {
                 if (optModelMap.ContainsKey(item.Key))
@@ -521,9 +524,10 @@ namespace CalculationEngineServ
                 #endregion getting EnergyConsumer
 
                 FillData();
-                return true;
-            }
+				FillInitialCommandedGenerators();
 
+				return true;
+            }
         }
 
         private void FillData()
@@ -546,6 +550,25 @@ namespace CalculationEngineServ
                 }
             }
         }
+
+		private void FillInitialCommandedGenerators()
+		{
+			List<CommandedGenerator> commandedGenerators = new List<CommandedGenerator>();
+			commandedGenerators = DbManager.Instance.GetCommandedGenerators().ToList();
+
+			if(commandedGenerators.Count == 0)
+			{
+				commandedGenerators = generators.Where(x => x.Value.GeneratorType == GeneratorType.Coal ||
+				x.Value.GeneratorType == GeneratorType.Gas || x.Value.GeneratorType == GeneratorType.Oil).Select(y => new CommandedGenerator()
+				{
+					Gid = y.Value.GlobalId,
+					CommandingFlag = false
+				}).ToList();
+
+				DbManager.Instance.AddListCommandedGenerators(commandedGenerators);
+				DbManager.Instance.SaveChanges();
+			}
+		}
 		
 		public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
 		{

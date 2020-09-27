@@ -20,26 +20,46 @@ namespace CalculationEngineServ.GeneticAlgorithm
         public float TotalCost { get; private set; }
         public float GeneratedPower { get; private set; }
         public float EmissionCO2 { get; private set; }
+		private Dictionary<long, OptimisationModel> commandedGeneratrs;
+		private List<long> commandedGenGids;
         public GA(float necessaryEnergy, Dictionary<long, OptimisationModel> optModelMap)
         {
-            indexToGid = new Dictionary<int, long>();
+			commandedGeneratrs = new Dictionary<long, OptimisationModel>();
+			commandedGenGids = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).Select(y => y.Gid).ToList();
+			this.optModelMap = optModelMap.Where(x => !commandedGenGids.Any(y => y == x.Key)).ToDictionary(param => param.Key, param => param.Value);
+			commandedGeneratrs = optModelMap.Where(x => commandedGenGids.Any(y => y == x.Key)).ToDictionary(param => param.Key, param => param.Value);
+
+			indexToGid = new Dictionary<int, long>();
             int i = 0;
-            foreach (var valPair in optModelMap)
+            foreach (var valPair in this.optModelMap)
             {
                 indexToGid.Add(i++, valPair.Key);
             }
+			
+            this.necessaryEnergy = necessaryEnergy - commandedGeneratrs.Sum(x => x.Value.MeasuredValue);
 
-            this.necessaryEnergy = necessaryEnergy;
-            this.optModelMap = optModelMap;
-        }
+			foreach(var item in commandedGeneratrs)
+			{
+				var cg = DbManager.Instance.GetCommandedGenerator(item.Key);
+				cg.CommandingFlag = false;
+				DbManager.Instance.UpdateCommandedGenerator(cg);
+			}
+			DbManager.Instance.SaveChanges();
+
+		}
 
         private Tuple<long, float> GetRandomGene(int index)
         {
             long gid = indexToGid[index];
-            var minPower = optModelMap[gid].MinPower;
-            var maxPower = optModelMap[gid].MaxPower;
-            float randNumb = (float)GetRandomNumber(minPower, maxPower);
-            return new Tuple<long, float>(gid, randNumb);
+			if(optModelMap[gid] != null)
+			{
+				var minPower = optModelMap[gid].MinPower;
+				var maxPower = optModelMap[gid].MaxPower;
+				float randNumb = (float)GetRandomNumber(minPower, maxPower);
+				return new Tuple<long, float>(gid, randNumb);
+			}
+			return null;
+            
         }
         private double GetRandomNumber(float minPower, float maxPower)
         {
@@ -87,11 +107,20 @@ namespace CalculationEngineServ.GeneticAlgorithm
             ga.Population = PopulateFirstPopulation();
             Tuple<long, float>[] bestGenes = ga.StartAndReturnBest(NUMBER_OF_ITERATION);
 
-            for (int i = 0; i < bestGenes.Length; i++)
+            foreach (var item in bestGenes)
             {
-                optModelMap[indexToGid[i]].GenericOptimizedValue = bestGenes[i].Item2;
-				optModelMap[indexToGid[i]].measurementUnit.CurrentValue = bestGenes[i].Item2;
+				optModelMap.FirstOrDefault(x => x.Key == item.Item1).Value.GenericOptimizedValue = item.Item2;
+				optModelMap.FirstOrDefault(x => x.Key == item.Item1).Value.measurementUnit.CurrentValue = item.Item2;
+
+				//optModelMap[indexToGid[i]].GenericOptimizedValue = bestGenes[i].Item2;
+				//optModelMap[indexToGid[i]].measurementUnit.CurrentValue = bestGenes[i].Item2;
 			}
+
+			foreach(var item in commandedGeneratrs)
+			{
+				optModelMap.Add(item.Key, item.Value);
+			}
+			
 
             float emCO2 = CalculationEngine.CalculateCO2(optModelMap);
 

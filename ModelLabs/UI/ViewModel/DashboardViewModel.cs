@@ -67,6 +67,8 @@ namespace UI.ViewModel
         private float currentOilProduction;
         private float currentGasProduction;
 
+		private readonly object lockObject = new object();
+
         private readonly double graphSizeOffset = 18;
         private bool isOptionsExpanded = false;
 
@@ -142,11 +144,14 @@ namespace UI.ViewModel
 
         private void CommandGenExecute(object obj)
         {
-            ModelForCheckboxes model = (ModelForCheckboxes)obj;
-            if (model.IsActive)
-            {
-                ScadaCommandingProxy.Instance.CommandAnalogValues(model.Id, model.InputValue);
-            }
+			lock(lockObject)
+			{
+				ModelForCheckboxes model = (ModelForCheckboxes)obj;
+				if (model.IsActive)
+				{
+					ScadaCommandingProxy.Instance.CommandAnalogValues(model.Id, model.InputValue);
+				}
+			}
         }
 
         private void VisibilityCheckedCommandExecute(long gid)
