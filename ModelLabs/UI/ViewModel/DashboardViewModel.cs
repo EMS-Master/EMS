@@ -46,12 +46,25 @@ namespace UI.ViewModel
         private float mutationRate;
         private float maxValue = 10;
         private float minValue = 0;
+
+
+        private float gasPrice;
+        private float oilPrice;
+        private float coalPrice;
+
         public float MinValue { get { return minValue; } set { minValue = value; OnPropertyChanged(); } }
         public float MaxValue { get { return maxValue; } set { maxValue = value; OnPropertyChanged(); } }
         public int NumOfIterations { get { return numOfIterations; } set { numOfIterations = value; OnPropertyChanged(); } }
         public int NumOfPuplation { get { return numOfPuplation; } set { numOfPuplation = value; OnPropertyChanged(); } }
         public int ElitsmPercent { get { return elitsmPercent; } set { elitsmPercent = value; OnPropertyChanged(); } }
         public float MutationRate { get { return mutationRate; } set { mutationRate = value; OnPropertyChanged(); } }
+
+
+        public float GasPrice { get { return gasPrice; } set { gasPrice = value; OnPropertyChanged(); } }
+        public float OilPrice { get { return oilPrice; } set { oilPrice = value; OnPropertyChanged(); } }
+        public float CoalPrice { get { return coalPrice; } set { coalPrice = value; OnPropertyChanged(); } }
+
+
         private ICommand changeNumOfIterations;
         public ICommand ChangeNumOfIterations => changeNumOfIterations ?? (changeNumOfIterations = new RelayCommand<object>(ChangeNumOfIterationsExecute));
 
@@ -82,12 +95,18 @@ namespace UI.ViewModel
         private ObservableCollection<KeyValuePair<DateTime, float>> generationList = new ObservableCollection<KeyValuePair<DateTime, float>>();
         private ObservableCollection<KeyValuePair<string, float>> generationByTypeList = new ObservableCollection<KeyValuePair<string, float>>() { new KeyValuePair<string, float>("Wind [kW]", 0), new KeyValuePair<string, float>("Solar [kW]", 0), new KeyValuePair<string, float>("Hydro [MW]", 0), new KeyValuePair<string, float>("Coal [kW]", 0), new KeyValuePair<string, float>("Oil [kW]", 0), new KeyValuePair<string, float>("Gas [kW]", 0), };
         private ObservableCollection<KeyValuePair<DateTime, float>> demandList = new ObservableCollection<KeyValuePair<DateTime, float>>();
+        private string renwableList;
+        
 
+        
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
         private double graphWidth;
         private double graphHeight;
         private ObservableCollection<WindSpeed> windspeed = new ObservableCollection<WindSpeed>();
         private ObservableCollection<WindSpeed> windPercent = new ObservableCollection<WindSpeed>();
+        private ObservableCollection<WindSpeed> coReduction = new ObservableCollection<WindSpeed>();
+        private ObservableCollection<WindSpeed> costList = new ObservableCollection<WindSpeed>();
+
         private ObservableCollection<ColumChartData> totalProductionColumnChart = new ObservableCollection<ColumChartData>() { new ColumChartData("Wind [kW]", 0), new ColumChartData("Solar [kW]", 0), new ColumChartData("Hydro [MW]", 0), new ColumChartData("Coal [kW]", 0), new ColumChartData("Oil [kW]", 0), new ColumChartData("Gas [kW]", 0) };
         private ICommand visibilityCheckedCommand;
         private ICommand visibilityUncheckedCommand;
@@ -105,11 +124,20 @@ namespace UI.ViewModel
         public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
         private ICommand deactivateGen;
         private ICommand defaultParamValues;
+
+        private ICommand defaultPrice;
+        private ICommand applyPrice;
+
         public ICommand DeactivateGen => deactivateGen ?? (deactivateGen = new RelayCommand<object>(DeactivateGenExecute));
 
         public ICommand ExpandCommand => expandCommand ?? (expandCommand = new RelayCommand(ExpandCommandExecute));
 
         public ICommand DefaultParamValues => defaultParamValues ?? (defaultParamValues = new RelayCommand(DefaultParamValuesExecute));
+
+        public ICommand DefaultPrice => defaultPrice ?? (defaultPrice = new RelayCommand(DefaultPriceExecute));
+
+        public ICommand ApplyPrice => applyPrice ?? (applyPrice = new RelayCommand(ApplyPriceExecute));
+
 
         private ICommand applyParamValues;
         public ICommand ApplyParamValues => applyParamValues ?? (applyParamValues = new RelayCommand(ApplyParamValuesExecute));
@@ -195,6 +223,21 @@ namespace UI.ViewModel
             }
         }
 
+        public string RenwableList
+        {
+            get
+            {
+                return renwableList;
+            }
+
+            set
+            {
+                renwableList = value;
+                OnPropertyChanged();
+
+            }
+        }
+
         public double GraphWidth
         {
             get
@@ -252,6 +295,12 @@ namespace UI.ViewModel
             ElitsmPercent = para.Item3;
             MutationRate = para.Item4;
 
+            var para2 = CalculationEngineUIProxy.Instance.GetPricePerGeneratorType();
+
+            OilPrice = para2.Item1;
+            GasPrice = para2.Item3;
+            CoalPrice = para2.Item2;
+
             SizeValue = 0;
 
             GraphWidth = 16 * graphSizeOffset;
@@ -292,6 +341,28 @@ namespace UI.ViewModel
 
             }
         }
+
+        public ObservableCollection<WindSpeed> CoReduction
+        {
+            get => coReduction;
+            set
+            {
+                coReduction = value;
+                OnPropertyChanged();
+
+            }
+        }
+        public ObservableCollection<WindSpeed> CostList
+        {
+            get => costList;
+            set
+            {
+                costList = value;
+                OnPropertyChanged();
+
+            }
+        }
+
         public ObservableCollection<WindSpeed> WindPercent
         {
             get => windPercent;
@@ -317,6 +388,7 @@ namespace UI.ViewModel
 
         public ObservableCollection<KeyValuePair<DateTime, float>> GenerationList { get => generationList; set => generationList = value; }
         public ObservableCollection<KeyValuePair<DateTime, float>> DemandList { get => demandList; set => demandList = value; }
+
 
 
         public Dictionary<long, bool> GidToBoolMap { get => gidToBoolMap; set => gidToBoolMap = value; }
@@ -359,8 +431,46 @@ namespace UI.ViewModel
             List<MeasurementUI> measUIs = obj as List<MeasurementUI>;
             if (measUIs == null)
             {
-                float wind = (float)obj;
-                UpdateWindSpeed(wind);
+                Tuple<DateTime, float> renewable = obj as Tuple<DateTime, float>;
+                if(renewable != null)
+                {
+                    RenwableList = (renewable.Item2 / 1000).ToString("0.00");
+                }
+                else
+                {
+
+                    Tuple<string, float, float> tupla2 = obj as Tuple<string, float, float>;
+                    if(tupla2 != null)
+                    {
+                        if(tupla2.Item1 == "coReduction")
+                        {
+                            WindSpeed co = new WindSpeed("CO2 Reduction",tupla2.Item2);
+                            WindSpeed co1 = new WindSpeed("CO2 Emission", tupla2.Item3);
+                            ObservableCollection<WindSpeed> newList = new ObservableCollection<WindSpeed>();
+                            newList.Add(co);
+                            newList.Add(co1);
+
+                            CoReduction = newList;
+                        }
+                        else
+                        {
+                            WindSpeed co = new WindSpeed("Cost", tupla2.Item2);
+                            WindSpeed co1 = new WindSpeed("Profit", tupla2.Item3);
+                            ObservableCollection<WindSpeed> newList = new ObservableCollection<WindSpeed>();
+                            newList.Add(co);
+                            newList.Add(co1);
+
+                            CostList = newList;
+                        }
+                    }
+                    else
+                    {
+                        float wind = (float)obj;
+                        UpdateWindSpeed(wind);
+                    }
+                   
+                }
+                
             }
             else
             {
@@ -563,6 +673,24 @@ namespace UI.ViewModel
             ElitsmPercent = para.Item3;
             MutationRate = para.Item4;
 
+        }
+
+        private void DefaultPriceExecute(object obj)
+        {
+
+            CalculationEngineUIProxy.Instance.SetPricePerGeneratorTypeDefault();
+            var para = CalculationEngineUIProxy.Instance.GetPricePerGeneratorType();
+
+            OilPrice = para.Item1;
+            GasPrice = para.Item3;
+            CoalPrice = para.Item2;
+
+
+        }
+
+        private void ApplyPriceExecute(object obj)
+        {
+            CalculationEngineUIProxy.Instance.SetPricePerGeneratorType(OilPrice, CoalPrice, GasPrice);
         }
 
         private void ApplyParamValuesExecute(object obj)

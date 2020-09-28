@@ -74,7 +74,7 @@ namespace FTN.Services.NetworkModelService.TestClient
 					{
                         try
                         {
-                            tgda.GetExtentValues(InputModelCode());
+                            //tgda.GetExtentValues(InputModelCode());
                         }
                         catch (Exception ex)
                         {

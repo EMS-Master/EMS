@@ -31,5 +31,11 @@ namespace FTN.ServiceContracts
 
         [OperationContract(IsOneWay = false)]
         void WindPercentResult(float result);
+
+        [OperationContract(IsOneWay = false)]
+        void RenewableResult(Tuple<DateTime, float> renewableKW);
+
+        [OperationContract(IsOneWay = false)]
+        void PublishCoReduction(Tuple<string, float, float> tupla);
     }
 }

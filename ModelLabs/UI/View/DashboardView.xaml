@@ -240,16 +240,19 @@
 
                 <Grid Grid.Column="0">
                    
-                    <Grid Background="White" Width="250"
-			  Visibility="{Binding IsOptionsExpanded,Converter={StaticResource BoolToVisibilityConverter}}">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Background="White" Width="250" Visibility="{Binding IsOptionsExpanded,Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
                             <GroupBox  FontSize="20" Header="Calculation parameters"  Foreground="Black">
                                 <StackPanel>
                                     <GroupBox Margin="0,10,0,0"  FontSize="14" Header="Number of iterations"  Foreground="Black">
                                         <TextBox Margin="10"   Text ="{Binding NumOfIterations, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
-                                            <TextBox.InputBindings>
+                                            <!--<TextBox.InputBindings>
                                                 <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
-                                            </TextBox.InputBindings>
+                                            </TextBox.InputBindings>-->
                                         </TextBox>
                                     </GroupBox>
                                     <GroupBox  FontSize="14" Header="Number of populatios"  Foreground="Black">
@@ -289,6 +292,45 @@
                                 </StackPanel>
                             </GroupBox>
                         </ScrollViewer>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Margin="0,10">
+                            <GroupBox  FontSize="20" Header="Fuel options"  Foreground="Black">
+                                <StackPanel>
+                                    <GroupBox Margin="0,10,0,0"  FontSize="14" Header="Gas price"  Foreground="Black">
+                                        <TextBox Margin="10"   Text ="{Binding GasPrice, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <!--<TextBox.InputBindings>
+                                                <KeyBinding Command="{Binding Path=ChangePrice}" Key="Enter"  CommandParameter="{Binding}"/>
+                                            </TextBox.InputBindings>-->
+                                        </TextBox>
+                                    </GroupBox>
+                                    <GroupBox  FontSize="14" Header="Oil price"  Foreground="Black">
+                                        <TextBox  Margin="10"  Text ="{Binding OilPrice, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <!--<TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                        </TextBox.InputBindings>-->
+                                        </TextBox>
+                                    </GroupBox>
+
+                                    <GroupBox  FontSize="14" Header="Coal price"  Foreground="Black">
+                                        <TextBox  Margin="10"   Text ="{Binding CoalPrice, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+                                            <!--<TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding Path=ChangeNumOfIterations}" Key="Enter"  CommandParameter="{Binding}"/>
+                                        </TextBox.InputBindings>-->
+                                        </TextBox>
+                                    </GroupBox>
+                                    <Grid Margin="0,10,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="115"/>
+                                            <ColumnDefinition Width="5"/>
+                                            <ColumnDefinition Width="116"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" FontSize="14" Content='Reset' Command="{Binding DefaultPrice}" />
+                                        <Button Grid.Column="2" FontSize="14" Content='Apply' Command="{Binding ApplyPrice}" />
+                                    </Grid>
+
+                                </StackPanel>
+                            </GroupBox>
+                        </ScrollViewer>
                     </Grid>
 
                     <!--<GridSplitter x:Name="Splitter" Grid.Column="1" HorizontalAlignment="Stretch" Width="2"
@@ -319,48 +361,71 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="20,60,0,0" >
+                    <Grid Grid.Row="0" Margin="10,10,0,0" >
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <DockPanel Grid.Column="0"   Height="Auto" >
+                        <DockPanel Grid.Column="0"   >
 
-                            <Grid  Width="Auto">
-                                <TextBlock TextWrapping="WrapWithOverflow" >
-					                <Grid >
-                                        <Grid.OpacityMask>
-                                            <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
-                                        </Grid.OpacityMask> 
-                                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
 
-                                        <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="CO2 reduction" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
-                                            <MetroChart:RadialGaugeChart.Series>
-                                                <MetroChart:ChartSeries
-                                                                    
-                                                                    Background="#e0e0e0"
-                                                                    DisplayMember="Name"
-                                                                    ItemsSource="{Binding Path= Windspeed}"
-                                                                    SeriesTitle="Name"
-                                                                    ValueMember="Speed" HorizontalAlignment="Center"/>
-                                            </MetroChart:RadialGaugeChart.Series>
-                                        </MetroChart:RadialGaugeChart>  
-                                     </Grid>
-                                 </TextBlock>
-
-                            </Grid>
-                        </DockPanel>
-                        <DockPanel Grid.Column="2" Height="Auto" >
-
-                            <Grid  Width="Auto">
-                                <TextBlock TextWrapping="WrapWithOverflow" >
+                            <TextBlock TextWrapping="WrapWithOverflow" >
 					                <Grid >
                                         <Grid.OpacityMask>
                                             <VisualBrush Visual="{ Binding ElementName=BorderG1 }"/>
                                         </Grid.OpacityMask>     
                                         <Border x:Name="BorderG1" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
+
+                                    <MetroChart:PieChart Background="{x:Null}" ChartTitle="CO2 " ChartSubTitle="" Height="330" Width="250"  Foreground="Black" FontSize="12"  >
+                                        <MetroChart:PieChart.Series>
+                                            <MetroChart:ChartSeries
+                                                Background="Orange"
+                                                
+                                                DisplayMember="Name"
+                                                ItemsSource="{Binding Path= CoReduction}"
+                                                SeriesTitle="Name"
+                                                ValueMember="Speed" HorizontalAlignment="Center"/>
+                                        
+                                           </MetroChart:PieChart.Series>
+                                    </MetroChart:PieChart>
+                                        </Grid>
+                            </TextBlock>
+                        </DockPanel>
+                        <DockPanel Grid.Column="2"   >
+                            <TextBlock TextWrapping="WrapWithOverflow" >
+					                <Grid >
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
+                                        </Grid.OpacityMask>     
+                                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
+
+                                    <MetroChart:PieChart Background="{x:Null}" ChartTitle="Cost " ChartSubTitle="" Height="330" Width="250"  Foreground="Black" FontSize="12"  >
+                                        <MetroChart:PieChart.Series>
+                                            <MetroChart:ChartSeries
+                                                Background="#e0e0e0"
+                                                DisplayMember="Name"
+                                                ItemsSource="{Binding Path= CostList}"
+                                                SeriesTitle="Name"
+                                                ValueMember="Speed" HorizontalAlignment="Center"/>
+                                        </MetroChart:PieChart.Series>
+                                    </MetroChart:PieChart>
+                                        </Grid>
+                                    </TextBlock>
+                              
+                        </DockPanel>
+                        <DockPanel Grid.Column="4" Height="Auto" >
+
+                            <Grid  Width="Auto">
+                                <TextBlock TextWrapping="WrapWithOverflow" >
+					                <Grid >
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{ Binding ElementName=BorderG3 }"/>
+                                        </Grid.OpacityMask>     
+                                        <Border x:Name="BorderG3" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>
 
                                         <MetroChart:RadialGaugeChart Background="{x:Null}" ChartTitle="Wind contribution" ChartSubTitle=""  Foreground="Black" FontSize="7"  >
                                             <MetroChart:RadialGaugeChart.Series>
@@ -412,12 +477,12 @@
                     </Grid>
                     <StackPanel Grid.Column="1" DockPanel.Dock="Top" Margin="10,10,10,0">
                         <Grid >
-                            <StackPanel Orientation="Horizontal">
+                            <!--<StackPanel Orientation="Horizontal">
                             <CheckBox  Margin="40,-10,5,0" Content="CO2" Foreground="Black"/>
                             <CheckBox  Margin="0,-10,5,0" Content="$" Foreground="Black"/>
-                            </StackPanel>
+                            </StackPanel>-->
 
-                            <StackPanel Margin="40,10,0,0">
+                            <StackPanel Margin="40,0,0,0">
                                 <StackPanel Orientation="Horizontal"  DockPanel.Dock="Top">
                                     <TextBlock  Style="{StaticResource Title}" Foreground="Green" Text="Production:" />
                                     <TextBlock  Style="{StaticResource SubTitle}" Foreground="Green" Text="{Binding CurrentProduction}" Margin="5,0,0,0" />
@@ -429,9 +494,15 @@
                                     <TextBlock  Style="{StaticResource SubTitle}" Foreground="DarkOrange" Text="{Binding CurrentConsumption}" Margin="5,0,0,0" />
                                     <TextBlock  Style="{StaticResource SubTitle}" Foreground="DarkOrange" Text="MW" Margin="5,0,0,0" />
                                 </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                <TextBlock  Style="{StaticResource Title}" Foreground="Blue" Text="Renewable production:" />
+                                <TextBlock  Style="{StaticResource SubTitle}" Foreground="Blue" Text="{Binding RenwableList}" Margin="5,0,0,0" />
+                                <TextBlock  Style="{StaticResource SubTitle}" Foreground="Blue" Text="MW" Margin="5,0,0,0" />
                             </StackPanel>
+                        </StackPanel>
                             <TextBlock TextWrapping="WrapWithOverflow">
-							<chartingToolkit:Chart Grid.Row="2" Margin="40, 55, 0, 0"  FontWeight="Bold" Style="{StaticResource DashboardChartStyle}" Height="600" Width="810">
+							<chartingToolkit:Chart Grid.Row="2" Margin="40, 75, 0, 0"  FontWeight="Bold" Style="{StaticResource DashboardChartStyle}" Height="600" Width="810">
 								<chartingToolkit:LineSeries ItemsSource="{Binding Path=GenerationList}" 
 													DependentValueBinding="{Binding Path=Value}" 
 													IndependentValueBinding="{Binding Path=Key}"
@@ -462,6 +533,24 @@
 										</Style>										
 									</chartingToolkit:LineSeries.DataPointStyle>
 								</chartingToolkit:LineSeries>
+                                
+                                <!--<chartingToolkit:LineSeries ItemsSource="{Binding Path=RenwableList}" 
+													DependentValueBinding="{Binding Path=Value}" 
+													IndependentValueBinding="{Binding Path=Key}"
+													IsSelectionEnabled="False"
+													Style="{StaticResource LineSeriesStyle}"
+													Title="Total renewable production   " Margin="0,10,0,0" 
+													>
+									<chartingToolkit:LineSeries.DataPointStyle>
+										<Style TargetType="chartingToolkit:LineDataPoint">
+											<Setter Property="Background" Value="Blue"/>
+											<Setter Property="Template" Value="{StaticResource LineDataPointPowerTemplate}"/>
+										</Style>
+										
+									</chartingToolkit:LineSeries.DataPointStyle>
+								</chartingToolkit:LineSeries>-->
+                                
+                                
 							</chartingToolkit:Chart>
 
                             </TextBlock>

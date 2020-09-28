@@ -16,11 +16,11 @@ namespace UI.ViewModel
         private TestGDA testGda;
         private NMSView NMSview;
 
-        private ObservableCollection<ResourceDescription> resList;
+        private ObservableCollection<ResourceDescription> resList = new ObservableCollection<ResourceDescription>();
         private ObservableCollection<ModelCode> avaliableProperties;
 
         private ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
-        private RelayCommand goToReferenceCommand;
+        //private RelayCommand goToReferenceCommand;
 
         private ICommand findCommand;
         private ICommand typeCheckBoxChangedCommand;
@@ -32,7 +32,7 @@ namespace UI.ViewModel
             Title = "NMS";
             this.NMSview = mainWindow;
             this.NMSview.Loaded += View_Loaded;
-            ResList = new ObservableCollection<ResourceDescription>();
+           // ResList = new ObservableCollection<ResourceDescription>();
             AvaliableProperties = new ObservableCollection<ModelCode>();
         }
 
@@ -62,20 +62,20 @@ namespace UI.ViewModel
         }
 
         public ICommand FindCommand => findCommand ?? (findCommand = new RelayCommand<string>(FindCommandExecute));
-        public ICommand GoToReferenceCommand => goToReferenceCommand ?? (goToReferenceCommand = new RelayCommand(GoToReferenceCommandExecute));
+        //public ICommand GoToReferenceCommand => goToReferenceCommand ?? (goToReferenceCommand = new RelayCommand(GoToReferenceCommandExecute));
         public ICommand TypeCheckBoxChangedCommand => typeCheckBoxChangedCommand ?? (typeCheckBoxChangedCommand = new RelayCommand(TypeCheckBoxChangedCommandExecute));
 
-        private void GoToReferenceCommandExecute(object obj)
-        {
-            var grid = obj as Grid;
-            var property = grid.DataContext as Property;
-            var resDesc = grid.Tag as ResourceDescription;
+        //private void GoToReferenceCommandExecute(object obj)
+        //{
+        //    var grid = obj as Grid;
+        //    var property = grid.DataContext as Property;
+        //    var resDesc = grid.Tag as ResourceDescription;
 
-            List<ResourceDescription> refResList = new List<ResourceDescription>();
+        //    List<ResourceDescription> refResList = new List<ResourceDescription>();
 
-            //ReferenceView RefView = new ReferenceView(tgda, resDesc.Id, property);
-            //RefView.Visibility = System.Windows.Visibility.Visible;
-        }
+        //    //ReferenceView RefView = new ReferenceView(testGda, resDesc.Id, property);
+        //    //RefView.Visibility = System.Windows.Visibility.Visible;
+        //}
 
         private void View_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -96,10 +96,10 @@ namespace UI.ViewModel
         {
             var hex_val = textForFind;
             ResList.Clear();
-
+            
             List<ModelCode> forFind = getModelCodes();
 
-            var allSelected = getModelCodes();
+            var allSelected  = getSelectedProp();
             foreach (var modCode in forFind)
             {
                 var myProps = modelResourcesDesc.GetAllPropertyIds(ModelCodeHelper.GetTypeFromModelCode(modCode));
@@ -184,25 +184,23 @@ namespace UI.ViewModel
             
         }
 
-      /* private List<ModelCode> getSelectedProp()
-        {
-            List<ModelCode> retList = new List<ModelCode>();
-            foreach (var item in NMSview.PropertiesContainer.Items)
-            {
-                ContentPresenter c = (ContentPresenter)NMSview.PropertiesContainer.ItemContainerGenerator.ContainerFromItem(item);
-                CheckBox chbox = c.ContentTemplate.FindName("PropCheckBox", c) as CheckBox;
-                if (chbox.IsChecked == true)
-                {
-                    var propModelCode = (ModelCode)chbox.DataContext;
+         private List<ModelCode> getSelectedProp()
+          {
+              List<ModelCode> retList = new List<ModelCode>();
+              foreach (var item in NMSview.PropertiesContainer.Items)
+              {
+                  ContentPresenter c = (ContentPresenter)NMSview.PropertiesContainer.ItemContainerGenerator.ContainerFromItem(item);
+                  CheckBox chbox = c.ContentTemplate.FindName("PropCheckBox", c) as CheckBox;
+                  if (chbox.IsChecked == true)
+                  {
+                      var propModelCode = (ModelCode)chbox.DataContext;
+                    
+                      retList.Add(propModelCode);
 
-                    //convert an enum to another type of enum
-                    //After convert add to list
-                    retList.Add(propModelCode);
+                  }
+              }
 
-                }
-            }
-
-            return retList;
-        }*/
+              return retList;
+          }
     }
 }

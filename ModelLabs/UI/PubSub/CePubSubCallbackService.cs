@@ -31,6 +31,16 @@ namespace UI.PubSub
             CallbackAction(result);
         }
 
+        public void PublishCoReduction(Tuple<string, float, float> tupla)
+        {
+            CallbackAction(tupla);
+        }
+
+        public void RenewableResult(Tuple<DateTime, float> renewableKW)
+        {
+            CallbackAction(renewableKW);
+        }
+
         public void WindPercentResult(float result)
         {
             CallbackAction(result);

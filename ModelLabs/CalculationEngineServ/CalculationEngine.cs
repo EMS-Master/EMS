@@ -89,6 +89,12 @@ namespace CalculationEngineServ
 
 			PublishGeneratorsToUI(measurementsOptimized);
             PublishConsumersToUI(measEnergyConsumer);
+
+            PublishRenewableToUI(new Tuple<DateTime, float>(DateTime.Now, renewableConributionKW));
+            PublishCoReductionToUI(new Tuple<string, float, float>("coReduction", reductionCO2, currentEmissionCO2));
+            PublishCoReductionToUI(new Tuple<string, float, float>("cost", totalCost, profit));
+
+
             PublishWindPercent(windProductionPct);
 
 
@@ -420,6 +426,16 @@ namespace CalculationEngineServ
             publisher.PublishWindPercent(windPercent);
         }
 
+        private void PublishRenewableToUI( Tuple<DateTime, float> tupla)
+        {
+            publisher.PublishRenewableKW(tupla);
+        }
+
+
+        private void PublishCoReductionToUI(Tuple<string, float, float> tupla)
+        {
+            publisher.PublishCoReduction(tupla);
+        }
         #endregion
 
         public bool InitiateIntegrityUpdate()

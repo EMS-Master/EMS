@@ -39,6 +39,10 @@ namespace CalculationEngineServ.PubSub
                 {
                     if (e.Message == "wind percent")
                         client.WindPercentResult(e.WindPercent);
+                    else if (e.Message == "RenewableKW")
+                        client.RenewableResult(e.RenewableKW);
+                    else if (e.Message == "CoReduction")
+                        client.PublishCoReduction(e.CoReduction);
                     else
                         client.OptimizationResults(e.OptimizationResult);
                 }
@@ -93,6 +97,45 @@ namespace CalculationEngineServ.PubSub
             {
                 WindPercent = result,
                 Message = "wind percent"
+            };
+            try
+            {
+                OptimizationResultEvent(this, e);
+            }
+            catch (Exception ex)
+            {
+                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+                Console.WriteLine(message);
+            }
+        }
+
+        public void PublishRenewableKW(Tuple<DateTime, float> renewableKW)
+        {
+            OptimizationEventArgs e = new OptimizationEventArgs
+            {
+                RenewableKW = renewableKW,
+                Message = "RenewableKW"
+            };
+            try
+            {
+                OptimizationResultEvent(this, e);
+            }
+            catch (Exception ex)
+            {
+                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+                Console.WriteLine(message);
+            }
+        }
+
+
+        public void PublishCoReduction(Tuple<string, float, float> tupla)
+        {
+            OptimizationEventArgs e = new OptimizationEventArgs
+            {
+                CoReduction = tupla,
+                Message = "CoReduction"
             };
             try
             {

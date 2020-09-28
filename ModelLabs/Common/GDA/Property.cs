@@ -461,8 +461,14 @@ namespace FTN.Common
 		// Override the Object.Equals(object o) method:
 		public override bool Equals(object o)
 		{
-			return this == (Property)o;
-		}
+            var prop = o as Property;
+            if (prop == null)
+            {
+                return false;
+            }
+
+            return this == prop;
+        }
 
 		public int CompareTo(object obj)
 		{

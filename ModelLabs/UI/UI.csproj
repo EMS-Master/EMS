@@ -274,6 +274,9 @@
     <Compile Include="View\NMSView.xaml.cs">
       <DependentUpon>NMSView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ReferenceView.xaml.cs">
+      <DependentUpon>ReferenceView.xaml</DependentUpon>
+    </Compile>
     <Page Include="HistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -331,6 +334,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\NMSView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReferenceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -414,6 +421,10 @@
     <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj">
       <Project>{2630d180-1b68-4e84-aeac-42ee8c88b50f}</Project>
       <Name>NetworkModelService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\Test\NMSTestClient\NMSTestClient.csproj">
+      <Project>{32EE9373-A350-42AC-972B-41B2EDABA082}</Project>
+      <Name>NMSTestClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
       <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
