@@ -17,6 +17,19 @@ namespace CalculationEngineContracts
         List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime);
 
         [OperationContract]
+        List<Tuple<double, DateTime>> GetProfit(DateTime startTime, DateTime endTime);
+
+        [OperationContract]
+        List<Tuple<double, DateTime>> GetCost(DateTime startTime, DateTime endTime);
+        
+
+        [OperationContract]
+        List<Tuple<double, DateTime>> GetCoReduction(DateTime startTime, DateTime endTime);
+
+        [OperationContract]
+        List<Tuple<double, DateTime>> GetCoEmission(DateTime startTime, DateTime endTime);
+
+        [OperationContract]
         bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate);
 
         [OperationContract]

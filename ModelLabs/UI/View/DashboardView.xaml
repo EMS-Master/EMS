@@ -93,7 +93,7 @@
                                         </Binding>
                                     </MenuItem.Visibility>-->
                                 </MenuItem>
-                                <MenuItem Header="Fuel economy">
+                                <MenuItem x:Name="MenuItemFuelEconomy" Header="Fuel economy" Click="MenuItemFuelEconomy_Click">
                                     <MenuItem.Visibility>
                                         <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
                                         </Binding>

@@ -57,7 +57,24 @@ namespace UI.ViewModel
         private ObservableCollection<long> energyConsumersFromNms = new ObservableCollection<long>();
 
         private ObservableCollection<Tuple<double, DateTime>> totalProduction = new ObservableCollection<Tuple<double, DateTime>>();
+        private ObservableCollection<Tuple<double, DateTime>> totalProfit = new ObservableCollection<Tuple<double, DateTime>>();
+        private ObservableCollection<Tuple<double, DateTime>> totalCost = new ObservableCollection<Tuple<double, DateTime>>();
+        
+        private ObservableCollection<Tuple<double, DateTime>> coEmission = new ObservableCollection<Tuple<double, DateTime>>();
+        private ObservableCollection<Tuple<double, DateTime>> coReduction = new ObservableCollection<Tuple<double, DateTime>>();
+
+
+
+
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
+        private ObservableCollection<Tuple<double, DateTime>> graphProfit = new ObservableCollection<Tuple<double, DateTime>>();
+
+        private ObservableCollection<Tuple<double, DateTime>> graphCost = new ObservableCollection<Tuple<double, DateTime>>();
+
+        private ObservableCollection<Tuple<double, DateTime>> graphCoEmission = new ObservableCollection<Tuple<double, DateTime>>();
+        private ObservableCollection<Tuple<double, DateTime>> graphCoReduction = new ObservableCollection<Tuple<double, DateTime>>();
+
+
         private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
         private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> consumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
         private ObservableCollection<Tuple<double, DateTime>> graphTotalProductionForSelected = new ObservableCollection<Tuple<double, DateTime>>();
@@ -231,9 +248,24 @@ namespace UI.ViewModel
             }
         }
         public ObservableCollection<Tuple<double, DateTime>> TotalProduction { get => totalProduction; set => totalProduction = value; }
+        public ObservableCollection<Tuple<double, DateTime>> TotalProfit { get => totalProfit; set => totalProfit = value; }
+        public ObservableCollection<Tuple<double, DateTime>> TotalCost { get => totalCost; set => totalCost = value; }
+
+        public ObservableCollection<Tuple<double, DateTime>> CoEmission { get => coEmission; set => coEmission = value; }
+        public ObservableCollection<Tuple<double, DateTime>> CoReduction { get => coReduction; set => coReduction = value; }
+
+
         public ObservableCollection<Tuple<double, DateTime>> GraphTotalProductionForSelected { get => graphTotalProductionForSelected; set => graphTotalProductionForSelected = value; }
 
         public ObservableCollection<Tuple<double, DateTime>> GraphTotalProduction { get => graphTotalProduction; set => graphTotalProduction = value; }
+        public ObservableCollection<Tuple<double, DateTime>> GraphProfit { get => graphProfit; set => graphProfit = value; }
+        public ObservableCollection<Tuple<double, DateTime>> GraphCost { get => graphCost; set => graphCost = value; }
+
+        public ObservableCollection<Tuple<double, DateTime>> GraphCoEmission { get => graphCoEmission; set => graphCoEmission = value; }
+        public ObservableCollection<Tuple<double, DateTime>> GraphCoReduction { get => graphCoReduction; set => graphCoReduction = value; }
+
+
+
         public PeriodValues SelectedPeriod { get => selectedPeriod; set => selectedPeriod = value; }
         public GraphSample GraphSampling { get => graphSampling; set => graphSampling = value; }
 
@@ -442,11 +474,25 @@ namespace UI.ViewModel
 
             ObservableCollection<Tuple<double, DateTime>> measurementsFromDb;
             ObservableCollection<Tuple<double, DateTime>> tempData;
+
+            ObservableCollection<Tuple<double, DateTime>> tempDataProfit;
+            ObservableCollection<Tuple<double, DateTime>> tempDataCost;
+
+            ObservableCollection<Tuple<double, DateTime>> tempDataEmission;
+            ObservableCollection<Tuple<double, DateTime>> tempDataReduction;
+
+
             ObservableCollection<Tuple<double, DateTime>> tempContainer = new ObservableCollection<Tuple<double, DateTime>>();
             ObservableCollection<Tuple<double, DateTime>> tempContainer1 = new ObservableCollection<Tuple<double, DateTime>>();
 
 
             GraphTotalProduction.Clear();
+            GraphProfit.Clear();
+            GraphCost.Clear();
+
+            GraphCoEmission.Clear();
+            GraphCoReduction.Clear();
+
             GeneratorsContainer.Clear();
             ConsumersContainer.Clear();
             GraphTotalProductionForSelected.Clear();
@@ -458,6 +504,7 @@ namespace UI.ViewModel
                     try
                     {
                         measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(keyPair.Key, startTime, endTime));
+
 
                         if (measurementsFromDb == null)
                         {
@@ -474,6 +521,7 @@ namespace UI.ViewModel
                             while (tempEndTime <= endTime)
                             {
                                 tempData = new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
+
                                 if (tempData != null && tempData.Count != 0)
                                 {
                                     averageProduction = tempData.Average(x => x.Item1)/1000;
@@ -533,7 +581,20 @@ namespace UI.ViewModel
             }
 
             TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetTotalProduction(StartTime, EndTime));
+
+            TotalProfit = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetProfit(StartTime, EndTime));
+            TotalCost = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetCost(StartTime, EndTime));
+
+
+            CoReduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetCoReduction(StartTime, EndTime));
+            CoEmission = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetCoEmission(StartTime, EndTime));
+
             GraphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
+            GraphProfit = new ObservableCollection<Tuple<double, DateTime>>();
+            GraphCoReduction = new ObservableCollection<Tuple<double, DateTime>>();
+            GraphCoEmission = new ObservableCollection<Tuple<double, DateTime>>();
+
+
 
             if (graphSampling != GraphSample.None)
             {
@@ -541,10 +602,20 @@ namespace UI.ViewModel
                 DateTime tempEndTime = IncrementTime(tempStartTime);
 
                 double averageProduction;
+                double averageProfit;
+                double averageCost;
+
+                double averageEmission;
+                double averageReudtion;
 
                 while (tempEndTime <= endTime)
                 {
                     tempData = new ObservableCollection<Tuple<double, DateTime>>(TotalProduction.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
+                    tempDataProfit = new ObservableCollection<Tuple<double, DateTime>>(TotalProfit.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
+                    tempDataCost = new ObservableCollection<Tuple<double, DateTime>>(TotalCost.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
+                    tempDataEmission = new ObservableCollection<Tuple<double, DateTime>>(CoEmission.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
+                    tempDataReduction = new ObservableCollection<Tuple<double, DateTime>>(CoReduction.Where(x => x.Item2 >= tempStartTime && x.Item2 < tempEndTime));
+
                     if (tempData != null && tempData.Count != 0)
                     {
                         averageProduction = tempData.Average(x => x.Item1)/1000;
@@ -554,14 +625,60 @@ namespace UI.ViewModel
                         averageProduction = 0;
                     }
 
+                    if (tempDataProfit != null && tempDataProfit.Count != 0)
+                    {
+                        averageProfit = tempDataProfit.Average(x => x.Item1);
+                    }
+                    else
+                    {
+                        averageProfit = 0;
+                    }
+                    if (tempDataEmission != null && tempDataEmission.Count != 0)
+                    {
+                        averageEmission = tempDataEmission.Average(x => x.Item1);
+                    }
+                    else
+                    {
+                        averageEmission = 0;
+                    }
+                    if (tempDataReduction != null && tempDataReduction.Count != 0)
+                    {
+                        averageReudtion = tempDataReduction.Average(x => x.Item1);
+                    }
+                    else
+                    {
+                        averageReudtion = 0;
+                    }
+
+
+                    if (tempDataCost != null && tempDataCost.Count != 0)
+                    {
+                        averageCost = tempDataCost.Average(x => x.Item1);
+                    }
+                    else
+                    {
+                        averageCost = 0;
+                    }
+
                     tempStartTime = IncrementTime(tempStartTime);
                     tempEndTime = IncrementTime(tempEndTime);
                     GraphTotalProduction.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime));
+                    GraphCost.Add(new Tuple<double, DateTime>(averageCost, tempStartTime));
+                    GraphProfit.Add(new Tuple<double, DateTime>(averageProfit,tempStartTime));
+                    GraphCoReduction.Add(new Tuple<double, DateTime>(averageReudtion, tempStartTime));
+                    GraphCoEmission.Add(new Tuple<double, DateTime>(averageEmission, tempStartTime));
+
                 }
             }
             else
             {
                 GraphTotalProduction = TotalProduction;
+                GraphProfit = TotalProfit;
+                GraphCost = TotalCost;
+
+                GraphCoReduction = CoReduction;
+                GraphCoEmission = CoEmission;
+
             }
             IsExpandedSeparated = true;
             IsExpandedTotalProduction = true;
@@ -569,6 +686,11 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GraphTotalProductionForSelected));
             OnPropertyChanged(nameof(GraphTotalProduction));
             OnPropertyChanged(nameof(GeneratorsContainer));
+            OnPropertyChanged(nameof(GraphProfit));
+            OnPropertyChanged(nameof(GraphCost));
+            OnPropertyChanged(nameof(GraphCoReduction));
+            OnPropertyChanged(nameof(GraphCoEmission));
+
 
         }
 

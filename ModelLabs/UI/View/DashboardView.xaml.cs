@@ -48,5 +48,18 @@ namespace UI.View
             SetPointWindow setPointWindow = new SetPointWindow(gid, name);
             setPointWindow.Show();
         }
+
+        private void MenuItemFuelEconomy_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menu = (MenuItem)sender;
+            var dataCOntext = menu.DataContext;
+            var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
+            long gid = v.Key;
+            string name = v.Value[0].Name;
+
+            FuelEconomyWindow fuelEconomyWindow = new FuelEconomyWindow(gid);
+            fuelEconomyWindow.Show();
+
+        }
     }
 }

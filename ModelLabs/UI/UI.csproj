@@ -222,6 +222,9 @@
     <Compile Include="Converters\PropertyValueConverter.cs" />
     <Compile Include="Converters\StringCompareConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
+    <Compile Include="FuelEconomyWindow.xaml.cs">
+      <DependentUpon>FuelEconomyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HistoryWindow.xaml.cs">
       <DependentUpon>HistoryWindow.xaml</DependentUpon>
     </Compile>
@@ -245,6 +248,7 @@
     <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\DockManagerViewModel.cs" />
+    <Compile Include="ViewModel\FuelEconomyWindowViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\HistoryWindowViewModel.cs" />
     <Compile Include="ViewModel\ImporterViewModel.cs" />
@@ -277,6 +281,10 @@
     <Compile Include="View\ReferenceView.xaml.cs">
       <DependentUpon>ReferenceView.xaml</DependentUpon>
     </Compile>
+    <Page Include="FuelEconomyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HistoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

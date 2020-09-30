@@ -59,6 +59,21 @@ namespace CalculationEngineContracts
             return proxy.GetAlgorithmOptions();
         }
 
+        public List<Tuple<double, DateTime>> GetCoEmission(DateTime startTime, DateTime endTime)
+        {
+            return proxy.GetCoEmission(startTime, endTime);
+        }
+
+        public List<Tuple<double, DateTime>> GetCoReduction(DateTime startTime, DateTime endTime)
+        {
+            return proxy.GetCoReduction(startTime, endTime);
+        }
+
+        public List<Tuple<double, DateTime>> GetCost(DateTime startTime, DateTime endTime)
+        {
+            return proxy.GetCost(startTime, endTime);
+        }
+
         public List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime)
         {
             return proxy.GetHistoryMeasurements(gid, startTime, endTime);
@@ -69,7 +84,13 @@ namespace CalculationEngineContracts
 			return proxy.GetPricePerGeneratorType(); 
 		}
 
-		public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+        public List<Tuple<double, DateTime>> GetProfit(DateTime startTime, DateTime endTime)
+        {
+            return proxy.GetProfit(startTime, endTime);
+
+        }
+
+        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
         {
             return proxy.GetTotalProduction(startTime, endTime);
         }

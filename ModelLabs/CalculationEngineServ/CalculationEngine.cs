@@ -353,6 +353,122 @@ namespace CalculationEngineServ
             return retVal;
         }
 
+        public List<Tuple<double, DateTime>> ReadTotalProfitFromDb(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                foreach (var item in list)
+                {
+                    retVal.Add(new Tuple<double, DateTime>(item.Profit, item.TimeOfCalculation));
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+
+            return retVal;
+        }
+
+        public List<Tuple<double, DateTime>> ReadReductionFromDb(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                foreach (var item in list)
+                {
+                    retVal.Add(new Tuple<double, DateTime>(item.CO2Reduction, item.TimeOfCalculation));
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+
+            return retVal;
+        }
+
+
+        public List<Tuple<double, DateTime>> ReadEmissionnFromDb(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                foreach (var item in list)
+                {
+                    retVal.Add(new Tuple<double, DateTime>(item.CO2Emission, item.TimeOfCalculation));
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+
+            return retVal;
+        }
+        public List<Tuple<double, DateTime>> ReadCostFromDb(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                foreach (var item in list)
+                {
+                    retVal.Add(new Tuple<double, DateTime>(item.TotalCost, item.TimeOfCalculation));
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+
+            return retVal;
+        }
+
+        public List<Tuple<double, DateTime>> ReadProfitFromDb(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                foreach (var item in list)
+                {
+                    retVal.Add(new Tuple<double, DateTime>(item.TotalGeneration, item.TimeOfCalculation));
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+
+            return retVal;
+        }
+
+
         #endregion
 
         #region Publish to UI

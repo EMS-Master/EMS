@@ -76,6 +76,69 @@ namespace CalculationEngineServ
 		{
 			return CalculationEngine.GetPricePerGeneratorTypes();
 		}
-		
-	}
+
+        public List<Tuple<double, DateTime>> GetProfit(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                retList = ce.ReadTotalProfitFromDb(startTime, endTime);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+            }
+
+            return retList;
+        }
+
+        public List<Tuple<double, DateTime>> GetCoReduction(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                retList = ce.ReadReductionFromDb(startTime, endTime);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+            }
+
+            return retList;
+        }
+
+        public List<Tuple<double, DateTime>> GetCoEmission(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                retList = ce.ReadEmissionnFromDb(startTime, endTime);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+            }
+
+            return retList;
+        }
+
+        public List<Tuple<double, DateTime>> GetCost(DateTime startTime, DateTime endTime)
+        {
+            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+
+            try
+            {
+                retList = ce.ReadCostFromDb(startTime, endTime);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+            }
+
+            return retList;
+        }
+    }
 }
