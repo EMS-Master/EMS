@@ -9,7 +9,7 @@ using TransactionContract;
 
 namespace TransactionManagerService
 {
-    class TransactionScadaPRProxy : ITransactionContract
+    public class TransactionScadaCDProxy : ITransactionContract
     {
         private static ITransactionContract proxy;
         private static DuplexChannelFactory<ITransactionContract> factory;
@@ -21,7 +21,7 @@ namespace TransactionManagerService
                 if (proxy == null)
                 {
                     InstanceContext context = new InstanceContext(new TransactionManager());
-                    factory = new DuplexChannelFactory<ITransactionContract>(context, "ScadaPRTransactionEndpoint");
+                    factory = new DuplexChannelFactory<ITransactionContract>(context, "ScadaCMDTransactionEndpoint");
                     proxy = factory.CreateChannel();
                 }
 

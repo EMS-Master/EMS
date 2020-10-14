@@ -25,7 +25,16 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
             }
         }
 
+        public override object Clone()
+        {
+            ConnectivityNodeContainer io = new ConnectivityNodeContainer(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.AliasName = this.AliasName;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
 
+            return io;
+        }
 
 
         public override int GetHashCode()

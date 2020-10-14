@@ -51,6 +51,16 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
             }
         }
 
+        public override object Clone()
+        {
+            Equipment io = new Equipment(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.AliasName = this.AliasName;
+            io.EquipmentContainer = this.EquipmentContainer;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            return io;
+        }
         public override void GetProperty(Property prop)
         {
             switch (prop.Id)

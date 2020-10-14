@@ -16,6 +16,10 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
         {
         }
 
+        public Discrete() 
+        {
+        }
+
         public int MaxValue { get => maxValue; set => maxValue = value; }
         public int MinValue { get => minValue; set => minValue = value; }
         public int NormalValue { get => normalValue; set => normalValue = value; }
@@ -33,6 +37,22 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
             }
         }
 
+        public override object Clone()
+        {
+            Discrete io = new Discrete();
+            io.MaxValue = this.MaxValue;
+            io.MeasurmentType = this.MeasurmentType;
+            io.MinValue = this.MinValue;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.AliasName = this.AliasName;
+            io.NormalValue = this.NormalValue;
+            io.PowerSystemResource = this.PowerSystemResource;
+            io.Direction = this.Direction;
+            io.ScadaAddress = this.ScadaAddress;
+
+            return io;
+        }
         public override int GetHashCode()
         {
             return base.GetHashCode();

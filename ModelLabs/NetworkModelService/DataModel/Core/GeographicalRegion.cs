@@ -28,6 +28,15 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             return base.GetHashCode();
         }
+        public override object Clone()
+        {
+            GeographicalRegion io = new GeographicalRegion(base.GlobalId);
+            io.AliasName = this.AliasName;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+
+            return io;
+        }
 
         #region IAccess implementation
 

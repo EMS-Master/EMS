@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using TransactionContract;
 
 namespace TransactionManagerService
 {
+    [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class TransactionManager : ITransactionCallback, IImporterContract
     {
         private static Delta deltaToApply;
@@ -24,7 +26,7 @@ namespace TransactionManagerService
             noRespone = 0;
             toRespond = 1;
             Delta ceDelta = new Delta();
-
+            Delta scadaDelta = new Delta();
             updateResult = new UpdateResult();
 
             List<long> idToRemove = new List<long>(10);
@@ -37,8 +39,9 @@ namespace TransactionManagerService
             Delta geograficalRegionDelta = delta.SeparateDeltaForEMSType(DMSType.GEOGRAFICAL_REGION);
 
             ceDelta = generatorDelta + energyConsumerDelta;
+            scadaDelta = analogsDelta + discreteDelta;
 
-            if (analogsDelta.InsertOperations.Count != 0 || analogsDelta.UpdateOperations.Count != 0)
+            if (scadaDelta.InsertOperations.Count != 0 || scadaDelta.UpdateOperations.Count != 0)
             {
                 toRespond += 2;
             }
@@ -46,6 +49,7 @@ namespace TransactionManagerService
             {
                 toRespond++;
             }
+
             try
             {
                 // first transaction - send delta to NMS
@@ -62,16 +66,14 @@ namespace TransactionManagerService
                 }
                 // create new delta object from delta with gids
                  analogsDelta = delta.SeparateDeltaForEMSType(DMSType.ANALOG);
-                energyConsumerDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
+                 energyConsumerDelta = delta.SeparateDeltaForEMSType(DMSType.ENERGY_CONSUMER);
                  generatorDelta = delta.SeparateDeltaForEMSType(DMSType.GENERATOR);
                  discreteDelta = delta.SeparateDeltaForEMSType(DMSType.DISCRETE);
-                 substationDelta = delta.SeparateDeltaForEMSType(DMSType.SUBSTATION);
-                 geograficalRegionDelta = delta.SeparateDeltaForEMSType(DMSType.GEOGRAFICAL_REGION);
 
                 ceDelta = energyConsumerDelta + generatorDelta;
+                scadaDelta = analogsDelta + discreteDelta;
                 ceDeltaToApply = ceDelta;
 
-                // second transaction - send ceDelta to CE
                 if (toRespond == 2)
                 {
                     if (ceDelta.InsertOperations.Count != 0 || ceDelta.UpdateOperations.Count != 0)
@@ -92,13 +94,13 @@ namespace TransactionManagerService
                     {
                         try
                         {
-                            TransactionScadaPRProxy.Instance.Prepare(ref analogsDelta);
-                            //TransactionCMDProxy.Instance.Prepare(ref analogsDelta);
+                            TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
+                            TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
                         }
                         catch (Exception e)
                         {
                             CommonTrace.WriteTrace(CommonTrace.TraceError, "Transacion: SCADA Prepare phase failed; Message: {0}", e.Message);
-                            updateResult.Message = "Transaction: Failed to apply delta on SCADA CR and CMD Services";
+                            updateResult.Message = "Transaction: Failed to apply delta on SCADA PR and CMD Services";
                             updateResult.Result = ResultType.Failed;
                             return updateResult;
                         }
@@ -109,8 +111,8 @@ namespace TransactionManagerService
                     // second transaction - send ceDelta to CE, analogDelta to SCADA
                     try
                     {
-                        TransactionScadaPRProxy.Instance.Prepare(ref analogsDelta);
-                       
+                        TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
+                        TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
                     }
                     catch (Exception e)
                     {
@@ -125,8 +127,8 @@ namespace TransactionManagerService
                     try
                     {
                         TransactionCEProxy.Instance.Prepare(ref ceDelta);
-                        TransactionScadaPRProxy.Instance.Prepare(ref analogsDelta);
-                        //TransactionCMDProxy.Instance.Prepare(ref analogsDelta);
+                        TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
+                        TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
                     }
                     catch (Exception e)
                     {
@@ -144,7 +146,7 @@ namespace TransactionManagerService
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Start Rollback!");
                 TransactionNMSProxy.Instance.Rollback();
                 TransactionScadaPRProxy.Instance.Rollback();
-                //TransactionCMDProxy.Instance.Rollback();
+                TransactionScadaCDProxy.Instance.Rollback();
                 TransactionCEProxy.Instance.Rollback();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback finished!");
             }
@@ -210,18 +212,18 @@ namespace TransactionManagerService
                     commitResultScadaCMD = false;
                     commitResultCE = false;
                     commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
-                    //commitResultScadaCMD = TransactionCMDProxy.Instance.Commit();
+                    commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
                     commitResultSCADA = commitResultScadaCMD && commitResultScadaCR;
 
                     commitResultCE = TransactionCEProxy.Instance.Commit();
 
                     if (!commitResultScadaCR)
                     {
-                        updateResult.Message += String.Format("\nCommit phase failed for SCADA Krunching Service");
+                        updateResult.Message += String.Format("\nCommit phase failed for SCADA Processing Service");
                     }
                     else
                     {
-                        updateResult.Message += String.Format("\nChanges successfully applied on SCADA Krunching Service");
+                        updateResult.Message += String.Format("\nChanges successfully applied on SCADA Processing Service");
                     }
                     if (!commitResultScadaCMD)
                     {
@@ -259,15 +261,15 @@ namespace TransactionManagerService
                     commitResultScadaCR = false;
                     commitResultScadaCMD = false;
                     commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
-                    //commitResultScadaCMD = TransactionCMDProxy.Instance.Commit();
+                    commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
 
                     if (!commitResultScadaCR)
                     {
-                        updateResult.Message += String.Format("\nCommit phase failed for SCADA Krunching Service");
+                        updateResult.Message += String.Format("\nCommit phase failed for SCADA Processing Service");
                     }
                     else
                     {
-                        updateResult.Message += String.Format("\nChanges successfully applied on SCADA Krunching Service");
+                        updateResult.Message += String.Format("\nChanges successfully applied on SCADA Processing Service");
                     }
 
                     if (!commitResultScadaCMD)
@@ -296,20 +298,20 @@ namespace TransactionManagerService
                 try
                 {
                     TransactionScadaPRProxy.Instance.Rollback();
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA KR successfully finished.");
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA Processing successfully finished.");
                 }
                 catch (Exception exc)
                 {
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA KR - Message: {0}", exc.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA Processing - Message: {0}", exc.Message);
                 }
                 try
                 {
-                    //TransactionCMDProxy.Instance.Rollback();
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA CMD successfully finished.");
+                    TransactionScadaCDProxy.Instance.Rollback();
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA Commanding successfully finished.");
                 }
                 catch (Exception exc)
                 {
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA CMD - Message: {0}", exc.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA Commanding - Message: {0}", exc.Message);
                 }
                 try
                 {
@@ -337,11 +339,6 @@ namespace TransactionManagerService
                 CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Commit phase failed!");
                 updateResult.Message += string.Format("\nCommit pahse failed");
                 updateResult.GlobalIdPairs.Clear();
-                //CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Start Rollback!");
-                //TransactionNMSProxy.Instance.Rollback();
-                //TransactionCRProxy.Instance.Rollback();
-                //TransactionCMDProxy.Instance.Rollback();
-                //TransactionCEProxy.Instance.Rollback();
             }
             updateResult.Message += String.Format("\n\nApply finished");
             toRespond = 1;

@@ -26,27 +26,36 @@ namespace ScadaProcessingSevice
         private ModelResourcesDesc modelResourcesDesc;
         private NetworkModelGDAProxy gdaQueryProxy = null;
         private static List<AnalogLocation> energyConsumerAnalogs;
+        private static List<AnalogLocation> energyConsumerAnalogsCopy;
         private static List<AnalogLocation> generatorAnalogs;
+        private static List<AnalogLocation> generatorAnalogsCopy;
 		private static List<DiscreteLocation> energyConsumerDiscretes;
+		private static List<DiscreteLocation> energyConsumerDiscretesCopy;
 		private static List<DiscreteLocation> generatorDscretes;
+		private static List<DiscreteLocation> generatorDscretesCopy;
 		private readonly int START_ADDRESS_GENERATOR = 40;
 		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 20;
         private ConvertorHelper convertorHelper;
 		private static Dictionary<long, float> previousGeneratorDiscretes;
 		private static Dictionary<long, int> DiscretMaxVal;
+        private UpdateResult updateResult;
+        private ITransactionCallback transactionCallback;
 
 
-
-		public ScadaProcessing()
+        public ScadaProcessing()
         {
             convertorHelper = new ConvertorHelper();
 
             generatorAnalogs = new List<AnalogLocation>();
+            generatorAnalogsCopy = new List<AnalogLocation>();
             energyConsumerAnalogs = new List<AnalogLocation>();
+            energyConsumerAnalogsCopy = new List<AnalogLocation>();
             modelResourcesDesc = new ModelResourcesDesc();
 			previousGeneratorDiscretes = new Dictionary<long, float>(10);
             energyConsumerDiscretes = new List<DiscreteLocation>();
+            energyConsumerDiscretesCopy = new List<DiscreteLocation>();
 			generatorDscretes = new List<DiscreteLocation>();
+			generatorDscretesCopy = new List<DiscreteLocation>();
             DiscretMaxVal = new Dictionary<long, int>();
         }
         //data collected from simulator should be passed through 
@@ -250,17 +259,391 @@ namespace ScadaProcessingSevice
 
         public UpdateResult Prepare(ref Delta delta)
         {
-            throw new NotImplementedException();
+            try
+            {
+                transactionCallback = OperationContext.Current.GetCallbackChannel<ITransactionCallback>();
+                updateResult = new UpdateResult();
+
+                generatorAnalogsCopy.Clear();
+                energyConsumerAnalogsCopy.Clear();
+                generatorDscretesCopy.Clear();
+                energyConsumerDiscretesCopy.Clear();
+
+                // napravi kopiju od originala
+                foreach (AnalogLocation alocation in generatorAnalogs)
+                {
+                    generatorAnalogsCopy.Add(alocation.Clone() as AnalogLocation);
+                }
+
+                foreach (AnalogLocation alocation in energyConsumerAnalogs)
+                {
+                    energyConsumerAnalogsCopy.Add(alocation.Clone() as AnalogLocation);
+                }
+                foreach (DiscreteLocation dlocation in generatorDscretes)
+                {
+                    generatorDscretesCopy.Add(dlocation.Clone() as DiscreteLocation);
+                }
+
+                foreach (DiscreteLocation dlocation in energyConsumerDiscretes)
+                {
+                    energyConsumerDiscretesCopy.Add(dlocation.Clone() as DiscreteLocation);
+                }
+
+                Analog analog = null;
+                Discrete discrete = null;
+                foreach (ResourceDescription rd in delta.InsertOperations)
+                {
+
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)==(DMSType.ANALOG))
+                    {
+                        foreach (Property prop in rd.Properties)
+                        {
+                            analog = ResourcesDescriptionConverter.ConvertTo<Analog>(rd);
+
+                            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
+                            {
+                                energyConsumerAnalogsCopy.Add(new AnalogLocation()
+                                {
+                                    Analog = analog,
+                                    StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]),
+                                    Length = 2,
+                                    LengthInBytes = 4
+                                });
+                            }
+                            else
+                            {
+                                generatorAnalogsCopy.Add(new AnalogLocation()
+                                {
+                                    Analog = analog,
+                                    StartAddress = Int32.Parse(analog.ScadaAddress.Split('_')[1]), // float value 4 bytes
+                                    Length = 2,
+                                    LengthInBytes = 4
+                                });
+                            }
+                            break;
+                        }
+                    }
+                    else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id) == (DMSType.DISCRETE))
+                    {
+                        foreach (Property prop in rd.Properties)
+                        {
+                            discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
+
+                            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
+                            {
+                                energyConsumerDiscretesCopy.Add(new DiscreteLocation()
+                                {
+                                    Discrete = discrete,
+                                    StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
+                                    Length = 1,
+                                    LengthInBytes = 2
+                                });
+                            }
+                            else
+                            {
+                                generatorDscretesCopy.Add(new DiscreteLocation()
+                                {
+                                    Discrete = discrete,
+                                    StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]), // float value 4 bytes
+                                    Length = 1,
+                                    LengthInBytes = 2
+                                });
+                            }
+                            break;
+                        }
+                    }
+                    
+                }
+
+                foreach (ResourceDescription rd in delta.UpdateOperations)
+                {
+
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id) == (DMSType.ANALOG))
+                    {
+                        foreach (Property prop in rd.Properties)
+                        {
+                            analog = ResourcesDescriptionConverter.ConvertTo<Analog>(rd);
+                            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
+                            {
+                                if (ContainsMrid(analog, energyConsumerAnalogsCopy))
+                                {
+                                    foreach (AnalogLocation al in energyConsumerAnalogsCopy)
+                                    {
+                                        if (al.Analog.Mrid.Equals(analog.Mrid))
+                                        {
+                                            if (analog.MaxValue != al.Analog.MaxValue && analog.MaxValue != 0)
+                                            {
+                                                al.Analog.MaxValue = analog.MaxValue;
+                                            }
+                                            else if (analog.MeasurmentType != al.Analog.MeasurmentType && analog.MeasurmentType.ToString() != "")
+                                            {
+                                                al.Analog.MeasurmentType = analog.MeasurmentType;
+                                            }
+                                            else if (analog.MinValue != al.Analog.MinValue && analog.MinValue != 0)
+                                            {
+                                                al.Analog.MinValue = analog.MinValue;
+                                            }
+                                            else if (analog.Name != al.Analog.Name && analog.Name.ToString() != "")
+                                            {
+                                                al.Analog.Name = analog.Name;
+                                            }
+                                            else if (analog.AliasName != al.Analog.AliasName && analog.AliasName.ToString() != "")
+                                            {
+                                                al.Analog.AliasName = analog.AliasName;
+                                            }
+                                            else if (analog.NormalValue != al.Analog.NormalValue && analog.NormalValue != 0)
+                                            {
+                                                al.Analog.NormalValue = analog.NormalValue;
+                                            }
+                                            else if (analog.PowerSystemResource != al.Analog.PowerSystemResource && analog.PowerSystemResource.ToString() != "")
+                                            {
+                                                al.Analog.PowerSystemResource = analog.PowerSystemResource;
+                                            }
+                                            else if (analog.Direction != al.Analog.Direction && analog.Direction.ToString() != "")
+                                            {
+                                                al.Analog.Direction = analog.Direction;
+                                            }
+                                            else if (analog.ScadaAddress != al.Analog.ScadaAddress && analog.ScadaAddress.ToString() != "")
+                                            {
+                                                al.Analog.ScadaAddress = analog.ScadaAddress;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(analog.PowerSystemResource) == DMSType.GENERATOR)
+                            {
+
+                                if (ContainsMrid(analog, generatorAnalogsCopy))
+                                {
+                                    foreach (AnalogLocation al in generatorAnalogsCopy)
+                                    {
+                                        if (al.Analog.Mrid.Equals(analog.Mrid))
+                                        {
+                                            if (analog.MaxValue != al.Analog.MaxValue && analog.MaxValue != 0)
+                                            {
+                                                al.Analog.MaxValue = analog.MaxValue;
+                                            }
+                                            else if (analog.MeasurmentType != al.Analog.MeasurmentType && analog.MeasurmentType.ToString() != "")
+                                            {
+                                                al.Analog.MeasurmentType = analog.MeasurmentType;
+                                            }
+                                            else if (analog.MinValue != al.Analog.MinValue && analog.MinValue != 0)
+                                            {
+                                                al.Analog.MinValue = analog.MinValue;
+                                            }
+                                            else if (analog.Name != al.Analog.Name && analog.Name.ToString() != "")
+                                            {
+                                                al.Analog.Name = analog.Name;
+                                            }
+                                            else if (analog.AliasName != al.Analog.AliasName && analog.AliasName.ToString() != "")
+                                            {
+                                                al.Analog.AliasName = analog.AliasName;
+                                            }
+                                            else if (analog.NormalValue != al.Analog.NormalValue && analog.NormalValue != 0)
+                                            {
+                                                al.Analog.NormalValue = analog.NormalValue;
+                                            }
+                                            else if (analog.PowerSystemResource != al.Analog.PowerSystemResource && analog.PowerSystemResource.ToString() != "")
+                                            {
+                                                al.Analog.PowerSystemResource = analog.PowerSystemResource;
+                                            }
+                                            else if (analog.Direction != al.Analog.Direction && analog.Direction.ToString() != "")
+                                            {
+                                                al.Analog.Direction = analog.Direction;
+                                            }
+                                            else if (analog.ScadaAddress != al.Analog.ScadaAddress && analog.ScadaAddress.ToString() != "")
+                                            {
+                                                al.Analog.ScadaAddress = analog.ScadaAddress;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id) == (DMSType.DISCRETE))
+                    {
+                        foreach (Property prop in rd.Properties)
+                        {
+                            discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
+                            if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
+                            {
+                                if (ContainsMridDiscrete(discrete, energyConsumerDiscretesCopy))
+                                {
+                                    foreach (DiscreteLocation al in energyConsumerDiscretesCopy)
+                                    {
+                                        if (al.Discrete.Mrid.Equals(discrete.Mrid))
+                                        {
+                                            if (discrete.MaxValue != al.Discrete.MaxValue && discrete.MaxValue != 0)
+                                            {
+                                                al.Discrete.MaxValue = discrete.MaxValue;
+                                            }
+                                            else if (discrete.MeasurmentType != al.Discrete.MeasurmentType && discrete.MeasurmentType.ToString() != "")
+                                            {
+                                                al.Discrete.MeasurmentType = discrete.MeasurmentType;
+                                            }
+                                            else if (discrete.MinValue != al.Discrete.MinValue && discrete.MinValue != 0)
+                                            {
+                                                al.Discrete.MinValue = discrete.MinValue;
+                                            }
+                                            else if (discrete.Name != al.Discrete.Name && discrete.Name.ToString() != "")
+                                            {
+                                                al.Discrete.Name = discrete.Name;
+                                            }
+                                            else if (discrete.AliasName != al.Discrete.AliasName && discrete.AliasName.ToString() != "")
+                                            {
+                                                al.Discrete.AliasName = discrete.AliasName;
+                                            }
+                                            else if (discrete.NormalValue != al.Discrete.NormalValue && discrete.NormalValue != 0)
+                                            {
+                                                al.Discrete.NormalValue = discrete.NormalValue;
+                                            }
+                                            else if (discrete.PowerSystemResource != al.Discrete.PowerSystemResource && discrete.PowerSystemResource.ToString() != "")
+                                            {
+                                                al.Discrete.PowerSystemResource = discrete.PowerSystemResource;
+                                            }
+                                            else if (discrete.Direction != al.Discrete.Direction && discrete.Direction.ToString() != "")
+                                            {
+                                                al.Discrete.Direction = discrete.Direction;
+                                            }
+                                            else if (discrete.ScadaAddress != al.Discrete.ScadaAddress && discrete.ScadaAddress.ToString() != "")
+                                            {
+                                                al.Discrete.ScadaAddress = discrete.ScadaAddress;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.GENERATOR)
+                            {
+                                if (ContainsMridDiscrete(discrete, generatorDscretesCopy))
+                                {
+                                    foreach (DiscreteLocation al in generatorDscretesCopy)
+                                    {
+                                        if (al.Discrete.Mrid.Equals(discrete.Mrid))
+                                        {
+                                            if (discrete.MaxValue != al.Discrete.MaxValue && discrete.MaxValue != 0)
+                                            {
+                                                al.Discrete.MaxValue = discrete.MaxValue;
+                                            }
+                                            else if (discrete.MeasurmentType != al.Discrete.MeasurmentType && discrete.MeasurmentType.ToString() != "")
+                                            {
+                                                al.Discrete.MeasurmentType = discrete.MeasurmentType;
+                                            }
+                                            else if (discrete.MinValue != al.Discrete.MinValue && discrete.MinValue != 0)
+                                            {
+                                                al.Discrete.MinValue = discrete.MinValue;
+                                            }
+                                            else if (discrete.Name != al.Discrete.Name && discrete.Name.ToString() != "")
+                                            {
+                                                al.Discrete.Name = discrete.Name;
+                                            }
+                                            else if (discrete.AliasName != al.Discrete.AliasName && discrete.AliasName.ToString() != "")
+                                            {
+                                                al.Discrete.AliasName = discrete.AliasName;
+                                            }
+                                            else if (discrete.NormalValue != al.Discrete.NormalValue && discrete.NormalValue != 0)
+                                            {
+                                                al.Discrete.NormalValue = discrete.NormalValue;
+                                            }
+                                            else if (discrete.PowerSystemResource != al.Discrete.PowerSystemResource && discrete.PowerSystemResource.ToString() != "")
+                                            {
+                                                al.Discrete.PowerSystemResource = discrete.PowerSystemResource;
+                                            }
+                                            else if (discrete.Direction != al.Discrete.Direction && discrete.Direction.ToString() != "")
+                                            {
+                                                al.Discrete.Direction = discrete.Direction;
+                                            }
+                                            else if (discrete.ScadaAddress != al.Discrete.ScadaAddress && discrete.ScadaAddress.ToString() != "")
+                                            {
+                                                al.Discrete.ScadaAddress = discrete.ScadaAddress;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                
+                updateResult.Message = "SCADA PR Transaction Prepare finished.";
+                updateResult.Result = ResultType.Succeeded;
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PR Transaction Prepare finished successfully.");
+                transactionCallback.Response("OK");
+            }
+            catch (Exception e)
+            {
+                updateResult.Message = "SCADA PR Transaction Prepare finished.";
+                updateResult.Result = ResultType.Failed;
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA PR Transaction Prepare failed. Message: {0}", e.Message);
+                transactionCallback.Response("ERROR");
+            }
+
+            return updateResult;
         }
 
         public bool Commit()
         {
-            throw new NotImplementedException();
+            try
+            {
+                generatorAnalogs.Clear();
+                energyConsumerAnalogs.Clear();
+                generatorDscretes.Clear();
+                energyConsumerDiscretes.Clear();
+
+                foreach (AnalogLocation alocation in generatorAnalogsCopy)
+                {
+                    generatorAnalogs.Add(alocation.Clone() as AnalogLocation);
+                }
+
+                foreach (AnalogLocation alocation in energyConsumerAnalogsCopy)
+                {
+                    energyConsumerAnalogs.Add(alocation.Clone() as AnalogLocation);
+                }
+                foreach (DiscreteLocation dlocation in generatorDscretesCopy)
+                {
+                    generatorDscretes.Add(dlocation.Clone() as DiscreteLocation);
+                }
+
+                foreach (DiscreteLocation dlocation in energyConsumerDiscretesCopy)
+                {
+                    energyConsumerDiscretes.Add(dlocation.Clone() as DiscreteLocation);
+                }
+
+                generatorAnalogsCopy.Clear();
+                energyConsumerAnalogsCopy.Clear();
+                generatorDscretesCopy.Clear();
+                energyConsumerDiscretesCopy.Clear();
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PR Transaction: Commit phase successfully finished.");
+               
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA PR Transaction: Failed to Commit changes. Message: {0}", e.Message);
+                return false;
+            }
         }
 
         public bool Rollback()
         {
-            throw new NotImplementedException();
+            try
+            {
+                generatorAnalogsCopy.Clear();
+                generatorDscretesCopy.Clear();
+                energyConsumerAnalogsCopy.Clear();
+                energyConsumerDiscretesCopy.Clear();
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Transaction rollback successfully finished!");
+                return true;
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction rollback error. Message: {0}", e.Message);
+                return false;
+            }
         }
 
 		private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
@@ -498,6 +881,31 @@ namespace ScadaProcessingSevice
         {
             float[] values = ModbusHelper.GetValueFromByteArray<float>(sunData, byteLength);
             return values[0];
+        }
+
+        public bool ContainsMrid(Analog analog, List<AnalogLocation> list)
+        {
+            foreach (AnalogLocation al in list)
+            {
+                if (al.Analog.Mrid.Equals(analog.Mrid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        public bool ContainsMridDiscrete(Discrete analog, List<DiscreteLocation> list)
+        {
+            foreach (DiscreteLocation al in list)
+            {
+                if (al.Discrete.Mrid.Equals(analog.Mrid))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

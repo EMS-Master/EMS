@@ -47,6 +47,25 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             }
         }
 
+        public override object Clone()
+        {
+            Generator io = new Generator(base.GlobalId);
+            io.AliasName = this.AliasName;
+            io.EquipmentContainer = this.EquipmentContainer;
+            io.GeneratorType = this.GeneratorType;
+            io.Mrid = this.Mrid;
+            io.MaxQ = this.MaxQ;
+            io.Measurements = this.Measurements;
+            io.X = this.X;
+            io.MinQ = this.MinQ;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.Y = this.Y;
+            io.RatedS = this.RatedS;
+
+            return io;
+
+        }
         public override int GetHashCode()
         {
             return base.GetHashCode();

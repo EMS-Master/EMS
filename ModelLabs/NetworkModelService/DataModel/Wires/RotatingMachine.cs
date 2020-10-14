@@ -35,7 +35,20 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
                 return false;
             }
         }
-        
+
+        public override object Clone()
+        {
+            RotatingMachine io = new RotatingMachine(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.AliasName = this.AliasName;
+            io.RatedS = this.RatedS;
+            io.EquipmentContainer = this.EquipmentContainer;
+
+            return io;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();

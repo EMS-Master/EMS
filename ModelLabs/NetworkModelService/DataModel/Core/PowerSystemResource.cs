@@ -33,6 +33,17 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                 return false;
             }
         }
+        public override object Clone()
+        {
+            PowerSystemResource io = new PowerSystemResource(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.AliasName = this.AliasName;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+           
+
+            return io;
+        }
 
         public override int GetHashCode()
 		{

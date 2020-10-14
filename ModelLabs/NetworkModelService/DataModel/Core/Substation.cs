@@ -31,6 +31,18 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
     {
         return base.GetHashCode();
     }
+        public override object Clone()
+        {
+            Substation io = new Substation(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.AliasName = this.AliasName;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.Equpments = this.Equpments;
+            
+
+            return io;
+        }
 
         #region IAccess implementation
 

@@ -15,7 +15,11 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
         public Analog(long globalId) : base(globalId)
         {
         }
-        
+
+        public Analog() 
+        {
+        }
+
         public float MaxValue { get => maxValue; set => maxValue = value; }
         public float MinValue { get => minValue; set => minValue = value; }
         public float NormalValue { get => normalValue; set => normalValue = value; }
@@ -38,6 +42,22 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
             return base.GetHashCode();
         }
 
+        public override object Clone()
+        {
+            Analog io = new Analog();
+            io.MaxValue = this.MaxValue;
+            io.MeasurmentType = this.MeasurmentType;
+            io.MinValue = this.MinValue;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.AliasName = this.AliasName;
+            io.NormalValue = this.NormalValue;
+            io.PowerSystemResource = this.PowerSystemResource;
+            io.Direction = this.Direction;
+            io.ScadaAddress = this.ScadaAddress;
+
+            return io;
+        }
 
         #region IAccess implementation
 

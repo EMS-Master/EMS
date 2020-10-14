@@ -33,6 +33,18 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                 return false;
             }
         }
+        public override object Clone()
+        {
+            EquipmentContainer io = new EquipmentContainer(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.AliasName = this.AliasName;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.Equpments = this.Equpments;
+            
+
+            return io;
+        }
 
         public override int GetHashCode()
         {

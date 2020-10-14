@@ -51,12 +51,17 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 		public IdentifiedObject(long globalId)
 		{
 			this.globalId = globalId;			
-		}		
+		}
 
-		/// <summary>
-		/// Gets or sets global id of the entity (identified object).
-		/// </summary>			
-		public long GlobalId
+        public IdentifiedObject()
+        {
+
+        }
+
+        /// <summary>
+        /// Gets or sets global id of the entity (identified object).
+        /// </summary>			
+        public long GlobalId
 		{
 			get
 			{
@@ -267,7 +272,16 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 			return rd;
 		}
 
-		public ResourceDescription GetAsResourceDescription(List<ModelCode> propIds)
+        public virtual object Clone()
+        {
+            IdentifiedObject io = new IdentifiedObject();
+            io.Name = this.Name;
+            io.Mrid = this.Mrid;
+            io.AliasName = this.AliasName;
+            return io;
+        }
+
+        public ResourceDescription GetAsResourceDescription(List<ModelCode> propIds)
 		{
 			ResourceDescription rd = new ResourceDescription(globalId);
 

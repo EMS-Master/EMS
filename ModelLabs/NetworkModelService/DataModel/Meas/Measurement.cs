@@ -18,6 +18,10 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
         {
         }
 
+        public Measurement() 
+        {
+        }
+
         public Direction Direction { get => direction; set => direction = value; }
         public MeasurementType MeasurmentType { get => measurmentType; set => measurmentType = value; }
         public string ScadaAddress { get => scadaAddress; set => scadaAddress = value; }
@@ -38,6 +42,19 @@ namespace FTN.Services.NetworkModelService.DataModel.Meas
             }
         }
 
+        public override object Clone()
+        {
+            Measurement io = new Measurement();
+            io.MeasurmentType = this.MeasurmentType;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.AliasName = this.AliasName;
+            io.PowerSystemResource = this.PowerSystemResource;
+            io.ScadaAddress = this.scadaAddress;
+            io.Direction = this.Direction;
+
+            return io;
+        }
         public override int GetHashCode()
         {
             return base.GetHashCode();

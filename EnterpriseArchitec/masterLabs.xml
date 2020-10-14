@@ -25,7 +25,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_1</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Ruma</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Ruma_update</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_2">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -105,7 +105,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_9</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_9</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Malibunar</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Malibunar update</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_10">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -115,7 +115,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_10</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_10</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Alibunar</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Alibunar_update</cim:IdentifiedObject.name>
 	</cim:Generator>
 		<cim:Generator rdf:ID="Generator_11">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -125,7 +125,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_11</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_11</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Djerdap 1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 1 update</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_12">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -145,7 +145,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_13</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_13</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Bajina Basta</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Bajina Basta update</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_14">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
@@ -223,7 +223,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_2"/>
 		<cim:IdentifiedObject.aliasName>EnergyConsumer_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>EnergyConsumer_1</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>EnergyConsumer_1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>EnergyConsumer_1 </cim:IdentifiedObject.name>
 	</cim:EnergyConsumer>
 	<cim:EnergyConsumer rdf:ID="EnergyConsumer_2">
 		<cim:EnergyConsumer.currentPower>22</cim:EnergyConsumer.currentPower>
@@ -387,7 +387,7 @@
 		<cim:Measurement.scadaAddress>address_1</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_1</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Analog_1 </cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_2">
 		<cim:Analog.maxValue>15000</cim:Analog.maxValue>
@@ -868,7 +868,7 @@
 		<cim:Measurement.scadaAddress>address_1</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_1</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_1</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Discrete_1 </cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_2">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1322,7 +1322,7 @@
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_19"/> 
 		<cim:Measurement.scadaAddress>address_39</cim:Measurement.scadaAddress>
-		<cim:IdentifiedObject.aliasName>Discrete_39</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.aliasName>Discrete_39_update</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_39</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_39</cim:IdentifiedObject.name>
 	</cim:Discrete>
@@ -1334,7 +1334,7 @@
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_20"/> 
 		<cim:Measurement.scadaAddress>address_40</cim:Measurement.scadaAddress>
-		<cim:IdentifiedObject.aliasName>Discrete_40</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.aliasName>Discrete_40_update</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_40</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>Discrete_40</cim:IdentifiedObject.name>
 	</cim:Discrete>

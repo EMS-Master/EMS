@@ -50,7 +50,18 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             }
         }
 
+        public override object Clone()
+        {
+            RegulatingCondEq io = new RegulatingCondEq(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.AliasName = this.AliasName;
+            io.EquipmentContainer = this.EquipmentContainer;
+            
 
+            return io;
+        }
         #endregion IAccess implementation
 
         #region IReference implementation

@@ -78,12 +78,12 @@ namespace UI.ViewModel
                     nmsDelta = null;
                     MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
                     var mainWindVM = mainWindow.DataContext as MainWindowViewModel;
-                   // var historyVm = mainWindVM?.DockManagerViewModel.Documents.FirstOrDefault(x => x is HistoryViewModel) as HistoryViewModel;
+                    var historyVm = mainWindVM?.DockManagerViewModel.Documents.FirstOrDefault(x => x is HistoryViewModel) as HistoryViewModel;
 
-                   // mainWindVM.InitiateIntegrityUpdate();
-                   // if (historyVm != null)
+                    mainWindVM.InitiateIntegrityUpdate();
+                    if (historyVm != null)
                     {
-                   //     historyVm.IntegrityUpdateForGenerators();
+                        historyVm.IntegrityUpdateForGenerators();
                     }
                 }
                 catch (Exception e)

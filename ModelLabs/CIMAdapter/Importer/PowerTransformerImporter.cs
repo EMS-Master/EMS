@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CIM.Model;
 using FTN.Common;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Manager;
+using FTN.ServiceContracts;
 
 namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
 {
@@ -123,8 +124,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                     ResourceDescription rd = CreateDiscreteResourceDescription(cimBaseVoltage);
                     if (rd != null)
                     {
-                        delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-                        report.Report.Append("Discrete ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        if (ModelCodeHelper.ExtractEntityIdFromGlobalId(rd.Id) > 0)
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
+                            report.Report.Append("EnergyConsumer ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
+                        else
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+                            report.Report.Append("Discrete ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
                     }
                     else
                     {
@@ -135,16 +144,56 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             }
         }
 
-        private ResourceDescription CreateDiscreteResourceDescription(FTN.Discrete cimBaseVoltage)
+        private ResourceDescription CreateDiscreteResourceDescription(FTN.Discrete discrete)
         {
             ResourceDescription rd = null;
-            if (cimBaseVoltage != null)
+            if (discrete != null)
             {
-                long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.DISCRETE, importHelper.CheckOutIndexForDMSType(DMSType.DISCRETE));
-                rd = new ResourceDescription(gid);
-                importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+                long gid = 0;
 
-                PowerTransformerConverter.PopulateDiscreteProperties(cimBaseVoltage, rd, importHelper, report);
+                int iteratorId = 0;
+                int resourcesLeft = 0;
+                int numberOfResources = 2;
+                string message = string.Empty;
+                bool contains = false;
+
+                ModelCode modelCodeDiscrete = ModelCode.DISCRETE;
+                List<ModelCode> properties = new List<ModelCode>();
+                ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+                List<ResourceDescription> retList = new List<ResourceDescription>();
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                foreach (ResourceDescription res in retList)
+                {
+                    foreach (Property pr in res.Properties)
+                    {
+                        if (pr.PropertyValue.StringValue.Equals(discrete.MRID))
+                        {
+                            contains = true;
+                            gid = res.Id;
+                        }
+                    }
+                }
+
+                if (!contains)
+                {
+                    gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.DISCRETE, importHelper.CheckOutIndexForDMSType(DMSType.DISCRETE));
+                }
+                rd = new ResourceDescription(gid);
+                importHelper.DefineIDMapping(discrete.ID, gid);
+
+                PowerTransformerConverter.PopulateDiscreteProperties(discrete, rd, importHelper, report);
             }
             return rd;
         }
@@ -161,8 +210,17 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                     ResourceDescription rd = CreateAnalogResourceDescription(cimBaseVoltage);
                     if (rd != null)
                     {
-                        delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-                        report.Report.Append("Analog ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        if (ModelCodeHelper.ExtractEntityIdFromGlobalId(rd.Id) > 0)
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
+                            report.Report.Append("Analog ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+
+                        }
+                        else
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+                            report.Report.Append("Analog ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
                     }
                     else
                     {
@@ -173,16 +231,56 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             }
         }
 
-        private ResourceDescription CreateAnalogResourceDescription(FTN.Analog cimBaseVoltage)
+        private ResourceDescription CreateAnalogResourceDescription(FTN.Analog analog)
         {
             ResourceDescription rd = null;
-            if (cimBaseVoltage != null)
+            if (analog != null)
             {
-                long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.ANALOG, importHelper.CheckOutIndexForDMSType(DMSType.ANALOG));
-                rd = new ResourceDescription(gid);
-                importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+                long gid = 0;
 
-                PowerTransformerConverter.PopulateAnalogProperties(cimBaseVoltage, rd, importHelper, report);
+                int iteratorId = 0;
+                int resourcesLeft = 0;
+                int numberOfResources = 2;
+                string message = string.Empty;
+                bool contains = false;
+
+                ModelCode modelCodeAnalog = ModelCode.ANALOG;
+                List<ModelCode> properties = new List<ModelCode>();
+                ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+                List<ResourceDescription> retList = new List<ResourceDescription>();
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeAnalog);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeAnalog, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                foreach (ResourceDescription res in retList)
+                {
+                    foreach (Property pr in res.Properties)
+                    {
+                        if (pr.PropertyValue.StringValue.Equals(analog.MRID))
+                        {
+                            contains = true;
+                            gid = res.Id;
+                        }
+                    }
+                }
+
+                if (!contains)
+                {
+                    gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.ANALOG, importHelper.CheckOutIndexForDMSType(DMSType.ANALOG));
+                }
+                rd = new ResourceDescription(gid);
+                importHelper.DefineIDMapping(analog.ID, gid);
+
+                PowerTransformerConverter.PopulateAnalogProperties(analog, rd, importHelper, report);
             }
             return rd;
         }
@@ -199,8 +297,17 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                     ResourceDescription rd = CreateGeneratorResourceDescription(cimBaseVoltage);
                     if (rd != null)
                     {
-                        delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-                        report.Report.Append("Generator ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        if (ModelCodeHelper.ExtractEntityIdFromGlobalId(rd.Id) > 0)
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
+                            report.Report.Append("Generator ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
+                        else
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+                            report.Report.Append("Generator ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+
+                        }
                     }
                     else
                     {
@@ -211,57 +318,59 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             }
         }
 
-        private ResourceDescription CreateGeneratorResourceDescription(FTN.Generator cimBaseVoltage)
+        private ResourceDescription CreateGeneratorResourceDescription(FTN.Generator generator)
         {
             ResourceDescription rd = null;
-            if (cimBaseVoltage != null)
+            if (generator != null)
             {
-                long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.GENERATOR, importHelper.CheckOutIndexForDMSType(DMSType.GENERATOR));
-                rd = new ResourceDescription(gid);
-                importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+                long gid = 0;
 
-                PowerTransformerConverter.PopulateGeneratorProperties(cimBaseVoltage, rd, importHelper, report);
+                int iteratorId = 0;
+                int resourcesLeft = 0;
+                int numberOfResources = 2;
+                string message = string.Empty;
+                bool contains = false;
+
+                ModelCode modelCodeGenerator = ModelCode.GENERATOR;
+                List<ModelCode> properties = new List<ModelCode>();
+                ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+                List<ResourceDescription> retList = new List<ResourceDescription>();
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                foreach (ResourceDescription res in retList)
+                {
+                    foreach (Property pr in res.Properties)
+                    {
+                        if (pr.PropertyValue.StringValue.Equals(generator.MRID))
+                        {
+                            contains = true;
+                            gid = res.Id;
+                        }
+                    }
+                }
+
+                if (!contains)
+                {
+                    gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.GENERATOR, importHelper.CheckOutIndexForDMSType(DMSType.GENERATOR));
+                }
+                rd = new ResourceDescription(gid);
+                importHelper.DefineIDMapping(generator.ID, gid);
+
+                PowerTransformerConverter.PopulateGeneratorProperties(generator, rd, importHelper, report);
             }
             return rd;
         }
-
-		//private void ImportBatteryStorage()
-		//{
-		//    SortedDictionary<string, object> cimBaseVoltages = concreteModel.GetAllObjectsOfType("FTN.BatteryStorage");
-		//    if (cimBaseVoltages != null)
-		//    {
-		//        foreach (KeyValuePair<string, object> cimBaseVoltagePair in cimBaseVoltages)
-		//        {
-		//            FTN.BatteryStorage cimBaseVoltage = cimBaseVoltagePair.Value as FTN.BatteryStorage;
-
-		//            ResourceDescription rd = CreateBatteryStorageResourceDescription(cimBaseVoltage);
-		//            if (rd != null)
-		//            {
-		//                delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-		//                report.Report.Append("BatteryStorage ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
-		//            }
-		//            else
-		//            {
-		//                report.Report.Append("BatteryStorage ID = ").Append(cimBaseVoltage.ID).AppendLine(" FAILED to be converted");
-		//            }
-		//        }
-		//        report.Report.AppendLine();
-		//    }
-		//}
-
-		//private ResourceDescription CreateBatteryStorageResourceDescription(FTN.BatteryStorage cimBaseVoltage)
-		//{
-		//    ResourceDescription rd = null;
-		//    if (cimBaseVoltage != null)
-		//    {
-		//        long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.BATTERY_STORAGE, importHelper.CheckOutIndexForDMSType(DMSType.BATTERY_STORAGE));
-		//        rd = new ResourceDescription(gid);
-		//        importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
-
-		//        PowerTransformerConverter.PopulateBatteryStorageProperties(cimBaseVoltage, rd, importHelper, report);
-		//    }
-		//    return rd;
-		//}
 
 		private void ImportEnergyConsumer()
 		{
@@ -270,35 +379,86 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
 			{
 				foreach (KeyValuePair<string, object> cimBaseVoltagePair in cimBaseVoltages)
 				{
-					FTN.EnergyConsumer cimBaseVoltage = cimBaseVoltagePair.Value as FTN.EnergyConsumer;
+					FTN.EnergyConsumer energyConsumer = cimBaseVoltagePair.Value as FTN.EnergyConsumer;
 
-					ResourceDescription rd = CreateEnergyConsumerResourceDescription(cimBaseVoltage);
+					ResourceDescription rd = CreateEnergyConsumerResourceDescription(energyConsumer);
 					if (rd != null)
 					{
-						delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-						report.Report.Append("EnergyConsumer ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
-					}
+                        if (ModelCodeHelper.ExtractEntityIdFromGlobalId(rd.Id) > 0)
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
+                            report.Report.Append("EnergyConsumer ID = ").Append(energyConsumer.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+
+                        }
+                        else
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+                            report.Report.Append("EnergyConsumer ID = ").Append(energyConsumer.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
+                    }
 					else
 					{
-						report.Report.Append("EnergyConsumer ID = ").Append(cimBaseVoltage.ID).AppendLine(" FAILED to be converted");
+						report.Report.Append("EnergyConsumer ID = ").Append(energyConsumer.ID).AppendLine(" FAILED to be converted");
 					}
 				}
 				report.Report.AppendLine();
 			}
 		}
 
-		private ResourceDescription CreateEnergyConsumerResourceDescription(FTN.EnergyConsumer cimBaseVoltage)
+		private ResourceDescription CreateEnergyConsumerResourceDescription(FTN.EnergyConsumer energyConsumer)
 		{
-			ResourceDescription rd = null;
-			if (cimBaseVoltage != null)
-			{
-				long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.ENERGY_CONSUMER, importHelper.CheckOutIndexForDMSType(DMSType.ENERGY_CONSUMER));
-				rd = new ResourceDescription(gid);
-				importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
 
-				PowerTransformerConverter.PopulateEnergyConsumerProperties(cimBaseVoltage, rd, importHelper, report);
-			}
-			return rd;
+            ResourceDescription rd = null;
+            if (energyConsumer != null)
+            {
+                long gid = 0;
+
+                int iteratorId = 0;
+                int resourcesLeft = 0;
+                int numberOfResources = 2;
+                string message = string.Empty;
+                bool contains = false;
+
+                ModelCode modelCodeEnergyConsumer = ModelCode.ENERGY_CONSUMER;
+                List<ModelCode> properties = new List<ModelCode>();
+                ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+                List<ResourceDescription> retList = new List<ResourceDescription>();
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeEnergyConsumer, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                foreach (ResourceDescription res in retList)
+                {
+                    foreach (Property pr in res.Properties)
+                    {
+                        if (pr.PropertyValue.StringValue.Equals(energyConsumer.MRID))
+                        {
+                            contains = true;
+                            gid = res.Id;
+                        }
+                    }
+                }
+
+                if (!contains)
+                {
+                    gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.ENERGY_CONSUMER, importHelper.CheckOutIndexForDMSType(DMSType.ENERGY_CONSUMER));
+                }
+                rd = new ResourceDescription(gid);
+                importHelper.DefineIDMapping(energyConsumer.ID, gid);
+
+                PowerTransformerConverter.PopulateEnergyConsumerProperties(energyConsumer, rd, importHelper, report);
+            }
+            return rd;
+            
 		}
 
 
@@ -314,8 +474,17 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                     ResourceDescription rd = CreateGeographicalRegionResourceDescription(cimBaseVoltage);
                     if (rd != null)
                     {
-                        delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-                        report.Report.Append("GeographicalRegion ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        if (ModelCodeHelper.ExtractEntityIdFromGlobalId(rd.Id) > 0)
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
+                            report.Report.Append("GeographicalRegion ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+
+                        }
+                        else
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+                            report.Report.Append("GeographicalRegion ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
                     }
                     else
                     {
@@ -326,16 +495,56 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             }
         }
 
-        private ResourceDescription CreateGeographicalRegionResourceDescription(FTN.GeographicalRegion cimBaseVoltage)
+        private ResourceDescription CreateGeographicalRegionResourceDescription(FTN.GeographicalRegion geographical)
         {
             ResourceDescription rd = null;
-            if (cimBaseVoltage != null)
+            if (geographical != null)
             {
-                long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.GEOGRAFICAL_REGION, importHelper.CheckOutIndexForDMSType(DMSType.GEOGRAFICAL_REGION));
-                rd = new ResourceDescription(gid);
-                importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+                long gid = 0;
 
-                PowerTransformerConverter.PopulateGeographicalRegionProperties(cimBaseVoltage, rd, importHelper, report);
+                int iteratorId = 0;
+                int resourcesLeft = 0;
+                int numberOfResources = 2;
+                string message = string.Empty;
+                bool contains = false;
+
+                ModelCode modelCodeGeo = ModelCode.GEOGRAFICAL_REGION;
+                List<ModelCode> properties = new List<ModelCode>();
+                ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+                List<ResourceDescription> retList = new List<ResourceDescription>();
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGeo);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGeo, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                foreach (ResourceDescription res in retList)
+                {
+                    foreach (Property pr in res.Properties)
+                    {
+                        if (pr.PropertyValue.StringValue.Equals(geographical.MRID))
+                        {
+                            contains = true;
+                            gid = res.Id;
+                        }
+                    }
+                }
+
+                if (!contains)
+                {
+                    gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.GEOGRAFICAL_REGION, importHelper.CheckOutIndexForDMSType(DMSType.GEOGRAFICAL_REGION));
+                }
+                rd = new ResourceDescription(gid);
+                importHelper.DefineIDMapping(geographical.ID, gid);
+
+                PowerTransformerConverter.PopulateGeographicalRegionProperties(geographical, rd, importHelper, report);
             }
             return rd;
         }
@@ -352,8 +561,17 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                     ResourceDescription rd = CreateSubstationResourceDescription(cimBaseVoltage);
                     if (rd != null)
                     {
-                        delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
-                        report.Report.Append("Substation ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        if (ModelCodeHelper.ExtractEntityIdFromGlobalId(rd.Id) > 0)
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
+                            report.Report.Append("Substation ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+
+                        }
+                        else
+                        {
+                            delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
+                            report.Report.Append("Substation ID = ").Append(cimBaseVoltage.ID).Append(" SUCCESSFULLY converted to GID = ").AppendLine(rd.Id.ToString());
+                        }
                     }
                     else
                     {
@@ -364,16 +582,56 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
             }
         }
 
-        private ResourceDescription CreateSubstationResourceDescription(FTN.Substation cimBaseVoltage)
+        private ResourceDescription CreateSubstationResourceDescription(FTN.Substation substation)
         {
             ResourceDescription rd = null;
-            if (cimBaseVoltage != null)
+            if (substation != null)
             {
-                long gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.SUBSTATION, importHelper.CheckOutIndexForDMSType(DMSType.SUBSTATION));
-                rd = new ResourceDescription(gid);
-                importHelper.DefineIDMapping(cimBaseVoltage.ID, gid);
+                long gid = 0;
 
-                PowerTransformerConverter.PopulateSubstationProperties(cimBaseVoltage, rd, importHelper, report);
+                int iteratorId = 0;
+                int resourcesLeft = 0;
+                int numberOfResources = 2;
+                string message = string.Empty;
+                bool contains = false;
+
+                ModelCode modelCodeSubstation = ModelCode.SUBSTATION;
+                List<ModelCode> properties = new List<ModelCode>();
+                ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+                List<ResourceDescription> retList = new List<ResourceDescription>();
+
+                properties = modelResourcesDesc.GetAllPropertyIds(modelCodeSubstation);
+                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeSubstation, properties);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    retList.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                foreach (ResourceDescription res in retList)
+                {
+                    foreach (Property pr in res.Properties)
+                    {
+                        if (pr.PropertyValue.StringValue.Equals(substation.MRID))
+                        {
+                            contains = true;
+                            gid = res.Id;
+                        }
+                    }
+                }
+
+                if (!contains)
+                {
+                    gid = ModelCodeHelper.CreateGlobalId(0, (short)DMSType.SUBSTATION, importHelper.CheckOutIndexForDMSType(DMSType.SUBSTATION));
+                }
+                rd = new ResourceDescription(gid);
+                importHelper.DefineIDMapping(substation.ID, gid);
+
+                PowerTransformerConverter.PopulateSubstationProperties(substation, rd, importHelper, report);
             }
             return rd;
         }

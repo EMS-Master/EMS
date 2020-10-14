@@ -66,7 +66,17 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
                     break;
             }
         }
-
+        public override object Clone()
+        {
+            ConductingEquipment io = new ConductingEquipment(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.AliasName = this.AliasName;
+            io.EquipmentContainer = this.EquipmentContainer;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            
+            return io;
+        }
         #endregion IAccess implementation
 
         #region IReference implementation

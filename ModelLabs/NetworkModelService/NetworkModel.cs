@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.ServiceModel;
 using System.Text;
 using System.Xml;
 using FTN.Common;
@@ -12,18 +13,25 @@ using FTN.Services.NetworkModelService.DataModel.Wires;
 using TransactionContract;
 
 namespace FTN.Services.NetworkModelService
-{	
-	public class NetworkModel : ITransactionContract
+{
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public class NetworkModel : ITransactionContract
 	{
 		/// <summary>
 		/// Dictionaru which contains all data: Key - DMSType, Value - Container
 		/// </summary>
-		private Dictionary<DMSType, Container> networkDataModel;		
+		private static Dictionary<DMSType, Container> networkDataModel;
+        private Dictionary<DMSType, Container> networkDataModelCopy;
+        private ITransactionCallback transactionCallback;
 
-		/// <summary>
-		/// ModelResourceDesc class contains metadata of the model
-		/// </summary>
-		private ModelResourcesDesc resourcesDescs;
+        private static object obj = new object();
+        private Delta deltaToCommit;
+
+        private int deltaCount = 0;
+        /// <summary>
+        /// ModelResourceDesc class contains metadata of the model
+        /// </summary>
+        private ModelResourcesDesc resourcesDescs;
 	
 		/// <summary>
 		/// Initializes a new instance of the Model class.
@@ -31,6 +39,7 @@ namespace FTN.Services.NetworkModelService
 		public NetworkModel()
 		{
 			networkDataModel = new Dictionary<DMSType, Container>();
+			networkDataModelCopy = new Dictionary<DMSType, Container>();
 			resourcesDescs = new ModelResourcesDesc();			
 			Initialize();
 		}
@@ -272,12 +281,15 @@ namespace FTN.Services.NetworkModelService
 			}
 			finally
 			{
-				if (applyingStarted)
-				{
-					SaveDelta(delta);
-				}
+				//if (applyingStarted)
+				//{
+				//	SaveDelta(delta);
+				//}
 
-				if (updateResult.Result == ResultType.Succeeded)
+                deltaToCommit = delta;
+
+
+                if (updateResult.Result == ResultType.Succeeded)
 				{
 					string mesage = "Applying delta to network model successfully finished.";
 					CommonTrace.WriteTrace(CommonTrace.TraceInfo, mesage);
@@ -305,7 +317,7 @@ namespace FTN.Services.NetworkModelService
 			CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Inserting entity with GID ({0:x16}).", globalId);
 
 			// check if mapping for specified global id already exists			
-			if (this.EntityExists(globalId))
+			if (this.EntityCopyExists(globalId))
 			{
 				string message = String.Format("Failed to insert entity because entity with specified GID ({0:x16}) already exists in network model.", globalId);
 				CommonTrace.WriteTrace(CommonTrace.TraceError, message);
@@ -320,14 +332,14 @@ namespace FTN.Services.NetworkModelService
 				Container container = null;
 
 				// get container or create container 
-				if (ContainerExists(type))
+				if (ContainerCopyExists(type))
 				{
-					container = GetContainer(type);
+					container = GetContainerCopy(type);
 				}
 				else
 				{
 					container = new Container();
-					networkDataModel.Add(type, container);
+					networkDataModelCopy.Add(type, container);
 				}
 
 				// create entity and add it to container
@@ -352,14 +364,14 @@ namespace FTN.Services.NetworkModelService
 							if (targetGlobalId != 0)
 							{
 
-								if (!EntityExists(targetGlobalId))
+								if (!EntityCopyExists(targetGlobalId))
 								{
 									string message = string.Format("Failed to get target entity with GID: 0x{0:X16}. {1}", targetGlobalId);
 									throw new Exception(message);
 								}
 
 								// get referenced entity for update
-								IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+								IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
 								targetEntity.AddReference(property.Id, io.GlobalId);																	
 							}
 
@@ -400,14 +412,14 @@ namespace FTN.Services.NetworkModelService
 
 					CommonTrace.WriteTrace(CommonTrace.TraceVerbose, "Updating entity with GID ({0:x16}).", globalId);
 
-					if (!this.EntityExists(globalId))
+					if (!this.EntityCopyExists(globalId))
 					{
 						string message = String.Format("Failed to update entity because entity with specified GID ({0:x16}) does not exist in network model.", globalId);
 						CommonTrace.WriteTrace(CommonTrace.TraceError, message);
 						throw new Exception(message);
 					}
 
-					IdentifiedObject io = GetEntity(globalId);					
+					IdentifiedObject io = GetEntityCopy(globalId);					
 
 					// updating properties of entity
 					foreach (Property property in rd.Properties)
@@ -418,7 +430,7 @@ namespace FTN.Services.NetworkModelService
                             
                             if (oldTargetGlobalId != 0)
                             {
-                                IdentifiedObject oldTargetEntity = GetEntity(oldTargetGlobalId);
+                                IdentifiedObject oldTargetEntity = GetEntityCopy(oldTargetGlobalId);
                                 oldTargetEntity.RemoveReference(property.Id, globalId);
                             }
 
@@ -427,13 +439,13 @@ namespace FTN.Services.NetworkModelService
 
 							if (targetGlobalId != 0)
 							{								
-								if (!EntityExists(targetGlobalId))
+								if (!EntityCopyExists(targetGlobalId))
 								{
 									string message = string.Format("Failed to get target entity with GID: 0x{0:X16}.", targetGlobalId);
 									throw new Exception(message);
 								}
 
-                                IdentifiedObject targetEntity = GetEntity(targetGlobalId);
+                                IdentifiedObject targetEntity = GetEntityCopy(targetGlobalId);
                                 targetEntity.AddReference(property.Id, globalId);
 							}
 
@@ -662,7 +674,20 @@ namespace FTN.Services.NetworkModelService
 				{
 					CommonTrace.WriteTrace(CommonTrace.TraceError, "Error while applying delta (id = {0}) during service initialization. {1}", delta.Id, ex.Message);
 				}
-			}		
+
+                foreach (KeyValuePair<DMSType, Container> pair in networkDataModelCopy)
+                {
+                    if(networkDataModel.ContainsKey(pair.Key))
+                    {
+                        networkDataModel[pair.Key] = pair.Value.Clone() as Container;
+                    }
+                    else
+                    {
+                        networkDataModel.Add(pair.Key, pair.Value.Clone() as Container);
+                    }
+                    
+                }
+            }		
 		}
 
 		private void SaveDelta(Delta delta)
@@ -701,11 +726,14 @@ namespace FTN.Services.NetworkModelService
 			if (br != null)
 			{
 				br.Close();
-			}
+                br.Dispose();
+            }
 
-			bw.Close();			
-			fs.Close(); 
-		}
+            bw.Close();
+            bw.Dispose();
+            fs.Close();
+            fs.Dispose();
+        }
 
 		private List<Delta> ReadAllDeltas()
 		{
@@ -764,17 +792,123 @@ namespace FTN.Services.NetworkModelService
 
         public UpdateResult Prepare(ref Delta delta)
         {
-            throw new NotImplementedException();
+            transactionCallback = OperationContext.Current.GetCallbackChannel<ITransactionCallback>();
+
+            string message = string.Empty;
+
+            networkDataModelCopy.Clear();
+            foreach (KeyValuePair<DMSType, Container> pair in networkDataModel)
+            {
+                networkDataModelCopy.Add(pair.Key, pair.Value.Clone() as Container);
+            }
+            UpdateResult applyResult = ApplyDelta(delta);
+
+            if (applyResult.Result == ResultType.Succeeded)
+            {
+                message = "OK";
+            }
+            else
+            {
+                message = "ERROR";
+            }
+
+            transactionCallback.Response(message);
+            return applyResult;
         }
 
         public bool Commit()
         {
-            throw new NotImplementedException();
+            try
+            {
+                lock (obj)
+                {
+                    networkDataModel.Clear();
+                    foreach (KeyValuePair<DMSType, Container> pair in networkDataModelCopy)
+                    {
+                        networkDataModel.Add(pair.Key, pair.Value.Clone() as Container);
+                    }
+
+                    networkDataModelCopy.Clear();
+                    SaveDelta(deltaToCommit);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
         }
 
         public bool Rollback()
         {
-            throw new NotImplementedException();
+            try
+            {
+                networkDataModelCopy.Clear();
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Transaction rollback successfully finished!");
+                return true;
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction rollback error. Message: {0}", e.Message);
+                return false;
+            }
+        }
+
+        public IdentifiedObject GetEntityCopy(long globalId)
+        {
+            if (EntityCopyExists(globalId))
+            {
+                DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
+                IdentifiedObject io = GetContainerCopy(type).GetEntity(globalId);
+
+                return io;
+            }
+            else
+            {
+                string message = string.Format("Entity  (GID = 0x{0:x16}) does not exist.", globalId);
+                throw new Exception(message);
+            }
+        }
+
+        public bool EntityCopyExists(long globalId)
+        {
+            DMSType type = (DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
+
+            if (ContainerCopyExists(type))
+            {
+                Container container = GetContainerCopy(type);
+
+                if (container.EntityExists(globalId))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private Container GetContainerCopy(DMSType type)
+        {
+            if (ContainerCopyExists(type))
+            {
+                return networkDataModelCopy[type];
+            }
+            else
+            {
+                string message = string.Format("ContainerCopy does not exist for type {0}.", type);
+                throw new Exception(message);
+            }
+        }
+
+        private bool ContainerCopyExists(DMSType type)
+        {
+            if (networkDataModelCopy.ContainsKey(type))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

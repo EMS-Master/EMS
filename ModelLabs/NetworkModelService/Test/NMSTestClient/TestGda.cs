@@ -16,47 +16,49 @@ using FTN.Services.NetworkModelService.TestClient;
 
 namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
 {
-	public class TestGda : IDisposable
-	{			
+    public class TestGda : IDisposable
+    {
 
-		private ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
+        private ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
 
-		private NetworkModelGDAProxy gdaQueryProxy = null;
-		private NetworkModelGDAProxy GdaQueryProxy
-		{
-			get
-			{
-				if (gdaQueryProxy != null)
-				{
-					gdaQueryProxy.Abort();
-                    gdaQueryProxy = null;
-				}
+        private NetworkModelGDAProxy gdaQueryProxy = null;
+        //private NetworkModelGDAProxy GdaQueryProxy
+        //{
+        //	get
+        //	{
+        //		if (gdaQueryProxy != null)
+        //		{
+        //			gdaQueryProxy.Abort();
+        //                  gdaQueryProxy = null;
+        //		}
 
-				gdaQueryProxy = new NetworkModelGDAProxy("NetworkModelGDAEndpoint");
-				gdaQueryProxy.Open();
+        //		gdaQueryProxy = new NetworkModelGDAProxy("NetworkModelGDAEndpoint");
+        //		gdaQueryProxy.Open();
 
-				return gdaQueryProxy;
-			}
-		}
-		
-		public TestGda()
-		{
-		}
+        //		return gdaQueryProxy;
+        //	}
+        //}
 
-		#region GDAQueryService
+        public TestGda()
+        {
+        }
 
-		public ResourceDescription GetValues(long globalId)
-		{
+        #region GDAQueryService
+
+        public ResourceDescription GetValues(long globalId)
+        {
             string message = "Getting values method started.";
             Console.WriteLine(message);
             CommonTrace.WriteTrace(CommonTrace.TraceError, message);
 
             ResourceDescription rd = null;
 
+
             try
             {
                 short type = ModelCodeHelper.ExtractTypeFromGlobalId(globalId);
                 List<ModelCode> properties = modelResourcesDesc.GetAllPropertyIds((DMSType)type);
+
 
                 //rd = GdaQueryProxy.GetValues(globalId, properties);
                 rd = NetworkModelGDAProxy.Instance.GetValues(globalId, properties);
@@ -74,67 +76,69 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
             return rd;
         }
 
-		//public List<long> GetExtentValues(ModelCode modelCode)
-		//{
-  //          string message = "Getting extent values method started.";
-  //          Console.WriteLine(message);
-  //          CommonTrace.WriteTrace(CommonTrace.TraceError, message);
 
-		//	XmlTextWriter xmlWriter = null;
-		//	int iteratorId = 0;
-		//	List<long> ids = new List<long>();
+        //public List<long> GetExtentValues(ModelCode modelCode)
+        //{
+        //          string message = "Getting extent values method started.";
+        //          Console.WriteLine(message);
+        //          CommonTrace.WriteTrace(CommonTrace.TraceError, message);
 
-		//	try
-		//	{				
-		//		int numberOfResources = 2;
-		//		int resourcesLeft = 0;
+        //	XmlTextWriter xmlWriter = null;
+        //	int iteratorId = 0;
+        //	List<long> ids = new List<long>();
 
-  //              List<ModelCode> properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
-				
-		//		iteratorId = GdaQueryProxy.GetExtentValues(modelCode, properties);
-		//		resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
-								
+        //	try
+        //	{				
+        //		int numberOfResources = 2;
+        //		int resourcesLeft = 0;
 
-		//		xmlWriter = new XmlTextWriter(Config.Instance.ResultDirecotry + "\\GetExtentValues_Results.xml", Encoding.Unicode);
-		//		xmlWriter.Formatting = Formatting.Indented;
+        //              List<ModelCode> properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
 
-		//		while (resourcesLeft > 0)
-		//		{
-		//			List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
+        //		iteratorId = GdaQueryProxy.GetExtentValues(modelCode, properties);
+        //		resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
 
-		//			for (int i = 0; i < rds.Count; i++)
-		//			{
-		//				ids.Add(rds[i].Id);
-		//				rds[i].ExportToXml(xmlWriter);
-		//				xmlWriter.Flush();
-		//			}
 
-		//			resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
-		//		}
+        //		xmlWriter = new XmlTextWriter(Config.Instance.ResultDirecotry + "\\GetExtentValues_Results.xml", Encoding.Unicode);
+        //		xmlWriter.Formatting = Formatting.Indented;
 
-		//		GdaQueryProxy.IteratorClose(iteratorId);
+        //		while (resourcesLeft > 0)
+        //		{
+        //			List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
 
-  //              message = "Getting extent values method successfully finished.";
-  //              Console.WriteLine(message);
-  //              CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-			
-		//	}			
-		//	catch (Exception e)
-  //          {
-  //              message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCode, e.Message);
-  //              Console.WriteLine(message);
-  //              CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-		//	}
-		//	finally
-		//	{				
-		//		if (xmlWriter != null)
-		//		{
-		//			xmlWriter.Close();
-		//		}
-		//	}
-			
-		//	return ids;
-		//}
+        //			for (int i = 0; i < rds.Count; i++)
+        //			{
+        //				ids.Add(rds[i].Id);
+        //				rds[i].ExportToXml(xmlWriter);
+        //				xmlWriter.Flush();
+        //			}
+
+        //			resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+        //		}
+
+        //		GdaQueryProxy.IteratorClose(iteratorId);
+
+        //              message = "Getting extent values method successfully finished.";
+        //              Console.WriteLine(message);
+        //              CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+
+        //	}			
+        //	catch (Exception e)
+        //          {
+        //              message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCode, e.Message);
+        //              Console.WriteLine(message);
+        //              CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+        //	}
+        //	finally
+        //	{				
+        //		if (xmlWriter != null)
+        //		{
+        //			xmlWriter.Close();
+        //		}
+        //	}
+
+        //	return ids;
+        //}
+
         public List<ResourceDescription> GetExtentValues(ModelCode modelCode, List<ModelCode> properties)
         {
             string message = "Getting extent values method started.";
@@ -188,6 +192,7 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
             return retList;
         }
 
+
         public List<ResourceDescription> GetRelatedValues(long sourceGlobalId, Association association)
         {
             string message = "Getting related values method started.";
@@ -201,6 +206,8 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
             List<long> ids = new List<long>();
             try
             {
+
+
                 List<ModelCode> properties = new List<ModelCode>();
 
                 //int iteratorId = GdaQueryProxy.GetRelatedValues(sourceGlobalId, properties, association);
@@ -235,10 +242,44 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
 
                 //GdaQueryProxy.IteratorClose(iteratorId);
                 NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                //>>>>>>> Stashed changes
 
-                message = "Getting related values method successfully finished.";
-                Console.WriteLine(message);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                //                if (properties.Count == 0)
+                //                {
+                //                    properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
+                //                }
+
+                //                //iteratorId = GdaQueryProxy.GetExtentValues(modelCode, properties);
+                //                //resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+
+                //                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
+                //                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+                //                while (resourcesLeft > 0)
+                //                {
+                //                    //List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
+                //                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                //                    retList.AddRange(rds);
+                //                    //resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+                //                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                //                }
+
+                //                //GdaQueryProxy.IteratorClose(iteratorId);
+                //                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+                //                message = "Getting extent values method successfully finished.";
+                //                Console.WriteLine(message);
+                //                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                //<<<<<<< Updated upstream
+
+                //            }
+                //            catch (Exception e)
+                //            {
+                //                message = string.Format("Getting extent values method failed for {0}.\n\t{1}", modelCode, e.Message);
+                //                Console.WriteLine(message);
+                //                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                //            }
+                //=======
             }
             catch (Exception e)
             {
@@ -250,12 +291,143 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
 
             return resultRds;
         }
+    
+//>>>>>>> Stashed changes
+
+
+//            return retList;
+//        }
+
+//<<<<<<< Updated upstream
+//        public List<ResourceDescription> GetRelatedValues(long sourceGlobalId, Association association)
+//        {
+//            string message = "Getting related values method started.";
+//            Console.WriteLine(message);
+//            CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+
+//            List<ResourceDescription> resultRds = new List<ResourceDescription>();
+
+
+//            int numberOfResources = 5;
+//            List<long> ids = new List<long>();
+//            try
+//            {
+//                List<ModelCode> properties = new List<ModelCode>();
+
+//                //int iteratorId = GdaQueryProxy.GetRelatedValues(sourceGlobalId, properties, association);
+//                //int resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+
+//                int iteratorId = NetworkModelGDAProxy.Instance.GetRelatedValues(sourceGlobalId, properties, association);
+//                int resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+
+
+//                //import ids
+//                while (resourcesLeft > 0)
+//                {
+//                    //List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
+//                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+//                    foreach (var rd in rds)
+//                    {
+//                        ids.Add(rd.Id);
+//                    }
+
+//                    //resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+//                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+//                }
+
+//                //find all properties for each id and call 
+//                foreach (var id in ids)
+//                {
+//                    properties = modelResourcesDesc.GetAllPropertyIdsForEntityId(id);
+//                    //resultRds.Add(GdaQueryProxy.GetValues(id, properties));
+//                    resultRds.Add(NetworkModelGDAProxy.Instance.GetValues(id, properties));
+
+//                }
+//=======
+//        //public List<long> TestGetExtentValuesAllTypes()
+//        //{
+//        //    string message = "Getting extent values for all DMS types started.";
+//        //    Console.WriteLine(message);
+//        //    CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+
+//        //    List<ModelCode> properties = new List<ModelCode>();
+//        //    List<long> ids = new List<long>();
+
+//        //    int iteratorId = 0;
+//        //    int numberOfResources = 1000;
+//        //    DMSType currType = 0;
+//        //    try
+//        //    {
+//        //        foreach (DMSType type in Enum.GetValues(typeof(DMSType)))
+//        //        {
+//        //            currType = type;
+//        //            properties = modelResourcesDesc.GetAllPropertyIds(type);
+
+//        //            iteratorId = GdaQueryProxy.GetExtentValues(modelResourcesDesc.GetModelCodeFromType(type), properties);
+//        //            int count = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+
+//        //            while (count > 0)
+//        //            {
+//        //                List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
+
+//        //                for (int i = 0; i < rds.Count; i++)
+//        //                {
+//        //                    ids.Add(rds[i].Id);
+//        //                }
+
+//        //                count = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
+//        //            }
+
+//        //            bool ok = GdaQueryProxy.IteratorClose(iteratorId);
+
+//        //            message = string.Format("Number of {0} in model {1}.", type, ids.Count);
+//        //            Console.WriteLine(message);
+//        //            CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+//        //        }
+//>>>>>>> Stashed changes
+
+//                //GdaQueryProxy.IteratorClose(iteratorId);
+//                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+
+//<<<<<<< Updated upstream
+//                message = "Getting related values method successfully finished.";
+//                Console.WriteLine(message);
+//                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+//            }
+//            catch (Exception e)
+//            {
+//                message = string.Format("Getting related values method  failed for sourceGlobalId = {0} and association (propertyId = {1}, type = {2}). Reason: {3}", sourceGlobalId, association.PropertyId, association.Type, e.Message);
+//                Console.WriteLine(message);
+//                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+//            }
+
+
+//            return resultRds;
+//        }
 
         #endregion GDAQueryService
 
         #region Test Methods
 
         
+
+        //        message = "Getting extent values for all DMS types successfully ended.";
+        //        Console.WriteLine(message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+        //    }
+
+        //    catch (Exception e)
+        //    {
+        //        message = string.Format("Getting extent values for all DMS types failed for type {0}.\n\t{1}", currType, e.Message);
+        //        Console.WriteLine(message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+
+        //        throw;
+        //    }
+
+        //    return ids;
+        //}
+
         
         #region GDAUpdate Service
 
@@ -278,7 +450,7 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
                     delta.AddDeltaOperation(DeltaOpType.Insert, rd, true);
                 }
 
-                updateResult = GdaQueryProxy.ApplyUpdate(delta);
+                //updateResult = GdaQueryProxy.ApplyUpdate(delta);
 
                 message = "Apply update method finished. \n" + updateResult.ToString();
                 Console.WriteLine(message);
@@ -319,7 +491,7 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
                     delta.AddDeltaOperation(DeltaOpType.Update, rd, true);
                 }
 
-                updateResult = GdaQueryProxy.ApplyUpdate(delta);
+                //updateResult = GdaQueryProxy.ApplyUpdate(delta);
 
                 message = "Testing apply delta update method finished. \n" + updateResult.ToString();
                 Console.WriteLine(message);
@@ -360,7 +532,7 @@ namespace TelventDMS.Services.NetworkModelService.TestClient.Tests
                     delta.AddDeltaOperation(DeltaOpType.Delete, rd, true);
                 }
 
-                updateResult = GdaQueryProxy.ApplyUpdate(delta);
+                //updateResult = GdaQueryProxy.ApplyUpdate(delta);
 
                 message = "Testing apply delta delete method finished. \n" + updateResult.ToString();
                 Console.WriteLine(message);

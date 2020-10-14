@@ -36,6 +36,20 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             return base.GetHashCode();
         }
 
+        public override object Clone()
+        {
+            EnergyConsumer io = new EnergyConsumer(base.GlobalId);
+            io.Measurements = this.Measurements;
+            io.Mrid = this.Mrid;
+            io.Name = this.Name;
+            io.AliasName = this.AliasName;
+            io.PFixed = this.PFixed;
+            io.CurrentPower = this.CurrentPower;
+            io.EquipmentContainer = this.EquipmentContainer;
+
+            return io;
+
+        }
 
         #region IAccess implementation
 

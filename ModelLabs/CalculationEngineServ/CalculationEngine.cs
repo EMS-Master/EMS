@@ -22,7 +22,9 @@ namespace CalculationEngineServ
     {
 		private PublisherService publisher = null;
         private static List<ResourceDescription> internalGenerators;
+        private static List<ResourceDescription> internalGeneratorsCopy;
         private static List<ResourceDescription> internalEnergyConsumers;
+        private static List<ResourceDescription> internalEnergyConsumersCopy;
         private object lockObj;
 
         private static IDictionary<long, Generator> generators;
@@ -47,6 +49,8 @@ namespace CalculationEngineServ
         private float GenAll = 0;
         private float Diff = 0;
 
+        private ITransactionCallback transactionCallback;
+        private UpdateResult updateResult;
 		private static Dictionary<GeneratorType, float> allTypes;
 
 		private List<GeneratorCurveModel> generatorCurves;
@@ -58,7 +62,9 @@ namespace CalculationEngineServ
 
 			publisher = new PublisherService();
             internalGenerators = new List<ResourceDescription>();
+            internalGeneratorsCopy = new List<ResourceDescription>();
             internalEnergyConsumers = new List<ResourceDescription>();
+            internalEnergyConsumersCopy = new List<ResourceDescription>();
 
             lockObj = new object();
 
@@ -231,15 +237,142 @@ namespace CalculationEngineServ
         #region Transaction
         public UpdateResult Prepare(ref Delta delta)
         {
-            throw new NotImplementedException();
+            try
+            {
+                transactionCallback = OperationContext.Current.GetCallbackChannel<ITransactionCallback>();
+                updateResult = new UpdateResult();
+                
+                internalGeneratorsCopy.Clear();
+                foreach (ResourceDescription rd in internalGenerators)
+                {
+                    internalGeneratorsCopy.Add(rd.Clone() as ResourceDescription);
+                }
+
+                internalEnergyConsumersCopy.Clear();
+                foreach (ResourceDescription rd in internalEnergyConsumers)
+                {
+                    internalEnergyConsumersCopy.Add(rd.Clone() as ResourceDescription);
+                }
+
+                foreach (ResourceDescription rd in delta.InsertOperations)
+                {
+                    foreach (Property prop in rd.Properties)
+                    {
+                        if (ModelCodeHelper.GetTypeFromModelCode(prop.Id).Equals(DMSType.GENERATOR))
+                        {
+                            internalGeneratorsCopy.Add(rd);
+                            break;
+                        }
+                        else if (ModelCodeHelper.GetTypeFromModelCode(prop.Id).Equals(DMSType.ENERGY_CONSUMER))
+                        {
+                            internalEnergyConsumersCopy.Add(rd);
+                            break;
+                        }
+                    }
+                }
+
+                foreach (ResourceDescription rd in delta.UpdateOperations)
+                {
+                    foreach (Property prop in rd.Properties)
+                    {
+                        if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id) == (DMSType.GENERATOR))
+                        {
+                            foreach (ResourceDescription res in internalGeneratorsCopy)
+                            {
+                                if (rd.Id.Equals(res.Id))
+                                {
+                                    foreach (Property p in res.Properties)
+                                    {
+                                        if (prop.Id.Equals(p.Id))
+                                        {
+                                            p.PropertyValue = prop.PropertyValue;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id) == (DMSType.ENERGY_CONSUMER))
+                        {
+                            foreach (ResourceDescription res in internalEnergyConsumersCopy)
+                            {
+                                if (rd.Id.Equals(res.Id))
+                                {
+                                    foreach (Property p in res.Properties)
+                                    {
+                                        if (prop.Id.Equals(p.Id))
+                                        {
+                                            p.PropertyValue = prop.PropertyValue;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                updateResult.Message = "CE Transaction Prepare finished.";
+                updateResult.Result = ResultType.Succeeded;
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CETransaction Prepare finished successfully.");
+                transactionCallback.Response("OK");
+            }
+            catch (Exception e)
+            {
+                updateResult.Message = "CE Transaction Prepare finished.";
+                updateResult.Result = ResultType.Failed;
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CE Transaction Prepare failed. Message: {0}", e.Message);
+                transactionCallback.Response("ERROR");
+            }
+
+            return updateResult;
         }
         public bool Commit()
         {
-            throw new NotImplementedException();
+            try
+            {
+                internalGenerators.Clear();
+                foreach (ResourceDescription rd in internalGeneratorsCopy)
+                {
+                    internalGenerators.Add(rd.Clone() as ResourceDescription);
+                }
+                internalGeneratorsCopy.Clear();
+
+                
+                internalEnergyConsumers.Clear();
+                foreach (ResourceDescription rd in internalEnergyConsumersCopy)
+                {
+                    internalEnergyConsumers.Add(rd.Clone() as ResourceDescription);
+                }
+                internalEnergyConsumersCopy.Clear();
+
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE Transaction: Commit phase successfully finished.");
+                Console.WriteLine("Number of SynchronousMachines values: {0}", internalGenerators.Count);
+                Console.WriteLine("Number of Energy Consumers values: {0}", internalEnergyConsumers.Count);
+
+                FillData();
+                return true;
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CE Transaction: Failed to Commit changes. Message: {0}", e.Message);
+                return false;
+            }
         }
         public bool Rollback()
         {
-            throw new NotImplementedException();
+            try
+            {
+                internalGeneratorsCopy.Clear();
+                internalEnergyConsumersCopy.Clear();
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE Transaction rollback successfully finished!");
+                return true;
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "CE Transaction rollback error. Message: {0}", e.Message);
+                return false;
+            }
         }
         #endregion
 
