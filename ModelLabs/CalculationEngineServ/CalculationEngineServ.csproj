@@ -127,6 +127,10 @@
     <Compile Include="Migrations\202009271418271_CommandedGenerator.designer.cs">
       <DependentUpon>202009271418271_CommandedGenerator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010171319072_AddValueToCommandedGenerator.cs" />
+    <Compile Include="Migrations\202010171319072_AddValueToCommandedGenerator.designer.cs">
+      <DependentUpon>202010171319072_AddValueToCommandedGenerator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="OptimisationModel.cs" />
     <Compile Include="ProcessingToCalculation.cs" />
@@ -202,6 +206,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202009271418271_CommandedGenerator.resx">
       <DependentUpon>202009271418271_CommandedGenerator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010171319072_AddValueToCommandedGenerator.resx">
+      <DependentUpon>202010171319072_AddValueToCommandedGenerator.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

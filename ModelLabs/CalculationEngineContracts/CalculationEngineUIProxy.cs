@@ -114,5 +114,10 @@ namespace CalculationEngineContracts
 		{
 			return proxy.SetPricePerGeneratorTypeDefault();
 		}
+
+		public void ResetCommandedGenerator(long gid)
+		{
+			proxy.ResetCommandedGenerator(gid);
+		}
 	}
 }

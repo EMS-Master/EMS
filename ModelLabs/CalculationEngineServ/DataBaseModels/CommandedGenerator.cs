@@ -13,5 +13,6 @@ namespace CalculationEngineServ.DataBaseModels
 		public int Id { get; set; }
 		public long Gid { get; set; }
 		public bool CommandingFlag { get; set; }
+		public float CommandingValue { get; set; }
 	}
 }

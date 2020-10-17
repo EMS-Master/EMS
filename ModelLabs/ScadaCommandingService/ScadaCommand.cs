@@ -490,6 +490,7 @@ namespace ScadaCommandingService
                 modbusClient.WriteSingleRegister((ushort)((anLoc.StartAddress - 1) * 2), rawValue);
 				var commandedGeneratorFromDB = DbManager.Instance.GetCommandedGenerator(gid);
 				commandedGeneratorFromDB.CommandingFlag = true;
+				commandedGeneratorFromDB.CommandingValue = value;
 
 				DbManager.Instance.UpdateCommandedGenerator(commandedGeneratorFromDB);
 				DbManager.Instance.SaveChanges();

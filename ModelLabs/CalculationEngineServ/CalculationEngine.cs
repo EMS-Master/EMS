@@ -827,7 +827,8 @@ namespace CalculationEngineServ
 				x.Value.GeneratorType == GeneratorType.Gas || x.Value.GeneratorType == GeneratorType.Oil).Select(y => new CommandedGenerator()
 				{
 					Gid = y.Value.GlobalId,
-					CommandingFlag = false
+					CommandingFlag = false,
+					CommandingValue = 0
 				}).ToList();
 
 				DbManager.Instance.AddListCommandedGenerators(commandedGenerators);
@@ -969,6 +970,18 @@ namespace CalculationEngineServ
 			ret.Add(GeneratorType.Gas, 2f);
 			ret.Add(GeneratorType.Oil, 3f);
 			return ret;
+		}
+
+		public void ResetCommandedGenerator(long gid)
+		{
+			var commandedGen = DbManager.Instance.GetCommandedGenerator(gid);
+			if(commandedGen != null)
+			{
+				commandedGen.CommandingFlag = false;
+				commandedGen.CommandingValue = 0;
+				DbManager.Instance.UpdateCommandedGenerator(commandedGen);
+				DbManager.Instance.SaveChanges();
+			}	
 		}
 	}
 }

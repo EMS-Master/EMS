@@ -8,59 +8,59 @@ using System.Threading.Tasks;
 
 namespace CalculationEngineServ
 {
-    public class CeToUI : ICalculationEngineUIContract
-    {
-        private static CalculationEngine ce = null;
-        public CeToUI()
-        {
-        }
+	public class CeToUI : ICalculationEngineUIContract
+	{
+		private static CalculationEngine ce = null;
+		public CeToUI()
+		{
+		}
 
-        public static CalculationEngine Ce { set => ce = value; }
+		public static CalculationEngine Ce { set => ce = value; }
 
-        public Tuple<int, int, int, float> GetAlgorithmOptions()
-        {
-            return CalculationEngine.GetAlgorithmParams();
-        }
+		public Tuple<int, int, int, float> GetAlgorithmOptions()
+		{
+			return CalculationEngine.GetAlgorithmParams();
+		}
 
-        public List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
-            try
-            {
-                retList = ce.ReadMeasurementsFromDb(gid, startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetHistoryMeasurements {0}", ex.Message);
-            }
+		public List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime)
+		{
+			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+			try
+			{
+				retList = ce.ReadMeasurementsFromDb(gid, startTime, endTime);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetHistoryMeasurements {0}", ex.Message);
+			}
 
-            return retList;
-        }
+			return retList;
+		}
 
-        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+		public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+		{
+			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
 
-            try
-            {
-                retList = ce.ReadTotalProductionsFromDb(startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
-            }
+			try
+			{
+				retList = ce.ReadTotalProductionsFromDb(startTime, endTime);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+			}
 
-            return retList;
-        }
+			return retList;
+		}
 
-        public bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate)
-        {
-           return CalculationEngine.SetAlgorithmParams(iterationCount, populationCount, elitisamPct, mutationRate);
-        }
-        public bool SetAlgorithmOptionsDefault()
-        {
-            return CalculationEngine.SetAlgorithmParamsDefault();
-        }
+		public bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate)
+		{
+			return CalculationEngine.SetAlgorithmParams(iterationCount, populationCount, elitisamPct, mutationRate);
+		}
+		public bool SetAlgorithmOptionsDefault()
+		{
+			return CalculationEngine.SetAlgorithmParamsDefault();
+		}
 
 		public bool SetPricePerGeneratorType(float oilPrice, float coalPrice, float gasPrice)
 		{
@@ -77,68 +77,80 @@ namespace CalculationEngineServ
 			return CalculationEngine.GetPricePerGeneratorTypes();
 		}
 
-        public List<Tuple<double, DateTime>> GetProfit(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+		public List<Tuple<double, DateTime>> GetProfit(DateTime startTime, DateTime endTime)
+		{
+			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
 
-            try
-            {
-                retList = ce.ReadTotalProfitFromDb(startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
-            }
+			try
+			{
+				retList = ce.ReadTotalProfitFromDb(startTime, endTime);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+			}
 
-            return retList;
-        }
+			return retList;
+		}
 
-        public List<Tuple<double, DateTime>> GetCoReduction(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+		public List<Tuple<double, DateTime>> GetCoReduction(DateTime startTime, DateTime endTime)
+		{
+			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
 
-            try
-            {
-                retList = ce.ReadReductionFromDb(startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
-            }
+			try
+			{
+				retList = ce.ReadReductionFromDb(startTime, endTime);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+			}
 
-            return retList;
-        }
+			return retList;
+		}
 
-        public List<Tuple<double, DateTime>> GetCoEmission(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+		public List<Tuple<double, DateTime>> GetCoEmission(DateTime startTime, DateTime endTime)
+		{
+			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
 
-            try
-            {
-                retList = ce.ReadEmissionnFromDb(startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
-            }
+			try
+			{
+				retList = ce.ReadEmissionnFromDb(startTime, endTime);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+			}
 
-            return retList;
-        }
+			return retList;
+		}
 
-        public List<Tuple<double, DateTime>> GetCost(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+		public List<Tuple<double, DateTime>> GetCost(DateTime startTime, DateTime endTime)
+		{
+			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
 
-            try
-            {
-                retList = ce.ReadCostFromDb(startTime, endTime);
-            }
-            catch (Exception ex)
-            {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
-            }
+			try
+			{
+				retList = ce.ReadCostFromDb(startTime, endTime);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+			}
 
-            return retList;
-        }
-    }
+			return retList;
+		}
+
+		public void ResetCommandedGenerator(long gid)
+		{
+			try
+			{
+				ce.ResetCommandedGenerator(gid);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error ResetCommandedGenerator {0}", ex.Message);
+			}
+		}
+	}
 }

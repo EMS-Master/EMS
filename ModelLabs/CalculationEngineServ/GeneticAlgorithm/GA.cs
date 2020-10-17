@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculationEngineServ.DataBaseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,17 +36,14 @@ namespace CalculationEngineServ.GeneticAlgorithm
             {
                 indexToGid.Add(i++, valPair.Key);
             }
+
+			this.necessaryEnergy = necessaryEnergy - commandedGeneratrs.Sum(x => x.Value.MeasuredValue);
+			//List<CommandedGenerator> gen = new List<CommandedGenerator>();
+			//gen = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag && x.CommandingValue != 0).Select(x => x).ToList();
+
+			//float sumOfCommanded = gen.Count != 0 ? gen.Select(x => x.CommandingValue).Sum() : 0;
+			//this.necessaryEnergy = this.necessaryEnergy - sumOfCommanded;
 			
-            this.necessaryEnergy = necessaryEnergy - commandedGeneratrs.Sum(x => x.Value.MeasuredValue);
-
-			foreach(var item in commandedGeneratrs)
-			{
-				var cg = DbManager.Instance.GetCommandedGenerator(item.Key);
-				cg.CommandingFlag = false;
-				DbManager.Instance.UpdateCommandedGenerator(cg);
-			}
-			DbManager.Instance.SaveChanges();
-
 		}
 
         private Tuple<long, float> GetRandomGene(int index)

@@ -46,5 +46,8 @@ namespace CalculationEngineContracts
 
 		[OperationContract]
 		Tuple<float, float, float> GetPricePerGeneratorType();
+
+		[OperationContract]
+		void ResetCommandedGenerator(long gid);
 	}
 }
