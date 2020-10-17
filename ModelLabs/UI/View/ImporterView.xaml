@@ -11,47 +11,111 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<Expander Grid.Row="0" IsExpanded="False" Header="Convert and apply" Foreground="DarkSlateGray" Margin="10">
-			<Grid Margin="0,0,404,0" >
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"></ColumnDefinition>
-					<ColumnDefinition Width="*"></ColumnDefinition>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				<StackPanel Grid.Column="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10">
-					<GroupBox Margin="10" FontSize="18" Header="Browse"  Foreground="DarkSlateGray">
-						<TextBox Grid.Row="0" Background="#ede8e6" Name="textBox1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Width="300" Text="{Binding FileLocation}"/>
-					</GroupBox>
-					<Button Content="Browse"  Margin="113,32,124,30" Command="{Binding ShowOpenDialog}" RenderTransformOrigin="0.539,-0.56" Height="26" Width="Auto">
-						<Button.Style>
-							<Style TargetType="Button" BasedOn="{StaticResource ExpButtonStyle}"/>
-						</Button.Style>
-					</Button>
-					<Button Content="Convert" HorizontalAlignment="Left" Height="26" Margin="10,32,0,30" VerticalAlignment="Top" Width="140" Command="{Binding ConvertCommand}">
-						<Button.Style>
-							<Style TargetType="Button" BasedOn="{StaticResource ExpButtonStyle}"/>
-						</Button.Style>
-					</Button>
-					<Button Content="Apply" HorizontalAlignment="Left" Height="26" Margin="10,2,194,30" Grid.Row="1" VerticalAlignment="Top" Width="144" Command="{Binding ApplyCommand}">
-						<Button.Style>
-							<Style TargetType="Button" BasedOn="{StaticResource ExpButtonStyle}"/>
-						</Button.Style>
-					</Button>
-				</StackPanel>
-				<StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="10,10,-362,10" HorizontalAlignment="Left" Width="454" >
-					<TextBox HorizontalAlignment="Left" Height="336" Margin="30,42,0,0" Grid.Row="1" VerticalAlignment="Top" Width="386"
+
+        <Grid Grid.Row="0" Margin="10,50,10,10" >
+            <StackPanel HorizontalAlignment="Center" >
+                <GroupBox FontSize="18" Header="Browse">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0" Width="700" Name="textBox1" Margin="10"  Text="{Binding FileLocation}"/>
+                        <Button Grid.Row="1" Width="200" Content="Browse" Margin="10"  Command="{Binding ShowOpenDialog}"  Height="35">
+                           
+                        </Button>
+                    </Grid>
+                   
+                </GroupBox>
+                
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1" Margin="10,40,10,10" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Margin="10,10,50,10" FontSize="18" Header="Convert">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Margin=" 10" Grid.Row="0" Content="Convert" Width="200" Height="35" Command="{Binding ConvertCommand}">
+
+                    </Button>
+                    <TextBox Margin="10" HorizontalAlignment="Left" Height="400"  Grid.Row="1" Width="600"
 					 Text="{Binding ConvertReport}"
 					 Background="#ede8e6"
 					 IsReadOnly="True"
 					 TextWrapping="Wrap"
 					 ScrollViewer.VerticalScrollBarVisibility="Auto"
 					 FontSize="12"/>
-				</StackPanel>
-			</Grid>
-		</Expander>
 
-	</Grid>
+
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="1" FontSize="18" Margin="50,10,10,10" Header="Apply">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Content="Apply"  Width="200" Height="35" Grid.Row="0" Margin="10"  Command="{Binding ApplyCommand}">
+
+                    </Button>
+                    <TextBox Margin="10" HorizontalAlignment="Left" Height="400"  Grid.Row="1" Width="600"
+					 Text="{Binding ApplyReport}"
+					 Background="#ede8e6"
+					 IsReadOnly="True"
+					 TextWrapping="Wrap"
+					 ScrollViewer.VerticalScrollBarVisibility="Auto"
+					 FontSize="12"/>
+
+
+                </Grid>
+            </GroupBox>
+
+
+        </Grid>
+
+
+
+
+
+
+
+
+
+
+        <!--<Grid Margin="0,0,404,0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10">
+                
+               
+                <Button Content="Apply" HorizontalAlignment="Left" Height="26" Margin="10,2,194,30" Grid.Row="1" VerticalAlignment="Top" Width="144" Command="{Binding ApplyCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource ExpButtonStyle}"/>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="10,10,-362,10" HorizontalAlignment="Left" Width="454" >
+                <TextBox HorizontalAlignment="Left" Height="336" Margin="30,42,0,0" Grid.Row="1" VerticalAlignment="Top" Width="386"
+					 Text="{Binding ConvertReport}"
+					 Background="#ede8e6"
+					 IsReadOnly="True"
+					 TextWrapping="Wrap"
+					 ScrollViewer.VerticalScrollBarVisibility="Auto"
+					 FontSize="12"/>
+            </StackPanel>
+        </Grid>-->
+    </Grid>
 </UserControl>

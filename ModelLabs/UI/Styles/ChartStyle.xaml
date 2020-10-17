@@ -574,7 +574,7 @@
 										ContentStringFormat="Time : {0}"/>
 						<ContentControl Content="{TemplateBinding DependentValue}" 
 										Foreground="{TemplateBinding Foreground}" 
-										ContentStringFormat="Power : {0:0.##} kW"/>
+										ContentStringFormat="Power : {0:0.##} [MW]"/>
 					</StackPanel>
 				</Grid>
 			</ToolTipService.ToolTip>
@@ -597,7 +597,7 @@
 										ContentStringFormat="Time : {0}"/>
 						<ContentControl Content="{TemplateBinding DependentValue}" 
 										Foreground="{TemplateBinding Foreground}" 
-										ContentStringFormat="Mass : {0:0.####} t"/>
+										ContentStringFormat="Mass : {0:0.##} [t]"/>
 					</StackPanel>
 				</Grid>
 			</ToolTipService.ToolTip>
@@ -638,5 +638,28 @@
 
 		</Grid>
 	</ControlTemplate>
+
+    <ControlTemplate x:Key="LineDataPointProfitTemplate" TargetType="charting:LineDataPoint">
+        <Grid x:Name="Root" Background="Transparent">
+            <ToolTipService.ToolTip>
+                <Grid Margin="-5" Background="{TemplateBinding Background}">
+                    <StackPanel Margin="5">
+                        <ContentControl Content="{TemplateBinding IndependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Time : {0}"/>
+                        <ContentControl Content="{TemplateBinding DependentValue}" 
+										Foreground="{TemplateBinding Foreground}" 
+										ContentStringFormat="Profit : {0:0.##} [$]"/>
+                    </StackPanel>
+                </Grid>
+            </ToolTipService.ToolTip>
+            <ToolTipService.BetweenShowDelay>0</ToolTipService.BetweenShowDelay>
+            <Ellipse Name="Marker" Fill="{TemplateBinding BorderBrush}" Width="6" Height="6" 
+					 Opacity="1"
+					 VerticalAlignment="Center" HorizontalAlignment="Center">
+            </Ellipse>
+        </Grid>
+
+    </ControlTemplate>
 
 </ResourceDictionary>

@@ -27,8 +27,8 @@ namespace UI.View
             DataContext = new ImporterViewModel();
             
             InitializeComponent();
-            textBox1.Text = "XML document...";
-            textBox1.Foreground = Brushes.DarkSlateGray;
+            //textBox1.Text = "XML document...";
+            //textBox1.Foreground = Brushes.DarkSlateGray;
         }
     }
 }

@@ -206,6 +206,7 @@
     <Compile Include="Converters\BoolToColorConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DMSTypeToStringConverter.cs" />
+    <Compile Include="Converters\GeneratorEnable.cs" />
     <Compile Include="Converters\GeneratorTypeToVIsibility.cs" />
     <Compile Include="Converters\GidMapToBoolConverter.cs" />
     <Compile Include="Converters\GidMapToVisibilityConverter.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Converters\ModelCodeToStringConverter.cs" />
     <Compile Include="Converters\PeriodEnumToStringConverter.cs" />
     <Compile Include="Converters\PropertyValueConverter.cs" />
+    <Compile Include="Converters\ResetGeneratorToVisibility.cs" />
     <Compile Include="Converters\StringCompareConverter.cs" />
     <Compile Include="Converters\TestConverter.cs" />
     <Compile Include="FuelEconomyWindow.xaml.cs">

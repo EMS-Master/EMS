@@ -74,7 +74,7 @@ namespace UI.ViewModel
                 try
                 {
                     string log = adapter.ApplyUpdates(nmsDelta);
-                    ConvertReport = log;
+                    ApplyReport = log;
                     nmsDelta = null;
                     MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
                     var mainWindVM = mainWindow.DataContext as MainWindowViewModel;

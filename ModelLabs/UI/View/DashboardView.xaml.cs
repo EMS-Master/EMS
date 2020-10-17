@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CalculationEngineContracts;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -60,6 +61,15 @@ namespace UI.View
             FuelEconomyWindow fuelEconomyWindow = new FuelEconomyWindow(gid);
             fuelEconomyWindow.Show();
 
+        }
+
+        private void MenuItemReset_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menu = (MenuItem)sender;
+            var dataCOntext = menu.DataContext;
+            var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
+            long gid = v.Key;
+            CalculationEngineUIProxy.Instance.ResetCommandedGenerator(gid);
         }
     }
 }

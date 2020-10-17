@@ -18,14 +18,14 @@ namespace UI.Converters
                 return false;
             }
             string s1 = (string)values[0];
-            string s2 = (string)values[1];
+            //string s2 = (string)values[1];
 
             if (s1.Length > 2)
             {
                 s1 = s1.Substring(2);
             }
 
-            return s1 == s2;
+            return false;
         }
 
 

@@ -35,7 +35,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_2</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Beograd</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Beograd update</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_3">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>

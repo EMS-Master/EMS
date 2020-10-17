@@ -112,22 +112,22 @@ namespace UI.ViewModel
                 }
             }
 
-            if (hex_val.Trim() != string.Empty)
-            {
-                try
-                {
-                    long gid = Convert.ToInt64(hex_val, 16);
-                    ResourceDescription rd = testGda.GetValues(gid);
-                    if (!ResList.ToList().Exists((x) => x.Id == rd.Id))
-                    {
-                        ResList.Add(rd);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+            //if (hex_val.Trim() != string.Empty)
+            //{
+            //    try
+            //    {
+            //        long gid = Convert.ToInt64(hex_val, 16);
+            //        ResourceDescription rd = testGda.GetValues(gid);
+            //        if (!ResList.ToList().Exists((x) => x.Id == rd.Id))
+            //        {
+            //            ResList.Add(rd);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //}
         }
 
         private List<ModelCode> getModelCodes()
