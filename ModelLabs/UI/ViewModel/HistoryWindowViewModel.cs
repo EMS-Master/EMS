@@ -13,6 +13,7 @@ namespace UI.ViewModel
     public class HistoryWindowViewModel : ViewModelBase
     {
         long globalId;
+        string globalName;
         private DateTime startTime;
         private DateTime endTime;
         private PeriodValues selectedPeriod;
@@ -29,12 +30,14 @@ namespace UI.ViewModel
         private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generator = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
         public ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> Generator { get => generator; set => generator = value; }
 
-        public HistoryWindowViewModel(long gid)
+        public HistoryWindowViewModel(long gid, string name)
         {
             globalId = gid;
             startTime = DateTime.Now.AddMinutes(-1);
             endTime = DateTime.Now;
             SelectedPeriod = PeriodValues.None;
+            GlobalName = name;
+            OnPropertyChanged(GlobalName);
         }
 
         private void ShowDataCommandExecute(object obj)
@@ -63,7 +66,7 @@ namespace UI.ViewModel
                     tempData = new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
                     if (tempData != null && tempData.Count != 0)
                     {
-                        averageProduction = tempData.Average(x => x.Item1);
+                        averageProduction = tempData.Average(x => x.Item1)/1000;
                     }
                     else
                     {
@@ -105,6 +108,8 @@ namespace UI.ViewModel
                 OnPropertyChanged(nameof(EndTime));
             }
         }
+
+        public string GlobalName { get => globalName; set { globalName = value; OnPropertyChanged(); } }
 
         private void SelectedPeriodCommandExecute(object obj)
         {

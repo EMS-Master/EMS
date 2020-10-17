@@ -21,11 +21,12 @@ namespace UI
     public partial class HistoryWindow : Window
     {
         public long globalGid;
-        public HistoryWindow(long gid)
+        public HistoryWindow(long gid, string name)
         {
             InitializeComponent();
             this.globalGid = gid;
-            this.DataContext = new HistoryWindowViewModel(gid);
+            
+            this.DataContext = new HistoryWindowViewModel(gid, name);
         }
     }
 }

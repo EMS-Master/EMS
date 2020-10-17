@@ -34,7 +34,7 @@ namespace UI.View
             var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
             long gid = v.Key;
 
-            HistoryWindow historyWindow = new HistoryWindow(gid);
+            HistoryWindow historyWindow = new HistoryWindow(gid, v.Value[0].Name);
             historyWindow.Show();
         }
 

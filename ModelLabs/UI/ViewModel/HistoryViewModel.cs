@@ -18,6 +18,10 @@ namespace UI.ViewModel
     {
         #region Fields
 
+        private string item_0;
+        private string item_1;
+        private string item_2;
+
         private DateTime startTime;
         private DateTime endTime;
         private PeriodValues selectedPeriod;
@@ -54,6 +58,8 @@ namespace UI.ViewModel
         private bool totalLoadGraphVisible = true;
 
         private ObservableCollection<long> generatorsFromNms = new ObservableCollection<long>();
+        private ObservableCollection<KeyValuePair<long, string>> generatorsFromNmsName = new ObservableCollection<KeyValuePair<long, string>>();
+
         private ObservableCollection<long> energyConsumersFromNms = new ObservableCollection<long>();
 
         private ObservableCollection<Tuple<double, DateTime>> totalProduction = new ObservableCollection<Tuple<double, DateTime>>();
@@ -105,6 +111,19 @@ namespace UI.ViewModel
             set
             {
                 generatorsFromNms = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<KeyValuePair<long, string>> GeneratorsFromNmsName
+        {
+            get
+            {
+                return generatorsFromNmsName;
+            }
+            set
+            {
+                generatorsFromNmsName = value;
                 OnPropertyChanged();
             }
         }
@@ -295,7 +314,9 @@ namespace UI.ViewModel
             }
         }
 
-
+        public string Item_0 { get => item_0; set { item_0 = value; OnPropertyChanged(); } }
+        public string Item_1 { get => item_1; set { item_1 = value; OnPropertyChanged(); } }
+        public string Item_2 { get => item_2; set { item_2 = value; OnPropertyChanged(); } }
 
         #endregion Properties
         public HistoryViewModel()
@@ -339,16 +360,13 @@ namespace UI.ViewModel
                 foreach (ResourceDescription rd in internalGen)
                 {
                     Generator generator = ResourcesDescriptionConverter.ConvertTo<Generator>(rd);
-                    //if (rd.ContainsProperty(ModelCode.IDOBJ))
-                    //{
-                    //long gid = rd.GetProperty(ModelCode.IDOBJ_GID).AsLong();
                     if (GeneratorsFromNms.Contains(rd.Id))
-                        {
-                            continue;
-                        }
-                        GeneratorsFromNms.Add(rd.Id);
-                        GidToBoolMap.Add(rd.Id, false);
-                    //}
+                    {
+                        continue;
+                    }
+                    GeneratorsFromNms.Add(rd.Id);
+                    GeneratorsFromNmsName.Add(new KeyValuePair<long, string>(rd.Id, generator.Name));
+                    GidToBoolMap.Add(rd.Id, false);
                 }
                 OnPropertyChanged(nameof(GeneratorsFromNms));
 
@@ -497,7 +515,12 @@ namespace UI.ViewModel
             ConsumersContainer.Clear();
             GraphTotalProductionForSelected.Clear();
 
-			foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
+            Item_0 = "";
+            Item_1 = "";
+            Item_2 = "";
+
+
+            foreach (KeyValuePair<long, bool> keyPair in GidToBoolMap)
             {
                 if (keyPair.Value == true)
                 {
@@ -524,7 +547,7 @@ namespace UI.ViewModel
 
                                 if (tempData != null && tempData.Count != 0)
                                 {
-                                    averageProduction = tempData.Average(x => x.Item1)/1000;
+                                    averageProduction = tempData.Average(x => x.Item1) / 1000;
                                 }
                                 else
                                 {
@@ -537,6 +560,40 @@ namespace UI.ViewModel
                                 tempContainer.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime));
                             }
                             GeneratorsContainer.Add(new KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>(keyPair.Key, new ObservableCollection<Tuple<double, DateTime>>(tempContainer)));
+                            int count = GeneratorsContainer.Count;
+                            if (count == 0)
+                            {
+                                Item_0 = String.Empty;
+                                Item_1 = String.Empty;
+                                Item_2 = String.Empty;
+                                OnPropertyChanged(nameof(Item_0));
+                                OnPropertyChanged(nameof(Item_1));
+                                OnPropertyChanged(nameof(Item_2));
+                            }
+                            else if(count == 1)
+                            {
+                                Item_0 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[0].Key).Value;
+                                Item_1 = String.Empty;
+                                Item_2 = String.Empty;
+                                OnPropertyChanged(nameof(Item_0));
+                                OnPropertyChanged(nameof(Item_1));
+                                OnPropertyChanged(nameof(Item_2));
+                            }
+                            else if (count == 2)
+                            {
+                                Item_0 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[0].Key).Value;
+                                Item_1 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[1].Key).Value;
+                                Item_2 = String.Empty;
+                                OnPropertyChanged(nameof(Item_0));
+                                OnPropertyChanged(nameof(Item_1));
+                                OnPropertyChanged(nameof(Item_2));
+                            }
+                            else if (count == 3)
+                            {
+                                Item_0 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[0].Key).Value;
+                                Item_1 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[1].Key).Value;
+                                Item_2 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[2].Key).Value;
+                            }
                         }
                         else
                         {
@@ -690,6 +747,10 @@ namespace UI.ViewModel
             OnPropertyChanged(nameof(GraphCost));
             OnPropertyChanged(nameof(GraphCoReduction));
             OnPropertyChanged(nameof(GraphCoEmission));
+            OnPropertyChanged(nameof(Item_0));
+            OnPropertyChanged(nameof(Item_1));
+            OnPropertyChanged(nameof(Item_2));
+
 
 
         }
