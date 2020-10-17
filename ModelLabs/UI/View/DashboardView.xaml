@@ -24,15 +24,7 @@
         <converters:LastTypeShowConverter x:Key="LastTypeShowConverter" />
         <converters:GeneratorTypeToVIsibility x:Key="GeneratorTypeToVIsibility" />
         <converters:ResetGeneratorToVisibility x:Key="ResetGeneratorToVisibility" />
-        <!--<Style
-			x:Key = "DateTimeAxisLabelStyle2" TargetType="chartingToolkit:DateTimeAxisLabel">
-            <Setter Property="RenderTransformOrigin" Value="0.80,0.20"></Setter>
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <RotateTransform Angle="-90"></RotateTransform>
-                </Setter.Value>
-            </Setter>
-        </Style>-->
+        <converters:BoolToColorTextConverter x:Key="BoolToColorTextConverter" />
 
         <DataTemplate x:Key="GraphGeneratorTemplate" >
             <Border x:Name="B1" CornerRadius="15" Background="#e0e0e0" Opacity="0.8"   BorderThickness="1">
@@ -52,8 +44,14 @@
                             </CheckBox.Visibility>
                             <CheckBox.IsChecked>
 
-                                <Binding Path="Value" Converter="{StaticResource LastValueToBool}" ConverterParameter="Key" Mode="OneWay"  >
-                                </Binding>
+                                <!--<Binding Path="Value" Converter="{StaticResource LastValueToBool}" ConverterParameter="Key" Mode="OneWay"  >
+                                </Binding>-->
+                                <MultiBinding Converter="{StaticResource LastValueToBool}" Mode="OneWay">
+                                    <Binding Path="Value"/>
+                                    <Binding Path="Value[0].IsActive"></Binding>
+                                </MultiBinding>
+
+
                             </CheckBox.IsChecked>
                             <CheckBox.ToolTip>
                                 <ToolTip>
@@ -111,10 +109,21 @@
                                 </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
-                        <Ellipse Fill="{Binding ElementName=GenDigital, Path=IsChecked, Converter={StaticResource BoolToColorConverter}}" Stroke="{Binding ElementName=GenDigital, Path=IsChecked, Converter={StaticResource BoolToColorConverter}}" StrokeThickness="2" >
-
+                        <Ellipse  StrokeThickness="2" >
+                            <Ellipse.Fill>
+                                <MultiBinding Converter="{StaticResource BoolToColorConverter}" >
+                                    <Binding Path="Value"/>
+                                    <Binding Path="Value[0].IsActive"></Binding>
+                                </MultiBinding>
+                            </Ellipse.Fill>
+                            <Ellipse.Stroke>
+                                <MultiBinding Converter="{StaticResource BoolToColorConverter}" >
+                                    <Binding Path="Value"/>
+                                    <Binding Path="Value[0].IsActive"></Binding>
+                                </MultiBinding>
+                            </Ellipse.Stroke>
                         </Ellipse>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="G" FontWeight="Bold" Foreground="{Binding Path=OnOff, Converter={StaticResource BoolToColorConverter}}"/>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="G" FontWeight="Bold" Foreground="{Binding Path=OnOff, Converter={StaticResource BoolToColorTextConverter}}"/>
                     </Grid>
 
                     <TextBlock Margin="0,0,15,0" HorizontalAlignment="Right" Foreground="Black" FontSize="16">

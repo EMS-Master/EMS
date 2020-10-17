@@ -13,8 +13,7 @@ namespace UI.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            IEnumerable<MeasurementUI> measUIs = values[0] as IEnumerable<MeasurementUI>;
-            if (measUIs != null)
+            if (values[0] is IEnumerable<MeasurementUI> measUIs)
             {
                 return measUIs.LastOrDefault().Name;
             }

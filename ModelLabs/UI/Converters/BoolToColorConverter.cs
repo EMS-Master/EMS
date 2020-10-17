@@ -5,17 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
+using FTN.ServiceContracts;
 
 namespace UI.Converters
 {
-	public class BoolToColorConverter : IValueConverter
+	public class BoolToColorConverter : IMultiValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			return (bool)value ? new SolidColorBrush(Colors.GreenYellow) : new SolidColorBrush(Colors.DarkRed);
+            if (value[0] is IEnumerable<MeasurementUI> measUIs)
+            {
+                return measUIs.LastOrDefault().IsActive ? new SolidColorBrush(Colors.GreenYellow) : new SolidColorBrush(Colors.DarkRed);
+            }
+            return new SolidColorBrush(Colors.DarkRed);
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object[] ConvertBack(object value, Type[] targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 			throw new NotImplementedException();
 		}

@@ -9,20 +9,19 @@ using System.Windows.Data;
 
 namespace UI.Converters
 {
-    public class LastValueToBool : IValueConverter
+    public class LastValueToBool : IMultiValueConverter
     {
-        public object Convert(object values, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            IEnumerable<MeasurementUI> measUIs = values as IEnumerable<MeasurementUI>;
-            if (measUIs != null)
+            if (values is IEnumerable<MeasurementUI> measUIs)
             {
-                return measUIs.LastOrDefault().IsActive ;
+                return measUIs.LastOrDefault().IsActive;
             }
 
             return false;
         }
 
-        public object ConvertBack(object value, Type targetTypes, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
