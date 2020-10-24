@@ -100,7 +100,6 @@ namespace CalculationEngineServ
             PublishCoReductionToUI(new Tuple<string, float, float>("coReduction", reductionCO2, currentEmissionCO2));
             PublishCoReductionToUI(new Tuple<string, float, float>("cost", totalCost, profit));
 
-
             PublishWindPercent(windProductionPct);
 
 

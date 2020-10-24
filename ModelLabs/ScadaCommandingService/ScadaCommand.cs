@@ -468,11 +468,13 @@ namespace ScadaCommandingService
         public bool CommandDiscreteValues(long gid, bool value)
         {
             var discLoc = listOfDiscretes.Find(p => p.Discrete.PowerSystemResource == gid);
-           
-            if (discLoc != null)
+			var anLoc = listOfAnalog.Find(p => p.Analog.PowerSystemResource == gid);
+
+			if (discLoc != null)
             {
                 modbusClient.WriteSingleCoil((ushort)(discLoc.StartAddress - 1), value);
-            }
+				modbusClient.WriteSingleRegister((ushort)((anLoc.StartAddress - 1) * 2), 0f);
+			}
 
             Console.WriteLine("SendDataToSimulator executed...\n");
 

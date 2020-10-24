@@ -157,7 +157,6 @@ namespace UI.ViewModel
         {
             long gid = (long)obj;
             ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, false);
-            ScadaCommandingProxy.Instance.CommandAnalogValues(gid, 0);
         }
 
         private void CommandGenMessBoxExecute(object obj)

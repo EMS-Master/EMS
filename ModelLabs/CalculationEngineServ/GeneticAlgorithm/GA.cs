@@ -22,13 +22,23 @@ namespace CalculationEngineServ.GeneticAlgorithm
         public float GeneratedPower { get; private set; }
         public float EmissionCO2 { get; private set; }
 		private Dictionary<long, OptimisationModel> commandedGeneratrs;
-		private List<long> commandedGenGids;
+		private Dictionary<long, float> commandedGenGidsAndValues;
+		public float PointX;
+		public float PointY;
         public GA(float necessaryEnergy, Dictionary<long, OptimisationModel> optModelMap)
         {
+			EmsContext e = new EmsContext();
 			commandedGeneratrs = new Dictionary<long, OptimisationModel>();
-			commandedGenGids = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).Select(y => y.Gid).ToList();
-			this.optModelMap = optModelMap.Where(x => !commandedGenGids.Any(y => y == x.Key)).ToDictionary(param => param.Key, param => param.Value);
-			commandedGeneratrs = optModelMap.Where(x => commandedGenGids.Any(y => y == x.Key)).ToDictionary(param => param.Key, param => param.Value);
+			commandedGenGidsAndValues = e.CommandedGenerators.Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
+			this.optModelMap = optModelMap.Where(x => !commandedGenGidsAndValues.Any(y => y.Key == x.Key)).ToDictionary(param => param.Key, param => param.Value);
+			
+			foreach(var item in commandedGenGidsAndValues)
+			{
+				var comm = optModelMap.FirstOrDefault(x => x.Key == item.Key);
+				comm.Value.MeasuredValue = item.Value;
+				comm.Value.measurementUnit.CurrentValue = item.Value;
+				commandedGeneratrs.Add(item.Key, comm.Value);
+			}
 
 			indexToGid = new Dictionary<int, long>();
             int i = 0;

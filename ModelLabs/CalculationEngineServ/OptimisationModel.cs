@@ -23,6 +23,8 @@ namespace CalculationEngineServ
 		public float EmissionFactor { get; set; }
 		public MeasurementUnit measurementUnit { get; set; }
 		private GeneratorCurveModel curve = new GeneratorCurveModel();
+		public float PointX;
+		public float PointY;
 		public GeneratorCurveModel Curve
 		{
 			get { return curve; }
@@ -59,6 +61,8 @@ namespace CalculationEngineServ
 			float fuelQuantityPerMW = (float)Curve.A * (percentage/100f) + (float)Curve.B;       //[t/MW]
 			float fuelQuantity = fuelQuantityPerMW * energy/1000f;
 			price = Fuel.Item2 * fuelQuantity;
+			PointX = percentage / 100f;
+			PointY = fuelQuantityPerMW;
 		
             return price;
         }
