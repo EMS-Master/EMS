@@ -119,5 +119,10 @@ namespace CalculationEngineContracts
 		{
 			proxy.ResetCommandedGenerator(gid);
 		}
+
+		public List<float> GetPointForFuelEconomy(long gid)
+		{
+			return proxy.GetPointForFuelEconomy(gid);
+		}
 	}
 }

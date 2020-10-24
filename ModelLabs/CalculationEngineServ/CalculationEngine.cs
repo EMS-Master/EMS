@@ -52,6 +52,7 @@ namespace CalculationEngineServ
         private ITransactionCallback transactionCallback;
         private UpdateResult updateResult;
 		private static Dictionary<GeneratorType, float> allTypes;
+		private static Dictionary<long, OptimisationModel> optimizationModelResults;
 
 		private List<GeneratorCurveModel> generatorCurves;
 		
@@ -71,6 +72,7 @@ namespace CalculationEngineServ
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
 			generatorCurves = LoadXMLFile.Load().Curves;
+			optimizationModelResults = new Dictionary<long, OptimisationModel>();
 		}
         
 
@@ -101,8 +103,7 @@ namespace CalculationEngineServ
             PublishCoReductionToUI(new Tuple<string, float, float>("cost", totalCost, profit));
 
             PublishWindPercent(windProductionPct);
-
-
+			
             try
             {
                 if (measurementsOptimized != null && measurementsOptimized.Count > 0)
@@ -174,10 +175,11 @@ namespace CalculationEngineServ
 		
         private List<MeasurementUnit> DoOptimization(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers, float windSpeed, float sunlight)
         {
-                Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
+			//Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
+			optimizationModelResults = new Dictionary<long, OptimisationModel>();
 
-                optModelMapOptimizied = CalculateWithGeneticAlgorithm(optModelMap, powerOfConsumers);
-				return optModelMapOptimizied.Select(x => x.Value.measurementUnit).ToList();
+			optimizationModelResults = CalculateWithGeneticAlgorithm(optModelMap, powerOfConsumers);
+			return optimizationModelResults.Select(x => x.Value.measurementUnit).ToList();
            
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
@@ -981,6 +983,14 @@ namespace CalculationEngineServ
 				DbManager.Instance.UpdateCommandedGenerator(commandedGen);
 				DbManager.Instance.SaveChanges();
 			}	
+		}
+
+		public List<float> GetPointForFuelEconomy(long gid)
+		{
+			List<float> points = new List<float>();
+			points.Add(optimizationModelResults[gid].PointX);
+			points.Add(optimizationModelResults[gid].PointY);
+			return points;
 		}
 	}
 }

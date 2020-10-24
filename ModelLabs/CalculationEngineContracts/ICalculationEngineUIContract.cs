@@ -49,5 +49,8 @@ namespace CalculationEngineContracts
 
 		[OperationContract]
 		void ResetCommandedGenerator(long gid);
+
+		[OperationContract]
+		List<float> GetPointForFuelEconomy(long gid);
 	}
 }

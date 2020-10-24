@@ -152,5 +152,19 @@ namespace CalculationEngineServ
 				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error ResetCommandedGenerator {0}", ex.Message);
 			}
 		}
+
+		public List<float> GetPointForFuelEconomy(long gid)
+		{
+			List<float> points = new List<float>();
+			try
+			{
+				points = ce.GetPointForFuelEconomy(gid);
+			}
+			catch (Exception ex)
+			{
+				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetPointForFuelEconomy {0}", ex.Message);
+			}
+			return points;
+		}
 	}
 }
