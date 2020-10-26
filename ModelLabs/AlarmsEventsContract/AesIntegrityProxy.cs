@@ -55,7 +55,7 @@ namespace FTN.ServiceContracts
             }
         }
 
-        public List<Alarm> InitiateIntegrityUpdate()
+        public List<AlarmHelper> InitiateIntegrityUpdate()
         {
             return proxy.InitiateIntegrityUpdate();
         }

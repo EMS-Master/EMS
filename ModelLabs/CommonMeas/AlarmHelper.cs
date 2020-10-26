@@ -27,6 +27,8 @@ namespace CommonMeas
 
         //stores the message
         private string message;
+        private string name;
+        private bool isVisible;
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
@@ -57,12 +59,18 @@ namespace CommonMeas
             this.timeStamp = timeStamp;
             this.message = "";
             this.persistent = PersistentState.Persistent;
+            this.name = "";
+            this.isVisible = true;
         }
         public long Gid { get { return this.gid; } set { this.gid = value; } }
 
-        public DateTime TimeStamp{ get { return this.timeStamp; } set { this.timeStamp = value; NotifyPropertyChanged();
-            }
-        }
+        public DateTime TimeStamp{ get { return this.timeStamp; } set { this.timeStamp = value; NotifyPropertyChanged();}}
+
+        public string Name { get { return this.name; } set { this.name = value; NotifyPropertyChanged(); } }
+
+
+        public bool IsVisible { get { return this.isVisible; } set { this.isVisible = value; NotifyPropertyChanged(); } }
+
         public AckState AckState { get { return ackState; } set { ackState = value; } }
 
         public float MinValue

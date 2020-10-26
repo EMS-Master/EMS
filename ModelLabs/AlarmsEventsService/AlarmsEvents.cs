@@ -20,11 +20,30 @@ namespace FTN.Services.AlarmsEventsService
     public class AlarmsEvents : IAlarmsEventsContract, IAesIntegirtyContract
     {
         private PublisherService publisher;
+        private List<AlarmHelper> alarms;
+        private List<AlarmHelper> alarmsFromDatabase;
+       
+        private Dictionary<long, bool> isNormalCreated = new Dictionary<long, bool>(10);
         public object alarmLock = new object();
 
         public AlarmsEvents()
         {
             this.Publisher = new PublisherService();
+            this.Alarms = new List<AlarmHelper>();
+            alarmsFromDatabase = SelectAlarmsFromDatabase();
+        }
+
+        public List<AlarmHelper> Alarms
+        {
+            get
+            {
+                return this.alarms;
+            }
+
+            set
+            {
+                this.alarms = value;
+            }
         }
 
         public PublisherService Publisher
@@ -40,62 +59,83 @@ namespace FTN.Services.AlarmsEventsService
             }
         }
 
-        public void AddAlarm(Alarm alarm)
+       
+        public void AddAlarm(AlarmHelper alarm)
         {
+            bool normalAlarm = false;
+            if (Alarms.Count == 0 && alarm.Type.Equals(AlarmType.NORMAL))
+            {
+                return;
+            }
+
+            PublishingStatus publishingStatus = PublishingStatus.INSERT;
             bool updated = false;
             try
             {
                 alarm.AckState = AckState.Unacknowledged;
                 if (string.IsNullOrEmpty(alarm.CurrentState))
                 {
-                    alarm.CurrentState = string.Format("{0}", State.Active);
+                    alarm.CurrentState = string.Format("{0} | {1}", State.Active, alarm.AckState);
                 }
-                if (alarm.AlarmType == AlarmType.DOM)
+
+                // cleared status check
+                foreach (AlarmHelper item in Alarms)
                 {
-                    Alarm al = new Alarm();
-                    List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
-                    
-                    foreach (var all in alarms)
+                    if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()))
                     {
-                        if (all.AlarmType == AlarmType.DOM && all.Gid == alarm.Gid)
+                        item.Severity = alarm.Severity;
+                        item.Value = alarm.Value;
+                        item.Message = alarm.Message;
+                        item.TimeStamp = alarm.TimeStamp;
+                        publishingStatus = PublishingStatus.UPDATE;
+                        updated = true;
+                        break;
+                    }
+                    else if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Cleared.ToString()))
+                    {
+                        if (alarm.Type.Equals(AlarmType.NORMAL) && !item.Type.Equals(AlarmType.NORMAL.ToString()))
                         {
-                            al = all;
+                            bool normalCreated = false;
+                            if (this.isNormalCreated.TryGetValue(alarm.Gid, out normalCreated))
+                            {
+                                if (!normalCreated)
+                                {
+                                    normalAlarm = true;
+                                }
+                            }
+
                             break;
                         }
                     }
-                    
-                    if (al.Gid != 0)
-                    {
-                        UpdateAlarmStatusIntoDb(alarm);
-                    }
-                    
                 }
-                else
+
+                // ako je insert dodaj u listu - inace je updateovan
+                if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.Type.Equals(AlarmType.NORMAL))
                 {
-                    List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
-                    
-                    foreach (Alarm item in alarms)
+                    RemoveFromAlarms(alarm.Gid);
+                    this.Alarms.Add(alarm);
+                    if (InsertAlarmIntoDb(alarm))
                     {
-                        if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()) && item.AlarmType == alarm.AlarmType)
-                        {
-                            UpdateAlarmStatusIntoDb(alarm);
-                            updated = true;
-                            break;
-                        }                            
+                        Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
                     }
-                    
-                    //ako se prvi put pojavio i nije .NORMAL
-                    if (!updated /* && !alarm.AlarmType.Equals(AlarmType.NORMAL)*/)
-                    {
-                        if (InsertAlarmIntoDb(alarm))
-                        {
-                            Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
-                        }
-                    }
-                    //Console.WriteLine("AlarmsEvents: AddAlarm method");
-                    string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.AlarmValue);
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                    this.isNormalCreated[alarm.Gid] = false;
                 }
+                if (alarm.Type.Equals(AlarmType.NORMAL) && normalAlarm)
+                {
+                    RemoveFromAlarms(alarm.Gid);
+                    this.Alarms.Add(alarm);
+                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                    this.isNormalCreated[alarm.Gid] = true;
+
+                }
+                else if (!alarm.Type.Equals(AlarmType.NORMAL))
+                {
+                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                }
+
+                //Console.WriteLine("AlarmsEvents: AddAlarm method");
+                string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.Value);
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
             }
             catch (Exception ex)
             {
@@ -105,35 +145,53 @@ namespace FTN.Services.AlarmsEventsService
             }
         }
 
-        //private void RemoveFromAlarms(long gid)
-        //{
+        private void RemoveFromAlarms(long gid)
+        {
 
-        //    lock (alarmLock)
-        //    {
-        //        List<Alarm> alarmsToRemove = new List<Alarm>(1);
-        //        foreach (Alarm ah in Alarms)
-        //        {
-        //            if (ah.Gid == gid)
-        //            {
-        //                alarmsToRemove.Add(ah);
-        //            }
-        //        }
+            lock (alarmLock)
+            {
+                List<AlarmHelper> alarmsToRemove = new List<AlarmHelper>(1);
+                foreach (AlarmHelper ah in Alarms)
+                {
+                    if (ah.Gid == gid)
+                    {
+                        alarmsToRemove.Add(ah);
+                    }
+                }
 
-        //        foreach (Alarm ah in alarmsToRemove)
-        //        {
-        //            Alarms.Remove(ah);
-        //        }
-        //    }
-        //}
-        public bool InsertAlarmIntoDb(Alarm alarm)
+                foreach (AlarmHelper ah in alarmsToRemove)
+                {
+                    Alarms.Remove(ah);
+                }
+            }
+        }
+
+        private bool InsertAlarmIntoDb(AlarmHelper alarm)
         {
             bool success = true;
+
+            EmsContext ems = new EmsContext();
             try
             {
-                DbManager.Instance.AddAlarm(new Alarm { Gid = alarm.Gid, AlarmValue = alarm.AlarmValue, MinValue = alarm.MinValue, MaxValue = alarm.MaxValue, AlarmTimeStamp = alarm.AlarmTimeStamp, AckState = alarm.AckState, AlarmType = alarm.AlarmType, AlarmMessage = alarm.AlarmMessage, Severity = alarm.Severity, CurrentState=alarm.CurrentState });
-                DbManager.Instance.SaveChanges();
-               
+                Alarm a = new Alarm()
+                {
+                    Gid = alarm.Gid,
+                    AlarmValue = alarm.Value,
+                    MinValue = alarm.MinValue,
+                    MaxValue = alarm.MaxValue,
+                    AlarmTimeStamp = alarm.TimeStamp,
+                    AckState = alarm.AckState,
+                    AlarmType = alarm.Type,
+                    AlarmMessage = alarm.Message,
+                    Severity = alarm.Severity,
+                    CurrentState = alarm.CurrentState
+                };
+
+                ems.Alarms.Add(a);
+                ems.SaveChanges();
+
             }
+
             catch (Exception e)
             {
                 success = false;
@@ -141,44 +199,84 @@ namespace FTN.Services.AlarmsEventsService
                 CommonTrace.WriteTrace(CommonTrace.TraceError, message);
                 Console.WriteLine(message);
             }
+
             return success;
         }
 
-        public List<Alarm> InitiateIntegrityUpdate()
+      
+
+        public List<AlarmHelper> InitiateIntegrityUpdate()
         {
             string message = string.Format("UI client requested integirty update for existing alarms.");
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
 
-            return DbManager.Instance.GetAlarms().ToList();
+            return Alarms;
         }
 
-        public void UpdateStatus(Alarm analogLoc, State state)
+       
+
+        public void UpdateStatus(AnalogLocation analogLoc, State state)
         {
-            List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
-            
-                foreach (Alarm alarm in alarms)
+            long powerSystemResGid = analogLoc.Analog.PowerSystemResource;
+            List<AlarmHelper> alarmsToAdd = new List<AlarmHelper>(2);
+            foreach (AlarmHelper alarm in this.Alarms)
+            {
+                if (alarm.Gid.Equals(powerSystemResGid) && alarm.CurrentState.Contains(State.Active.ToString()))
                 {
-                    if (alarm.Gid.Equals(analogLoc.Gid) && alarm.CurrentState.Contains(State.Active.ToString()) && alarm.AlarmType != AlarmType.DOM && alarm.AlarmType != AlarmType.NORMAL)
+                    alarm.CurrentState = string.Format("{0} | {1}", state, alarm.AckState);
+                    alarm.PubStatus = PublishingStatus.UPDATE;
+                    if (UpdateAlarmStatusIntoDb(alarm))
                     {
-                        if (UpdateAlarmStatus(alarm))
-                        {
-                            Console.WriteLine("Alarm status with GID:{0} updated into database.", alarm.Gid);
-                        }
-                        try
-                        {
-                            string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
-                            CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
-                        }
-                        catch (Exception ex)
-                        {
-                            string message = string.Format("Greska ", ex.Message);
-                            CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                            // throw new Exception(message);
-                        }
+                        Console.WriteLine("Alarm status with GID:{0} updated into database.", alarm.Gid);
+                    }
+
+                    try
+                    {
+                        this.Publisher.PublishStateChange(alarm);
+                        string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
+                        CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                    }
+                    catch (Exception ex)
+                    {
+                        string message = string.Format("Greska ", ex.Message);
+                        CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                        // throw new Exception(message);
                     }
                 }
-            
+            }
         }
+
+        public void UpdateAckStatus(AlarmHelper alarmtoupdate)
+        {
+            long powerSystemResGid = alarmtoupdate.Gid;
+            foreach (AlarmHelper alarm in this.Alarms)
+            {
+                if (alarm.Gid.Equals(powerSystemResGid) && alarm.AckState==AckState.Unacknowledged)
+                {
+                    alarm.AckState = alarmtoupdate.AckState;
+                    alarm.CurrentState = alarmtoupdate.CurrentState;
+                    alarm.PubStatus = PublishingStatus.UPDATE;
+                    if (UpdateAlarmAckStatusIntoDb(alarm))
+                    {
+                        Console.WriteLine("Alarm status with GID:{0} updated into database.", alarm.Gid);
+                    }
+
+                    try
+                    {
+                        this.Publisher.PublishStateChange(alarm);
+                        string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
+                        CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                    }
+                    catch (Exception ex)
+                    {
+                        string message = string.Format("Greska ", ex.Message);
+                        CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                        // throw new Exception(message);
+                    }
+                }
+            }
+        }
+
         private bool UpdateAlarmStatus(Alarm alarm)
         {
             bool success = true;
@@ -198,14 +296,14 @@ namespace FTN.Services.AlarmsEventsService
             }
             return success;
         }
-        private bool UpdateAlarmStatusIntoDb(Alarm alarm)
+        private bool UpdateAlarmStatusIntoDb(AlarmHelper alarm)
         {
             bool success = true;
             
                 try
                 {
-                    var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
-                    tmpAlarm.AlarmValue = alarm.AlarmValue;
+                    var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
+                    tmpAlarm.AlarmValue = alarm.Value;
                     tmpAlarm.Severity = alarm.Severity;
                     DbManager.Instance.SaveChanges();                       
                     
@@ -221,9 +319,69 @@ namespace FTN.Services.AlarmsEventsService
 
             return success;
         }
-        private List<Alarm> SelectAlarmsFromDatabase()
+        private bool UpdateAlarmAckStatusIntoDb(AlarmHelper alarm)
         {
-            return DbManager.Instance.GetAlarms().ToList();
+            bool success = true;
+
+            try
+            {
+                var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
+                tmpAlarm.AckState = alarm.AckState;
+                DbManager.Instance.SaveChanges();
+
+            }
+            catch (Exception e)
+            {
+                success = false;
+                string message = string.Format("Failed to update alarm into database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+
+            return success;
+        }
+        
+
+        private List<AlarmHelper> SelectAlarmsFromDatabase()
+        {
+            List<AlarmHelper> alarms = new List<AlarmHelper>();
+
+            EmsContext ems = new EmsContext();
+
+                try
+                {
+                    var alarmsdb = ems.Alarms.ToList();
+
+                    foreach (var item in alarmsdb)
+                    {
+                        AlarmHelper alarm = new AlarmHelper
+                        {
+                            Gid = item.Gid,
+                            Severity = (SeverityLevel)item.Severity,
+                            Value = item.AlarmValue,
+                            MinValue = item.MinValue,
+                            MaxValue = item.MaxValue,
+                            TimeStamp = item.AlarmTimeStamp,
+                            CurrentState = item.CurrentState,
+                            AckState = (AckState)item.AckState,
+                            PubStatus = (PublishingStatus)item.PubStatus,
+                            Type = (AlarmType)item.AlarmType,
+                            Message = item.AlarmMessage
+                        };
+
+                        alarms.Add(alarm);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    string message = string.Format("Failed read alarms from database. {0}", e.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                    Console.WriteLine(message);
+                }
+
+            return alarms;
         }
         private List<Alarm> SelectDiscretAlarmsFromDatabase()
         {
@@ -239,6 +397,6 @@ namespace FTN.Services.AlarmsEventsService
             
             return discret;
         }
-        
+
     }
 }

@@ -20,19 +20,23 @@ namespace UI.ViewModel
 {
     public class AlarmSummaryViewModel : ViewModelBase
     {
+        private string combo1;
+        private string combo2;
+
         private AlarmsEventsSubscribeProxy aeSubscribeProxy;
 
         
 
-        private ObservableCollection<Alarm> alarmSummaryQueue = new ObservableCollection<Alarm>();
+        private ObservableCollection<AlarmHelper> alarmSummaryQueue = new ObservableCollection<AlarmHelper>();
+        private ObservableCollection<string> sourceCombo2 = new ObservableCollection<string>();
+
 
         private ICommand acknowledgeCommand;
-
+        private ICommand hideClick;
         public object alarmSummaryLock = new object();
-        AlarmSummaryView aw = new AlarmSummaryView();
 
 
-        public ObservableCollection<Alarm> AlarmSummaryQueue
+        public ObservableCollection<AlarmHelper> AlarmSummaryQueue
         {
             get
             {
@@ -49,19 +53,6 @@ namespace UI.ViewModel
         {
             Title = "Alarm Summary";
 
-            //using (var db = new EmsContext())
-            //{
-            //    List<Alarm> al = new List<Alarm>();
-            //    foreach (var alarm in db.Alarms)
-            //    {
-            //        al.Add(alarm);
-            //        aw.AlarmSummaryDataGrid.ItemsSource = al;
-
-
-            //    }
-
-            //}
-
             try
             {
                 aeSubscribeProxy = new AlarmsEventsSubscribeProxy(CallbackAction);
@@ -74,7 +65,7 @@ namespace UI.ViewModel
 
             try
             {
-                //IntegirtyUpdate();
+                IntegirtyUpdate();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Successfully finished Integirty update operation for existing Alarms on AES! \n");
             }
             catch (Exception e)
@@ -83,12 +74,80 @@ namespace UI.ViewModel
             }
         }
 
-        public ICommand AcknowledgeCommand => acknowledgeCommand ?? (acknowledgeCommand = new RelayCommand<Alarm>(AcknowledgeCommandExecute));
+        public ICommand HideClick => hideClick ?? (hideClick = new RelayCommand(HideCLickExecute));
+        public ICommand AcknowledgeCommand => acknowledgeCommand ?? (acknowledgeCommand = new RelayCommand<AlarmHelper>(AcknowledgeCommandExecute));
 
+        public string Combo1 { get => combo1;
+            set
+            {
+                combo1 = value.Split(':')[1];
+                OnPropertyChanged();
+
+                if (combo1.Contains("Type Alarm"))
+                {
+                    SourceCombo2 = new ObservableCollection<string>() { "NORMAL", "HIGH", "LOW", "DOM" };
+                }
+                else if (combo1.Contains("Severity"))
+                {
+                    SourceCombo2 = new ObservableCollection<string>() { "HIGH", "LOW", "MEDIUM" };
+                }
+                else if (combo1.Contains("Name"))
+                {
+
+                }
+
+                OnPropertyChanged("SourceCombo2");
+            }
+        }
+
+        public string Combo2
+        {
+            get => combo2;
+            set
+            {
+                combo2 = value;
+                if (combo2 != null)
+                {
+                    OnPropertyChanged();
+
+                    if (Combo1.Contains("Type Alarm"))
+                    {
+                        if (combo2.Equals("NORMAL") || combo2.Equals("HIGH") || combo2.Equals("LOW") || combo2.Equals("DOM"))
+                        {
+                            foreach (var item in AlarmSummaryQueue)
+                            {
+                                if (item.Type.ToString() != combo2)
+                                    item.IsVisible = false;
+                                else
+                                    item.IsVisible = true;
+                            }
+                        }
+                    }
+                    else if (Combo1.Contains("Severity"))
+                    {
+                        if (combo2.Equals("HIGH") || combo2.Equals("LOW") || combo2.Equals("MEDIUM"))
+                        {
+                            foreach (var item in AlarmSummaryQueue)
+                            {
+                                if (item.Severity.ToString() != combo2)
+                                    item.IsVisible = false;
+                                else
+                                    item.IsVisible = true;
+                            }
+                        }
+                    }
+
+                    OnPropertyChanged("AlarmSummaryQueue");
+                }
+
+            }
+        }
+
+        public ObservableCollection<string> SourceCombo2 { get => sourceCombo2; set => sourceCombo2 = value; }
 
         private void CallbackAction(object obj)
         {
-            Alarm alarm = obj as Alarm;
+            AlarmHelper alarm = obj as AlarmHelper;
 
             if (obj == null)
             {
@@ -105,18 +164,19 @@ namespace UI.ViewModel
             }
         }
 
-        private void AddAlarm(Alarm alarm)
+        private void AddAlarm(AlarmHelper alarm)
         {
             lock (alarmSummaryLock)
             {
-                List<Alarm> alarmsToRemove = new List<Alarm>(1);
-                if (!alarm.AlarmType.Equals(AlarmType.NORMAL))
+                List<AlarmHelper> alarmsToRemove = new List<AlarmHelper>(1);
+                if (!alarm.Type.Equals(AlarmType.NORMAL))
                 {
-                    foreach (Alarm aHelper in AlarmSummaryQueue)
+                    foreach (AlarmHelper aHelper in AlarmSummaryQueue)
                     {
                         if (aHelper.Gid.Equals(alarm.Gid) && aHelper.CurrentState.Contains(State.Active.ToString()))
                         {
-                            
+                            //aHelper.CurrentState = string.Format("{0}, {1}", State.Active, aHelper.AckState);
+                            //OnPropertyChanged(nameof(AlarmSummaryQueue));
                             UpdateAlarm(alarm);
                             return;
                         }
@@ -124,29 +184,27 @@ namespace UI.ViewModel
                 }
                 else //ako je tip NORMAL
                 {
-                    foreach (Alarm aHelper in AlarmSummaryQueue)
+                    foreach (AlarmHelper aHelper in AlarmSummaryQueue)
                     {
-                        if (aHelper.Gid.Equals(alarm.Gid) && aHelper.AlarmTimeStamp.Equals(alarm.AlarmTimeStamp))
+                        if (aHelper.Gid.Equals(alarm.Gid) && aHelper.TimeStamp.Equals(alarm.TimeStamp))
                             return;
                     }
 
 
                 }
 
-                foreach (Alarm aHelper in AlarmSummaryQueue)
+                foreach (AlarmHelper aHelper in AlarmSummaryQueue)
                 {
                     if (aHelper.Gid == alarm.Gid)
                     {
                         alarmsToRemove.Add(aHelper);
                     }
                 }
-                foreach (Alarm ah in alarmsToRemove)
+                foreach (AlarmHelper ah in alarmsToRemove)
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
                         AlarmSummaryQueue.Remove(ah);
-
-
                     });
                 }
 
@@ -155,8 +213,6 @@ namespace UI.ViewModel
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
                         AlarmSummaryQueue.Add(alarm);
-                        
-
                     });
                 }
                 catch (Exception e)
@@ -167,11 +223,11 @@ namespace UI.ViewModel
             }
         }
 
-        private void UpdateAlarm(Alarm alarm)
+        private void UpdateAlarm(AlarmHelper alarm)
         {
             lock (alarmSummaryLock)
             {
-                foreach (Alarm aHelper in AlarmSummaryQueue)
+                foreach (AlarmHelper aHelper in AlarmSummaryQueue)
                 {
                     if (aHelper.Gid.Equals(alarm.Gid) && aHelper.CurrentState.Contains(State.Active.ToString()))
                     {
@@ -180,103 +236,108 @@ namespace UI.ViewModel
                             aHelper.CurrentState = alarm.CurrentState;
                         }
                         aHelper.Severity = alarm.Severity;
-                        aHelper.AlarmValue = alarm.AlarmValue;
-                        aHelper.AlarmMessage = alarm.AlarmMessage;
-                        aHelper.AlarmTimeStamp = alarm.AlarmTimeStamp;
+                        aHelper.Value = alarm.Value;
+                        aHelper.Message = alarm.Message;
+                        aHelper.TimeStamp = alarm.TimeStamp;
                     }
-
                 }
                 OnPropertyChanged(nameof(AlarmSummaryQueue));
-
             }
         }
 
         private void IntegirtyUpdate()
         {
-            List<Alarm> integirtyResult = AesIntegrityProxy.Instance.InitiateIntegrityUpdate();
+            List<AlarmHelper> integirtyResult = AesIntegrityProxy.Instance.InitiateIntegrityUpdate();
             
             lock (alarmSummaryLock)
             {
-                foreach (Alarm alarm in integirtyResult)
+                foreach (AlarmHelper alarm in integirtyResult)
                 {                   
                     AlarmSummaryQueue.Add(alarm);
                    //aw.AlarmSummaryDataGrid.ItemsSource = AlarmSummaryQueue;
 
                     OnPropertyChanged(nameof(AlarmSummaryQueue));
 
-
                 }
             }
         }
 
-
-        private void AcknowledgeCommandExecute(Alarm alarmHelper)
+        private void AcknowledgeCommandExecute(AlarmHelper alarmHelper)
         {
-            List<Alarm> alarmsList = DbManager.Instance.GetAlarms().ToList();
-            foreach (Alarm alarm in alarmsList)
+            AlarmHelper alarmToRemove = new AlarmHelper();
+            EmsContext e = new EmsContext();
+            if (alarmHelper == null)
             {
-                if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid==alarmHelper.Gid)
-                {
-                    //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid).FirstOrDefault();                        
-                    //al.AckState = AckState.Acknowledged;
-                    alarm.AckState = AckState.Acknowledged;
-                    OnPropertyChanged(nameof(alarmsList));
-                      
-                    // db.Alarms.Add(alarm);
-                    DbManager.Instance.SaveChanges();
-                }
-                if (alarmHelper.AckState == AckState.Unacknowledged && alarm.Gid == alarmHelper.Gid && alarmHelper.AlarmMessage.Contains("discret"))
-                {
-                    //Alarm al = db.Alarms.Where(a => a.Gid == alarm.Gid && a.AlarmMessage.Contains("discret")).FirstOrDefault();
-                    //al.AckState = AckState.Acknowledged;
-                    alarm.AckState = AckState.Acknowledged;
+                return;
+            }
 
-                    OnPropertyChanged(nameof(alarmsList));
+            if (alarmHelper.AckState == AckState.Unacknowledged)
+            {
+                lock (alarmSummaryLock)
+                {
+                    foreach (AlarmHelper alarm in AlarmSummaryQueue)
+                    {
+                        if (alarm.Gid.Equals(alarmHelper.Gid) && alarm.Persistent.Equals(PersistentState.Nonpersistent))
+                        {
+                            alarmToRemove = alarm;
+                            break;
+                        }
+                        else if (alarm.Gid.Equals(alarmHelper.Gid) && alarm.Persistent.Equals(PersistentState.Persistent))
+                        {
+                            alarm.AckState = AckState.Acknowledged;
+                            alarm.CurrentState = string.Format("{0} | {1}", alarm.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString(), alarm.AckState.ToString());
+                            OnPropertyChanged(nameof(AlarmSummaryQueue));
+                            CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Persistent alarm acknowledged");
+                        }
                         
-                    // db.Alarms.Add(alarm);
-                    DbManager.Instance.SaveChanges();
+                    }
+                    if (alarmToRemove != null)
+                    {
 
+                        AlarmSummaryQueue.Remove(alarmToRemove);
+                        OnPropertyChanged(nameof(AlarmSummaryQueue));
+                        CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Non persistent alarm acknowledged and removed from alarm summary collection");
+                    }
                 }
-            }                
+            }
+            else
+            {
+                alarmHelper.AckState = AckState.Unacknowledged;
+                string state = alarmHelper.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString();
+                alarmHelper.CurrentState = string.Format("{0} | {1}", state, alarmHelper.AckState.ToString());
+                OnPropertyChanged(nameof(AlarmSummaryQueue));
+            }
+            AlarmsEventsProxy.Instance.UpdateAckStatus(alarmHelper);
+           
+        }
+
+        private void HideCLickExecute(object o)
+       {
+            ObservableCollection<AlarmHelper> altoremove = new ObservableCollection<AlarmHelper>();
+            lock(alarmSummaryLock)
+            {
+                foreach (var a in AlarmSummaryQueue)
+                {
+                    if (a.AckState == AckState.Acknowledged)
+                    {
+                        altoremove.Add(a);
+                    }
+                }
+                foreach (var a in altoremove)
+                {
+                    AlarmSummaryQueue.Remove(a);
+                    OnPropertyChanged("AlarmSummaryQueue");
+                }
+                
+            }
             
 
-           
-            //using (var db = new EmsContext())
-            //{
-            //    if (alarmHelper == null)
-            //    {
-            //        return;
-            //    }
 
-            //if (alarmHelper.AckState == AckState.Unacknowledged)
-            //{
-            //    lock (alarmSummaryLock)
-            //    {
-
-            //        foreach (Alarm alarm in db.Alarms.ToList())
-            //        {
-            //            if (alarm.Gid.Equals(alarmHelper.Gid))
-            //            {
-            //                alarm.AckState = AckState.Acknowledged;
-            //                db.SaveChanges();
-            //                //alarm.CurrentState = string.Format("{0} | {1}", alarm.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString(), alarm.AckState.ToString());
-            //                OnPropertyChanged(nameof(db.Alarms));
-            //                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm acknowledged");
-            //            }
-            //        }
-
-            //    }
-            //}
-            //else
-            //{
-            //    alarmHelper.AckState = AckState.Unacknowledged;
-            //    string state = alarmHelper.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString();
-            //    alarmHelper.CurrentState = string.Format("{0} | {1}", state, alarmHelper.AckState.ToString());
-            //    OnPropertyChanged(nameof(db.Alarms));
-            //}
-            //}
+            
         }
-        
-        }
+
+       
+
+    }
 
 }

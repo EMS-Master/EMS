@@ -285,7 +285,7 @@ namespace UI.ViewModel
 
         public DashboardViewModel()
         {
-            SubsrcibeToCE();
+            SubsrcibeToCE(); 
             ceSubscribeProxy.Optimization();
 
             var para = CalculationEngineUIProxy.Instance.GetAlgorithmOptions();
@@ -443,8 +443,8 @@ namespace UI.ViewModel
                     {
                         if(tupla2.Item1 == "coReduction")
                         {
-                            WindSpeed co = new WindSpeed("CO2 Reduction",tupla2.Item2);
-                            WindSpeed co1 = new WindSpeed("CO2 Emission", tupla2.Item3);
+                            WindSpeed co = new WindSpeed("Reduction",tupla2.Item2);
+                            WindSpeed co1 = new WindSpeed("Emission", tupla2.Item3);
                             ObservableCollection<WindSpeed> newList = new ObservableCollection<WindSpeed>();
                             newList.Add(co);
                             newList.Add(co1);

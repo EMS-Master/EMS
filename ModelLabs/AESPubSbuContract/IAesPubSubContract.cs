@@ -22,9 +22,9 @@ namespace FTN.ServiceContracts
     public interface IAesPubSubCallbackContract
     {
         [OperationContract(IsOneWay = false)]
-        void AlarmsEvents(Alarm alarm);
+        void AlarmsEvents(AlarmHelper alarm);
 
         [OperationContract(IsOneWay = false)]
-        void UpdateAlarmsEvents(Alarm alarm);
+        void UpdateAlarmsEvents(AlarmHelper alarm);
     }
 }

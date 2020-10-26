@@ -10,7 +10,7 @@
 					xmlns:view ="clr-namespace:UI.View"
                     xmlns:local="clr-namespace:UI.Styles">
 
-	<SolidColorBrush x:Key="AppBackground" Color="#FF6E6E6E"/>
+	<SolidColorBrush x:Key="AppBackground" Color="White"/>
 	<SolidColorBrush x:Key="DarkBrush" Color="#FF2D2D30"/>
 	<SolidColorBrush x:Key="LigthBrush" Color="#FF6E6E6E"/>
 	<SolidColorBrush x:Key="AxisLineBrush" Color="Black"/>

@@ -19,8 +19,8 @@ namespace CommonMeas
     public enum SeverityLevel : int
     {
         NORMAL = 0,
-        MINOR = 1,       // cyan
-        LOW = 2,           // green
+        MINOR = 1,       // cyan boje su izmenjene...
+        LOW = 2,           // green 
         MEDIUM = 3,          // yellow
         MAJOR = 4,         // orange
         HIGH = 5,            // red

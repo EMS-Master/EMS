@@ -38,7 +38,7 @@ namespace FTN.ServiceContracts
             }
         }
 
-        public void AddAlarm(Alarm alarm)
+        public void AddAlarm(AlarmHelper alarm)
         {
             proxy.AddAlarm(alarm);
         }
@@ -62,9 +62,13 @@ namespace FTN.ServiceContracts
             }
         }
 
-        public void UpdateStatus(Alarm analogLoc, State state)
+        public void UpdateStatus(AnalogLocation analogLoc, State state)
         {
             proxy.UpdateStatus(analogLoc, state);
+        }
+        public void UpdateAckStatus(AlarmHelper alarmtoupdate)
+        {
+            proxy.UpdateAckStatus(alarmtoupdate);
         }
     }
 }

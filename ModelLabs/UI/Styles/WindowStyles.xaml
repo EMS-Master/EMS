@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:UI.Styles"
+                      xmlns:MetroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
 					xmlns:view="clr-namespace:UI.View">
 
 	<SolidColorBrush x:Key="BlueMouseOver" Color="#8a1519"/>
@@ -58,14 +59,19 @@
 		<Setter Property="FontSize" Value="17"/>
 		<Setter Property="FontFamily" Value="Verdana"/>
 	</Style>
-
-	<Style x:Key="AlarmDataGridColumnHeaderStyle" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+    <Style x:Key="AGridCell" TargetType="DataGridCell">
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="AlarmDataGridColumnHeaderStyle" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
 		<Setter Property="Background" Value="White" />
 		<Setter Property="Foreground" Value="Black" />
 		<Setter Property="Padding" Value="3,2,4,2" />
-		<Setter Property="BorderThickness" Value="1,0,0,0"/>
-		<Setter Property="BorderBrush" Value="LightGray"/>
-	</Style>
+        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <!--<Setter Property="HorizontalContentAlignment" Value="Center"/>-->
+    </Style>
 
 	<Style x:Key="AlarmSummaryDataGridRowStyle" TargetType="DataGridRow">
 		<Setter Property="Background" Value="Transparent"></Setter>
@@ -74,17 +80,18 @@
 
 			
 	<Style x:Key="AlarmBlinkCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
-		<Style.Triggers>
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+        <Style.Triggers>
 			<DataTrigger Binding="{Binding AckState}" Value="Acknowledged">
-				<Setter Property="Background" Value="Gray">
+                <Setter Property="Background" Value="#FFADFF2F">
 				</Setter>
 			
 			</DataTrigger>
 			<DataTrigger Binding="{Binding AckState}" Value="Unacknowledged">
 				<Setter Property="Background">
 					<Setter.Value>
-						<SolidColorBrush Color="ForestGreen" Opacity="0.7"/>
-					</Setter.Value>
+                        <SolidColorBrush Color="#FFD8BFD8" Opacity="0.7"/> 
+                    </Setter.Value>
 				</Setter>
 			</DataTrigger>
 		</Style.Triggers>
@@ -120,41 +127,48 @@
 	</Style>
 	
 	<Style x:Key="AlarmGridCell" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
-		<Setter Property="BorderThickness" Value="0" />
+        <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="0" />
 		<Style.Triggers>
 			<DataTrigger Binding="{Binding Severity}" Value="CRITICAL">
-				<Setter Property="Background" Value="Magenta"></Setter>
+				<Setter Property="Background" Value="DarkRed"></Setter>
+                <Setter Property="Foreground" Value="White" />
 			</DataTrigger>
 
 			<DataTrigger Binding="{Binding Severity}" Value="HIGH">
-				<Setter Property="Background" Value="Red"></Setter>
-			</DataTrigger>
+                <Setter Property="Background" Value="#FFDC143C"></Setter> <!--crimson ~ red -->
+                <Setter Property="Foreground" Value="White" />
+            </DataTrigger>
 
 			<DataTrigger Binding="{Binding Severity}" Value="MAJOR">
-				<Setter Property="Background" Value="Orange"></Setter>
-			</DataTrigger>
+                <Setter Property="Background" Value="Yellow"></Setter>
+                <Setter Property="Foreground" Value="Black" />
+            </DataTrigger>
 
 			<DataTrigger Binding="{Binding Severity}" Value="MEDIUM">
-				<Setter Property="Background" Value="Yellow"></Setter>
-				<Setter Property="Foreground" Value="Gray" />
+                <Setter Property="Background" Value="#FFFFDAB9"></Setter> <!--peach-->
+				<Setter Property="Foreground" Value="Black" />
 			</DataTrigger>
 
 			<DataTrigger Binding="{Binding Severity}" Value="LOW">
-				<Setter Property="Background" Value="Green"></Setter>
-			</DataTrigger>
+                <Setter Property="Background" Value="#FF98FB98"></Setter> 
+                <Setter Property="Foreground" Value="Black" />
+            </DataTrigger>
 
 			<DataTrigger Binding="{Binding Severity}" Value="MINOR">
-				<Setter Property="Background" Value="Cyan"></Setter>
+                <Setter Property="Background" Value="#FF6495ED"></Setter>
 			</DataTrigger>
 		</Style.Triggers>
 	</Style>
 
 	<Style TargetType="view:AlarmSummaryView" x:Key="AlarmSummaryStyle">
 		<Setter Property="Foreground" Value="White" ></Setter>
-		<Setter Property="Background" Value="{StaticResource DarkBrush}"></Setter>
+		<Setter Property="Background" Value="White"></Setter>
 		<Setter Property="BorderThickness" Value="0" ></Setter>
 	</Style>
-	<!--<Style TargetType="Button" x:Key="ExpButtonStyle">
+    
+
+    <!--<Style TargetType="Button" x:Key="ExpButtonStyle"> 
 		<Setter Property="Background" Value="Gray"/>
 		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="FontSize" Value="10"/>
@@ -178,5 +192,109 @@
 			</Setter.Value>
 		</Setter>
 	</Style>-->
+
+    <Style x:Key="RadialGaugeChartPlotterAreaStyle1" TargetType="MetroChart:PlotterArea">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MetroChart:PlotterArea">
+                    <MetroChart:FadingListView  ItemsSource="{Binding Path=ParentChart.DataPointGroups, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                        <MetroChart:FadingListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </MetroChart:FadingListView.ItemsPanel>
+                        <MetroChart:FadingListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    
+                                    <MetroChart:FadingListView 
+                                            x:Name="itemsControl" 
+                                            ItemsSource="{Binding Path=DataPoints}"
+                                            Margin="5"
+                                            Grid.Row="1">
+                                        <MetroChart:FadingListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <!--<StackPanel Orientation="Horizontal" />-->
+                                                <MetroChart:UniformGridPanel Orientation="Horizontal" MinimalGridWidth="150.0" />
+                                            </ItemsPanelTemplate>
+                                        </MetroChart:FadingListView.ItemsPanel>
+                                        <MetroChart:FadingListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <MetroChart:RadialGaugePiece
+                                                    Grid.Row="0"
+                                                    Margin="5"
+                                                    Background="#FF40E0D0"
+                                                    SelectedBrush="{Binding Path=SelectedBrush}"  
+                                                    Value="{Binding Path=Value}"
+                                                    IsClickedByUser="{Binding Path=IsClickedByUser, Mode=TwoWay}"
+                                                    IsSelected="{Binding Path=IsSelected}"
+                                                    ClientWidth="180"
+                                                    ClientHeight="180" 
+                                                    x:Name="radial">
+                                                    </MetroChart:RadialGaugePiece>
+                                                    <Border Grid.Row="1" HorizontalAlignment="Center" Margin="0 0 0 10">
+                                                        <TextBlock Text="{Binding Path=SeriesCaption}" />
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </MetroChart:FadingListView.ItemTemplate>
+                                    </MetroChart:FadingListView>
+                                </Grid>
+                            </DataTemplate>
+                        </MetroChart:FadingListView.ItemTemplate>
+                    </MetroChart:FadingListView>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <MetroChart:ResourceDictionaryCollection x:Key="CustomColors">
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush1" Color="#FF8B008B" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush2" Color="#FFFFFACD" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush3" Color="#FF00BFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush4" Color="	#FFB22222" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush4" Color="	#FF808000" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush4" Color="#FFF4A460" />
+        </ResourceDictionary>
+        <!-- add more values with a different key -->
+    </MetroChart:ResourceDictionaryCollection>
+
+    <MetroChart:ResourceDictionaryCollection x:Key="CustomColors1">
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush1" Color="#FFC71585" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush2" Color="#FF800000" />
+        </ResourceDictionary>
+    </MetroChart:ResourceDictionaryCollection>
+<MetroChart:ResourceDictionaryCollection x:Key="CustomColors2">
+    <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush1" Color="#FFD2691E" />
+    </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush2" Color="#FFE9967A" />
+        </ResourceDictionary>
+        <!-- add more values with a different key -->
+</MetroChart:ResourceDictionaryCollection>
 
 </ResourceDictionary>

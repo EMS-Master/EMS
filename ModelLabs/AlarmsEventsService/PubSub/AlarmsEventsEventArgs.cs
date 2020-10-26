@@ -10,9 +10,9 @@ namespace FTN.Services.AlarmsEventsService.PubSub
 {
    public class AlarmsEventsEventArgs : EventArgs
     {
-        private Alarm alarm;
+        private AlarmHelper alarm;
 
-        public Alarm Alarm
+        public AlarmHelper Alarm
         {
             get { return alarm; }
             set { alarm = value; }

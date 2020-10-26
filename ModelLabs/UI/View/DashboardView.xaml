@@ -472,7 +472,7 @@
 
                         <Grid Grid.Column="0"   >
 
-                                    <MetroChart:PieChart Width="200" ChartTitle="CO2 " ChartSubTitle=""   Foreground="Black" FontSize="12"  >
+                            <MetroChart:PieChart Width="250" Palette="{StaticResource CustomColors2}"  ChartTitle="CO2" ChartSubTitle="Reduction vs Emission"   Foreground="Black" FontSize="12"  >
                                 <MetroChart:PieChart.Series>
                                     <MetroChart:ChartSeries
                                                 Background="Orange"
@@ -494,14 +494,15 @@
                                         </Grid.OpacityMask>     
                                         <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>-->
 
-                            <MetroChart:PieChart Width="200" ChartTitle="Cost " ChartSubTitle=""   Foreground="Black" FontSize="12"  >
+                            <MetroChart:PieChart Palette="{StaticResource CustomColors1}" Width="250" ChartTitle="CO2 $ " ChartSubTitle="Cost vs Profit"   Foreground="Black" FontSize="12"  >
                                         <MetroChart:PieChart.Series>
                                             <MetroChart:ChartSeries
                                                 Background="#e0e0e0"
                                                 DisplayMember="Name"
                                                 ItemsSource="{Binding Path= CostList}"
                                                 SeriesTitle="Name"
-                                                ValueMember="Speed" HorizontalAlignment="Center"/>
+                                                ValueMember="Speed" HorizontalAlignment="Center"
+                                                />
                                         </MetroChart:PieChart.Series>
                                     </MetroChart:PieChart>
                                         <!--</Grid>
@@ -518,16 +519,19 @@
                                         </Grid.OpacityMask>     
                                         <Border x:Name="BorderG3" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>-->
 
-                                        <MetroChart:RadialGaugeChart  ChartTitle="Wind contribution" ChartSubTitle="" Margin="10,0,10,0"  Foreground="Black" FontSize="7"  >
-                                            <MetroChart:RadialGaugeChart.Series>
-                                                <MetroChart:ChartSeries
+                            <MetroChart:RadialGaugeChart  ChartTitle="RENEWABLES % " PlotterAreaStyle="{StaticResource RadialGaugeChartPlotterAreaStyle1}" ChartSubTitle="" Margin="10,0,10,0"  Foreground="Black" FontSize="7"  >
+                                <MetroChart:RadialGaugeChart.Series>
+                                    <MetroChart:ChartSeries
+                                                                    Foreground="Orange"
                                                                     Background="#e0e0e0"
                                                                     DisplayMember="Name"
                                                                     ItemsSource="{Binding Path= Windspeed}"
                                                                     SeriesTitle="Name"
-                                                                    ValueMember="Speed" HorizontalAlignment="Center"/>
-                                            </MetroChart:RadialGaugeChart.Series>
-                                        </MetroChart:RadialGaugeChart>
+                                                                    ValueMember="Speed" HorizontalAlignment="Center"
+                                        />
+                                </MetroChart:RadialGaugeChart.Series>
+                               
+                            </MetroChart:RadialGaugeChart>
                                   <!--</Grid>
                                 </TextBlock>
 
@@ -552,7 +556,7 @@
                                     
 							            </chartingToolkit:ColumnSeries>
                                  </chartingToolkit:Chart>-->   
-                            <MetroChart:ClusteredColumnChart ChartTitle="Total production by generator type" ChartSubTitle="" Width="700"  Foreground="Black" FontSize="14">
+                            <MetroChart:ClusteredColumnChart Palette="{StaticResource CustomColors}" ChartTitle="Total production by generator type" ChartSubTitle="" Width="700"  Foreground="Black" FontSize="14">
                                 <MetroChart:ClusteredColumnChart.Series>
                                     <MetroChart:ChartSeries Background="#e0e0e0"
                                                                     DisplayMember="Type"

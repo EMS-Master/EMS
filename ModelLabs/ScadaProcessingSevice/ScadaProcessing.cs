@@ -665,10 +665,10 @@ namespace ScadaProcessingSevice
 
                     if (!alarmEGU)
                     {
-                        Alarm al = new Alarm();
+                        AlarmHelper al = new AlarmHelper();
                         al.Gid = analogLoc.Analog.PowerSystemResource;
-                        al.AlarmValue = eguVal;
-                        AlarmsEventsProxy.Instance.UpdateStatus(al, State.Cleared);
+                        al.Value = eguVal;
+                        AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
 
                         Alarm normalAlarm = new Alarm();
                         normalAlarm.AckState = AckState.Unacknowledged;
@@ -721,14 +721,14 @@ namespace ScadaProcessingSevice
         private bool CheckDiscretAlarm (int value, float max, long gid)
         {
             bool retVal = false;
-            Alarm ah = new Alarm(gid, value, -1, max, DateTime.Now);
+            AlarmHelper ah = new AlarmHelper(gid, value, -1, max, DateTime.Now);
             if (value > max)
             {
-                ah.AlarmValue = value;
+                ah.Value = value;
                 ah.MaxValue = max;
-                ah.AlarmType = AlarmType.DOM;
+                ah.Type = AlarmType.DOM;
                 ah.Severity = SeverityLevel.HIGH;                
-                ah.AlarmMessage = string.Format("Value on input discret signal: {0:X} higher than maximum expected value", gid);
+                ah.Message = string.Format("Value on input discret signal: {0:X} higher than maximum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);
@@ -739,10 +739,10 @@ namespace ScadaProcessingSevice
         private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid)
         {
             bool retVal = false;
-            Alarm ah = new Alarm(gid, value, minEgu, maxEgu, DateTime.Now);
+            AlarmHelper ah = new AlarmHelper(gid, value, minEgu, maxEgu, DateTime.Now);
             if (value < minEgu)
             {
-                ah.AlarmType = AlarmType.LOW;
+                ah.Type = AlarmType.LOW;
                 if (value >= (minEgu - (minEgu * 20 / 100)))
                 {
                     ah.Severity = SeverityLevel.MEDIUM;
@@ -755,8 +755,8 @@ namespace ScadaProcessingSevice
                 {
                     ah.Severity = SeverityLevel.LOW;
                 }
-                ah.AlarmTimeStamp = DateTime.Now;
-                ah.AlarmMessage = string.Format("Value on input analog signal: {0:X} lower than minimum expected value", gid);
+                ah.TimeStamp = DateTime.Now;
+                ah.Message = string.Format("Value on input analog signal: {0:X} lower than minimum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on low raw limit on gid: {0:X}", gid);
@@ -765,7 +765,7 @@ namespace ScadaProcessingSevice
 
             if (value > maxEgu)
             {
-                ah.AlarmType = AlarmType.HIGH;
+                ah.Type = AlarmType.HIGH;
                 if (value <= (maxEgu + (maxEgu * 20 / 100)))
                 {
                     ah.Severity = SeverityLevel.MAJOR;
@@ -778,8 +778,8 @@ namespace ScadaProcessingSevice
                 {
                     ah.Severity = SeverityLevel.CRITICAL;
                 }
-                ah.AlarmTimeStamp = DateTime.Now;
-                ah.AlarmMessage = string.Format("Value on input analog signal: {0:X} higher than maximum expected value", gid);
+                ah.TimeStamp = DateTime.Now;
+                ah.Message = string.Format("Value on input analog signal: {0:X} higher than maximum expected value", gid);
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);

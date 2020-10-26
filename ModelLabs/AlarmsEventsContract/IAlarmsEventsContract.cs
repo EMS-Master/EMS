@@ -14,10 +14,13 @@ namespace FTN.ServiceContracts
     {
         //add new alarm
         [OperationContract]
-        void AddAlarm(Alarm alarm);
+        void AddAlarm(AlarmHelper alarm);
 
         //send measured value to alarmEvents service(gid, value)
         [OperationContract]
-        void UpdateStatus(Alarm analogLoc, State state);
+        void UpdateStatus(AnalogLocation analogLoc, State state);
+
+        [OperationContract]
+        void UpdateAckStatus(AlarmHelper alarmtoupdate);
     }
 }

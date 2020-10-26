@@ -14,6 +14,6 @@ namespace FTN.ServiceContracts
     {
         //initiates integrity update
         [OperationContract]
-        List<Alarm> InitiateIntegrityUpdate();
+        List<AlarmHelper> InitiateIntegrityUpdate();
     }
 }

@@ -22,7 +22,7 @@ namespace UI.PubSub
 
         public AlarmsEventsSubscribeProxy(Action<object> callbackAction)
         {
-            if (proxy == null)
+            if (Proxy == null)
             {
                 context = new InstanceContext(new AePubSubCallbackService() { CallbackAction = callbackAction });
                 factory = new DuplexChannelFactory<IAesPubSubContract>(context, "AlarmsEventsPubSub");
@@ -40,12 +40,12 @@ namespace UI.PubSub
 
         public void Subscribe()
         {
-            proxy.Subscribe();
+            Proxy.Subscribe();
         }
 
         public void Unsubscribe()
         {
-            proxy.Unsubscribe();
+            Proxy.Unsubscribe();
         }
     }
 }

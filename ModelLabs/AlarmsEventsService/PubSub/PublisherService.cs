@@ -102,7 +102,7 @@ namespace FTN.Services.AlarmsEventsService.PubSub
             }
         }
 
-        public void PublishAlarmsEvents(Alarm alarm, PublishingStatus status)
+        public void PublishAlarmsEvents(AlarmHelper alarm, PublishingStatus status)
         {
             switch (status)
             {
@@ -151,7 +151,7 @@ namespace FTN.Services.AlarmsEventsService.PubSub
         }
 
 
-        public void PublishStateChange(Alarm alarm)
+        public void PublishStateChange(AlarmHelper alarm)
         {
             AlarmUpdateEventArgs e = new AlarmUpdateEventArgs()
             {
