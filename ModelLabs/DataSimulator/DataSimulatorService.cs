@@ -15,6 +15,7 @@ namespace DataSimulator
 		private Dictionary<int, Tuple<int, int>> insolationRange;
         private Dictionary<int, Tuple<double, double>> consumptionRange;
         private float oldWindSpeed = 5f;
+		private float sumOldConsumers = -1;
         private readonly object lockObj = new object();
 		 
 		
@@ -83,13 +84,6 @@ namespace DataSimulator
                 powerForGenerator4 = 0;
                 powerForGenerator5 = 0;
             }
-
-   //         mdbClient.WriteSingleRegister(100, insolation);
-			//mdbClient.WriteSingleRegister(40, powerForGenerator1);
-			//mdbClient.WriteSingleRegister(42, powerForGenerator2);
-			//mdbClient.WriteSingleRegister(44, powerForGenerator3);
-   //         mdbClient.WriteSingleRegister(46, powerForGenerator4);
-   //         mdbClient.WriteSingleRegister(48, powerForGenerator5);
 
             Console.WriteLine("Insolation: " + insolation);
             Console.WriteLine("PoverPerPV: " + powerPerPV);
@@ -169,14 +163,7 @@ namespace DataSimulator
 			Console.WriteLine("Wind gen 4: " +  powerGenerator4 + " KW");
 			Console.WriteLine("Wind gen 5: " +  powerGenerator5 + " KW");
 			Console.WriteLine();
-
-			//mdbClient.WriteSingleRegister(102, windSpeed);
-			//mdbClient.WriteSingleRegister(50, powerGenerator1);
-			//mdbClient.WriteSingleRegister(52, powerGenerator2);
-			//mdbClient.WriteSingleRegister(54, powerGenerator3);
-			//mdbClient.WriteSingleRegister(56, powerGenerator4);
-			//mdbClient.WriteSingleRegister(58, powerGenerator5);
-            
+			
 			oldWindSpeed = windSpeed;
             float sum = powerGenerator1 + powerGenerator2 + powerGenerator3 + powerGenerator4 + powerGenerator5;
             return new List<float>() { windSpeed, powerGenerator1, powerGenerator2, powerGenerator3, powerGenerator4, powerGenerator5};
@@ -187,10 +174,6 @@ namespace DataSimulator
             float powerGenerator1 = 100000; //KW
             float powerGenerator2 = 120000;
             float powerGenerator3 = 130000;
-
-            //mdbClient.WriteSingleRegister(60, powerGenerator1);
-            //mdbClient.WriteSingleRegister(62, powerGenerator2);
-            //mdbClient.WriteSingleRegister(64, powerGenerator3);
 
             Console.WriteLine("Hydro data");
             Console.WriteLine("Hydro gen 1: " + powerGenerator1 + " KW");
@@ -250,15 +233,37 @@ namespace DataSimulator
                     consumptions[i] += valueToAddForEachConsumer;
                 }
             }
+			
+			if(sumOldConsumers >= 0)
+			{
+				float consumptionsSum = consumptions.Sum();
+				if (Math.Abs(consumptionsSum - sumOldConsumers) > 30000)
+				{
+					Random radnom = new Random();
+					var wantedDifference = random.Next(10000, 30000);
+					if (consumptionsSum > sumOldConsumers)
+					{
+						var actualDifference = consumptionsSum - sumOldConsumers;
+						var toBeReduced = (actualDifference - wantedDifference) / 20;
+						for (int i = 0; i < 20; i++)
+						{
+							consumptions[i] -= toBeReduced;
+						}
+					}
+					else if (consumptionsSum < sumOldConsumers)
+					{
+						var actualDifference = sumOldConsumers - consumptionsSum;
+						var toBeReduced = (actualDifference - wantedDifference) / 20;
+						for (int i = 0; i < 20; i++)
+						{
+							consumptions[i] += toBeReduced;
+						}
+					}
+				}
+			}
 
-			float consumptionsSum = consumptions.Sum();
-            Console.WriteLine("Consumption sum: " + consumptionsSum);
-
-            //for (int i = 0; i < 20; i++)
-            //         { 
-            //             mdbClient.WriteSingleRegister((ushort)(i * 2), consumptions[i]); // kW
-            //             Console.WriteLine("Consumer " + (i+1) + ": " + consumptions[i] + " kW");
-            //         }
+			Console.WriteLine("OldConsumptionSum: " + sumOldConsumers);
+            Console.WriteLine("Consumption sum: " + consumptions.Sum());
             return consumptions;
         }
 
@@ -323,8 +328,11 @@ namespace DataSimulator
                 mdbClient.WriteSingleRegister(62, hydro[1]);
                 mdbClient.WriteSingleRegister(64, hydro[2]);
 
+				sumOldConsumers = 0;
+
                 for (int i = 0; i < 20; i++)
                 {
+					sumOldConsumers += consumers[i];
                     mdbClient.WriteSingleRegister((ushort)(i * 2), consumers[i]); // kW
                 }
             }

@@ -130,12 +130,10 @@ namespace ModbusClient
             byte[] data = PreparePackageForRead(startingAddress, quantity, functionCode);
 
             int numberOfBytes = client.Client.Send(data);
-            Console.WriteLine("Sent {0} bytes", numberOfBytes);
 
             numberOfBytes = client.Client.Receive(receiveData);
             byte[] returnData = new byte[numberOfBytes];
             Array.Copy(receiveData, returnData, numberOfBytes);
-            Console.WriteLine("Received {0} bytes", numberOfBytes);
             return returnData;
         }
 
@@ -144,10 +142,8 @@ namespace ModbusClient
             byte[] data = PreparePackageForWrite(outputAddress, outputValue, functionCode);
 
             int numberOfBytes = client.Client.Send(data);
-            Console.WriteLine("Sent {0} bytes", numberOfBytes);
 
             numberOfBytes = client.Client.Receive(receiveData);
-            Console.WriteLine("Received {0} bytes", numberOfBytes);
             return receiveData;
         }
 

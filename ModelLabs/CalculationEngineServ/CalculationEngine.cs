@@ -104,9 +104,7 @@ namespace CalculationEngineServ
 
 
             PublishWindPercent(renewableContributionPrct);//(windProductionPct);
-
-
-
+			
             try
             {
                 if (measurementsOptimized != null && measurementsOptimized.Count > 0)

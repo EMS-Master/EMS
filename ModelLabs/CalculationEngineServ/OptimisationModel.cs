@@ -61,7 +61,7 @@ namespace CalculationEngineServ
 			float fuelQuantityPerMW = (float)Curve.A * (percentage/100f) + (float)Curve.B;       //[t/MW]
 			float fuelQuantity = fuelQuantityPerMW * energy/1000f;
 			price = Fuel.Item2 * fuelQuantity;
-			PointX = percentage / 100f;
+			PointX = percentage;
 			PointY = fuelQuantityPerMW;
 		
             return price;
