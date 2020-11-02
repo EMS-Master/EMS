@@ -27,7 +27,7 @@ namespace UI.View
     public partial class AlarmSummaryView : UserControl
     {
         // create a new timer
-        public DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+        //public DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
 
 
         public AlarmSummaryView()
