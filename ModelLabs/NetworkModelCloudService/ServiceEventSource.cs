@@ -9,7 +9,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace NetworkModelCloudService
 {
-    [EventSource(Name = "MyCompany-EMS-NetworkModelCloudService")]
+    [EventSource(Name = "MyCompany-EMSServiceFab-NetworkModelCloudService")]
     internal sealed class ServiceEventSource : EventSource
     {
         public static readonly ServiceEventSource Current = new ServiceEventSource();

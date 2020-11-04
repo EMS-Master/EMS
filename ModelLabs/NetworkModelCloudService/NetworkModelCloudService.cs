@@ -4,8 +4,13 @@ using System.Fabric;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CloudCommon;
+using FTN.ServiceContracts;
+using FTN.Services.NetworkModelService;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using TransactionContract;
 
 namespace NetworkModelCloudService
 {
@@ -14,9 +19,17 @@ namespace NetworkModelCloudService
     /// </summary>
     internal sealed class NetworkModelCloudService : StatelessService
     {
+        private NetworkModel nm = null;
+        private GenericDataAccess gda = null;
+
         public NetworkModelCloudService(StatelessServiceContext context)
             : base(context)
-        { }
+        {
+            gda = new GenericDataAccess();
+            nm = new NetworkModel();
+            GenericDataAccess.NetworkModel = nm;
+            ResourceIterator.NetworkModel = nm;
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -24,7 +37,11 @@ namespace NetworkModelCloudService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            return new List<ServiceInstanceListener>
+            {
+                new ServiceInstanceListener(context=>this.CreateNetworkModelGDAListener(context), "NetworkModelGDAEndpoint"),
+                new ServiceInstanceListener(context=>this.CreateNMSTransactionListener(context), "NMSTranscationEndpoint")
+            };
         }
 
         /// <summary>
@@ -46,6 +63,29 @@ namespace NetworkModelCloudService
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
+        }
+        private ICommunicationListener CreateNetworkModelGDAListener(StatelessServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<INetworkModelGDAContract>(
+                listenerBinding: Binding.CreateCustomNetTcp(),
+                endpointResourceName: "NetworkModelGDAEndpoint",
+                serviceContext: context,
+                wcfServiceObject: gda
+            );
+
+            return listener;
+        }
+       
+        private ICommunicationListener CreateNMSTransactionListener(StatelessServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<ITransactionContract>(
+                listenerBinding: Binding.CreateCustomNetTcp(),
+                endpointResourceName: "NMSTranscationEndpoint",
+                serviceContext: context,
+                wcfServiceObject: nm
+            );
+
+            return listener;
         }
     }
 }
