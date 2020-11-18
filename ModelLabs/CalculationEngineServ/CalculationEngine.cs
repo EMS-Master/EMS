@@ -989,7 +989,7 @@ namespace CalculationEngineServ
 		public List<float> GetPointForFuelEconomy(long gid)
 		{
 			List<float> points = new List<float>();
-			points.Add(optimizationModelResults[gid].PointX);
+			points.Add(optimizationModelResults[gid].PointX * 100);
 			points.Add(optimizationModelResults[gid].PointY);
 			return points;
 		}

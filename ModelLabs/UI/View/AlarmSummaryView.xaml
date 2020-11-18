@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <converters:GidToMridConverter x:Key="GidToMridConverter"/>
         <converters:AckStateToBoolConverter x:Key="AckStateToBoolConverter"/>
+        <converters:AckToColorConverter x:Key="AckToColorConverter"/>
     </UserControl.Resources>
     <Grid Background="White">
         
@@ -44,7 +45,15 @@
                 <DataGridTextColumn Header="Value" Binding="{Binding Value}" CellStyle="{StaticResource AGridCell}" FontSize="14" IsReadOnly="True" Width="100"/>
                 <DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp}" CellStyle="{StaticResource AGridCell}" FontSize="14" IsReadOnly="True" Width="160"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}" CellStyle="{StaticResource AGridCell}" FontSize="14" Width="65" />
-                <DataGridTextColumn Header="State" Binding="{Binding CurrentState}" FontSize="14" Width="170" CellStyle="{StaticResource AlarmBlinkCell}" />
+                <DataGridTextColumn Header="State" Binding="{Binding CurrentState}" FontSize="14" Width="170" CellStyle="{StaticResource AlarmBlinkCell}"  >
+                    <!--<DataGridTextColumn.CellStyle>
+                        <MultiBinding Converter="{StaticResource AckToColorConverter}" >
+                            <Binding Path="CurrentState"/>
+                            <Binding Path=""></Binding>
+                        </MultiBinding>
+                    </DataGridTextColumn.CellStyle>-->
+                    
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" CellStyle="{StaticResource AGridCell}" FontSize="14" IsReadOnly="True" Width="100">
                     <!--<DataGridTextColumn.CellStyle>
                         <Style>

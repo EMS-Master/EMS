@@ -1,4 +1,5 @@
 ﻿using CalculationEngineContracts;
+using FTN.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -57,8 +58,9 @@ namespace UI.View
             var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
             long gid = v.Key;
             string name = v.Value[0].Name;
+            GeneratorType genType = v.Value[0].GeneratorType;
 
-            FuelEconomyWindow fuelEconomyWindow = new FuelEconomyWindow(gid);
+            FuelEconomyWindow fuelEconomyWindow = new FuelEconomyWindow(gid, name, genType);
             fuelEconomyWindow.Show();
 
         }

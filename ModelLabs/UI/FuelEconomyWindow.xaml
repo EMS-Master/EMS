@@ -3,10 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="http://oxyplot.org/wpf"
+
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="FuelEconomyWindow" Height="450" Width="800">
-    <Grid>
+        Title="Fuel Economy" Height="520" Width="650">
+    <Grid >
+       
+        <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" Height="450"  Width="500">
+            <oxy:PlotView Model="{Binding Model}"/>
+        </Grid>
+       
         
     </Grid>
 </Window>

@@ -145,7 +145,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_13</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_13</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Bajina Basta update</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Bajina Basta update1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_14">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>

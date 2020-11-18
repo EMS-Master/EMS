@@ -273,17 +273,20 @@ namespace UI.ViewModel
 
             if (alarmHelper.AckState == AckState.Unacknowledged)
             {
+                
                 lock (alarmSummaryLock)
                 {
                     foreach (AlarmHelper alarm in AlarmSummaryQueue)
                     {
                         if (alarm.Gid.Equals(alarmHelper.Gid) && alarm.Persistent.Equals(PersistentState.Nonpersistent))
                         {
+                            alarmHelper.AckState = AckState.Acknowledged;
                             alarmToRemove = alarm;
                             break;
                         }
                         else if (alarm.Gid.Equals(alarmHelper.Gid) && alarm.Persistent.Equals(PersistentState.Persistent))
                         {
+                            alarmHelper.AckState = AckState.Acknowledged;
                             alarm.AckState = AckState.Acknowledged;
                             alarm.CurrentState = string.Format("{0} | {1}", alarm.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString(), alarm.AckState.ToString());
                             OnPropertyChanged(nameof(AlarmSummaryQueue));

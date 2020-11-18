@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTN.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,11 @@ namespace UI
     {
         public long globalGid;
 
-        public FuelEconomyWindow(long gid)
+        public FuelEconomyWindow(long gid, string name, GeneratorType gentType)
         {
             InitializeComponent();
             this.globalGid = gid;
-            this.DataContext = new FuelEconomyWindowViewModel(gid);
+            this.DataContext = new FuelEconomyWindowViewModel(gid, name, gentType);
         }
     }
 }
