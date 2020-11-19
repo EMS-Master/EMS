@@ -739,7 +739,8 @@ namespace FTN.Services.NetworkModelService
 		{
 			List<Delta> result = new List<Delta>();
 
-            if (!File.Exists(Config.Instance.ConnectionString))
+           // if (!File.Exists(Config.Instance.ConnectionString))
+           if(!File.Exists("../NetworkModelData.data"))
             {
                 return result;
             }

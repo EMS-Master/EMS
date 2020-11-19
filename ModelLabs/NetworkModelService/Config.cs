@@ -19,12 +19,14 @@ namespace FTN.Services.NetworkModelService
 
 		private Config()
 		{
-			connectionString = ConfigurationManager.ConnectionStrings["networkModelconnectionString"].ConnectionString;
+            connectionString = "../NetworkModelData.data";
+			//connectionString = ConfigurationManager.ConnectionStrings["networkModelconnectionString"].ConnectionString;
 		}
 
 		#region Static members
 
 		private static Config instance = null;	
+
 
 		public static Config Instance
 		{
