@@ -27,7 +27,7 @@ namespace UI.ViewModel
             Model.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left,  Title = "[t/MW]", MajorGridlineStyle = LineStyle.Dot, MajorGridlineColor = OxyColors.Gray });
             var series1 = new OxyPlot.Series.LineSeries
             {
-                InterpolationAlgorithm = InterpolationAlgorithms.ChordalCatmullRomSpline,
+                //InterpolationAlgorithm = InterpolationAlgorithms.ChordalCatmullRomSpline,
                 MarkerType = MarkerType.Circle,
                 MarkerSize = 2,
                 MarkerStroke = OxyColors.Black
@@ -37,7 +37,7 @@ namespace UI.ViewModel
                 MarkerType = MarkerType.Cross,
                 MarkerSize = 5,
                 MarkerStroke = OxyColors.Red,
-                InterpolationAlgorithm = InterpolationAlgorithms.ChordalCatmullRomSpline
+                //InterpolationAlgorithm = InterpolationAlgorithms.ChordalCatmullRomSpline
             };
 
             if (genType == GeneratorType.Coal)

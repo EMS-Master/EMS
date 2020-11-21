@@ -54,7 +54,7 @@ namespace CalculationEngineServ
 		private static Dictionary<GeneratorType, float> allTypes;
 		private static Dictionary<long, OptimisationModel> optimizationModelResults;
 
-		private List<GeneratorCurveModel> generatorCurves;
+		public static List<GeneratorCurveModel> generatorCurves;
 		
 		public CalculationEngine()
         {
@@ -152,10 +152,9 @@ namespace CalculationEngineServ
 						if (g.GeneratorType == GeneratorType.Hydro || g.GeneratorType == GeneratorType.Solar || g.GeneratorType == GeneratorType.Wind)
 							sumInGetOptModelMap += measUnit.CurrentValue;
 					
-						float percentage = (100 * (measUnit.CurrentValue/1000f)) / (g.MaxQ/1000f);
-						percentage = percentage / 100f;
+						float percentage = (100 * (measUnit.CurrentValue)) / (g.MaxQ);
 
-						GeneratorCurveModel generatorCurveModel= generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Contains(g.GeneratorType.ToString()));
+						GeneratorCurveModel generatorCurveModel= generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Split('_')[0] == g.GeneratorType.ToString());
 						om = new OptimisationModel(g, measUnit, windSpeed, sunlight, generatorCurveModel);
 					
 						optModelMap.Add(om.GlobalId, om);
@@ -989,7 +988,7 @@ namespace CalculationEngineServ
 		public List<float> GetPointForFuelEconomy(long gid)
 		{
 			List<float> points = new List<float>();
-			points.Add(optimizationModelResults[gid].PointX * 100);
+			points.Add(optimizationModelResults[gid].PointX);
 			points.Add(optimizationModelResults[gid].PointY);
 			return points;
 		}

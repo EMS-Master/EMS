@@ -3,87 +3,87 @@
   <Curves> 
 	<GeneratorCurveModel>
       <GeneratorType>Coal_1</GeneratorType>
-      <A>-1.5</A>
+      <A>-0.02</A>
       <B>1.3</B>
 	  <LowerPoint>0</LowerPoint>
-	  <HigherPoint>0.2</HigherPoint>
+	  <HigherPoint>15</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Coal_2</GeneratorType>
-      <A>-1</A>
-      <B>1.2</B>
-	  <LowerPoint>0.2</LowerPoint>
-	  <HigherPoint>0.4</HigherPoint>
+      <A>-0.014</A>
+      <B>1.21</B>
+	  <LowerPoint>15</LowerPoint>
+	  <HigherPoint>40</HigherPoint>
     </GeneratorCurveModel>	
 	<GeneratorCurveModel>
       <GeneratorType>Coal_3</GeneratorType>
-      <A>-0.5</A>
-      <B>1</B>
-	  <LowerPoint>0.4</LowerPoint>
-	  <HigherPoint>0.8</HigherPoint>
+      <A>-0.0075</A>
+      <B>0.95</B>
+	  <LowerPoint>40</LowerPoint>
+	  <HigherPoint>80</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Coal_4</GeneratorType>
-      <A>-1.5</A>
-      <B>1.8</B>
-	  <LowerPoint>0.8</LowerPoint>
-	  <HigherPoint>1</HigherPoint>
+      <A>-0.005</A>
+      <B>0.75</B>
+	  <LowerPoint>80</LowerPoint>
+	  <HigherPoint>100</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Oil_1</GeneratorType>
-      <A>-1</A>
-      <B>1.25</B>
+      <A>-0.015</A>
+      <B>1.3</B>
 	  <LowerPoint>0</LowerPoint>
-	  <HigherPoint>0.25</HigherPoint>
+	  <HigherPoint>10</HigherPoint>
     </GeneratorCurveModel>		
 	<GeneratorCurveModel>
       <GeneratorType>Oil_2</GeneratorType>
-     <A>-1</A>
-      <B>1.25</B>
-	  <LowerPoint>0.25</LowerPoint>
-	  <HigherPoint>0.5</HigherPoint>
+     <A>-0.02</A>
+      <B>1.35</B>
+	  <LowerPoint>10</LowerPoint>
+	  <HigherPoint>30</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Oil_3</GeneratorType>
-      <A>-1</A>
-      <B>1.25</B>
-	  <LowerPoint>0.5</LowerPoint>
-	  <HigherPoint>0.75</HigherPoint>
+      <A>-0.0175</A>
+      <B>1.275</B>
+	  <LowerPoint>30</LowerPoint>
+	  <HigherPoint>50</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Oil_4</GeneratorType>
-      <A>-1</A>
-      <B>1.25</B>
-	  <LowerPoint>0.75</LowerPoint>
-	  <HigherPoint>1</HigherPoint>
+      <A>-0.005</A>
+      <B>0.65</B>
+	  <LowerPoint>50</LowerPoint>
+	  <HigherPoint>100</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Gas_1</GeneratorType>
-      <A>-0.714</A>
-      <B>1.25</B>
+      <A>-0.015</A>
+      <B>1.3</B>
 	  <LowerPoint>0</LowerPoint>
-	  <HigherPoint>0.35</HigherPoint>
+	  <HigherPoint>10</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Gas_2</GeneratorType>
-      <A>-1</A>
-      <B>1.35</B>
-	  <LowerPoint>0.35</LowerPoint>
-	  <HigherPoint>0.6</HigherPoint>
+      <A>-0.0133333333</A>
+      <B>1.2833333333</B>
+	  <LowerPoint>10</LowerPoint>
+	  <HigherPoint>40</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Gas_3</GeneratorType>
-      <A>-1</A>
-      <B>1.35</B>
-	  <LowerPoint>0.6</LowerPoint>
-	  <HigherPoint>0.85</HigherPoint>
+      <A>-0.0116666667</A>
+      <B>1.21666667</B>
+	  <LowerPoint>40</LowerPoint>
+	  <HigherPoint>70</HigherPoint>
     </GeneratorCurveModel>
 	<GeneratorCurveModel>
       <GeneratorType>Gas_4</GeneratorType>
-      <A>-1.67</A>
-      <B>1.92</B>
-	  <LowerPoint>0.85</LowerPoint>
-	  <HigherPoint>1</HigherPoint>
+      <A>-0.00833333333</A>
+      <B>0.983333333</B>
+	  <LowerPoint>70</LowerPoint>
+	  <HigherPoint>100</HigherPoint>
     </GeneratorCurveModel>
   </Curves>
 </GeneratorCurveModels>

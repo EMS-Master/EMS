@@ -57,9 +57,10 @@ namespace CalculationEngineServ
                 return 0;
             }
             float price = 0;
-			float percentage = (100 * (energy / 1000f)) / (MaxPower/1000f);
-			float fuelQuantityPerMW = (float)Curve.A * (percentage/100f) + (float)Curve.B;       //[t/MW]
-			float fuelQuantity = fuelQuantityPerMW * energy/1000f;
+			float percentage = (100 * (energy)) / (MaxPower);
+			Curve = CalculationEngine.generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Split('_')[0] == TypeGenerator.ToString());
+			float fuelQuantityPerMW = (float)Curve.A * (percentage) + (float)Curve.B;       //[t/MW]
+			float fuelQuantity = fuelQuantityPerMW * (energy/1000f);
 			price = Fuel.Item2 * fuelQuantity;
 			PointX = percentage;
 			PointY = fuelQuantityPerMW;
