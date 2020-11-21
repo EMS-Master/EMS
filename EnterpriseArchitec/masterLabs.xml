@@ -25,7 +25,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_1</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Ruma_update</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Ruma</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_2">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -35,7 +35,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_2</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Beograd update</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Beograd</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_3">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -105,7 +105,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_9</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_9</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Malibunar update</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Malibunar</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_10">
 		<cim:Generator.generatorType>wind</cim:Generator.generatorType>
@@ -115,7 +115,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_10</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_10</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Alibunar_update</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Alibunar</cim:IdentifiedObject.name>
 	</cim:Generator>
 		<cim:Generator rdf:ID="Generator_11">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -125,7 +125,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_11</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_11</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Djerdap 1 update</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 1</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_12">
 		<cim:Generator.generatorType>hydro</cim:Generator.generatorType>
@@ -145,7 +145,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_13</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_13</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Bajina Basta update1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Bajina Basta</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_14">
 		<cim:Generator.generatorType>oil</cim:Generator.generatorType>
@@ -627,7 +627,7 @@
 		<cim:Measurement.scadaAddress>address_21</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_21</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_21</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_21</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Ruma analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_22">
 		<cim:Analog.maxValue>1200</cim:Analog.maxValue>
@@ -639,7 +639,7 @@
 		<cim:Measurement.scadaAddress>address_22</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_22</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_22</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_22</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Beograd analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_23">
 		<cim:Analog.maxValue>1500</cim:Analog.maxValue>
@@ -651,7 +651,7 @@
 		<cim:Measurement.scadaAddress>address_23</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_23</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_23</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_23</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Zlatibor analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_24">
 		<cim:Analog.maxValue>1800</cim:Analog.maxValue>
@@ -663,7 +663,7 @@
 		<cim:Measurement.scadaAddress>address_24</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_24</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_24</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_24</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Vranje analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_25">
 		<cim:Analog.maxValue>1000</cim:Analog.maxValue>
@@ -675,7 +675,7 @@
 		<cim:Measurement.scadaAddress>address_25</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_25</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_25</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_25</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Nis analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_26">
 		<cim:Analog.maxValue>5000</cim:Analog.maxValue>
@@ -687,7 +687,7 @@
 		<cim:Measurement.scadaAddress>address_26</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_26</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_26</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_26</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Devrec 1 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_27">
 		<cim:Analog.maxValue>8000</cim:Analog.maxValue>
@@ -699,7 +699,7 @@
 		<cim:Measurement.scadaAddress>address_27</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_27</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_27</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_27</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Kula 1 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_28">
 		<cim:Analog.maxValue>10000</cim:Analog.maxValue>
@@ -711,7 +711,7 @@
 		<cim:Measurement.scadaAddress>address_28</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_28</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_28</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_28</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Kula 2 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_29">
 		<cim:Analog.maxValue>14000</cim:Analog.maxValue>
@@ -723,7 +723,7 @@
 		<cim:Measurement.scadaAddress>address_29</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_29</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_29</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_29</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Malibunar analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_30">
 		<cim:Analog.maxValue>18000</cim:Analog.maxValue>
@@ -735,7 +735,7 @@
 		<cim:Measurement.scadaAddress>address_30</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_30</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_30</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_30</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Alibunar analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_31">
 		<cim:Analog.maxValue>100000</cim:Analog.maxValue>
@@ -747,7 +747,7 @@
 		<cim:Measurement.scadaAddress>address_31</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_31</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_31</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_31</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 1 analog </cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_32">
 		<cim:Analog.maxValue>120000</cim:Analog.maxValue>
@@ -759,7 +759,7 @@
 		<cim:Measurement.scadaAddress>address_32</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_32</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_32</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_32</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 2 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_33">
 		<cim:Analog.maxValue>130000</cim:Analog.maxValue>
@@ -771,7 +771,7 @@
 		<cim:Measurement.scadaAddress>address_33</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_33</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_33</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_33</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Bajina Basta analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_34">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -783,7 +783,7 @@
 		<cim:Measurement.scadaAddress>address_34</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_34</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_34</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_34</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 1 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_35">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -795,7 +795,7 @@
 		<cim:Measurement.scadaAddress>address_35</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_35</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_35</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_35</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 2 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_36">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -807,7 +807,7 @@
 		<cim:Measurement.scadaAddress>address_36</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_36</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_36</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_36</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 3 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_37">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -819,7 +819,7 @@
 		<cim:Measurement.scadaAddress>address_37</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_37</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_37</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_37</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE-TO Pancevo 1 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_38">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -831,7 +831,7 @@
 		<cim:Measurement.scadaAddress>address_38</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_38</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_38</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_38</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE-TO Pancevo 2 analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_39">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -843,7 +843,7 @@
 		<cim:Measurement.scadaAddress>address_39</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_39</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_39</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_39</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE Kolubara A analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	<cim:Analog rdf:ID="Analog_40">
 		<cim:Analog.maxValue>1000000</cim:Analog.maxValue>
@@ -855,7 +855,7 @@
 		<cim:Measurement.scadaAddress>address_40</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Analog_40</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Analog_40</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>Analog_40</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE Kolubara B analog</cim:IdentifiedObject.name>
 	</cim:Analog>
 	
      <cim:Discrete rdf:ID="Discrete_1">
@@ -1108,7 +1108,7 @@
 		<cim:Measurement.scadaAddress>address_21</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_21</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_21</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_21</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Ruma discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_22">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1120,7 +1120,7 @@
 		<cim:Measurement.scadaAddress>address_22</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_22</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_22</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_22</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Beograd discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_23">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1132,7 +1132,7 @@
 		<cim:Measurement.scadaAddress>address_23</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_23</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_23</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_23</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Zlatibor discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_24">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1144,7 +1144,7 @@
 		<cim:Measurement.scadaAddress>address_24</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_24</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_24</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_24</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Vranje discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_25">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1156,7 +1156,7 @@
 		<cim:Measurement.scadaAddress>address_25</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_25</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_25</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_25</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Nis discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_26">
 		<cim:Discrete.maxValue>6 </cim:Discrete.maxValue>
@@ -1168,7 +1168,7 @@
 		<cim:Measurement.scadaAddress>address_26</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_26</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_26</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_26</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Devrec 1 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_27">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1180,7 +1180,7 @@
 		<cim:Measurement.scadaAddress>address_27</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_27</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_27</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_27</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Kula 1 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_28">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1192,7 +1192,7 @@
 		<cim:Measurement.scadaAddress>address_28</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_28</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_28</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_28</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Kula 2 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_29">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1204,7 +1204,7 @@
 		<cim:Measurement.scadaAddress>address_29</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_29</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_29</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_29</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Malibunar discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_30">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1216,7 +1216,7 @@
 		<cim:Measurement.scadaAddress>address_30</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_30</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_30</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_30</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Alibunar discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_31">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1228,7 +1228,7 @@
 		<cim:Measurement.scadaAddress>address_31</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_31</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_31</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_31</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 1 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_32">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1240,7 +1240,7 @@
 		<cim:Measurement.scadaAddress>address_32</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_32</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_32</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_32</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Djerdap 2 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_33">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1252,7 +1252,7 @@
 		<cim:Measurement.scadaAddress>address_33</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_33</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_33</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_33</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Bajina Basta discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_34">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1264,7 +1264,7 @@
 		<cim:Measurement.scadaAddress>address_34</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_34</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_34</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_34</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 1 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_35">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1276,7 +1276,7 @@
 		<cim:Measurement.scadaAddress>address_35</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_35</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_35</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_35</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 2 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_36">
 		<cim:Discrete.maxValue>6 </cim:Discrete.maxValue>
@@ -1288,7 +1288,7 @@
 		<cim:Measurement.scadaAddress>address_36</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_36</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_36</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_36</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Nis 3 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_37">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1300,7 +1300,7 @@
 		<cim:Measurement.scadaAddress>address_37</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_37</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_37</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_37</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE-TO Pancevo 1 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_38">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1312,7 +1312,7 @@
 		<cim:Measurement.scadaAddress>address_38</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_38</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_38</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_38</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE-TO Pancevo 2 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_39">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1324,7 +1324,7 @@
 		<cim:Measurement.scadaAddress>address_39</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_39_update</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_39</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_39</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE Kolubara A discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_40">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1336,6 +1336,6 @@
 		<cim:Measurement.scadaAddress>address_40</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_40_update</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_40</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_40</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>TE Kolubara B discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 </rdf:RDF>
