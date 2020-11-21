@@ -17,22 +17,22 @@ namespace CalculationEngineServ.GeneticAlgorithm
         private GeneticAlgorithm<Tuple<long, float>> ga;
         private Dictionary<long, OptimisationModel> optModelMap;
         private Dictionary<int, long> indexToGid;
-        private float necessaryEnergy;
+        public float NecessaryEnergy { get; set; }
         public float TotalCost { get; private set; }
         public float GeneratedPower { get; private set; }
         public float EmissionCO2 { get; private set; }
 		private Dictionary<long, OptimisationModel> commandedGeneratrs;
-		private Dictionary<long, float> commandedGenGidsAndValues;
+		public Dictionary<long, float> CommandedGenGidsAndValues { get; set;}
 		public float PointX;
 		public float PointY;
         public GA(float necessaryEnergy, Dictionary<long, OptimisationModel> optModelMap)
         {
 			EmsContext e = new EmsContext();
 			commandedGeneratrs = new Dictionary<long, OptimisationModel>();
-			commandedGenGidsAndValues = e.CommandedGenerators.Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
-			this.optModelMap = optModelMap.Where(x => !commandedGenGidsAndValues.Any(y => y.Key == x.Key)).ToDictionary(param => param.Key, param => param.Value);
+			CommandedGenGidsAndValues = e.CommandedGenerators.Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
+			this.optModelMap = optModelMap.Where(x => !CommandedGenGidsAndValues.Any(y => y.Key == x.Key)).ToDictionary(param => param.Key, param => param.Value);
 			
-			foreach(var item in commandedGenGidsAndValues)
+			foreach(var item in CommandedGenGidsAndValues)
 			{
 				var comm = optModelMap.FirstOrDefault(x => x.Key == item.Key);
 				comm.Value.MeasuredValue = item.Value;
@@ -47,7 +47,9 @@ namespace CalculationEngineServ.GeneticAlgorithm
                 indexToGid.Add(i++, valPair.Key);
             }
 
-			this.necessaryEnergy = necessaryEnergy - commandedGeneratrs.Sum(x => x.Value.MeasuredValue);
+			this.NecessaryEnergy = necessaryEnergy - commandedGeneratrs.Sum(x => x.Value.MeasuredValue);
+			if (this.NecessaryEnergy <= 0)
+				this.NecessaryEnergy = 0;
 			//List<CommandedGenerator> gen = new List<CommandedGenerator>();
 			//gen = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag && x.CommandingValue != 0).Select(x => x).ToList();
 
@@ -111,7 +113,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
             random = new Random();
             ga = new GeneticAlgorithm<Tuple<long, float>>(NUMBER_OF_POPULATION, 
 				optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, 
-				ELITIMS_PERCENTAGE, necessaryEnergy, ScaleDNA, mutationRate, false);
+				ELITIMS_PERCENTAGE, NecessaryEnergy, ScaleDNA, mutationRate, false);
             ga.Population = PopulateFirstPopulation();
             Tuple<long, float>[] bestGenes = ga.StartAndReturnBest(NUMBER_OF_ITERATION);
 
@@ -137,7 +139,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
             TotalCost = CalculateCost(bestGenes);
             GeneratedPower = CalculateEnergy(bestGenes);
 
-            Console.WriteLine("Necessery energy: " + necessaryEnergy);
+            Console.WriteLine("Necessery energy: " + NecessaryEnergy);
             Console.WriteLine("Total power: " + GeneratedPower);
 
             return optModelMap;
@@ -209,7 +211,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
 				}
 			}
 
-			float k = (necessaryEnergy - (mutatedGen?.Item2 ?? 0f)) / (float)sumOfDna;
+			float k = (NecessaryEnergy - (mutatedGen?.Item2 ?? 0f)) / (float)sumOfDna;
 			for (int i = 0; i < dna.Size; i++)
 			{
 				if (i != mutatedGene)

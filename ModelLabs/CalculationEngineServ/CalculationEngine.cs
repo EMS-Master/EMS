@@ -215,25 +215,61 @@ namespace CalculationEngineServ
 			
             windProductionPct = (windProductionkW * 100) / powerOfConsumers;
 			windProductionkW = 0;
-			
-			
-			GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
-			optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION, NUMBER_OF_POPULATION, ELITIMS_PERCENTAGE, mutationRate);
-			
-			foreach (var item in optModelMapOptimizied)
-            {
-                if (optModelMap.ContainsKey(item.Key))
-                    optModelMap[item.Key] = item.Value;
-            }
 
+			bool isNecessaryEnergyZero = false;
+			GA gaoRenewable = new GA(powerOfConsumersWithoutRenewable, optModelMapNonRenewable);
+			if (gaoRenewable.NecessaryEnergy > 0)
+			{
+				optModelMapOptimizied = gaoRenewable.StartAlgorithm(NUMBER_OF_ITERATION, NUMBER_OF_POPULATION, ELITIMS_PERCENTAGE, mutationRate);
+
+				foreach (var item in optModelMapOptimizied)
+				{
+					if (optModelMap.ContainsKey(item.Key))
+						optModelMap[item.Key] = item.Value;
+				}
+			}
+			else
+			{
+				Dictionary<long, OptimisationModel> commandedValues = new Dictionary<long, OptimisationModel>();
+				foreach (var item in optModelMapNonRenewable)
+				{
+					if (gaoRenewable.CommandedGenGidsAndValues.ContainsKey(item.Key))
+					{
+						item.Value.GenericOptimizedValue = gaoRenewable.CommandedGenGidsAndValues[item.Key];
+						item.Value.MeasuredValue = gaoRenewable.CommandedGenGidsAndValues[item.Key];
+						optModelMap[item.Key] = item.Value;
+						commandedValues.Add(item.Key, item.Value);
+					}
+					else if (optModelMap.ContainsKey(item.Key))
+					{
+						item.Value.GenericOptimizedValue = 0;
+						item.Value.MeasuredValue = 0;
+						optModelMap[item.Key] = item.Value;
+					}
+				}
+				isNecessaryEnergyZero = true;
+				CalculateTotalCostWhenNecessaryEnergyIsZero(commandedValues);
+			}
+			
 			reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
 			renewableContributionPrct = (renewableConributionKW * 100) / powerOfConsumers;
-			totalCost = gaoRenewable.TotalCost;
-			currentEmissionCO2 = gaoRenewable.EmissionCO2;
+			totalCost = isNecessaryEnergyZero ? totalCost : gaoRenewable.TotalCost;
+			currentEmissionCO2 = CalculateCO2(optModelMap);
+			//currentEmissionCO2 = gaoRenewable.EmissionCO2;
 			profit = GetProfit(optModelMap);
 
 			return optModelMap;
         }
+		
+		private void CalculateTotalCostWhenNecessaryEnergyIsZero(Dictionary<long, OptimisationModel> optModelMap)
+		{
+			foreach (var item in optModelMap)
+			{
+				float price = item.Value.CalculatePrice(item.Value.GenericOptimizedValue);
+				item.Value.Price = price;
+				totalCost += price;
+			}
+		}
 
         #region Transaction
         public UpdateResult Prepare(ref Delta delta)
