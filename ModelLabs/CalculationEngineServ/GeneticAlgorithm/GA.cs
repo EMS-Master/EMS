@@ -37,6 +37,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
 				var comm = optModelMap.FirstOrDefault(x => x.Key == item.Key);
 				comm.Value.MeasuredValue = item.Value;
 				comm.Value.measurementUnit.CurrentValue = item.Value;
+				comm.Value.GenericOptimizedValue = item.Value;
 				commandedGeneratrs.Add(item.Key, comm.Value);
 			}
 
@@ -50,12 +51,6 @@ namespace CalculationEngineServ.GeneticAlgorithm
 			this.NecessaryEnergy = necessaryEnergy - commandedGeneratrs.Sum(x => x.Value.MeasuredValue);
 			if (this.NecessaryEnergy <= 0)
 				this.NecessaryEnergy = 0;
-			//List<CommandedGenerator> gen = new List<CommandedGenerator>();
-			//gen = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag && x.CommandingValue != 0).Select(x => x).ToList();
-
-			//float sumOfCommanded = gen.Count != 0 ? gen.Select(x => x.CommandingValue).Sum() : 0;
-			//this.necessaryEnergy = this.necessaryEnergy - sumOfCommanded;
-			
 		}
 
         private Tuple<long, float> GetRandomGene(int index)
@@ -111,19 +106,18 @@ namespace CalculationEngineServ.GeneticAlgorithm
         {
             SetAlgorithmOptions(iterationsCount, populationNumber, elitisam, mutationRat);
             random = new Random();
-            ga = new GeneticAlgorithm<Tuple<long, float>>(NUMBER_OF_POPULATION, 
-				optModelMap.Count, random, GetRandomGene, FitnessFunction, MutateFunction, 
-				ELITIMS_PERCENTAGE, NecessaryEnergy, ScaleDNA, mutationRate, false);
+            ga = new GeneticAlgorithm<Tuple<long, float>>(NUMBER_OF_POPULATION, optModelMap.Count, random, GetRandomGene,
+														FitnessFunction, MutateFunction, ELITIMS_PERCENTAGE, NecessaryEnergy,
+														ScaleDNA, mutationRate, false);
+
             ga.Population = PopulateFirstPopulation();
             Tuple<long, float>[] bestGenes = ga.StartAndReturnBest(NUMBER_OF_ITERATION);
 
             foreach (var item in bestGenes)
             {
 				optModelMap.FirstOrDefault(x => x.Key == item.Item1).Value.GenericOptimizedValue = item.Item2;
+				optModelMap.FirstOrDefault(x => x.Key == item.Item1).Value.MeasuredValue = item.Item2;
 				optModelMap.FirstOrDefault(x => x.Key == item.Item1).Value.measurementUnit.CurrentValue = item.Item2;
-
-				//optModelMap[indexToGid[i]].GenericOptimizedValue = bestGenes[i].Item2;
-				//optModelMap[indexToGid[i]].measurementUnit.CurrentValue = bestGenes[i].Item2;
 			}
 
 			foreach(var item in commandedGeneratrs)
@@ -136,11 +130,9 @@ namespace CalculationEngineServ.GeneticAlgorithm
 
             EmissionCO2 = emCO2;
 
-            TotalCost = CalculateCost(bestGenes);
-            GeneratedPower = CalculateEnergy(bestGenes);
+            TotalCost = CalculateCost();
 
             Console.WriteLine("Necessery energy: " + NecessaryEnergy);
-            Console.WriteLine("Total power: " + GeneratedPower);
 
             return optModelMap;
         }
@@ -149,15 +141,8 @@ namespace CalculationEngineServ.GeneticAlgorithm
             List<DNA<Tuple<long, float>>> firstPopulation = new List<DNA<Tuple<long, float>>>();
 
             DNA<Tuple<long, float>> previousBest = new DNA<Tuple<long, float>>(optModelMap.Count, random, 
-				GetRandomGene, FitnessFunction, MutateFunction, shouldInitGenes: false);
-            previousBest.Genes = new Tuple<long, float>[optModelMap.Count];
-
-            //for (int i = 0; i < optModelMap.Count; i++)
-            //{
-            //    long gid = indexToGid[i];
-            //    previousBest.Genes[i] = new Tuple<long, float>(gid, optModelMap[gid].MeasuredValue);
-            //}
-            //firstPopulation.Add(previousBest);
+													GetRandomGene, FitnessFunction, MutateFunction, shouldInitGenes: false);
+													previousBest.Genes = new Tuple<long, float>[optModelMap.Count];
 
             for (int i = 0; i < NUMBER_OF_POPULATION; i++)
             {
@@ -180,17 +165,19 @@ namespace CalculationEngineServ.GeneticAlgorithm
 
             return cost;
         }
-        private float CalculateEnergy(Tuple<long, float>[] genes)
-        {
-            float energySum = 0;
 
-            foreach (var gene in genes)
-            {
-                energySum += gene.Item2;
-            }
+		private float CalculateCost()
+		{
+			float cost = 0;
+			foreach (var item in optModelMap)
+			{
+				float price = item.Value.CalculatePrice(item.Value.GenericOptimizedValue);
+				item.Value.Price = price;
+				cost += price;
+			}
 
-            return energySum;
-        }
+			return cost;
+		}
 
 		private DNA<Tuple<long, float>> ScaleDNA(DNA<Tuple<long,float>> dna, int mutatedGene)
 		{

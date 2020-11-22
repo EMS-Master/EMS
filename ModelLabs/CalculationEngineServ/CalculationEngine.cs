@@ -199,6 +199,7 @@ namespace CalculationEngineServ
                 {
                     item.Value.GenericOptimizedValue = item.Value.MeasuredValue;
                     powerOfConsumersWithoutRenewable -= item.Value.MeasuredValue;
+					item.Value.measurementUnit.CurrentValue = item.Value.MeasuredValue;
                     if(item.Value.TypeGenerator == GeneratorType.Wind)
                     {
                         windProductionkW += item.Value.MeasuredValue;
@@ -237,6 +238,7 @@ namespace CalculationEngineServ
 					{
 						item.Value.GenericOptimizedValue = gaoRenewable.CommandedGenGidsAndValues[item.Key];
 						item.Value.MeasuredValue = gaoRenewable.CommandedGenGidsAndValues[item.Key];
+						item.Value.measurementUnit.CurrentValue = gaoRenewable.CommandedGenGidsAndValues[item.Key];
 						optModelMap[item.Key] = item.Value;
 						commandedValues.Add(item.Key, item.Value);
 					}
@@ -244,6 +246,7 @@ namespace CalculationEngineServ
 					{
 						item.Value.GenericOptimizedValue = 0;
 						item.Value.MeasuredValue = 0;
+						item.Value.measurementUnit.CurrentValue = 0;
 						optModelMap[item.Key] = item.Value;
 					}
 				}
@@ -255,7 +258,6 @@ namespace CalculationEngineServ
 			renewableContributionPrct = (renewableConributionKW * 100) / powerOfConsumers;
 			totalCost = isNecessaryEnergyZero ? totalCost : gaoRenewable.TotalCost;
 			currentEmissionCO2 = CalculateCO2(optModelMap);
-			//currentEmissionCO2 = gaoRenewable.EmissionCO2;
 			profit = GetProfit(optModelMap);
 
 			return optModelMap;
@@ -887,7 +889,7 @@ namespace CalculationEngineServ
 		public float CalculateCO2WithKyotoProtocol(Dictionary<long, OptimisationModel> optModelMap)
 		{
 			float kyotoCoefficient = 0.008f; //	EU - 0.8%
-			return optModelMap.Values.Sum(x => x.GenericOptimizedValue * kyotoCoefficient);
+			return optModelMap.Values.Sum(x => (x.GenericOptimizedValue/1000f) * kyotoCoefficient);
 		}
 
 		public float GetProfit(Dictionary<long, OptimisationModel> allGenerators)
@@ -911,7 +913,6 @@ namespace CalculationEngineServ
 				{
 					//profitValue += (item.Value * (sumOfRenewables/1000f));
 					float percentage = (100 * (sumOfRenewables / 1000f)) / (maxPowerPerFuel[item.Key]/1000f);
-					percentage = percentage / 100f;
 					GeneratorCurveModel genCurveModel = generatorCurves.FirstOrDefault(x => x.LowerPoint <= percentage && x.HigherPoint >= percentage && x.GeneratorType.Contains(item.Key.ToString()));
 					float fuelQuantityPerMW = (float)genCurveModel.A * percentage + (float)genCurveModel.B;       //[t/MW]
 					float fuelQuantity = fuelQuantityPerMW * sumOfRenewables / 1000f;

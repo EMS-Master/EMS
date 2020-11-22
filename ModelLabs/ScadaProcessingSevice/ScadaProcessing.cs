@@ -766,11 +766,11 @@ namespace ScadaProcessingSevice
             if (value > maxEgu)
             {
                 ah.Type = AlarmType.HIGH;
-                if (value <= (maxEgu + (maxEgu * 20 / 100)))
+                if (value <= (maxEgu + (maxEgu * 10 / 100)))
                 {
                     ah.Severity = SeverityLevel.MAJOR;
                 }
-                else if (value <= (maxEgu + (maxEgu * 40 / 100)))
+                else if (value <= (maxEgu + (maxEgu * 20 / 100)))
                 {
                     ah.Severity = SeverityLevel.HIGH;
                 }

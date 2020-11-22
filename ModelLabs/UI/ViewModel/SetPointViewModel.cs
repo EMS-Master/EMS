@@ -12,7 +12,8 @@ namespace UI.ViewModel
     public class SetPointViewModel:ViewModelBase
     {
         public long globalId { get; private set; }
-        public float newValue { get; set; }
+        public string newValue { get; set; }
+		public float newValueFloat { get; set; }
 
         public string globalName { get; private set; }
 
@@ -27,17 +28,35 @@ namespace UI.ViewModel
 
         private void CommandGenMessBoxExecute(object obj)
         {
-            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to command this element?", "Command", System.Windows.MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
-                CommandGenExecute(obj);
-                if (obj != null)
-                {
-                    var window = (Window)obj;
+			float value = 0;
+			bool isValidValue = float.TryParse(this.newValue, out value);
 
-                    window.Close();
-                }
-            }
+			if (isValidValue)
+			{
+				this.newValueFloat = value;
+				if (this.newValueFloat > 1000 || this.newValueFloat < 0)
+				{
+					MessageBoxResult messageBoxInvalidResult = System.Windows.MessageBox.Show("Commanded value is out of range (0 MW - 1000 MW)", "Command", System.Windows.MessageBoxButton.OK);
+				}
+				else
+				{
+					MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("Are you sure you want to command this element?", "Command", System.Windows.MessageBoxButton.YesNo);
+					if (messageBoxResult == MessageBoxResult.Yes)
+					{
+						CommandGenExecute(obj);
+						if (obj != null)
+						{
+							var window = (Window)obj;
+
+							window.Close();
+						}
+					}
+				}
+			}
+			else
+			{
+				MessageBoxResult messageBoxInvalidResult = System.Windows.MessageBox.Show("Value must be a number.", "Command", System.Windows.MessageBoxButton.OK);
+			}
         }
 
 
@@ -46,7 +65,7 @@ namespace UI.ViewModel
             //ModelForCheckboxes model = (ModelForCheckboxes)obj;
             //if (model.IsActive)
             //{
-                ScadaCommandingProxy.Instance.CommandAnalogValues(this.globalId,this.newValue);
+                ScadaCommandingProxy.Instance.CommandAnalogValues(this.globalId,this.newValueFloat);
             //}
         }
     }

@@ -17,6 +17,8 @@ namespace DataSimulator
         private float oldWindSpeed = 5f;
 		private float sumOldConsumers = -1;
         private readonly object lockObj = new object();
+
+		private bool isWindGenTurnedOff = false;
 		 
 		
 		public DataSimulatorService()
@@ -132,6 +134,7 @@ namespace DataSimulator
 
             if (windSpeed >= 3.6 && windSpeed <= 12.5)
 			{
+				isWindGenTurnedOff = false;
 				powerGenerator1 = oneWindTurbine * 5 / 1000; //KW
 				powerGenerator2 = oneWindTurbine * 8 / 1000;
 				powerGenerator3 = oneWindTurbine * 10 / 1000;
@@ -140,6 +143,7 @@ namespace DataSimulator
 			}
 			else if(windSpeed < 3.6 || windSpeed > 20)
 			{
+				isWindGenTurnedOff = true;
 				powerGenerator1 = 0;
 				powerGenerator2 = 0;
 				powerGenerator3 = 0;
@@ -148,6 +152,7 @@ namespace DataSimulator
 			}
 			else
 			{
+				isWindGenTurnedOff = false;
 				powerGenerator1 = oneRatedWindTurbine * 5 / 1000;
 				powerGenerator2 = oneRatedWindTurbine * 8 / 1000;
 				powerGenerator3 = oneRatedWindTurbine * 10 / 1000;
@@ -324,7 +329,13 @@ namespace DataSimulator
                 mdbClient.WriteSingleRegister(56, wind[4]);
                 mdbClient.WriteSingleRegister(58, wind[5]);
 
-                mdbClient.WriteSingleRegister(60, hydro[0]);
+				mdbClient.WriteSingleCoil(25, !isWindGenTurnedOff);
+				mdbClient.WriteSingleCoil(26, !isWindGenTurnedOff);
+				mdbClient.WriteSingleCoil(27, !isWindGenTurnedOff);
+				mdbClient.WriteSingleCoil(28, !isWindGenTurnedOff);
+				mdbClient.WriteSingleCoil(29, !isWindGenTurnedOff);
+
+				mdbClient.WriteSingleRegister(60, hydro[0]);
                 mdbClient.WriteSingleRegister(62, hydro[1]);
                 mdbClient.WriteSingleRegister(64, hydro[2]);
 

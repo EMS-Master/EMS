@@ -10,12 +10,13 @@
     <Grid >
         
         <TextBlock Margin="10,40,250,100"   Text="{Binding Path=globalName}"/>
-        <TextBox  Margin="150,40,10,100" Text ="{Binding newValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
+		<TextBox  Margin="150,40,99.6,100.4" Text ="{Binding newValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
             <!--<TextBox.InputBindings>
                 <KeyBinding Command="{Binding Path=CommandGenMessBox}" Key="Enter"  CommandParameter="{Binding ElementName=SetWindow}"/>
             </TextBox.InputBindings>-->
         </TextBox>
-        <Button Margin="100,100,100,40" Content="Apply" Command="{Binding Path=CommandGenMessBox}" CommandParameter="{Binding ElementName=SetWindow}"/>
+		<Label Margin="299,40,35.6,100.4" Content="[MW]"></Label>
+		<Button Margin="100,100,100,40" Content="Apply" Command="{Binding Path=CommandGenMessBox}" CommandParameter="{Binding ElementName=SetWindow}"/>
 
     </Grid>
 </Window>

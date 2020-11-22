@@ -77,9 +77,9 @@ namespace CalculationEngineServ.GeneticAlgorithm
             newPopulation.Clear();
 			int numberOfElite = Population.Count * Elitism / 100;
             for (int i = 0; i < Population.Count; i++)
-            {                                          
+            {
                 if (i < numberOfElite )
-                {                          
+                {
                     newPopulation.Add(Population[i]);
                 }
                 else if (i < Population.Count - numberOfElite)
