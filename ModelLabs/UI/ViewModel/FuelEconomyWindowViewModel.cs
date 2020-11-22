@@ -7,6 +7,7 @@ using OxyPlot;
 using OxyPlot.Series;
 using CalculationEngineContracts;
 using FTN.Common;
+using System.Windows.Input;
 
 namespace UI.ViewModel
 {
@@ -14,7 +15,11 @@ namespace UI.ViewModel
     {
         long globalId;
         public string Name { get; set; }
-        public PlotModel Model { get; set; }
+        private PlotModel model;
+        public PlotModel Model { get { return model; } set{  model = value; OnPropertyChanged(); } }
+        private ICommand refreshFuelEconomy;
+        public ICommand RefreshFuelEconomy => refreshFuelEconomy ?? (refreshFuelEconomy = new RelayCommand(RefreshFuelEconomyCommand));
+
         public FuelEconomyWindowViewModel(long gid, string name, GeneratorType genType)
         {
             globalId = gid;
@@ -24,6 +29,7 @@ namespace UI.ViewModel
             Model.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "[%]",
                 MajorGridlineStyle = LineStyle.Dot, MajorGridlineColor = OxyColors.Gray
             });
+            
             Model.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Left,  Title = "[t/MW]", MajorGridlineStyle = LineStyle.Dot, MajorGridlineColor = OxyColors.Gray });
             var series1 = new OxyPlot.Series.LineSeries
             {
@@ -77,6 +83,26 @@ namespace UI.ViewModel
             
             Model.Series.Add(series1);
             Model.Series.Add(series2);
+        }
+
+        public void RefreshFuelEconomyCommand(object obj)
+        {
+            List<float> points = CalculationEngineUIProxy.Instance.GetPointForFuelEconomy(globalId);
+            var series2 = new LineSeries
+            {
+                MarkerType = MarkerType.Cross,
+                MarkerSize = 5,
+                MarkerStroke = OxyColors.Red,
+                //InterpolationAlgorithm = InterpolationAlgorithms.ChordalCatmullRomSpline
+            };
+            
+            series2.Points.Add(new DataPoint(points[0], points[1]));
+            series2.ToolTip = "X = " + points[0] + ", Y = " + points[1];
+            Model.Series.RemoveAt(1);
+            OnPropertyChanged("Model");
+            Model.Series.Add(series2);
+            Model.InvalidatePlot(true);
+            OnPropertyChanged("Model");
         }
     }
 }

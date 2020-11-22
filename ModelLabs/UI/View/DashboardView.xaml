@@ -39,8 +39,12 @@
                     <StackPanel >
                         <CheckBox x:Name="GenDigital" Margin="10,13,0,0" >
                             <CheckBox.Visibility>
-                                <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
-                                </Binding>
+                                <MultiBinding Converter="{StaticResource GeneratorTypeToVIsibility}">
+                                    <Binding Path="Value"/>
+                                    <Binding Path=""/>
+                                </MultiBinding>
+                                <!--<Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                </Binding>-->
                             </CheckBox.Visibility>
                             <CheckBox.IsChecked>
 
@@ -80,8 +84,12 @@
                                 </ContextMenu.Visibility>-->
                                 <MenuItem x:Name="MenuItemSetPoint" Click="MenuItemSetPoint_Click" Header="Set point">
                                     <MenuItem.Visibility>
-                                        <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
-                                        </Binding>
+                                        <MultiBinding Converter="{StaticResource GeneratorTypeToVIsibility}">
+                                            <Binding Path="Value"/>
+                                            <Binding Path="Value[0].IsActive"/>
+                                        </MultiBinding>
+                                        <!--<Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                        </Binding>-->
                                     </MenuItem.Visibility>
                                 </MenuItem>
                                 <MenuItem x:Name="MenuItemHistory" Header="History" Click="MenuItemHistory_Click">
@@ -92,8 +100,12 @@
                                 </MenuItem>
                                 <MenuItem x:Name="MenuItemFuelEconomy" Header="Fuel economy" Click="MenuItemFuelEconomy_Click">
                                     <MenuItem.Visibility>
-                                        <Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
-                                        </Binding>
+                                        <MultiBinding Converter="{StaticResource GeneratorTypeToVIsibility}">
+                                            <Binding Path="Value"/>
+                                            <Binding Path="Value[0].IsActive"/>
+                                        </MultiBinding>
+                                        <!--<Binding Path="Value" Converter="{StaticResource GeneratorTypeToVIsibility}" ConverterParameter="Key" Mode="OneWay"  >
+                                        </Binding>-->
                                     </MenuItem.Visibility>
                                 </MenuItem>
                                 <MenuItem x:Name="MenuItemReset" Header="Reset" Click="MenuItemReset_Click">
@@ -352,7 +364,7 @@
                     <!--<GridSplitter x:Name="Splitter" Grid.Column="1" HorizontalAlignment="Stretch" Width="2"
 					  Visibility="{Binding IsOptionsExpanded,Converter={StaticResource BoolToVisibilityConverter}}" />-->
 
-                    <Button Height="50" Margin="-1,0,-5,0"
+                    <Button Height="90" Width="25" FontSize="16" Margin="-1,-600,-5,0"
 						Command="{Binding ExpandCommand}"
 						VerticalAlignment="Center" HorizontalAlignment="Right">
                         <Button.Style>
@@ -403,7 +415,7 @@
                             </StackPanel>
                         </StackPanel>
                         <TextBlock TextWrapping="WrapWithOverflow"  Grid.RowSpan="2">
-							<chartingToolkit:Chart Grid.Row="2" Width="700" Height="600" Margin="40,75,0,0"  Style="{StaticResource DashboardChartStyle}" FontSize="15" Title="Total Production vs Consumption">
+							<chartingToolkit:Chart Grid.Row="2" Width="600" Height="600" Margin="40,75,0,0"  Style="{StaticResource DashboardChartStyle}" FontSize="15" Title="Total Production vs Consumption">
 								<chartingToolkit:LineSeries ItemsSource="{Binding Path=GenerationList}" 
 													DependentValueBinding="{Binding Path=Value}" 
 													IndependentValueBinding="{Binding Path=Key}"

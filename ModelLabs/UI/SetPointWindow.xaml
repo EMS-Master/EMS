@@ -9,13 +9,13 @@
         Title="SetPointWindow" Height="200" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid >
         
-        <TextBlock Margin="10,40,250,100"   Text="{Binding Path=globalName}"/>
+        <TextBlock Margin="10,40,250,100" FontSize="16"  Text="{Binding Path=globalName}"/>
 		<TextBox  Margin="150,40,99.6,100.4" Text ="{Binding newValue, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}">
             <!--<TextBox.InputBindings>
                 <KeyBinding Command="{Binding Path=CommandGenMessBox}" Key="Enter"  CommandParameter="{Binding ElementName=SetWindow}"/>
             </TextBox.InputBindings>-->
         </TextBox>
-		<Label Margin="299,40,35.6,100.4" Content="[MW]"></Label>
+		<TextBlock Margin="300,40.5,35.6,100.4" FontSize="16" Text="[MW]" HorizontalAlignment="Center"></TextBlock>
 		<Button Margin="100,100,100,40" Content="Apply" Command="{Binding Path=CommandGenMessBox}" CommandParameter="{Binding ElementName=SetWindow}"/>
 
     </Grid>

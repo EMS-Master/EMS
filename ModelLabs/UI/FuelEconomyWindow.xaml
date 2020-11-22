@@ -7,10 +7,17 @@
 
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="Fuel Economy" Height="520" Width="650">
+        Title="Fuel Economy" Height="auto" Width="650">
     <Grid >
-       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="120,30,0,0">
+            <Button HorizontalAlignment="Left" Width="50" Command="{Binding RefreshFuelEconomy}">Refresh</Button>
+        </Grid>
         <Grid Grid.Row="1" HorizontalAlignment="Center" Margin="0,0,0,10" VerticalAlignment="Bottom" Height="450"  Width="500">
+            
             <oxy:PlotView Model="{Binding Model}"/>
         </Grid>
        
