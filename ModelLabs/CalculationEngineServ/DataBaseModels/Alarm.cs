@@ -23,6 +23,8 @@ namespace CalculationEngineServ.DataBaseModels
         public SeverityLevel Severity { get; set; }
         public string CurrentState { get; set; }
         public PublishingStatus PubStatus { get; set; }
+        public string Name { get; set; }
+
 
         public Alarm(long gid, float value, float minValue, float maxValue, DateTime timeStamp)
         {

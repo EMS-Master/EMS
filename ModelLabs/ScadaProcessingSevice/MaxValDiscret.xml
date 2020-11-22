@@ -1,88 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <NetworkModel>
-	<EnergyConsumers>
-		<EnergyConsumer>
-			<Gid>25769803777</Gid>
-			<MaxVal>2</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803778</Gid>
-			<MaxVal>5</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803779</Gid>
-			<MaxVal>3</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803780</Gid>
-			<MaxVal>4</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803781</Gid>
-			<MaxVal>7</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803782</Gid>
-			<MaxVal>6</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803783</Gid>
-			<MaxVal>4</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803784</Gid>
-			<MaxVal>8</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803785</Gid>
-			<MaxVal>7</MaxVal>
-		</EnergyConsumer>
-		<EnergyConsumer>
-			<Gid>25769803786</Gid>
-			<MaxVal>5</MaxVal>
-		</EnergyConsumer>
-	</EnergyConsumers>
-	
 	<Generators>
 		<Generator>
-			<Gid>12884901889</Gid>
+			<GeneratorType>Oil</GeneratorType>
 			<MaxVal>5</MaxVal>
 		</Generator>
 		<Generator>
-			<Gid>12884901891</Gid>
+			<GeneratorType>Coal</GeneratorType>
 			<MaxVal>4</MaxVal>
 		</Generator>
 		<Generator>
-			<Gid>12884901892</Gid>
+			<GeneratorType>Gas</GeneratorType>
 			<MaxVal>3</MaxVal>
 		</Generator>
 		<Generator>
-			<Gid>12884901893</Gid>
+			<GeneratorType>Solar</GeneratorType>
 			<MaxVal>6</MaxVal>
 		</Generator>
 		<Generator>
-			<Gid>12884901894</Gid>
+			<GeneratorType>Hydro</GeneratorType>
 			<MaxVal>7</MaxVal>
 		</Generator>
 		<Generator>
-			<Gid>12884901895</Gid>
+			<GeneratorType>Wind</GeneratorType>
 			<MaxVal>4</MaxVal>
-		</Generator>
-		<Generator>
-			<Gid>12884901896</Gid>
-			<MaxVal>6</MaxVal>
-		</Generator>
-		<Generator>
-			<Gid>12884901897</Gid>
-			<MaxVal>3</MaxVal>
-		</Generator>
-		<Generator>
-			<Gid>12884901898</Gid>
-			<MaxVal>7</MaxVal>
-		</Generator>
-		<Generator>
-			<Gid>12884901890</Gid>
-			<MaxVal>2</MaxVal>
 		</Generator>
 	</Generators>
 </NetworkModel>

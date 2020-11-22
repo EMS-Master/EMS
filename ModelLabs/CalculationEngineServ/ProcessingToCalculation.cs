@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace CalculationEngineServ
 {
@@ -58,7 +59,7 @@ namespace CalculationEngineServ
         {
             if(model.Id == 0)
             {
-               DbManager.Instance.AddDiscreteCounter(new DiscreteCounter() { Gid = model.Gid, Counter = model.Counter, CurrentValue = model.CurrentValue });
+               DbManager.Instance.AddDiscreteCounter(new DiscreteCounter() { Gid = model.Gid, Counter = model.Counter, CurrentValue = model.CurrentValue, Name = model.Name });
             }
             else
             {
@@ -69,6 +70,11 @@ namespace CalculationEngineServ
             }
 
             DbManager.Instance.SaveChanges();
+        }
+
+        public Dictionary<Tuple<long, string>, int> GetCounterForGeneratorType()
+        {
+            return CalculationEngine.MaxDiscreteCounter;
         }
     }
 }

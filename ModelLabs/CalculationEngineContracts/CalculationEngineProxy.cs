@@ -123,5 +123,10 @@ namespace CalculationEngineContracts
         {
             proxy1.InsertOrUpdate(model);
         }
+
+        public Dictionary<Tuple<long, string>, int> GetCounterForGeneratorType()
+        {
+            return proxy1.GetCounterForGeneratorType();
+        }
     }
 }

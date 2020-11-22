@@ -13,6 +13,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using TransactionContract;
 
 namespace CalculationEngineServ
@@ -55,6 +56,7 @@ namespace CalculationEngineServ
 		private static Dictionary<long, OptimisationModel> optimizationModelResults;
 
 		public static List<GeneratorCurveModel> generatorCurves;
+        public static Dictionary<Tuple<long, string>, int> MaxDiscreteCounter;
 		
 		public CalculationEngine()
         {
@@ -73,7 +75,8 @@ namespace CalculationEngineServ
             energyConsumers = new Dictionary<long, EnergyConsumer>();
 			generatorCurves = LoadXMLFile.Load().Curves;
 			optimizationModelResults = new Dictionary<long, OptimisationModel>();
-		}
+            MaxDiscreteCounter = new Dictionary<Tuple<long, string>, int>();
+        }
         
 
         public bool Optimize(List<MeasurementUnit> measEnergyConsumer, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
@@ -830,6 +833,8 @@ namespace CalculationEngineServ
                 FillData();
 				FillInitialCommandedGenerators();
 
+                FillInitialDiscreteCounters();
+                
 				return true;
             }
         }
@@ -874,8 +879,31 @@ namespace CalculationEngineServ
 				DbManager.Instance.SaveChanges();
 			}
 		}
-		
-		public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
+
+        private void FillInitialDiscreteCounters()
+        {
+            string path = System.IO.Path.GetFullPath("..\\..\\..\\..\\");
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");
+
+            XmlNodeList GeneratorStorageNode = doc.GetElementsByTagName("Generator");
+            Dictionary<string, int> keyValues = new Dictionary<string, int>();
+            foreach (XmlNode item in GeneratorStorageNode)
+            {
+                string type = item["GeneratorType"].InnerText;
+                int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
+                keyValues.Add(type, maxTurnOn);
+            }
+
+            foreach (var item in generators)
+            {
+                MaxDiscreteCounter.Add(new Tuple<long, string>(item.Key, item.Value.GeneratorType.ToString()), keyValues[item.Value.GeneratorType.ToString()]);
+            }
+        }
+
+
+        public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
 		{
 			//CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
 			float emCO2 = 0;

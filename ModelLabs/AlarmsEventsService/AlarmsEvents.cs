@@ -367,7 +367,8 @@ namespace FTN.Services.AlarmsEventsService
                             AckState = (AckState)item.AckState,
                             PubStatus = (PublishingStatus)item.PubStatus,
                             Type = (AlarmType)item.AlarmType,
-                            Message = item.AlarmMessage
+                            Message = item.AlarmMessage,
+
                         };
 
                         alarms.Add(alarm);

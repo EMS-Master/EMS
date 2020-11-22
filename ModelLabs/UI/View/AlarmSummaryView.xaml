@@ -40,19 +40,33 @@
             <DataGrid.Columns>
 
                 <DataGridTextColumn Header="Gid" Binding="{Binding Gid}" IsReadOnly="True" CellStyle="{StaticResource AGridCell}"  FontSize="14" Width="100"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" CellStyle="{StaticResource AGridCell}"  FontSize="14" Width="200"/>
+
                 <DataGridTextColumn Header="Severity" Binding="{Binding Severity}" FontSize="14" CellStyle="{StaticResource AlarmGridCell}" Width="65" />
 
                 <DataGridTextColumn Header="Value" Binding="{Binding Value}" CellStyle="{StaticResource AGridCell}" FontSize="14" IsReadOnly="True" Width="100"/>
                 <DataGridTextColumn Header="TimeStamp" Binding="{Binding TimeStamp}" CellStyle="{StaticResource AGridCell}" FontSize="14" IsReadOnly="True" Width="160"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding Type}" CellStyle="{StaticResource AGridCell}" FontSize="14" Width="65" />
-                <DataGridTextColumn Header="State" Binding="{Binding CurrentState}" FontSize="14" Width="170" CellStyle="{StaticResource AlarmBlinkCell}"  >
+                <DataGridTextColumn Header="State" Binding="{Binding CurrentState}" FontSize="14" Width="170"  >
                     <!--<DataGridTextColumn.CellStyle>
                         <MultiBinding Converter="{StaticResource AckToColorConverter}" >
                             <Binding Path="CurrentState"/>
                             <Binding Path=""></Binding>
                         </MultiBinding>
                     </DataGridTextColumn.CellStyle>-->
-                    
+
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource AckToColorConverter}">
+                                        <Binding Path="CurrentState"/>
+                                        <Binding Path=""/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="MinValue" Binding="{Binding MinValue}" CellStyle="{StaticResource AGridCell}" FontSize="14" IsReadOnly="True" Width="100">
                     <!--<DataGridTextColumn.CellStyle>
@@ -119,9 +133,9 @@
             <ComboBoxItem Content="All Alarms"/>
             <ComboBoxItem Content="Type Alarm"/>
             <ComboBoxItem Content="Severity"/>
-            <ComboBoxItem Content="Name"/>
+            <!--<ComboBoxItem Content="Name"/>-->
         </ComboBox>
-        <ComboBox x:Name="ComboBox2" ItemsSource="{Binding Path=SourceCombo2}" SelectedItem="{Binding Path=Combo2}" HorizontalAlignment="Left" Margin="206,3,-1,0" VerticalAlignment="Top" Width="95" Height="22"  Grid.ColumnSpan="2" />
+        <ComboBox x:Name="ComboBox2" ItemsSource="{Binding Path=SourceCombo2}" Visibility="{Binding Combo2Visibility}" SelectedItem="{Binding Path=Combo2}" HorizontalAlignment="Left" Margin="206,3,-1,0" VerticalAlignment="Top" Width="95" Height="22"  Grid.ColumnSpan="2" />
 
     </Grid>
 </UserControl>

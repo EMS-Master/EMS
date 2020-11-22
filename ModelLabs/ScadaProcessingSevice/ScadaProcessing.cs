@@ -37,7 +37,7 @@ namespace ScadaProcessingSevice
 		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 20;
         private ConvertorHelper convertorHelper;
 		private static Dictionary<long, float> previousGeneratorDiscretes;
-		private static Dictionary<long, int> DiscretMaxVal;
+		private static Dictionary<Tuple<long, string>, int> DiscretMaxVal;
         private UpdateResult updateResult;
         private ITransactionCallback transactionCallback;
 
@@ -56,7 +56,7 @@ namespace ScadaProcessingSevice
             energyConsumerDiscretesCopy = new List<DiscreteLocation>();
 			generatorDscretes = new List<DiscreteLocation>();
 			generatorDscretesCopy = new List<DiscreteLocation>();
-            DiscretMaxVal = new Dictionary<long, int>();
+            DiscretMaxVal = new Dictionary<Tuple<long, string>, int>();
         }
         //data collected from simulator should be passed through 
         //scadaProcessing,from scada, to calculationEngine for optimization
@@ -96,7 +96,7 @@ namespace ScadaProcessingSevice
 			float windSpeed = GetWindSpeed(windData, 4);
             float sunlight = GetSunlight(sunData, 4);
 
-            LoadXMLFile();
+            //LoadXMLFile();
             
             CheckWhichAreTurnedOff(energyConsumerMeasUnits, energyConsumerMeasUnitsDiscrete);
             CheckWhichAreTurnedOff(generatorMeasUnits, generatorMeasUnitsDiscrete);
@@ -661,7 +661,7 @@ namespace ScadaProcessingSevice
                 bool alarmEGU = false;
                 if (type.Equals(ModelCode.GENERATOR))
                 {
-                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource);
+                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource, analogLoc.Analog.Name);
 
                     if (!alarmEGU)
                     {
@@ -681,6 +681,7 @@ namespace ScadaProcessingSevice
                         normalAlarm.AlarmType = AlarmType.NORMAL;
                         normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
                         normalAlarm.MinValue = analogLoc.Analog.MinValue;
+                     
                         //AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
                     }
                 }
@@ -718,25 +719,26 @@ namespace ScadaProcessingSevice
             }
             return retList;
 		}
-        private bool CheckDiscretAlarm (int value, float max, long gid)
+        private bool CheckDiscretAlarm (int value, float max, long gid, string name)
         {
             bool retVal = false;
-            AlarmHelper ah = new AlarmHelper(gid, value, -1, max, DateTime.Now);
+            AlarmHelper ah = new AlarmHelper(gid, value, 0, max, DateTime.Now);
             if (value > max)
             {
                 ah.Value = value;
                 ah.MaxValue = max;
                 ah.Type = AlarmType.DOM;
                 ah.Severity = SeverityLevel.HIGH;                
-                ah.Message = string.Format("Value on input discret signal: {0:X} higher than maximum expected value", gid);
+                ah.Message = string.Format("Value on input discret signal: {0} higher than maximum expected value", name);
+                ah.Name = name;
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);
-                Console.WriteLine("Alarm on high raw limit on gid: {0:X}", gid);
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on name: {0}", name);
+                Console.WriteLine("Alarm on high raw limit on name: {0}", name);
             }
             return retVal;
         }
-        private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid)
+        private bool CheckForEGUAlarms(float value, float minEgu, float maxEgu, long gid, string name)
         {
             bool retVal = false;
             AlarmHelper ah = new AlarmHelper(gid, value, minEgu, maxEgu, DateTime.Now);
@@ -756,11 +758,12 @@ namespace ScadaProcessingSevice
                     ah.Severity = SeverityLevel.LOW;
                 }
                 ah.TimeStamp = DateTime.Now;
-                ah.Message = string.Format("Value on input analog signal: {0:X} lower than minimum expected value", gid);
+                ah.Message = string.Format("Value on input analog signal: {0} lower than minimum expected value", name);
+                ah.Name = name;
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on low raw limit on gid: {0:X}", gid);
-                Console.WriteLine("Alarm on low raw limit on gid: {0:X}", gid);
+                Console.WriteLine("Alarm on low raw limit on gid: {0}", name);
             }
 
             if (value > maxEgu)
@@ -779,46 +782,50 @@ namespace ScadaProcessingSevice
                     ah.Severity = SeverityLevel.CRITICAL;
                 }
                 ah.TimeStamp = DateTime.Now;
-                ah.Message = string.Format("Value on input analog signal: {0:X} higher than maximum expected value", gid);
+                ah.Message = string.Format("Value on input analog signal: {0} higher than maximum expected value", name);
+                ah.Name = name;
+
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
                 retVal = true;
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0:X}", gid);
-                Console.WriteLine("Alarm on high raw limit on gid: {0:X}", gid);
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0}", name);
+                Console.WriteLine("Alarm on high raw limit on gid: {0}", name);
             }
 
             return retVal;
         }
-        private void LoadXMLFile()
-        {
-            try
-            {
-                string path = System.IO.Path.GetFullPath("..\\..\\..\\..\\");
 
-                XmlDocument doc = new XmlDocument();
-                doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");
+        //private void LoadXMLFile()
+        //{
+        //    try
+        //    {
+        //        string path = System.IO.Path.GetFullPath("..\\..\\..\\..\\");
 
-                XmlNodeList EnergyConsumerNode = doc.GetElementsByTagName("EnergyConsumer");
-                foreach (XmlNode item in EnergyConsumerNode)
-                {
-                    long gid = long.Parse(item["Gid"].InnerText);
-                    int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
-                    DiscretMaxVal[gid] = maxTurnOn;
-                }
-                XmlNodeList GeneratorStorageNode = doc.GetElementsByTagName("Generator");
-                foreach (XmlNode item in GeneratorStorageNode)
-                {
-                    long gid = long.Parse(item["Gid"].InnerText);
-                    int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
-                    DiscretMaxVal[gid] = maxTurnOn;
-                }
-            }
-            catch
-            {
-                var message1 = string.Format("Error reading xml file");
-                Console.WriteLine(message1);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message1);
-            }
-        }
+        //        XmlDocument doc = new XmlDocument();
+        //        doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");
+
+        //        //XmlNodeList EnergyConsumerNode = doc.GetElementsByTagName("EnergyConsumer");
+        //        //foreach (XmlNode item in EnergyConsumerNode)
+        //        //{
+        //        //    long gid = long.Parse(item["Gid"].InnerText);
+        //        //    int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
+        //        //    DiscretMaxVal[gid] = maxTurnOn;
+        //        //}
+        //        XmlNodeList GeneratorStorageNode = doc.GetElementsByTagName("Generator");
+        //        foreach (XmlNode item in GeneratorStorageNode)
+        //        {
+        //            string type = item["GeneratorType"].InnerText;
+        //            int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
+        //            DiscretMaxVal[type] = maxTurnOn;
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        var message1 = string.Format("Error reading xml file");
+        //        Console.WriteLine(message1);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceError, message1);
+        //    }
+        //}
+
         private List<MeasurementUnit> SelectActive(List<MeasurementUnit> analogs, List<MeasurementUnit> descretes)
         {
            List<MeasurementUnit> returnList = new List<MeasurementUnit>();
@@ -839,6 +846,7 @@ namespace ScadaProcessingSevice
             {
                 var des = descretes.Find(x => x.Gid == item.Gid);
                 var itemFromDb = dcFromDB.Find(x => x.Gid == item.Gid);
+
                 if (des.CurrentValue == 1)
                 {
                     if(itemFromDb != null)
@@ -852,9 +860,11 @@ namespace ScadaProcessingSevice
                 }
                 else if(des.CurrentValue == 0)
                 {
-                    if(itemFromDb == null)
+                    var obj = generatorDscretes.FirstOrDefault(x => x.Discrete.PowerSystemResource == item.Gid);
+                    string name = obj.Discrete.Name;
+                    if (itemFromDb == null)
                     {
-                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false });
+                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false, Name = name});
                     }
                     else
                     {
@@ -862,8 +872,9 @@ namespace ScadaProcessingSevice
                         {
                             itemFromDb.CurrentValue = false;
                             itemFromDb.Counter++;
-                            int maxVal = DiscretMaxVal.FirstOrDefault(x => x.Key == itemFromDb.Gid).Value;
-                            CheckDiscretAlarm(itemFromDb.Counter, maxVal, itemFromDb.Gid);
+                            DiscretMaxVal = CalculationEngineProxy.InstanceRepository.GetCounterForGeneratorType();
+                            int maxVal = DiscretMaxVal.FirstOrDefault(x => x.Key.Item1 == itemFromDb.Gid).Value;
+                            CheckDiscretAlarm(itemFromDb.Counter, maxVal, itemFromDb.Gid, name);
                             CalculationEngineProxy.InstanceRepository.InsertOrUpdate(itemFromDb);
                         }
                     }

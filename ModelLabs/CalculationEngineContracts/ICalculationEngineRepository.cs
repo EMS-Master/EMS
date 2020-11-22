@@ -17,5 +17,8 @@ namespace CalculationEngineContracts
         [OperationContract]
         void InsertOrUpdate(DiscreteCounterModel model);
 
+        [OperationContract]
+        Dictionary<Tuple<long, string>, int> GetCounterForGeneratorType();
+
     }
 }

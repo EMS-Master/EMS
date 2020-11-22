@@ -12,5 +12,6 @@ namespace CommonMeas
         public long Gid { get; set; }
         public bool CurrentValue { get; set; }
         public int Counter { get; set; }
+        public string Name { get; set; }
     }
 }

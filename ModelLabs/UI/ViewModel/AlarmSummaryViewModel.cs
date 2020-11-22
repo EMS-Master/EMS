@@ -22,6 +22,8 @@ namespace UI.ViewModel
     {
         private string combo1;
         private string combo2;
+        private Visibility combo2Visibility = Visibility.Hidden;
+        public Visibility Combo2Visibility { get { return combo2Visibility; } set { combo2Visibility = value; OnPropertyChanged(); } }
 
         private AlarmsEventsSubscribeProxy aeSubscribeProxy;
 
@@ -85,15 +87,28 @@ namespace UI.ViewModel
 
                 if (combo1.Contains("Type Alarm"))
                 {
-                    SourceCombo2 = new ObservableCollection<string>() { "NORMAL", "HIGH", "LOW", "DOM" };
+                    Combo2Visibility = Visibility.Visible;
+                    SourceCombo2 = new ObservableCollection<string>() { "NONE", "NORMAL", "HIGH", "LOW", "DOM", "ABNORMAL"};
                 }
                 else if (combo1.Contains("Severity"))
                 {
-                    SourceCombo2 = new ObservableCollection<string>() { "HIGH", "LOW", "MEDIUM" };
+                    Combo2Visibility = Visibility.Visible;
+
+                    SourceCombo2 = new ObservableCollection<string>() { "MINOR", "LOW", "MEDIUM", "MAJOR", "HIGH", "CRITICAL" };
                 }
                 else if (combo1.Contains("Name"))
                 {
 
+                }
+                else
+                {
+                    Combo2Visibility = Visibility.Hidden;
+
+                    SourceCombo2 = new ObservableCollection<string>();
+                    foreach (var item in AlarmSummaryQueue)
+                    {
+                        item.IsVisible = true;
+                    }
                 }
 
                 OnPropertyChanged("SourceCombo2");
@@ -148,6 +163,12 @@ namespace UI.ViewModel
         private void CallbackAction(object obj)
         {
             AlarmHelper alarm = obj as AlarmHelper;
+
+            if (alarm.Type != AlarmType.DOM)
+            {
+                alarm.MaxValue = alarm.MaxValue / 1000;
+                alarm.Value = alarm.Value / 1000;
+            }
 
             if (obj == null)
             {
@@ -212,6 +233,12 @@ namespace UI.ViewModel
                 {
                     App.Current.Dispatcher.Invoke((Action)delegate
                     {
+                        //if (alarm.Type != AlarmType.DOM)
+                        //{
+                        //    alarm.Value = alarm.Value / 1000;
+                        //    alarm.MaxValue = alarm.MaxValue / 1000;
+                        //}
+
                         AlarmSummaryQueue.Add(alarm);
                     });
                 }
@@ -252,7 +279,12 @@ namespace UI.ViewModel
             lock (alarmSummaryLock)
             {
                 foreach (AlarmHelper alarm in integirtyResult)
-                {                   
+                {
+                    //if (alarm.Type != AlarmType.DOM)
+                    //{
+                    //    alarm.MaxValue = alarm.MaxValue / 1000;
+                    //    alarm.Value = alarm.Value / 1000;
+                    //}
                     AlarmSummaryQueue.Add(alarm);
                    //aw.AlarmSummaryDataGrid.ItemsSource = AlarmSummaryQueue;
 
