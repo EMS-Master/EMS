@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetworkModelCloudService\NetworkModelCloudService.csproj" />
+    <ProjectReference Include="..\TransactionManagerCloudService\TransactionManagerCloudService.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>

@@ -55,7 +55,7 @@ namespace TransactionManagerService
                 // first transaction - send delta to NMS
                 try
                 {
-                    updateResult = TransactionNMSProxy.Instance.Prepare(ref delta);
+                    //updateResult = TransactionNMSProxy.Instance.Prepare(ref delta);
                 }
                 catch (Exception e)
                 {
@@ -80,7 +80,7 @@ namespace TransactionManagerService
                     {
                         try
                         {
-                            TransactionCEProxy.Instance.Prepare(ref ceDelta);
+                            //TransactionCEProxy.Instance.Prepare(ref ceDelta);
                         }
                         catch (Exception e)
                         {
@@ -94,8 +94,8 @@ namespace TransactionManagerService
                     {
                         try
                         {
-                            TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
-                            TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
+                           // TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
+                           // TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
                         }
                         catch (Exception e)
                         {
@@ -111,8 +111,8 @@ namespace TransactionManagerService
                     // second transaction - send ceDelta to CE, analogDelta to SCADA
                     try
                     {
-                        TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
-                        TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
+                      //  TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
+                       // TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
                     }
                     catch (Exception e)
                     {
@@ -126,9 +126,9 @@ namespace TransactionManagerService
                 {
                     try
                     {
-                        TransactionCEProxy.Instance.Prepare(ref ceDelta);
-                        TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
-                        TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
+                        //TransactionCEProxy.Instance.Prepare(ref ceDelta);
+                        //TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
+                        //TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
                     }
                     catch (Exception e)
                     {
@@ -144,10 +144,10 @@ namespace TransactionManagerService
                 // ako se neki exception desio prilikom transakcije - radi rollback
                 CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction failed; Message: {0}", e.Message);
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Start Rollback!");
-                TransactionNMSProxy.Instance.Rollback();
-                TransactionScadaPRProxy.Instance.Rollback();
-                TransactionScadaCDProxy.Instance.Rollback();
-                TransactionCEProxy.Instance.Rollback();
+                //TransactionNMSProxy.Instance.Rollback();
+                //TransactionScadaPRProxy.Instance.Rollback();
+                //TransactionScadaCDProxy.Instance.Rollback();
+                //TransactionCEProxy.Instance.Rollback();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback finished!");
             }
             Thread.Sleep(5000);
@@ -211,11 +211,11 @@ namespace TransactionManagerService
                     commitResultScadaCR = false;
                     commitResultScadaCMD = false;
                     commitResultCE = false;
-                    commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
-                    commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
+                    //commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
+                    //commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
                     commitResultSCADA = commitResultScadaCMD && commitResultScadaCR;
 
-                    commitResultCE = TransactionCEProxy.Instance.Commit();
+                    //commitResultCE = TransactionCEProxy.Instance.Commit();
 
                     if (!commitResultScadaCR)
                     {
@@ -245,7 +245,7 @@ namespace TransactionManagerService
                 else if (toRespond == 2)
                 {
                     commitResultCE = false;
-                    commitResultCE = TransactionCEProxy.Instance.Commit();
+                   // commitResultCE = TransactionCEProxy.Instance.Commit();
 
                     if (!commitResultCE)
                     {
@@ -260,8 +260,8 @@ namespace TransactionManagerService
                 {
                     commitResultScadaCR = false;
                     commitResultScadaCMD = false;
-                    commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
-                    commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
+                    //commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
+                    //commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
 
                     if (!commitResultScadaCR)
                     {
@@ -288,7 +288,7 @@ namespace TransactionManagerService
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Starting Rollback phase ... ");
                 try
                 {
-                    TransactionNMSProxy.Instance.Rollback();
+                    //TransactionNMSProxy.Instance.Rollback();
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for NMS successfully finished.");
                 }
                 catch (Exception exc)
@@ -297,7 +297,7 @@ namespace TransactionManagerService
                 }
                 try
                 {
-                    TransactionScadaPRProxy.Instance.Rollback();
+                    //TransactionScadaPRProxy.Instance.Rollback();
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA Processing successfully finished.");
                 }
                 catch (Exception exc)
@@ -306,7 +306,7 @@ namespace TransactionManagerService
                 }
                 try
                 {
-                    TransactionScadaCDProxy.Instance.Rollback();
+                    //TransactionScadaCDProxy.Instance.Rollback();
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for SCADA Commanding successfully finished.");
                 }
                 catch (Exception exc)
@@ -315,7 +315,7 @@ namespace TransactionManagerService
                 }
                 try
                 {
-                    TransactionCEProxy.Instance.Rollback();
+                   // TransactionCEProxy.Instance.Rollback();
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback for CE successfully finished.");
                 }
                 catch (Exception exc)
@@ -327,7 +327,7 @@ namespace TransactionManagerService
             if (commitResultCE && commitResultSCADA)
             {
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Commit phase for all services succeeded. Starting commit for NMS!");
-                commitResultNMS = TransactionNMSProxy.Instance.Commit();
+                //commitResultNMS = TransactionNMSProxy.Instance.Commit();
             }
 
             if (commitResultNMS && commitResultSCADA && commitResultCE)

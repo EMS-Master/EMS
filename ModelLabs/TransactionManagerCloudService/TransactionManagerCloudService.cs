@@ -6,30 +6,24 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using CloudCommon;
-using FTN.ServiceContracts;
-using FTN.Services.NetworkModelService;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using TransactionContract;
+using TransactionManagerService;
 
-namespace NetworkModelCloudService
+namespace TransactionManagerCloudService
 {
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class NetworkModelCloudService : StatelessService
+    internal sealed class TransactionManagerCloudService : StatelessService
     {
-        private NetworkModel nm = null;
-        private GenericDataAccess gda = null;
-
-        public NetworkModelCloudService(StatelessServiceContext context)
+        private TransactionManager transactionManager = null;
+        public TransactionManagerCloudService(StatelessServiceContext context)
             : base(context)
         {
-            gda = new GenericDataAccess();
-            nm = new NetworkModel();
-            GenericDataAccess.NetworkModel = nm;
-            ResourceIterator.NetworkModel = nm;
+            transactionManager = new TransactionManager();
         }
 
         /// <summary>
@@ -40,11 +34,19 @@ namespace NetworkModelCloudService
         {
             return new List<ServiceInstanceListener>
             {
-                new ServiceInstanceListener(context=>this.CreateNetworkModelGDAListener(context), "NetworkModelGDAEndpoint"),
-                new ServiceInstanceListener(context=>this.CreateNMSTransactionListener(context), "NMSTranscationEndpoint")
+                new ServiceInstanceListener(context => this.CreateTransactionManagerListener(context), "TransactionManagerEndpoint"),
             };
         }
-
+        private ICommunicationListener CreateTransactionManagerListener(StatelessServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<IImporterContract>(
+                    listenerBinding: Binding.CreateCustomNetTcp(),
+                    address: new EndpointAddress("net.tcp://localhost:50000/TransactionManagerCloudService/Importer"),
+                    serviceContext: context,
+                    wcfServiceObject: new TransactionManager()
+                );
+            return listener;
+        }
         /// <summary>
         /// This is the main entry point for your service instance.
         /// </summary>
@@ -64,29 +66,6 @@ namespace NetworkModelCloudService
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
-        }
-        private ICommunicationListener CreateNetworkModelGDAListener(StatelessServiceContext context)
-        {
-            var listener = new WcfCommunicationListener<INetworkModelGDAContract>(
-                listenerBinding: Binding.CreateCustomNetTcp(),
-                address: new EndpointAddress("net.tcp://localhost:10000/NetworkModelCloudService/"),
-                serviceContext: context,
-                wcfServiceObject: gda
-            );
-
-            return listener;
-        }
-       
-        private ICommunicationListener CreateNMSTransactionListener(StatelessServiceContext context)
-        {
-            var listener = new WcfCommunicationListener<ITransactionContract>(
-                listenerBinding: Binding.CreateCustomNetTcp(),
-                endpointResourceName: "NMSTranscationEndpoint",
-                serviceContext: context,
-                wcfServiceObject: nm
-            );
-
-            return listener;
         }
     }
 }

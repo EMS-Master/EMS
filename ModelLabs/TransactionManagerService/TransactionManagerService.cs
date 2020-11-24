@@ -100,17 +100,17 @@ namespace TransactionManagerService
 
         public void ScadaCRPrepare(ref Delta analogDelta)
         {
-            TransactionScadaPRProxy.Instance.Prepare(ref analogDelta);
+            //TransactionScadaPRProxy.Instance.Prepare(ref analogDelta);
         }
 
         public void ScadaCMDPrepare(Delta analogDelta)
         {
-            TransactionScadaCDProxy.Instance.Prepare(ref analogDelta);
+           // TransactionScadaCDProxy.Instance.Prepare(ref analogDelta);
         }
 
         public void NMSPrepare(Delta delta)
         {
-            TransactionNMSProxy.Instance.Prepare(ref delta);
+           // TransactionNMSProxy.Instance.Prepare(ref delta);
         }
 
     }
