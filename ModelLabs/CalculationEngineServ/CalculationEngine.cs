@@ -257,7 +257,8 @@ namespace CalculationEngineServ
 				CalculateTotalCostWhenNecessaryEnergyIsZero(commandedValues);
 			}
 			
-			reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
+			//reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
+			reductionCO2 = CalculateCO2ReductionWithBiggestCoeficient(renewableGenerators);
 			renewableContributionPrct = (renewableConributionKW * 100) / powerOfConsumers;
 			totalCost = isNecessaryEnergyZero ? totalCost : gaoRenewable.TotalCost;
 			currentEmissionCO2 = CalculateCO2(optModelMap);
@@ -920,7 +921,15 @@ namespace CalculationEngineServ
 			return optModelMap.Values.Sum(x => (x.GenericOptimizedValue/1000f) * kyotoCoefficient);
 		}
 
-		public float GetProfit(Dictionary<long, OptimisationModel> allGenerators)
+        public static float CalculateCO2ReductionWithBiggestCoeficient(Dictionary<long, OptimisationModel> optModelMap)
+        {
+            //CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
+            float reductionCO2 = optModelMap.Values.Sum(x => (x.GenericOptimizedValue)) *0.30f * 0.001f;
+
+            return reductionCO2;
+        }
+
+        public float GetProfit(Dictionary<long, OptimisationModel> allGenerators)
 		{
 			float profitValue = 0;
 			Dictionary<GeneratorType, float> maxPowerPerFuel = new Dictionary<GeneratorType, float>();

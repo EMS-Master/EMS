@@ -329,11 +329,11 @@ namespace DataSimulator
                 mdbClient.WriteSingleRegister(56, wind[4]);
                 mdbClient.WriteSingleRegister(58, wind[5]);
 
-				mdbClient.WriteSingleCoil(25, !isWindGenTurnedOff);
-				mdbClient.WriteSingleCoil(26, !isWindGenTurnedOff);
-				mdbClient.WriteSingleCoil(27, !isWindGenTurnedOff);
-				mdbClient.WriteSingleCoil(28, !isWindGenTurnedOff);
-				mdbClient.WriteSingleCoil(29, !isWindGenTurnedOff);
+				//mdbClient.WriteSingleCoil(25, !isWindGenTurnedOff);
+				//mdbClient.WriteSingleCoil(26, !isWindGenTurnedOff);
+				//mdbClient.WriteSingleCoil(27, !isWindGenTurnedOff);
+				//mdbClient.WriteSingleCoil(28, !isWindGenTurnedOff);
+				//mdbClient.WriteSingleCoil(29, !isWindGenTurnedOff);
 
 				mdbClient.WriteSingleRegister(60, hydro[0]);
                 mdbClient.WriteSingleRegister(62, hydro[1]);
