@@ -19,25 +19,22 @@ using TransactionContract;
 
 namespace ScadaProcessingSevice
 {
-	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
-	public class ScadaProcessing : IScadaProcessingContract, ITransactionContract
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Reentrant)]
+    public class ScadaProcessing : IScadaProcessingContract, ITransactionContract
     {
-       
+
         private ModelResourcesDesc modelResourcesDesc;
-        private NetworkModelGDAProxy gdaQueryProxy = null;
         private static List<AnalogLocation> energyConsumerAnalogs;
         private static List<AnalogLocation> energyConsumerAnalogsCopy;
         private static List<AnalogLocation> generatorAnalogs;
         private static List<AnalogLocation> generatorAnalogsCopy;
-		private static List<DiscreteLocation> energyConsumerDiscretes;
-		private static List<DiscreteLocation> energyConsumerDiscretesCopy;
-		private static List<DiscreteLocation> generatorDscretes;
-		private static List<DiscreteLocation> generatorDscretesCopy;
-		private readonly int START_ADDRESS_GENERATOR = 40;
-		private readonly int START_ADDRESS_GENERATOR_DISCRETE = 20;
+        private static List<DiscreteLocation> energyConsumerDiscretes;
+        private static List<DiscreteLocation> energyConsumerDiscretesCopy;
+        private static List<DiscreteLocation> generatorDscretes;
+        private static List<DiscreteLocation> generatorDscretesCopy;
         private ConvertorHelper convertorHelper;
-		private static Dictionary<long, float> previousGeneratorDiscretes;
-		private static Dictionary<Tuple<long, string>, int> DiscretMaxVal;
+        //private static Dictionary<long, float> previousGeneratorDiscretes;
+        private static Dictionary<Tuple<long, string>, int> DiscretMaxVal;
         private UpdateResult updateResult;
         private ITransactionCallback transactionCallback;
 
@@ -51,11 +48,11 @@ namespace ScadaProcessingSevice
             energyConsumerAnalogs = new List<AnalogLocation>();
             energyConsumerAnalogsCopy = new List<AnalogLocation>();
             modelResourcesDesc = new ModelResourcesDesc();
-			previousGeneratorDiscretes = new Dictionary<long, float>(10);
+            //previousGeneratorDiscretes = new Dictionary<long, float>(10);
             energyConsumerDiscretes = new List<DiscreteLocation>();
             energyConsumerDiscretesCopy = new List<DiscreteLocation>();
-			generatorDscretes = new List<DiscreteLocation>();
-			generatorDscretesCopy = new List<DiscreteLocation>();
+            generatorDscretes = new List<DiscreteLocation>();
+            generatorDscretesCopy = new List<DiscreteLocation>();
             DiscretMaxVal = new Dictionary<Tuple<long, string>, int>();
         }
         //data collected from simulator should be passed through 
@@ -65,39 +62,39 @@ namespace ScadaProcessingSevice
             string function = Enum.GetName(typeof(FunctionCode), value[0]);
             Console.WriteLine("Function executed: {0}", function);
 
-			
-			int arrayLength = value[1];
+
+            int arrayLength = value[1];
             byte[] data = new byte[arrayLength];
             byte[] windData = new byte[4];
             byte[] sunData = new byte[4];
 
             Console.WriteLine("Byte count: {0}", arrayLength);
 
-			Array.Copy(value, 2, data, 0, arrayLength);
+            Array.Copy(value, 2, data, 0, arrayLength);
             Array.Copy(valuesWindSun, 2, windData, 0, 4);
             Array.Copy(valuesWindSun, 6, sunData, 0, 4);
 
             List<MeasurementUnit> energyConsumerMeasUnits = ParseDataToMeasurementUnit(energyConsumerAnalogs, data, 0, ModelCode.ENERGY_CONSUMER);
-            
+
             List<MeasurementUnit> generatorMeasUnits = ParseDataToMeasurementUnit(generatorAnalogs, data, 0, ModelCode.GENERATOR);
 
-			List<MeasurementUnit> energyConsumerMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(energyConsumerDiscretes, valuesDiscrete, 0, ModelCode.ENERGY_CONSUMER);
+            List<MeasurementUnit> energyConsumerMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(energyConsumerDiscretes, valuesDiscrete, 0, ModelCode.ENERGY_CONSUMER);
 
-			List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
+            List<MeasurementUnit> generatorMeasUnitsDiscrete = ParseDataToMeasurementUnitdiscrete(generatorDscretes, valuesDiscrete, 0, ModelCode.GENERATOR);
 
             List<MeasurementUnit> energyConsumerActive = SelectActive(energyConsumerMeasUnits, energyConsumerMeasUnitsDiscrete);
-			List<float> sumOfConsumers = energyConsumerMeasUnits.Select(x => x.CurrentValue).ToList();
-			float sss = sumOfConsumers.Sum();
+            List<float> sumOfConsumers = energyConsumerMeasUnits.Select(x => x.CurrentValue).ToList();
+            float sss = sumOfConsumers.Sum();
 
-			List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
-			List<float> sumOfGen = generatorMeasUnits.Select(x => x.CurrentValue).ToList();
-			float sssGen = sumOfGen.Sum();
+            List<MeasurementUnit> generatorsActive = SelectActive(generatorMeasUnits, generatorMeasUnitsDiscrete);
+            List<float> sumOfGen = generatorMeasUnits.Select(x => x.CurrentValue).ToList();
+            float sssGen = sumOfGen.Sum();
 
-			float windSpeed = GetWindSpeed(windData, 4);
+            float windSpeed = GetWindSpeed(windData, 4);
             float sunlight = GetSunlight(sunData, 4);
 
             //LoadXMLFile();
-            
+
             CheckWhichAreTurnedOff(energyConsumerMeasUnits, energyConsumerMeasUnitsDiscrete);
             CheckWhichAreTurnedOff(generatorMeasUnits, generatorMeasUnitsDiscrete);
 
@@ -120,7 +117,7 @@ namespace ScadaProcessingSevice
 
             return isSuccess;
         }
-        
+
 
         public bool InitiateIntegrityUpdate()
         {
@@ -128,7 +125,7 @@ namespace ScadaProcessingSevice
             List<ModelCode> propertiesDiscrete = new List<ModelCode>(10);
             ModelCode modelCode = ModelCode.ANALOG;
             ModelCode modelCodeDiscrete = ModelCode.DISCRETE;
-            
+
             int resourcesLeft = 0;
             int numberOfResources = 2;
 
@@ -137,9 +134,9 @@ namespace ScadaProcessingSevice
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
-				propertiesDiscrete = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
+                propertiesDiscrete = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
 
-				var iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
+                var iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
                 resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
@@ -150,17 +147,17 @@ namespace ScadaProcessingSevice
                 }
                 NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
 
-				var iteratorIdDiscrete = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
-				resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                var iteratorIdDiscrete = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
+                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
 
-				while (resourcesLeft > 0)
-				{
-					List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorIdDiscrete);
-					retListDiscrete.AddRange(rds);
-					resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
-				}
-				NetworkModelGDAProxy.Instance.IteratorClose(iteratorIdDiscrete);
-			}
+                while (resourcesLeft > 0)
+                {
+                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorIdDiscrete);
+                    retListDiscrete.AddRange(rds);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                }
+                NetworkModelGDAProxy.Instance.IteratorClose(iteratorIdDiscrete);
+            }
             catch (Exception e)
             {
 
@@ -199,34 +196,34 @@ namespace ScadaProcessingSevice
                     }
                 }
 
-				foreach (ResourceDescription rd in retListDiscrete)
-				{
-					Discrete discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
+                foreach (ResourceDescription rd in retListDiscrete)
+                {
+                    Discrete discrete = ResourcesDescriptionConverter.ConvertTo<Discrete>(rd);
 
-					if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
-					{
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(discrete.PowerSystemResource) == DMSType.ENERGY_CONSUMER)
+                    {
                         energyConsumerDiscretes.Add(new DiscreteLocation()
-						{
-							Discrete = discrete,
-							StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
-							Length = 1,
-							LengthInBytes = 2
-						});
-					}
-					else
-					{
-						generatorDscretes.Add(new DiscreteLocation()
-						{
-							Discrete = discrete,
-							StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
-							Length = 1,
-							LengthInBytes = 2
-						});
-					}
-				}
+                        {
+                            Discrete = discrete,
+                            StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
+                            Length = 1,
+                            LengthInBytes = 2
+                        });
+                    }
+                    else
+                    {
+                        generatorDscretes.Add(new DiscreteLocation()
+                        {
+                            Discrete = discrete,
+                            StartAddress = Int32.Parse(discrete.ScadaAddress.Split('_')[1]),
+                            Length = 1,
+                            LengthInBytes = 2
+                        });
+                    }
+                }
 
 
-			}
+            }
             catch (Exception e)
             {
                 var message1 = string.Format("Conversion to Analog object failed.\n\t{0}", e.Message);
@@ -240,19 +237,19 @@ namespace ScadaProcessingSevice
             Console.WriteLine("Integrity update: Number of {0} values: {1}", modelCode.ToString(), retList.Count.ToString());
 
             Console.WriteLine("EnergyConsumer:");
-            foreach(AnalogLocation al in energyConsumerAnalogs)
+            foreach (AnalogLocation al in energyConsumerAnalogs)
             {
                 Console.WriteLine(al.Analog.Mrid + " " + al.Analog.NormalValue);
-				var dic = energyConsumerDiscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
-				Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
+                var dic = energyConsumerDiscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
+                Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
             }
             Console.WriteLine("Generator:");
             foreach (AnalogLocation al in generatorAnalogs)
             {
                 Console.WriteLine(al.Analog.Mrid + " " + al.Analog.NormalValue);
-				var dic = generatorDscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
-				Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
-			}
+                var dic = generatorDscretes.Find(x => x.Discrete.PowerSystemResource == al.Analog.PowerSystemResource);
+                Console.WriteLine(dic.Discrete.Mrid + " " + dic.Discrete.NormalValue);
+            }
 
             return true;
         }
@@ -294,7 +291,7 @@ namespace ScadaProcessingSevice
                 foreach (ResourceDescription rd in delta.InsertOperations)
                 {
 
-                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id)==(DMSType.ANALOG))
+                    if ((DMSType)ModelCodeHelper.ExtractTypeFromGlobalId(rd.Id) == (DMSType.ANALOG))
                     {
                         foreach (Property prop in rd.Properties)
                         {
@@ -352,7 +349,7 @@ namespace ScadaProcessingSevice
                             break;
                         }
                     }
-                    
+
                 }
 
                 foreach (ResourceDescription rd in delta.UpdateOperations)
@@ -565,9 +562,9 @@ namespace ScadaProcessingSevice
                             }
                         }
                     }
-                    
+
                 }
-                
+
                 updateResult.Message = "SCADA PR Transaction Prepare finished.";
                 updateResult.Result = ResultType.Succeeded;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PR Transaction Prepare finished successfully.");
@@ -617,8 +614,8 @@ namespace ScadaProcessingSevice
                 generatorDscretesCopy.Clear();
                 energyConsumerDiscretesCopy.Clear();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PR Transaction: Commit phase successfully finished.");
-               
-                
+
+
                 return true;
             }
             catch (Exception e)
@@ -646,80 +643,93 @@ namespace ScadaProcessingSevice
             }
         }
 
-		private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
-		{
-            float sumSum = 0;
-			List<MeasurementUnit> retList = new List<MeasurementUnit>();
+        private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
+        {
+            List<MeasurementUnit> retList = new List<MeasurementUnit>();
             foreach (AnalogLocation analogLoc in analogList)
             {
                 float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
-                Console.WriteLine("Broj: {0}", values[0]);
-                sumSum += values[0];
-                float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
-                float MAX = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MaxValue, 1, 1);
-                float MIN = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MinValue, 1, 1);
-                bool alarmEGU = false;
-                if (type.Equals(ModelCode.GENERATOR))
+
+                if (values == null)
                 {
-                    alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource, analogLoc.Analog.Name);
-
-                    if (!alarmEGU)
-                    {
-                        AlarmHelper al = new AlarmHelper();
-                        al.Gid = analogLoc.Analog.PowerSystemResource;
-                        al.Value = eguVal;
-                        AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
-
-                        Alarm normalAlarm = new Alarm();
-                        normalAlarm.AckState = AckState.Unacknowledged;
-                        normalAlarm.CurrentState = string.Format("{0}", State.Active);
-                        normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
-                        normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
-                        normalAlarm.AlarmTimeStamp = DateTime.Now;
-                        normalAlarm.Severity = SeverityLevel.NORMAL;
-                        normalAlarm.AlarmValue = eguVal;
-                        normalAlarm.AlarmType = AlarmType.NORMAL;
-                        normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
-                        normalAlarm.MinValue = analogLoc.Analog.MinValue;
-                     
-                        //AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
-                    }
+                    MeasurementUnit measUnit1 = new MeasurementUnit();
+                    measUnit1.Gid = analogLoc.Analog.PowerSystemResource;
+                    measUnit1.MinValue = analogLoc.Analog.MinValue;
+                    measUnit1.MaxValue = analogLoc.Analog.MaxValue;
+                    measUnit1.CurrentValue = 0;
+                    measUnit1.TimeStamp = DateTime.Now;
+                    measUnit1.ScadaAddress = analogLoc.StartAddress;
+                    retList.Add(measUnit1);
                 }
+                else
+                {
+                    float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
+                    float MAX = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MaxValue, 1, 1);
+                    float MIN = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MinValue, 1, 1);
+                    bool alarmEGU = false;
 
+                    if (type.Equals(ModelCode.GENERATOR))
+                    {
+                        alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource, analogLoc.Analog.Name);
+
+                        if (!alarmEGU)
+                        {
+                            AlarmHelper al = new AlarmHelper();
+                            al.Gid = analogLoc.Analog.PowerSystemResource;
+                            al.Value = eguVal;
+                            AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
+
+                            Alarm normalAlarm = new Alarm();
+                            normalAlarm.AckState = AckState.Unacknowledged;
+                            normalAlarm.CurrentState = string.Format("{0}", State.Active);
+                            normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
+                            normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
+                            normalAlarm.AlarmTimeStamp = DateTime.Now;
+                            normalAlarm.Severity = SeverityLevel.NORMAL;
+                            normalAlarm.AlarmValue = eguVal;
+                            normalAlarm.AlarmType = AlarmType.NORMAL;
+                            normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
+                            normalAlarm.MinValue = analogLoc.Analog.MinValue;
+
+                            //AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
+                        }
+                    }
+
+                    MeasurementUnit measUnit = new MeasurementUnit();
+                    measUnit.Gid = analogLoc.Analog.PowerSystemResource;
+                    measUnit.MinValue = analogLoc.Analog.MinValue;
+                    measUnit.MaxValue = analogLoc.Analog.MaxValue;
+                    measUnit.CurrentValue = eguVal;
+                    measUnit.TimeStamp = DateTime.Now;
+                    measUnit.ScadaAddress = analogLoc.StartAddress;
+                    retList.Add(measUnit);
+                }
+            }
+
+            return retList;
+        }
+
+
+        private List<MeasurementUnit> ParseDataToMeasurementUnitdiscrete(List<DiscreteLocation> discreteList, bool[] value, int startAddress, ModelCode type)
+        {
+            List<MeasurementUnit> retList = new List<MeasurementUnit>();
+            foreach (DiscreteLocation discreteLoc in discreteList)
+            {
                 MeasurementUnit measUnit = new MeasurementUnit();
-				measUnit.Gid = analogLoc.Analog.PowerSystemResource;
-				measUnit.MinValue = analogLoc.Analog.MinValue;
-				measUnit.MaxValue = analogLoc.Analog.MaxValue;
-				measUnit.CurrentValue = eguVal;
-				measUnit.TimeStamp = DateTime.Now;
-                measUnit.ScadaAddress = analogLoc.StartAddress;
-				retList.Add(measUnit);
-				
-			}
-            Console.WriteLine("Rez: " + sumSum);
-			return retList;
-		}
-
-
-		private List<MeasurementUnit> ParseDataToMeasurementUnitdiscrete(List<DiscreteLocation> discreteList, bool[] value, int startAddress, ModelCode type)
-		{
-			List<MeasurementUnit> retList = new List<MeasurementUnit>();
-			foreach (DiscreteLocation discreteLoc in discreteList)
-			{
-				MeasurementUnit measUnit = new MeasurementUnit();
                 measUnit.Gid = discreteLoc.Discrete.PowerSystemResource;
                 measUnit.MinValue = discreteLoc.Discrete.MinValue;
-                measUnit.MaxValue = discreteLoc.Discrete.MaxValue;;
-                measUnit.CurrentValue = value[discreteLoc.StartAddress - 1] ? 1 : 0;
-				measUnit.TimeStamp = DateTime.Now;
+                measUnit.MaxValue = discreteLoc.Discrete.MaxValue; ;
+                measUnit.CurrentValue = value.Length < discreteLoc.StartAddress ? 0 : (value[discreteLoc.StartAddress - 1] ? 1 : 0);
+                measUnit.TimeStamp = DateTime.Now;
                 measUnit.ScadaAddress = discreteLoc.StartAddress;
-				retList.Add(measUnit);
+                retList.Add(measUnit);
 
-            previousGeneratorDiscretes[discreteLoc.Discrete.GlobalId] = measUnit.CurrentValue;
+                //previousGeneratorDiscretes[discreteLoc.Discrete.GlobalId] = measUnit.CurrentValue;
             }
             return retList;
-		}
-        private bool CheckDiscretAlarm (int value, float max, long gid, string name)
+        }
+
+        private bool CheckDiscretAlarm(int value, float max, long gid, string name)
         {
             bool retVal = false;
             AlarmHelper ah = new AlarmHelper(gid, value, 0, max, DateTime.Now);
@@ -728,7 +738,7 @@ namespace ScadaProcessingSevice
                 ah.Value = value;
                 ah.MaxValue = max;
                 ah.Type = AlarmType.DOM;
-                ah.Severity = SeverityLevel.HIGH;                
+                ah.Severity = SeverityLevel.HIGH;
                 ah.Message = string.Format("Value on input discret signal: {0} higher than maximum expected value", name);
                 ah.Name = name;
                 AlarmsEventsProxy.Instance.AddAlarm(ah);
@@ -794,48 +804,16 @@ namespace ScadaProcessingSevice
             return retVal;
         }
 
-        //private void LoadXMLFile()
-        //{
-        //    try
-        //    {
-        //        string path = System.IO.Path.GetFullPath("..\\..\\..\\..\\");
-
-        //        XmlDocument doc = new XmlDocument();
-        //        doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");
-
-        //        //XmlNodeList EnergyConsumerNode = doc.GetElementsByTagName("EnergyConsumer");
-        //        //foreach (XmlNode item in EnergyConsumerNode)
-        //        //{
-        //        //    long gid = long.Parse(item["Gid"].InnerText);
-        //        //    int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
-        //        //    DiscretMaxVal[gid] = maxTurnOn;
-        //        //}
-        //        XmlNodeList GeneratorStorageNode = doc.GetElementsByTagName("Generator");
-        //        foreach (XmlNode item in GeneratorStorageNode)
-        //        {
-        //            string type = item["GeneratorType"].InnerText;
-        //            int maxTurnOn = int.Parse(item["MaxVal"].InnerText);
-        //            DiscretMaxVal[type] = maxTurnOn;
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        var message1 = string.Format("Error reading xml file");
-        //        Console.WriteLine(message1);
-        //        CommonTrace.WriteTrace(CommonTrace.TraceError, message1);
-        //    }
-        //}
-
         private List<MeasurementUnit> SelectActive(List<MeasurementUnit> analogs, List<MeasurementUnit> descretes)
         {
-           List<MeasurementUnit> returnList = new List<MeasurementUnit>();
+            List<MeasurementUnit> returnList = new List<MeasurementUnit>();
 
-           foreach(var item in analogs)
-           {
+            foreach (var item in analogs)
+            {
                 var des = descretes.Find(x => x.Gid == item.Gid);
                 if (des.CurrentValue == 1)
                     returnList.Add(item);
-           }
+            }
             return returnList;
         }
 
@@ -849,22 +827,22 @@ namespace ScadaProcessingSevice
 
                 if (des.CurrentValue == 1)
                 {
-                    if(itemFromDb != null)
+                    if (itemFromDb != null)
                     {
-                        if(itemFromDb.CurrentValue == false)
+                        if (itemFromDb.CurrentValue == false)
                         {
                             itemFromDb.CurrentValue = true;
                             CalculationEngineProxy.InstanceRepository.InsertOrUpdate(itemFromDb);
                         }
                     }
                 }
-                else if(des.CurrentValue == 0)
+                else if (des.CurrentValue == 0)
                 {
                     var obj = generatorDscretes.FirstOrDefault(x => x.Discrete.PowerSystemResource == item.Gid);
                     string name = obj.Discrete.Name;
                     if (itemFromDb == null)
                     {
-                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false, Name = name});
+                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false, Name = name });
                     }
                     else
                     {

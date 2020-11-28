@@ -192,9 +192,13 @@
             <CheckBox Foreground="Black" Margin="1,0,0,2" >
 
                 <CheckBox.Content>
-                    <MultiBinding Converter="{StaticResource GidToMridConverter}">
+                    <!--<MultiBinding Converter="{StaticResource GidToMridConverter}">
                         <Binding Path="Key"></Binding>
                         <Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
+                    </MultiBinding>-->
+                    <MultiBinding Converter="{StaticResource LastNameShowConverter}" >
+                        <Binding Path="Value"/>
+                        <Binding Path="Value[0].CurrentValue"></Binding>
                     </MultiBinding>
                 </CheckBox.Content>
 
@@ -493,7 +497,9 @@
 
                         <Grid Grid.Column="0"   >
 
-							<MetroChart:PieChart Width="250" Palette="{StaticResource CustomColors2}"  HorizontalAlignment="Center" ChartTitle="CO2 [t]" ChartSubTitle="Reduction vs Emission"   Foreground="Black" FontSize="12"  >
+
+                            <MetroChart:PieChart Width="250" Palette="{StaticResource CustomColors2}"  ChartTitle="CO2" ChartSubTitle="Reduction vs Emission [t]"   Foreground="Black" FontSize="12"  >
+
                                 <MetroChart:PieChart.Series>
                                     <MetroChart:ChartSeries
                                                 Background="Orange"
@@ -515,7 +521,9 @@
                                         </Grid.OpacityMask>     
                                         <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>-->
 
-							<MetroChart:PieChart Palette="{StaticResource CustomColors1}"   HorizontalAlignment="Center" Width="250" ChartTitle="CO2 [$] " ChartSubTitle="Cost vs Profit"   Foreground="Black" FontSize="12"  >
+
+                            <MetroChart:PieChart Palette="{StaticResource CustomColors1}" Width="250" ChartTitle="Production" ChartSubTitle="Cost vs Profit [$]"   Foreground="Black" FontSize="12"  >
+
                                         <MetroChart:PieChart.Series>
                                             <MetroChart:ChartSeries
                                                 Background="#e0e0e0"

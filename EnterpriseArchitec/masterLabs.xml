@@ -217,6 +217,16 @@
 		<cim:IdentifiedObject.mRID>Generator_20</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>TE Kolubara B</cim:IdentifiedObject.name>
 	</cim:Generator>
+	<cim:Generator rdf:ID="Generator_21">
+		<cim:Generator.generatorType>coal</cim:Generator.generatorType>
+		<cim:Generator.maxQ>1000000</cim:Generator.maxQ>
+		<cim:Generator.minQ>0</cim:Generator.minQ>
+		<cim:RotatingMachine.ratedS>310 </cim:RotatingMachine.ratedS>
+		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
+		<cim:IdentifiedObject.aliasName>Generator_21</cim:IdentifiedObject.aliasName>
+		<cim:IdentifiedObject.mRID>Generator_21</cim:IdentifiedObject.mRID>
+		<cim:IdentifiedObject.name>TE Kolubara B1</cim:IdentifiedObject.name>
+	</cim:Generator>
 	<cim:EnergyConsumer rdf:ID="EnergyConsumer_1">
 		<cim:EnergyConsumer.currentPower>21</cim:EnergyConsumer.currentPower>
 		<cim:EnergyConsumer.pfixed>5</cim:EnergyConsumer.pfixed>
@@ -857,6 +867,18 @@
 		<cim:IdentifiedObject.mRID>Analog_40</cim:IdentifiedObject.mRID>
 		<cim:IdentifiedObject.name>TE Kolubara B analog</cim:IdentifiedObject.name>
 	</cim:Analog>
+	<cim:Analog rdf:ID="Analog_41">
+		<cim:Analog.maxValue>800000</cim:Analog.maxValue>
+		<cim:Analog.minValue>10000</cim:Analog.minValue>
+		<cim:Analog.normalValue>80</cim:Analog.normalValue>
+		<cim:Measurement.direction>readWrite</cim:Measurement.direction>
+		<cim:Measurement.measurementType>activePower</cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_21"/>
+		<cim:Measurement.scadaAddress>address_41</cim:Measurement.scadaAddress>
+		<cim:IdentifiedObject.aliasName>Analog_41</cim:IdentifiedObject.aliasName>
+		<cim:IdentifiedObject.mRID>Analog_41</cim:IdentifiedObject.mRID>
+		<cim:IdentifiedObject.name>TE Kolubara B1 analog</cim:IdentifiedObject.name>
+	</cim:Analog>
 	
      <cim:Discrete rdf:ID="Discrete_1">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
@@ -1337,5 +1359,17 @@
 		<cim:IdentifiedObject.aliasName>Discrete_40_update</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_40</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>TE Kolubara B discrete</cim:IdentifiedObject.name>
+	</cim:Discrete>
+	<cim:Discrete rdf:ID="Discrete_41">
+		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>
+		<cim:Discrete.minValue>0 </cim:Discrete.minValue>
+		<cim:Discrete.normalValue>1 </cim:Discrete.normalValue>
+		<cim:Measurement.direction> readWrite </cim:Measurement.direction>
+		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
+		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_21"/> 
+		<cim:Measurement.scadaAddress>address_41</cim:Measurement.scadaAddress>
+		<cim:IdentifiedObject.aliasName>Discrete_41</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.mRID>Discrete_41</cim:IdentifiedObject.mRID> 
+		<cim:IdentifiedObject.name>TE Kolubara B1 discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
 </rdf:RDF>

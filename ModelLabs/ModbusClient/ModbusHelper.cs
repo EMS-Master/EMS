@@ -55,6 +55,11 @@ namespace ModbusClient
         {
             int sizeofType = typeToByteCountDictionary[typeof(T)];
 
+            if (startIndex > byteArray.Length)
+            {
+                return null;
+            }
+
             int numberOfValues = arrayLength / sizeofType;
             T[] genericArray = new T[numberOfValues];
             for (int i = 0; i < numberOfValues; i++)
