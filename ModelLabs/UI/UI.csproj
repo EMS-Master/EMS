@@ -228,6 +228,7 @@
     <Compile Include="Converters\LastTypeShowConverter.cs" />
     <Compile Include="Converters\LastValueShowConverter.cs" />
     <Compile Include="Converters\LastValueToBool.cs" />
+    <Compile Include="Converters\MenuItemVisibilityConverter.cs" />
     <Compile Include="Converters\ModelCodeToStringConverter.cs" />
     <Compile Include="Converters\PeriodEnumToStringConverter.cs" />
     <Compile Include="Converters\PropertyValueConverter.cs" />

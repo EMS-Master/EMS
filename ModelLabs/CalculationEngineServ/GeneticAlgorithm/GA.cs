@@ -35,10 +35,14 @@ namespace CalculationEngineServ.GeneticAlgorithm
 			foreach(var item in CommandedGenGidsAndValues)
 			{
 				var comm = optModelMap.FirstOrDefault(x => x.Key == item.Key);
-				comm.Value.MeasuredValue = item.Value;
-				comm.Value.measurementUnit.CurrentValue = item.Value;
-				comm.Value.GenericOptimizedValue = item.Value;
-				commandedGeneratrs.Add(item.Key, comm.Value);
+                if(comm.Value != null)
+                {
+                    comm.Value.MeasuredValue = item.Value;
+                    comm.Value.measurementUnit.CurrentValue = item.Value;
+                    comm.Value.GenericOptimizedValue = item.Value;
+                    commandedGeneratrs.Add(item.Key, comm.Value);
+                }
+				
 			}
 
 			indexToGid = new Dictionary<int, long>();

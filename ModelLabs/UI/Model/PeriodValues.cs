@@ -19,7 +19,7 @@ namespace UI.Model
 		Last_3_Month,
 		[Description("Last Year")]
 		Last_6_Month,
-		[Description("")]
-		None
+		//[Description("")]
+		//None
 	}
 }

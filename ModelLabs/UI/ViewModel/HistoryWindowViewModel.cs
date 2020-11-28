@@ -33,9 +33,10 @@ namespace UI.ViewModel
         public HistoryWindowViewModel(long gid, string name)
         {
             globalId = gid;
-            startTime = DateTime.Now.AddMinutes(-1);
+            startTime = DateTime.Now.AddHours(-1);
             endTime = DateTime.Now;
-            SelectedPeriod = PeriodValues.None;
+            SelectedPeriod = PeriodValues.Last_Hour;
+            GraphSampling = GraphSample.HourSample;
             GlobalName = name;
             OnPropertyChanged(GlobalName);
         }
@@ -93,7 +94,7 @@ namespace UI.ViewModel
             set
             {
                 startTime = value;
-                graphSampling = GraphSample.None;
+                graphSampling = GraphSample.HourSample;
                 OnPropertyChanged(nameof(StartTime));
             }
         }
@@ -104,7 +105,7 @@ namespace UI.ViewModel
             set
             {
                 endTime = value;
-                graphSampling = GraphSample.None;
+                graphSampling = GraphSample.HourSample;
                 OnPropertyChanged(nameof(EndTime));
             }
         }

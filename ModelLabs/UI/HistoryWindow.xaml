@@ -13,7 +13,7 @@
 
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="HistoryWindow" Height="450" Width="950">
+        Title="HistoryWindow" Height="450" Width="850">
     <Window.Resources>
         <converters:PeriodEnumToStringConverter x:Key="PeriodEnumToStringConverter"/>
         <ObjectDataProvider x:Key="dataFromPeriodEnum" MethodName="GetValues"
@@ -103,15 +103,15 @@
                 </GroupBox>
 
                 <GroupBox Grid.Row="1" Margin="10" FontSize="14" Header="Start Time"  Foreground="Black">
-                    <toolkit:DateTimePicker  Margin="10" Value="{Binding StartTime, Mode=TwoWay}" 
-                                        Width="300">
-                    </toolkit:DateTimePicker>
+                    <TextBlock TextAlignment="Center" Margin="10" Text="{Binding StartTime, Mode=TwoWay}" 
+                                        Width="250">
+                    </TextBlock>
                 </GroupBox>
 
                 <GroupBox Grid.Row="2" Margin="10" FontSize="14" Header="End Time"  Foreground="Black">
-                    <toolkit:DateTimePicker Margin="10" Value="{Binding EndTime, Mode=TwoWay}"
-                                            Width="300">
-                    </toolkit:DateTimePicker>
+                    <TextBlock Margin="10" TextAlignment="Center" Text="{Binding EndTime, Mode=TwoWay}"
+                                            Width="250">
+                    </TextBlock>
                 </GroupBox>
 
                 <Button Grid.Row="7" Grid.Column="0" Content="View Data" Margin="10" 

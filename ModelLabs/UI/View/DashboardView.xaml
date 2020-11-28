@@ -25,6 +25,7 @@
         <converters:GeneratorTypeToVIsibility x:Key="GeneratorTypeToVIsibility" />
         <converters:ResetGeneratorToVisibility x:Key="ResetGeneratorToVisibility" />
         <converters:BoolToColorTextConverter x:Key="BoolToColorTextConverter" />
+        <converters:MenuItemVisibilityConverter x:Key="MenuItemVisibilityConverter" />
 
         <DataTemplate x:Key="GraphGeneratorTemplate" >
             <Border x:Name="B1" CornerRadius="15" Background="#e0e0e0" Opacity="0.8"   BorderThickness="1">
@@ -84,7 +85,7 @@
                                 </ContextMenu.Visibility>-->
                                 <MenuItem x:Name="MenuItemSetPoint" Click="MenuItemSetPoint_Click" Header="Set point">
                                     <MenuItem.Visibility>
-                                        <MultiBinding Converter="{StaticResource GeneratorTypeToVIsibility}">
+                                        <MultiBinding Converter="{StaticResource MenuItemVisibilityConverter}">
                                             <Binding Path="Value"/>
                                             <Binding Path="Value[0].IsActive"/>
                                         </MultiBinding>
@@ -100,7 +101,7 @@
                                 </MenuItem>
                                 <MenuItem x:Name="MenuItemFuelEconomy" Header="Fuel economy" Click="MenuItemFuelEconomy_Click">
                                     <MenuItem.Visibility>
-                                        <MultiBinding Converter="{StaticResource GeneratorTypeToVIsibility}">
+                                        <MultiBinding Converter="{StaticResource MenuItemVisibilityConverter}">
                                             <Binding Path="Value"/>
                                             <Binding Path="Value[0].IsActive"/>
                                         </MultiBinding>

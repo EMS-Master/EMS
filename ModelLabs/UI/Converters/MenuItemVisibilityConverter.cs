@@ -10,7 +10,7 @@ using System.Windows.Data;
 
 namespace UI.Converters
 {
-    public class GeneratorTypeToVIsibility : IMultiValueConverter
+    public class MenuItemVisibilityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -18,14 +18,19 @@ namespace UI.Converters
             if (measUIs != null)
             {
                 var gen = measUIs.LastOrDefault();
-                
+                if (gen.IsActive)
+                {
                     var genType = gen.GeneratorType;
                     if (genType == FTN.Common.GeneratorType.Wind || genType == FTN.Common.GeneratorType.Solar || genType == FTN.Common.GeneratorType.Hydro)
                         return Visibility.Collapsed;
                     else
                         return Visibility.Visible;
-                
-                
+                }
+                else
+                {
+                    return Visibility.Collapsed;
+                }
+
             }
 
             return false;

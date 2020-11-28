@@ -128,15 +128,15 @@
                 </GroupBox>
 
                 <GroupBox Grid.Row="1" Margin="10" FontSize="16" Header="Start Time"  Foreground="Black">
-                    <toolkit:DateTimePicker  Margin="10" Value="{Binding StartTime, Mode=TwoWay}" 
-                                    Width="300">
-                    </toolkit:DateTimePicker>
+                    <TextBlock  Margin="10" TextAlignment="Center" Text="{Binding StartTime, Mode=TwoWay}" 
+                                    Width="250">
+                    </TextBlock>
                 </GroupBox>
 
                 <GroupBox Grid.Row="2" Margin="10" FontSize="16" Header="End Time"  Foreground="Black">
-                    <toolkit:DateTimePicker Margin="10" Value="{Binding EndTime, Mode=TwoWay}"
-                                        Width="300">
-                    </toolkit:DateTimePicker>
+                    <TextBlock Margin="10" TextAlignment="Center" Text="{Binding EndTime, Mode=TwoWay}"
+                                        Width="250">
+                    </TextBlock>
                 </GroupBox>
 
                 <GroupBox Grid.Row="4" Grid.Column="0" Margin="10" FontSize="16" Header="Generators" Foreground="Black">

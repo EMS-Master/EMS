@@ -82,8 +82,7 @@ namespace UI.ViewModel
 
 
         private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> generatorsContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
-        private ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> consumersContainer = new ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>>();
-        private ObservableCollection<Tuple<double, DateTime>> graphTotalProductionForSelected = new ObservableCollection<Tuple<double, DateTime>>();
+       
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
 
         private int resourcesLeft;
@@ -158,8 +157,7 @@ namespace UI.ViewModel
         }
 
         public ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> GeneratorsContainer { get => generatorsContainer; set => generatorsContainer = value; }
-        public ObservableCollection<KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>> ConsumersContainer { get => consumersContainer; set => consumersContainer = value; }
-
+       
         public bool IsExpandedTotalProduction
         {
             get
@@ -274,7 +272,6 @@ namespace UI.ViewModel
         public ObservableCollection<Tuple<double, DateTime>> CoReduction { get => coReduction; set => coReduction = value; }
 
 
-        public ObservableCollection<Tuple<double, DateTime>> GraphTotalProductionForSelected { get => graphTotalProductionForSelected; set => graphTotalProductionForSelected = value; }
 
         public ObservableCollection<Tuple<double, DateTime>> GraphTotalProduction { get => graphTotalProduction; set => graphTotalProduction = value; }
         public ObservableCollection<Tuple<double, DateTime>> GraphProfit { get => graphProfit; set => graphProfit = value; }
@@ -322,10 +319,10 @@ namespace UI.ViewModel
         public HistoryViewModel()
         {
             Title = "History";
-            startTime = DateTime.Now.AddMinutes(-1);
+            startTime = DateTime.Now.AddHours(-1);
             endTime = DateTime.Now;
-            GraphSampling = GraphSample.None;
-            SelectedPeriod = PeriodValues.None;
+            GraphSampling = GraphSample.HourSample;
+            SelectedPeriod = PeriodValues.Last_Hour;
 
             IntegrityUpdateForGenerators();
             IntegrityUpdateForEnergyConsumer();
@@ -512,8 +509,6 @@ namespace UI.ViewModel
             GraphCoReduction.Clear();
 
             GeneratorsContainer.Clear();
-            ConsumersContainer.Clear();
-            GraphTotalProductionForSelected.Clear();
 
             Item_0 = "";
             Item_1 = "";
@@ -625,17 +620,7 @@ namespace UI.ViewModel
             }
             timestamps = timestamps.Distinct().ToList();
 
-            foreach (DateTime measTime in timestamps)
-            {
-                double production = 0;
-                List<Tuple<double, DateTime>> tuples = allProductionValues.Where(x => x.Item2 == measTime).ToList();
-                if (tuples != null)
-                {
-                    production = tuples.Sum(x => x.Item1)/1000;
-                }
-                tuples = null;
-                GraphTotalProductionForSelected.Add(new Tuple<double, DateTime>(production, measTime));
-            }
+           
 
             TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetTotalProduction(StartTime, EndTime));
 
@@ -740,7 +725,6 @@ namespace UI.ViewModel
             IsExpandedSeparated = true;
             IsExpandedTotalProduction = true;
 
-            OnPropertyChanged(nameof(GraphTotalProductionForSelected));
             OnPropertyChanged(nameof(GraphTotalProduction));
             OnPropertyChanged(nameof(GeneratorsContainer));
             OnPropertyChanged(nameof(GraphProfit));

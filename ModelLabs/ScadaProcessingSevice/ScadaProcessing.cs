@@ -719,7 +719,7 @@ namespace ScadaProcessingSevice
                 measUnit.Gid = discreteLoc.Discrete.PowerSystemResource;
                 measUnit.MinValue = discreteLoc.Discrete.MinValue;
                 measUnit.MaxValue = discreteLoc.Discrete.MaxValue; ;
-                measUnit.CurrentValue = value.Length < discreteLoc.StartAddress ? 0 : (value[discreteLoc.StartAddress - 1] ? 1 : 0);
+                measUnit.CurrentValue = value.Length < discreteLoc.StartAddress ? 1 : (value[discreteLoc.StartAddress - 1] ? 1 : 0);
                 measUnit.TimeStamp = DateTime.Now;
                 measUnit.ScadaAddress = discreteLoc.StartAddress;
                 retList.Add(measUnit);

@@ -866,19 +866,18 @@ namespace CalculationEngineServ
 			List<CommandedGenerator> commandedGenerators = new List<CommandedGenerator>();
 			commandedGenerators = DbManager.Instance.GetCommandedGenerators().ToList();
 
-			if(commandedGenerators.Count == 0)
-			{
-				commandedGenerators = generators.Where(x => x.Value.GeneratorType == GeneratorType.Coal ||
-				x.Value.GeneratorType == GeneratorType.Gas || x.Value.GeneratorType == GeneratorType.Oil).Select(y => new CommandedGenerator()
+
+            List<CommandedGenerator>  commandedGenerators1 = generators.Where(x => (x.Value.GeneratorType == GeneratorType.Coal ||
+				x.Value.GeneratorType == GeneratorType.Gas || x.Value.GeneratorType == GeneratorType.Oil) && !commandedGenerators.Any(y => y.Gid == x.Value.GlobalId)).Select(y => new CommandedGenerator()
 				{
 					Gid = y.Value.GlobalId,
 					CommandingFlag = false,
 					CommandingValue = 0
 				}).ToList();
 
-				DbManager.Instance.AddListCommandedGenerators(commandedGenerators);
+				DbManager.Instance.AddListCommandedGenerators(commandedGenerators1);
 				DbManager.Instance.SaveChanges();
-			}
+			
 		}
 
         private void FillInitialDiscreteCounters()
