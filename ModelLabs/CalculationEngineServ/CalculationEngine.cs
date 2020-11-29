@@ -189,7 +189,6 @@ namespace CalculationEngineServ
         {
             Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
-			float powerOfCommandedGen = 0;
 
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
 			Dictionary<long, OptimisationModel> renewableGenerators = new Dictionary<long, OptimisationModel>();

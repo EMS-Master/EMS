@@ -25,13 +25,14 @@ namespace CalculationEngineServ.GeneticAlgorithm
 		public Dictionary<long, float> CommandedGenGidsAndValues { get; set;}
 		public float PointX;
 		public float PointY;
+		public float MaxValuePerGen;
         public GA(float necessaryEnergy, Dictionary<long, OptimisationModel> optModelMap)
         {
 			EmsContext e = new EmsContext();
 			commandedGeneratrs = new Dictionary<long, OptimisationModel>();
 			CommandedGenGidsAndValues = e.CommandedGenerators.Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
 			this.optModelMap = optModelMap.Where(x => !CommandedGenGidsAndValues.Any(y => y.Key == x.Key)).ToDictionary(param => param.Key, param => param.Value);
-			
+			MaxValuePerGen = 1000000f;
 			foreach(var item in CommandedGenGidsAndValues)
 			{
 				var comm = optModelMap.FirstOrDefault(x => x.Key == item.Key);
@@ -202,14 +203,47 @@ namespace CalculationEngineServ.GeneticAlgorithm
 				}
 			}
 
+			float sumOfOvers = 0;
+			List<int> indexOfFilled = new List<int>();
+
 			float k = (NecessaryEnergy - (mutatedGen?.Item2 ?? 0f)) / (float)sumOfDna;
 			for (int i = 0; i < dna.Size; i++)
 			{
 				if (i != mutatedGene)
 				{
 					dna.Genes[i] = new Tuple<long, float>(dna.Genes[i].Item1, dna.Genes[i].Item2 * k);
+					if(dna.Genes[i].Item2 > MaxValuePerGen)
+					{
+						sumOfOvers += (dna.Genes[i].Item2 - MaxValuePerGen);
+						indexOfFilled.Add(i);
+						dna.Genes[i] = new Tuple<long, float>(dna.Genes[i].Item1, MaxValuePerGen);
+					}
 				}
 			}
+
+			
+			for (int i = 0; i < dna.Size; i++)
+			{
+				if (sumOfOvers <= 0)
+					break;
+
+				if (i != mutatedGene && !indexOfFilled.Any(x => x == i))
+				{
+					if (dna.Genes[i].Item2 + sumOfOvers <= MaxValuePerGen)
+					{
+						dna.Genes[i] = new Tuple<long, float>(dna.Genes[i].Item1, dna.Genes[i].Item2 + sumOfOvers);
+						sumOfOvers = 0;
+						break;
+					}
+					else
+					{
+						var diff = MaxValuePerGen - dna.Genes[i].Item2;
+						dna.Genes[i] = new Tuple<long, float>(dna.Genes[i].Item1, MaxValuePerGen);
+						sumOfOvers -= diff;
+					}
+				}
+			}
+			
 			return dna;
 		}
 
