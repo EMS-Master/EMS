@@ -12,7 +12,6 @@ namespace UI.Selector
     public class ToolTipTemplateSelector : DataTemplateSelector
     {
         public DataTemplate GeneratorTemplate { get; set; }
-        public DataTemplate EnergyConsumerTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item,
                    DependencyObject container)
@@ -20,10 +19,6 @@ namespace UI.Selector
             if (item is Generator)
             {
                 return GeneratorTemplate;
-            }
-            else if (item is EnergyConsumer)
-            {
-                return EnergyConsumerTemplate;
             }
 
             return null;

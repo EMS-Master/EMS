@@ -67,29 +67,6 @@
 		</Grid>
 	</DataTemplate>
 
-	<selector:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"
-									  GeneratorTemplate="{StaticResource GeneratorTemplate}"
-									  EnergyConsumerTemplate="{StaticResource EnergyConsumerTemplate}">
-	</selector:ToolTipTemplateSelector>
-
-	<ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">
-		<Grid  Background="{StaticResource DarkBrush}">
-			<Border BorderThickness="1" BorderBrush="Black">
-				<Border.Effect>
-					<DropShadowEffect Color="Black" ShadowDepth="2" />
-				</Border.Effect>
-				<ContentControl ContentTemplateSelector="{StaticResource ToolTipTemplateSelector}">
-					<ContentControl.Content>
-						<MultiBinding Converter="{StaticResource GidToIdObjectConverter}">
-							<Binding Path="Key"></Binding>
-							<Binding Path="DataContext.NmsModelMap" RelativeSource="{RelativeSource AncestorType={x:Type root:MainWindow}}"></Binding>
-						</MultiBinding>
-					</ContentControl.Content>
-				</ContentControl>
-			</Border>
-		</Grid>
-	</ControlTemplate>
-
 	<!-- LegendStyle-->
 	<Style x:Key="LegendStyle" TargetType="datavis:Legend">
 		<Setter Property="Margin" Value="10,0,10,0" />
@@ -114,28 +91,6 @@
 		<Setter Property="FontWeight" Value="Normal"/>
 		<Setter Property="VerticalAlignment" Value="Center" />
 		<Setter Property="Margin" Value="0,0,6,0"/>
-	</Style>
-
-	<!--  charting:Title  -->
-	<Style TargetType="datavis:Title">
-		<Setter Property="HorizontalContentAlignment" Value="Left" />
-		<Setter Property="Margin" Value="10,0,0,0"/>
-		<Setter Property="VerticalContentAlignment" Value="Top" />
-		<Setter Property="IsTabStop" Value="False" />
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="datavis:Title">
-					<Grid Background="{TemplateBinding Background}">
-						<ContentPresenter Content="{TemplateBinding Content}" 
-										  ContentTemplate="{TemplateBinding ContentTemplate}" 
-										  Cursor="{TemplateBinding Cursor}" 
-										  Margin="{TemplateBinding Padding}" 
-										  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-										  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
 	</Style>
 
 	<!--  charting:RangeAxis  -->
@@ -292,23 +247,8 @@
 					<RowDefinition/>
 				</Grid.RowDefinitions>
 
-				<!--<TextBlock Text="{TemplateBinding Title}" Style="{StaticResource TitleStyle}"/>-->
-				<TextBlock Text="{TemplateBinding Title}" Margin="20,0,0,5">
-					<TextBlock.ToolTip>
-						<ToolTip Background="Transparent" Template="{StaticResource ToolTipTemplate}"/>
-					</TextBlock.ToolTip>
-				</TextBlock>
 				<Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="LightGray" Margin="20,0,0,5" BorderThickness="0">
 					<StackPanel Orientation="Horizontal" Margin="1">
-						<!--<TextBlock Text="{TemplateBinding Tag}" Foreground="Black"  VerticalAlignment="Center" />
-						<TextBlock Text="kW" Foreground="Black" VerticalAlignment="Center" />-->
-						<!--<Button Command="{Binding DataContext.GoToCommand,RelativeSource={RelativeSource AncestorType={x:Type view:DashboardView}}}"
-											CommandParameter="{Binding DataContext.Key,RelativeSource={RelativeSource AncestorType={x:Type charting:Chart}}}"
-                                            Margin="3,0,0,0"
-                                            Style="{StaticResource ButtonIcon}"
-											Content="{StaticResource historyIcon}"
-                                            ToolTip="Show history">
-						</Button>-->
 					</StackPanel>
 				</Border>
 
@@ -332,12 +272,6 @@
 					<RowDefinition/>
 				</Grid.RowDefinitions>
 
-				<!--<TextBlock Text="{TemplateBinding Title}" Style="{StaticResource TitleStyle}"/>-->
-				<TextBlock Text="{TemplateBinding Title}" Margin="20,0,0,5">
-					<TextBlock.ToolTip>
-						<ToolTip Background="Transparent" Template="{StaticResource ToolTipTemplate}"/>
-					</TextBlock.ToolTip>
-				</TextBlock>
 				<Border Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" BorderBrush="LightGray" Margin="20,0,0,5" BorderThickness="0">
 					<StackPanel Orientation="Horizontal" Margin="1">
 						<TextBlock Text="{TemplateBinding Tag}" Foreground="LightGray"  VerticalAlignment="Center" />
@@ -537,32 +471,6 @@
 	</Style>
 	<Style TargetType="charting:CategoryAxis" BasedOn="{StaticResource DisplayAxisStyle}">
 	</Style>
-
-    <Style TargetType="Button" x:Key="ExpButtonStyle">
-        <Setter Property="Background" Value="Gray"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="10"/>
-        <!--<Setter Property="Margin" Value="0,0,-5,0"/>-->
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Grid >
-                        <Rectangle Fill="{TemplateBinding Background}"></Rectangle>
-                        <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        Margin="1"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource BlueMouseOver}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 
     <ControlTemplate x:Key="LineDataPointTemplate" TargetType="charting:LineDataPoint">
 		<Grid x:Name="Root" Background="Transparent">

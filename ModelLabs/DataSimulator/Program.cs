@@ -30,9 +30,18 @@ namespace DataSimulator
                     List<float> consum = dss.SimulateConsumption(sunGeneration.Sum(), windGeneration.Sum(), hydroGeneration.Sum());
                     float consumSum = consum.Sum();
                     float diff = consumSum - generationSum;
-                    dss.WriteToSimulatorEverything(sunGeneration, windGeneration, hydroGeneration, consum);
-					
-					Thread.Sleep(4000);
+                    try
+                    {
+                        dss.WriteToSimulatorEverything(sunGeneration, windGeneration, hydroGeneration, consum);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+
+                    Thread.Sleep(4000);
 				}
 			});
 			task.Start();

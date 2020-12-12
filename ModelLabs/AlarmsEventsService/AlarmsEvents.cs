@@ -112,13 +112,25 @@ namespace FTN.Services.AlarmsEventsService
                 // ako je insert dodaj u listu - inace je updateovan
                 if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.Type.Equals(AlarmType.NORMAL))
                 {
-                    RemoveFromAlarms(alarm.Gid);
-                    this.Alarms.Add(alarm);
-                    if (InsertAlarmIntoDb(alarm))
+                    if (alarm.Type != AlarmType.DOM)
                     {
-                        Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                        RemoveFromAlarms(alarm.Gid);
+                        this.Alarms.Add(alarm);
+                        if (InsertAlarmIntoDb(alarm))
+                        {
+                            Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                        }
+                        this.isNormalCreated[alarm.Gid] = false;
                     }
-                    this.isNormalCreated[alarm.Gid] = false;
+                    else
+                    {
+                        this.Alarms.Add(alarm);
+                        if (InsertAlarmIntoDb(alarm))
+                        {
+                            Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                        }
+                        this.isNormalCreated[alarm.Gid] = false;
+                    }
                 }
                 if (alarm.Type.Equals(AlarmType.NORMAL) && normalAlarm)
                 {
