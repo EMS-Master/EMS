@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using CloudCommon;
@@ -43,7 +44,7 @@ namespace ScadaProcessingCloudService
         {
             var listener = new WcfCommunicationListener<IScadaProcessingContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
-                endpointResourceName: "ScadaPREndpoint",
+                address: new EndpointAddress("net.tcp://localhost:33000/ScadaProcessingCloudService"),
                 serviceContext: context,
                 wcfServiceObject: scadaPR
             );

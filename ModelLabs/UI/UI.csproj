@@ -433,10 +433,6 @@
       <Project>{2630d180-1b68-4e84-aeac-42ee8c88b50f}</Project>
       <Name>NetworkModelService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetworkModelService\Test\NMSTestClient\NMSTestClient.csproj">
-      <Project>{32EE9373-A350-42AC-972B-41B2EDABA082}</Project>
-      <Name>NMSTestClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
       <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
       <Name>ScadaContracts</Name>

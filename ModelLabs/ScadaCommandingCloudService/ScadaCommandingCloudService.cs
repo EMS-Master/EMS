@@ -45,8 +45,8 @@ namespace ScadaCommandingCloudService
         {
             var listener = new WcfCommunicationListener<IScadaCommandingContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
-                //address: new EndpointAddress("net.tcp://localhost:34000/ScadaCloudCommanding"),
-                endpointResourceName: "ScadaCMDEndpoint",
+                address: new EndpointAddress("net.tcp://localhost:34000/ScadaCommandingCloudService"),
+               // endpointResourceName: "ScadaCMDEndpoint",
                 serviceContext: context,
                 wcfServiceObject: scadaCMD
             );

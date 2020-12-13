@@ -35,12 +35,12 @@ namespace AlarmsEventsCloudService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            //return new List<ServiceReplicaListener>() {
-            //    new ServiceReplicaListener(context => this.CreateAlarmEventsListener(context), "AlarmsEventsEndpoint"),
-            //    new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityListener(context), "AlarmsEventsIntegrityEndpoint"),
-            //    /*ovo ne treba =>*/ //new ServiceReplicaListener(context => this.CreateServiceRemotingListener(context), "AlarmsEventsIntegrityAsyncEndpoint")
-            //};
-            return new ServiceReplicaListener[0];
+            return new List<ServiceReplicaListener>() {
+                new ServiceReplicaListener(context => this.CreateAlarmEventsListener(context), "AlarmsEventsEndpoint"),
+                new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityListener(context), "AlarmsEventsIntegrityEndpoint"),
+                /*ovo ne treba =>*/ //new ServiceReplicaListener(context => this.CreateServiceRemotingListener(context), "AlarmsEventsIntegrityAsyncEndpoint")
+            };
+            // return new ServiceReplicaListener[0];
         }
         private ICommunicationListener CreateAlarmEventsListener(StatefulServiceContext context)
         {

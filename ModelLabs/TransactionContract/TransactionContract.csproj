@@ -140,6 +140,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IImporterAsyncContract.cs" />
     <Compile Include="IImporterContract.cs" />
     <Compile Include="ImporterProxy.cs" />
     <Compile Include="ITransactionContract.cs" />

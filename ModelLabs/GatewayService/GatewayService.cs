@@ -34,9 +34,9 @@ namespace GatewayService
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
-            //return new List<ServiceReplicaListener>
-            //{
+           // return new ServiceReplicaListener[0];
+            return new List<ServiceReplicaListener>
+            {
             //    new ServiceReplicaListener(context => this.CreateAESSubscribeListener(context), "AESSubscribeEndpoint"),
             //    new ServiceReplicaListener(context => this.CreateAESPublishListener(context), "AESPublishEndpoint"),
             //    new ServiceReplicaListener(context => this.CreateAESIntegirityUpdateListener(context), "AESIntegrityUpdate"),
@@ -44,9 +44,9 @@ namespace GatewayService
             //    new ServiceReplicaListener(context => this.CreateCEPublishListener(context), "CEPublishEndpoint"),
             //    new ServiceReplicaListener(context => this.CreateTransactionManagerImporterListener(context), "TransactionManagerImporterEndpoint"),
             //    new ServiceReplicaListener(context => this.CreateCalculationEngineHistoryListener(context), "CEHistoryEndpoint"),
-            //    new ServiceReplicaListener(context => this.CreateNetworkModelGDAListener(context), "NetworkModelGDAEndpoint"),
+                new ServiceReplicaListener(context => this.CreateNetworkModelGDAListener(context), "NetworkModelGDAEndpoint"),
             //    new ServiceReplicaListener(context => this.CreateOptimizationAlgorithmListener(context), "OptimizationAlgorithmEndpoint")
-            //};
+           };
         }
         private ICommunicationListener CreateNetworkModelGDAListener(StatefulServiceContext context)
         {
@@ -85,6 +85,7 @@ namespace GatewayService
                 cancellationToken.ThrowIfCancellationRequested();
 
                 using (var tx = this.StateManager.CreateTransaction())
+
                 {
                     var result = await myDictionary.TryGetValueAsync(tx, "Counter");
 

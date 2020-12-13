@@ -126,6 +126,10 @@
       <Project>{4E67B062-A8D7-4FB8-9487-B0ACE402DF52}</Project>
       <Name>CalculationEngineServ</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CEPubSubContract\CEPubSubContract.csproj">
+      <Project>{7D9F6CDC-97D6-4E0E-A371-BF9262FE4C8E}</Project>
+      <Name>CEPubSubContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CloudCommon\CloudCommon.csproj">
       <Project>{F8CD9AE6-486B-4EFB-9BC8-16D88187FFE2}</Project>
       <Name>CloudCommon</Name>
