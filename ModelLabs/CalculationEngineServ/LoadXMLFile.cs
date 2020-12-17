@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FTN.Common;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,8 +15,26 @@ namespace CalculationEngineServ
 		{
 			string message = string.Empty;
 			XmlSerializer serializer = new XmlSerializer(typeof(GeneratorCurveModels));
-			StreamReader reader = new StreamReader("../../../../Resources/GeneratorsCurves.xml");
-			var value = serializer.Deserialize(reader);
+
+            //StreamReader reader = null;
+            //var s = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            //try
+            //{ 
+            //    reader = new StreamReader(s + "/GeneratorsCurves.xml");
+            //}
+            //catch (Exception e)
+            //{
+            //    CommonTrace.WriteTrace(CommonTrace.TraceError, "Failed to find GeneratorsCurves.xml file. Message: {0}", e.Message);
+            //    return null;
+            //}
+
+            //StreamReader reader = new StreamReader("../../../../Resources/GeneratorsCurves.xml");
+            
+            
+            //NAMJESTITI ADRESU
+            StreamReader reader = new StreamReader("C://Users/ASUS/Desktop/New folder (2)/EMS/ModelLabs/Resources/GeneratorsCurves.xml");
+            var value = serializer.Deserialize(reader);
 
 			GeneratorCurveModels curveModel = new GeneratorCurveModels();
 

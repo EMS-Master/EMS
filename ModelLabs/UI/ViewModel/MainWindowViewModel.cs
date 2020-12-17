@@ -30,26 +30,26 @@ namespace UI.ViewModel
 
         public MainWindowViewModel()
         {
-            //InitiateIntegrityUpdate();
+            InitiateIntegrityUpdate();
 
-            //DashboardViewModel = new DashboardViewModel();
-            //DashboardViewModel.Title = "Dashboard";
+            DashboardViewModel = new DashboardViewModel();
+            DashboardViewModel.Title = "Dashboard";
 
             var documents = new List<ViewModelBase>();
 
-            //AlarmSummaryViewModel = new AlarmSummaryViewModel() { Title = "Alarm Summary" };
+            AlarmSummaryViewModel = new AlarmSummaryViewModel() { Title = "Alarm Summary" };
 
-            //HistoryViewModel = new HistoryViewModel() { Title = "History" };
+            HistoryViewModel = new HistoryViewModel() { Title = "History" };
 
-            //CommandViewModel = new CommandViewModel() { Title = "Command" };
+            CommandViewModel = new CommandViewModel() { Title = "Command" };
 
-            //documents.Add(DashboardViewModel);
-            //documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
+            documents.Add(DashboardViewModel);
+            documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
             documents.Add(new ImporterViewModel() { Title = "Importer" });
            
-            //documents.Add(HistoryViewModel);
-            //documents.Add(AlarmSummaryViewModel);
-            //documents.Add(CommandViewModel);
+            documents.Add(HistoryViewModel);
+            documents.Add(AlarmSummaryViewModel);
+            documents.Add(CommandViewModel);
 
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);
