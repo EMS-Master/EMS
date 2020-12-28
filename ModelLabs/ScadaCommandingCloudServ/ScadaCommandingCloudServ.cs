@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
-using CommonCloud;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using ScadaCommandingService;
-using ScadaContracts;
-using TransactionContract;
 
 namespace ScadaCommandingCloudServ
 {
@@ -20,13 +14,9 @@ namespace ScadaCommandingCloudServ
     /// </summary>
     internal sealed class ScadaCommandingCloudServ : StatelessService
     {
-        private ScadaCommand scadaCMD;
-
         public ScadaCommandingCloudServ(StatelessServiceContext context)
             : base(context)
-        {
-            scadaCMD = new ScadaCommand();
-        }
+        { }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -34,11 +24,7 @@ namespace ScadaCommandingCloudServ
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new List<ServiceInstanceListener>
-            {
-                new ServiceInstanceListener(context => this.CreateScadaCMDListener(context), "ScadaCMDEndpoint"),
-                new ServiceInstanceListener(context => this.CreateTransactionListener(context), "TransactionEndpoint")
-            };
+            return new ServiceInstanceListener[0];
         }
 
         /// <summary>
@@ -47,51 +33,19 @@ namespace ScadaCommandingCloudServ
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            bool integrityState = scadaCMD.InitiateIntegrityUpdate();
+            // TODO: Replace the following sample code with your own logic 
+            //       or remove this RunAsync override if it's not needed in your service.
 
-            if (!integrityState)
-            {
-                ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update failed");
-            }
-            else
-            {
-                ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update succeeded.");
-            }
-            //long iterations = 0;
+            long iterations = 0;
 
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
         }
-
-        private ICommunicationListener CreateScadaCMDListener(StatelessServiceContext context)
-        {
-            var listener = new WcfCommunicationListener<IScadaCommandingContract>(
-                listenerBinding: Binding.CreateCustomNetTcp(),
-                address: new EndpointAddress("net.tcp://localhost:34000/SCADA/ScadaCommandingCloudServ"),
-                serviceContext: context,
-                wcfServiceObject: scadaCMD
-            );
-
-            return listener;
-        }
-
-        private ICommunicationListener CreateTransactionListener(StatelessServiceContext context)
-        {
-            var listener = new WcfCommunicationListener<ITransactionContract>(
-                listenerBinding: Binding.CreateCustomNetTcp(),
-                endpointResourceName: "TransactionEndpoint",
-                serviceContext: context,
-                wcfServiceObject: scadaCMD
-            );
-
-            return listener;
-        }
-
     }
 }

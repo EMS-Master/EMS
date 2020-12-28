@@ -33,6 +33,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetworkModelCloudServ\NetworkModelCloudServ.csproj" />
+    <ProjectReference Include="..\ScadaCommandingCloudServ\ScadaCommandingCloudServ.csproj" />
+    <ProjectReference Include="..\ScadaProcessingCloudServ\ScadaProcessingCloudServ.csproj" />
     <ProjectReference Include="..\TransactionManagerCloudServ\TransactionManagerCloudServ.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{1F63F845-1DF3-4D80-9514-4698DB18B174}</ProjectGuid>
+    <ProjectGuid>{236DEA6F-6FFA-4920-B92C-DE62FB2A32B7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ScadaCommandingCloudServ</RootNamespace>
@@ -118,9 +118,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScadaCommandingService\ScadaCommandingService.csproj">
-      <Project>{1973F0E7-9E30-4F1B-9B3E-F3759C0B4324}</Project>
-      <Name>ScadaCommandingService</Name>
+    <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">
+      <Project>{25125418-b9c8-491e-9e99-ec33b3a059f1}</Project>
+      <Name>CommonCloud</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
