@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="CloudEMSType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="ScadaCommandingCloudServ_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="ScadaProcessingCloudServ_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="TransactionManagerCloudServ_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="NetworkModelCloudServ_InstanceCount" DefaultValue="-1" />
+  </Parameters>
+  <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
+       should match the Name and Version attributes of the ServiceManifest element defined in the 
+       ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="ScadaCommandingCloudServPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="ScadaProcessingCloudServPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="TransactionManagerCloudServPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="NetworkModelCloudServPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <DefaultServices>
+    <!-- The section below creates instances of service types, when an instance of this 
+         application type is created. You can also create one or more instances of service type using the 
+         ServiceFabric PowerShell module.
+         
+         The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="ScadaCommandingCloudServ" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="ScadaCommandingCloudServType" InstanceCount="[ScadaCommandingCloudServ_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="ScadaProcessingCloudServ" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="ScadaProcessingCloudServType" InstanceCount="[ScadaProcessingCloudServ_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="TransactionManagerCloudServ" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="TransactionManagerCloudServType" InstanceCount="[TransactionManagerCloudServ_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="NetworkModelCloudServ" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="NetworkModelCloudServType" InstanceCount="[NetworkModelCloudServ_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+  </DefaultServices>
+</ApplicationManifest>
