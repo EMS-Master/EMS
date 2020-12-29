@@ -13,14 +13,19 @@ using System.Data;
 using CalculationEngineService;
 using CalculationEngineServ.DataBaseModels;
 using CalculationEngineServ;
+using Microsoft.ServiceFabric.Data;
+using EMS.Services.AlarmsEventsService;
+using Microsoft.ServiceFabric.Data.Collections;
 
 namespace FTN.Services.AlarmsEventsService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AlarmsEvents : IAlarmsEventsContract, IAesIntegirtyContract
     {
-        private PublisherService publisher;
         private List<AlarmHelper> alarms;
+        private PublisherService publisher;
+        private IReliableStateManager StateManager;
+        private IReliableDictionary<string, AlarmsData> alarmsEventsCache;
         private List<AlarmHelper> alarmsFromDatabase;
        
         private Dictionary<long, bool> isNormalCreated = new Dictionary<long, bool>(10);
@@ -30,9 +35,31 @@ namespace FTN.Services.AlarmsEventsService
         {
             this.Publisher = new PublisherService();
             this.Alarms = new List<AlarmHelper>();
-            alarmsFromDatabase = SelectAlarmsFromDatabase();
+            //alarmsFromDatabase = SelectAlarmsFromDatabase();
         }
+        public async void Instantiate(IReliableStateManager stateManager)
+        {
+            this.StateManager = stateManager;
+            alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
 
+            using (var tx = this.StateManager.CreateTransaction())
+            {
+                ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+
+                AlarmsData alarmsData = data.HasValue ? data.Value : new AlarmsData();
+                try
+                {
+                    Alarms = alarmsData.Alarms as List<AlarmHelper>;
+                }
+                catch (Exception e)
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Failed to read alarms from reliable collection. Message: {0}", e.Message);
+                    Alarms = new List<AlarmHelper>();
+                }
+
+                await tx.CommitAsync();
+            }
+        }
         public List<AlarmHelper> Alarms
         {
             get
@@ -59,104 +86,114 @@ namespace FTN.Services.AlarmsEventsService
             }
         }
 
-       
+
         public void AddAlarm(AlarmHelper alarm)
         {
-            bool normalAlarm = false;
-            if (Alarms.Count == 0 && alarm.Type.Equals(AlarmType.NORMAL))
+            lock (alarmLock)
             {
-                return;
-            }
-
-            PublishingStatus publishingStatus = PublishingStatus.INSERT;
-            bool updated = false;
-            try
-            {
-                alarm.AckState = AckState.Unacknowledged;
-                if (string.IsNullOrEmpty(alarm.CurrentState))
+                bool normalAlarm = false;
+                this.GetAlarmsFromAlarmsEventsCache();
+                if (Alarms.Count == 0 && alarm.Type.Equals(AlarmType.NORMAL))
                 {
-                    alarm.CurrentState = string.Format("{0} | {1}", State.Active, alarm.AckState);
+                    return;
                 }
 
-                // cleared status check
-                foreach (AlarmHelper item in Alarms)
+                PublishingStatus publishingStatus = PublishingStatus.INSERT;
+                bool updated = false;
+                try
                 {
-                    if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()))
+                    alarm.AckState = AckState.Unacknowledged;
+                    if (string.IsNullOrEmpty(alarm.CurrentState))
                     {
-                        item.Severity = alarm.Severity;
-                        item.Value = alarm.Value;
-                        item.Message = alarm.Message;
-                        item.TimeStamp = alarm.TimeStamp;
-                        publishingStatus = PublishingStatus.UPDATE;
-                        updated = true;
-                        break;
+                        alarm.CurrentState = string.Format("{0} | {1}", State.Active, alarm.AckState);
                     }
-                    else if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Cleared.ToString()))
-                    {
-                        if (alarm.Type.Equals(AlarmType.NORMAL) && !item.Type.Equals(AlarmType.NORMAL.ToString()))
-                        {
-                            bool normalCreated = false;
-                            if (this.isNormalCreated.TryGetValue(alarm.Gid, out normalCreated))
-                            {
-                                if (!normalCreated)
-                                {
-                                    normalAlarm = true;
-                                }
-                            }
 
+                    // cleared status check
+                    foreach (AlarmHelper item in Alarms)
+                    {
+                        if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Active.ToString()))
+                        {
+                            item.Severity = alarm.Severity;
+                            item.Value = alarm.Value;
+                            item.Message = alarm.Message;
+                            item.TimeStamp = alarm.TimeStamp;
+                            publishingStatus = PublishingStatus.UPDATE;
+                            updated = true;
+
+                            this.UpdateAlarmsEventsCache(item);
                             break;
                         }
-                    }
-                }
-
-                // ako je insert dodaj u listu - inace je updateovan
-                if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.Type.Equals(AlarmType.NORMAL))
-                {
-                    if (alarm.Type != AlarmType.DOM)
-                    {
-                        RemoveFromAlarms(alarm.Gid);
-                        this.Alarms.Add(alarm);
-                        if (InsertAlarmIntoDb(alarm))
+                        else if (item.Gid.Equals(alarm.Gid) && item.CurrentState.Contains(State.Cleared.ToString()))
                         {
-                            Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                            if (alarm.Type.Equals(AlarmType.NORMAL) && !item.Type.Equals(AlarmType.NORMAL.ToString()))
+                            {
+                                bool normalCreated = false;
+                                if (this.isNormalCreated.TryGetValue(alarm.Gid, out normalCreated))
+                                {
+                                    if (!normalCreated)
+                                    {
+                                        normalAlarm = true;
+                                    }
+                                }
+
+                                break;
+                            }
                         }
-                        this.isNormalCreated[alarm.Gid] = false;
                     }
-                    else
+
+                    // ako je insert dodaj u listu - inace je updateovan
+                    if (publishingStatus.Equals(PublishingStatus.INSERT) && !updated && !alarm.Type.Equals(AlarmType.NORMAL))
                     {
-                        this.Alarms.Add(alarm);
-                        if (InsertAlarmIntoDb(alarm))
+                        if (alarm.Type != AlarmType.DOM)
                         {
-                            Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                            //RemoveFromAlarms(alarm.Gid);
+                            this.RemoveAlarmFromAlarmsEventsCache(alarm.Gid);
+                            //this.Alarms.Add(alarm);
+                            this.AddAlarmToAlarmsEventsCache(alarm);
+                            if (InsertAlarmIntoDb(alarm))
+                            {
+                                Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                            }
+                            this.isNormalCreated[alarm.Gid] = false;
                         }
-                        this.isNormalCreated[alarm.Gid] = false;
+                        else
+                        {
+                            //this.Alarms.Add(alarm);
+                            this.AddAlarmToAlarmsEventsCache(alarm);
+                            if (InsertAlarmIntoDb(alarm))
+                            {
+                                Console.WriteLine("Alarm with GID:{0} recorded into alarms database.", alarm.Gid);
+                            }
+                            this.isNormalCreated[alarm.Gid] = false;
+                        }
                     }
-                }
-                if (alarm.Type.Equals(AlarmType.NORMAL) && normalAlarm)
-                {
-                    RemoveFromAlarms(alarm.Gid);
-                    this.Alarms.Add(alarm);
-                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
-                    this.isNormalCreated[alarm.Gid] = true;
+                    if (alarm.Type.Equals(AlarmType.NORMAL) && normalAlarm)
+                    {
+                        //RemoveFromAlarms(alarm.Gid);
+                        this.RemoveAlarmFromAlarmsEventsCache(alarm.Gid);
+                        //this.Alarms.Add(alarm);
+                        this.AddAlarmToAlarmsEventsCache(alarm);
+                        this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                        this.isNormalCreated[alarm.Gid] = true;
 
-                }
-                else if (!alarm.Type.Equals(AlarmType.NORMAL))
-                {
-                    this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
-                }
+                    }
+                    else if (!alarm.Type.Equals(AlarmType.NORMAL))
+                    {
+                        this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                    }
 
-                //Console.WriteLine("AlarmsEvents: AddAlarm method");
-                string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.Value);
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
-            }
-            catch (Exception ex)
-            {
-                string message = string.Format("Greska ", ex.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                //throw new Exception(message);
+                    //Console.WriteLine("AlarmsEvents: AddAlarm method");
+                    string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.Value);
+                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                }
+                catch (Exception ex)
+                {
+                    string message = string.Format("Greska ", ex.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                    //throw new Exception(message);
+                }
             }
         }
-
         private void RemoveFromAlarms(long gid)
         {
 
@@ -410,6 +447,136 @@ namespace FTN.Services.AlarmsEventsService
             
             return discret;
         }
+        public async void GetAlarmsFromAlarmsEventsCache()
+        {
+            try
+            {
+                alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
+                using (ITransaction tx = this.StateManager.CreateTransaction())
+                {
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
 
+                    if (data.HasValue)
+                    {
+                        this.Alarms = data.Value.Alarms.ToList();
+                    }
+                    else
+                    {
+                        this.Alarms = new List<AlarmHelper>();
+                    }
+
+                    await tx.CommitAsync();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+        public async void UpdateAlarmsEventsCache(AlarmHelper alarmHelper)
+        {
+            try
+            {
+                alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
+                using (ITransaction tx = this.StateManager.CreateTransaction())
+                {
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+
+                    if (data.HasValue)
+                    {
+                        List<AlarmHelper> alarms = data.Value.Alarms.ToList();
+
+                        foreach (AlarmHelper item in alarms)
+                        {
+                            if (item.Gid == alarmHelper.Gid)
+                            {
+                                item.Severity = alarmHelper.Severity;
+                                item.Value = alarmHelper.Value;
+                                item.Message = alarmHelper.Message;
+                                item.TimeStamp = alarmHelper.TimeStamp;
+                            }
+                        }
+
+                        AlarmsData alarmsData = new AlarmsData();
+                        alarmsData.AddAlarms(alarms);
+
+                        await alarmsEventsCache.SetAsync(tx, "AlarmsData", alarmsData);
+
+                        await tx.CommitAsync();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
+        public async void RemoveAlarmFromAlarmsEventsCache(long gid)
+        {
+            try
+            {
+                AlarmHelper alarmToRemove = null;
+                alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
+                using (ITransaction tx = this.StateManager.CreateTransaction())
+                {
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+
+                    if (data.HasValue)
+                    {
+                        List<AlarmHelper> alarms = data.Value.Alarms.ToList();
+                        foreach (AlarmHelper alarm in alarms)
+                        {
+                            if (alarm.Gid == gid)
+                            {
+                                alarmToRemove = alarm;
+                                break;
+                            }
+                        }
+
+                        if (alarmToRemove != null)
+                        {
+                            alarms.Remove(alarmToRemove);
+                        }
+
+                        AlarmsData alarmsData = new AlarmsData();
+                        alarmsData.AddAlarms(alarms);
+
+                        await alarmsEventsCache.SetAsync(tx, "AlarmsData", alarmsData);
+                        await tx.CommitAsync();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+        public async void AddAlarmToAlarmsEventsCache(AlarmHelper alarmHelper)
+        {
+            try
+            {
+                alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
+                using (ITransaction tx = this.StateManager.CreateTransaction())
+                {
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+                    AlarmsData alarmsData = new AlarmsData();
+                    if (data.HasValue)
+                    {
+                        List<AlarmHelper> alarms = data.Value.Alarms.ToList();
+                        alarms.Add(alarmHelper);
+
+                        alarmsData.AddAlarms(alarms);
+                    }
+                    else
+                    {
+                        alarmsData = new AlarmsData();
+                        alarmsData.AddAlarm(alarmHelper);
+                    }
+
+                    await alarmsEventsCache.SetAsync(tx, "AlarmsData", alarmsData);
+                    await tx.CommitAsync();
+                }
+            }
+            catch (Exception e)
+            {
+            }
+        }
     }
 }

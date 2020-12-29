@@ -32,7 +32,10 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AlarmsEventsCloudServ\AlarmsEventsCloudServ.csproj" />
+    <ProjectReference Include="..\CalculationEngineCloudServ\CalculationEngineCloudServ.csproj" />
     <ProjectReference Include="..\NetworkModelCloudServ\NetworkModelCloudServ.csproj" />
+    <ProjectReference Include="..\ScadaCloudServ\ScadaCloudServ.csproj" />
     <ProjectReference Include="..\ScadaCommandingCloudServ\ScadaCommandingCloudServ.csproj" />
     <ProjectReference Include="..\ScadaProcessingCloudServ\ScadaProcessingCloudServ.csproj" />
     <ProjectReference Include="..\TransactionManagerCloudServ\TransactionManagerCloudServ.csproj" />
