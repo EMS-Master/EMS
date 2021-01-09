@@ -1,6 +1,7 @@
 ﻿using FTN.Common;
 using ModbusClient;
 using ScadaContracts;
+using ScadaContracts.ServiceFabricProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +77,8 @@ namespace ScadaService
             bool isSuccess = false;
             try
             {
-                isSuccess = ScadaProcessingProxy.Instance.SendValues(values, valuesDiscrete, valuesWindSun);
+                ScadaProcessingSfProxy scadaSf = new ScadaProcessingSfProxy();
+                isSuccess = scadaSf.SendValues(values, valuesDiscrete, valuesWindSun);
 				
             }
             catch (Exception ex)

@@ -26,7 +26,7 @@ namespace ScadaContracts.ServiceFabricProxy
             proxy = new ServicePartitionClient<WcfCommunicationClient<IScadaProcessingContract>>(
                     communicationClientFactory: factory,
                     serviceUri: new Uri("fabric:/CloudEMS/ScadaProcessingCloudServ"),
-                    listenerName: "ScadaCREndpoint");
+                    listenerName: "ScadaPREndpoint");
         }
 
         public bool SendValues(byte[] value, bool[] valueDiscrete, byte[] valueWindSun)

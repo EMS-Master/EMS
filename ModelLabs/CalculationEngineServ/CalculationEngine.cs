@@ -6,6 +6,7 @@ using FTN.Common;
 using FTN.ServiceContracts;
 using FTN.Services.NetworkModelService.DataModel.Wires;
 using ScadaContracts;
+using ScadaContracts.ServiceFabricProxy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,12 +120,21 @@ namespace CalculationEngineServ
                         Console.WriteLine("The total production is recorded into history database.");
                     }
                 }
-                if (ScadaCommandingProxy.Instance.SendDataToSimulator(measurementsOptimized))
+                try
                 {
-                    CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
-                    Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
+                    ScadaCommandingSfProxy scadaSf = new ScadaCommandingSfProxy();
+                    if (scadaSf.SendDataToSimulator(measurementsOptimized))
+                    {
+                        CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
+                        Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
 
-                    result = true;
+                        result = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, ex.Message);
+                    CommonTrace.WriteTrace(CommonTrace.TraceError, ex.StackTrace);
                 }
                 // ScadaCommandingProxy.Instance.CommandDiscreteValues(25769803777,true);
             }
