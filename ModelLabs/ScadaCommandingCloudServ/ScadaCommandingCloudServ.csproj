@@ -122,6 +122,18 @@
       <Project>{25125418-b9c8-491e-9e99-ec33b3a059f1}</Project>
       <Name>CommonCloud</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ScadaCommandingService\ScadaCommandingService.csproj">
+      <Project>{1973F0E7-9E30-4F1B-9B3E-F3759C0B4324}</Project>
+      <Name>ScadaCommandingService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
+      <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
+      <Name>ScadaContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransactionContract\TransactionContract.csproj">
+      <Project>{1E99A031-C0FF-416F-9C9B-3575941DF41E}</Project>
+      <Name>TransactionContract</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
