@@ -118,6 +118,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AESPubSbuContract\AESPubSbuContract.csproj">
+      <Project>{019617fe-7b84-49a7-9449-074fbef06817}</Project>
+      <Name>AESPubSbuContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AlarmsEventsContract\AlarmsEventsContract.csproj">
       <Project>{A90DA217-6062-4764-9095-DCA6C87E5C3A}</Project>
       <Name>AlarmsEventsContract</Name>

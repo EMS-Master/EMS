@@ -7,7 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using CalculationEngineContracts;
 using CalculationEngineServ;
+using CalculationEngineServ.PubSub;
 using CommonCloud;
+using FTN.ServiceContracts;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
@@ -24,6 +26,7 @@ namespace CalculationEngineCloudServ
         private CalculationEngine ce;
         private CeToUI ceToUI;
         private ProcessingToCalculation processingToCalculation;
+        private PublisherService publisherService;
 
         public CalculationEngineCloudServ(StatefulServiceContext context)
             : base(context)
@@ -33,6 +36,7 @@ namespace CalculationEngineCloudServ
             processingToCalculation = new ProcessingToCalculation();
             CeToUI.Ce = ce;
             ProcessingToCalculation.CalculationEngine = ce;
+            publisherService = new PublisherService();
         }
 
         /// <summary>
@@ -49,6 +53,7 @@ namespace CalculationEngineCloudServ
                 new ServiceReplicaListener(context => this.CreateCalculationEngineListener(context), "CalculationEngineEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineUIListener(context), "CalculationEngineUIEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineTransactionListener(context), "CalculationEngineTransactionEndpoint"),
+                new ServiceReplicaListener(context => this.CreateCalculationEnginePubSubListener(context), "CalculationEnginePubSubEndpoint"),
             };
         }
         private ICommunicationListener CreateCalculationEngineListener(StatefulServiceContext context)
@@ -84,6 +89,17 @@ namespace CalculationEngineCloudServ
                            wcfServiceObject: ce
             );
             ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineListenerEndpoint");
+            return listener;
+        }
+        private ICommunicationListener CreateCalculationEnginePubSubListener(StatefulServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<ICePubSubContract>(
+                           listenerBinding: Binding.CreateCustomNetTcp(),
+                           address: new EndpointAddress("net.tcp://localhost:20002/CalculationEngineCloudServ/CePubSubContract"),
+                           serviceContext: context,
+                           wcfServiceObject: publisherService
+            );
+            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineHistoryDataEndpoint");
             return listener;
         }
         /// <summary>

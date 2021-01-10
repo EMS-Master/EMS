@@ -53,7 +53,7 @@ namespace ScadaProcessingCloudServ
         {
             var listener = new WcfCommunicationListener<ITransactionContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
-                endpointResourceName: "TransactionCREndpoint",
+                endpointResourceName: "TransactionPREndpoint",
                 serviceContext: context,
                 wcfServiceObject: scadaProcessing
             );

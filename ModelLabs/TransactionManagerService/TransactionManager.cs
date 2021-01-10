@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TransactionContract;
+using TransactionManagerService.ServiceFabricProxy;
 
 namespace TransactionManagerService
 {
@@ -22,6 +23,12 @@ namespace TransactionManagerService
 
         public UpdateResult ModelUpdate(Delta delta)
         {
+            TransactionCESfProxy transactionCESfProxy = new TransactionCESfProxy();
+            TransactionScadaCDSfProxy transactionCMDSfProxy = new TransactionScadaCDSfProxy();
+            TransactionScadaPRSfProxy transactionCRSfProxy = new TransactionScadaPRSfProxy();
+            TransactionNMSSfProxy transactionNMSSfProxy = new TransactionNMSSfProxy();
+
+
             deltaToApply = delta;
             noRespone = 0;
             toRespond = 1;
@@ -55,7 +62,7 @@ namespace TransactionManagerService
                 // first transaction - send delta to NMS
                 try
                 {
-                    updateResult = TransactionNMSProxy.Instance.Prepare(ref delta);
+                    updateResult = transactionNMSSfProxy.Prepare(ref delta);
                 }
                 catch (Exception e)
                 {
@@ -80,7 +87,7 @@ namespace TransactionManagerService
                     {
                         try
                         {
-                            TransactionCEProxy.Instance.Prepare(ref ceDelta);
+                            transactionCESfProxy.Prepare(ref ceDelta);
                         }
                         catch (Exception e)
                         {
@@ -94,8 +101,8 @@ namespace TransactionManagerService
                     {
                         try
                         {
-                            TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
-                            TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
+                            transactionCRSfProxy.Prepare(ref scadaDelta);
+                            transactionCMDSfProxy.Prepare(ref scadaDelta);
                         }
                         catch (Exception e)
                         {
@@ -111,8 +118,8 @@ namespace TransactionManagerService
                     // second transaction - send ceDelta to CE, analogDelta to SCADA
                     try
                     {
-                        TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
-                        TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
+                        transactionCRSfProxy.Prepare(ref scadaDelta);
+                        transactionCMDSfProxy.Prepare(ref scadaDelta);
                     }
                     catch (Exception e)
                     {
@@ -126,9 +133,9 @@ namespace TransactionManagerService
                 {
                     try
                     {
-                        TransactionCEProxy.Instance.Prepare(ref ceDelta);
-                        TransactionScadaPRProxy.Instance.Prepare(ref scadaDelta);
-                        TransactionScadaCDProxy.Instance.Prepare(ref scadaDelta);
+                        transactionCESfProxy.Prepare(ref ceDelta);
+                        transactionCRSfProxy.Prepare(ref scadaDelta);
+                        transactionCMDSfProxy.Prepare(ref scadaDelta);
                     }
                     catch (Exception e)
                     {
@@ -144,10 +151,10 @@ namespace TransactionManagerService
                 // ako se neki exception desio prilikom transakcije - radi rollback
                 CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction failed; Message: {0}", e.Message);
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Start Rollback!");
-                TransactionNMSProxy.Instance.Rollback();
-                TransactionScadaPRProxy.Instance.Rollback();
-                TransactionScadaCDProxy.Instance.Rollback();
-                TransactionCEProxy.Instance.Rollback();
+                transactionNMSSfProxy.Rollback();
+                transactionCRSfProxy.Rollback();
+                transactionCMDSfProxy.Rollback();
+                transactionCESfProxy.Rollback();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback finished!");
             }
             Thread.Sleep(5000);
@@ -197,6 +204,11 @@ namespace TransactionManagerService
 
         private void Commit(object sender, EventArgs e)
         {
+            TransactionCESfProxy transactionCESfProxy = new TransactionCESfProxy();
+            TransactionScadaCDSfProxy transactionCMDSfProxy = new TransactionScadaCDSfProxy();
+            TransactionScadaPRSfProxy transactionCRSfProxy = new TransactionScadaPRSfProxy();
+            TransactionNMSSfProxy transactionNMSSfProxy = new TransactionNMSSfProxy();
+
             bool commitResultScadaCR;
             bool commitResultScadaCMD;
 
@@ -211,11 +223,11 @@ namespace TransactionManagerService
                     commitResultScadaCR = false;
                     commitResultScadaCMD = false;
                     commitResultCE = false;
-                    commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
-                    commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
+                    commitResultScadaCR = transactionCRSfProxy.Commit();
+                    commitResultScadaCMD = transactionCMDSfProxy.Commit();
                     commitResultSCADA = commitResultScadaCMD && commitResultScadaCR;
 
-                    commitResultCE = TransactionCEProxy.Instance.Commit();
+                    commitResultCE = transactionCESfProxy.Commit();
 
                     if (!commitResultScadaCR)
                     {
@@ -245,7 +257,7 @@ namespace TransactionManagerService
                 else if (toRespond == 2)
                 {
                     commitResultCE = false;
-                    commitResultCE = TransactionCEProxy.Instance.Commit();
+                    commitResultCE = transactionCESfProxy.Commit();
 
                     if (!commitResultCE)
                     {
@@ -260,8 +272,8 @@ namespace TransactionManagerService
                 {
                     commitResultScadaCR = false;
                     commitResultScadaCMD = false;
-                    commitResultScadaCR = TransactionScadaPRProxy.Instance.Commit();
-                    commitResultScadaCMD = TransactionScadaCDProxy.Instance.Commit();
+                    commitResultScadaCR = transactionCRSfProxy.Commit();
+                    commitResultScadaCMD = transactionCMDSfProxy.Commit();
 
                     if (!commitResultScadaCR)
                     {
@@ -327,7 +339,7 @@ namespace TransactionManagerService
             if (commitResultCE && commitResultSCADA)
             {
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Commit phase for all services succeeded. Starting commit for NMS!");
-                commitResultNMS = TransactionNMSProxy.Instance.Commit();
+                commitResultNMS = transactionNMSSfProxy.Commit();
             }
 
             if (commitResultNMS && commitResultSCADA && commitResultCE)

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CommonCloud;
 using FTN.ServiceContracts;
 using FTN.Services.AlarmsEventsService;
+using FTN.Services.AlarmsEventsService.PubSub;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Communication.Wcf.Runtime;
@@ -20,11 +21,14 @@ namespace AlarmsEventsCloudServ
     /// </summary>
     internal sealed class AlarmsEventsCloudServ : StatefulService
     {
+        private PublisherService publisherService;
+
         private AlarmsEvents alarmsEvents;
         public AlarmsEventsCloudServ(StatefulServiceContext context)
             : base(context)
         {
             alarmsEvents = new AlarmsEvents();
+            publisherService = new PublisherService();
         }
 
         /// <summary>
@@ -39,6 +43,7 @@ namespace AlarmsEventsCloudServ
             return new List<ServiceReplicaListener>() {
                 new ServiceReplicaListener(context => this.CreateAlarmEventsListener(context), "AlarmsEventsEndpoint"),
                 new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityListener(context), "AlarmsEventsIntegrityEndpoint"),
+                new ServiceReplicaListener(context => this.CreateAlarmsEventsPubSubListener(context), "AlarmsEventsPubSubEndpoint"),
             };
         }
 
@@ -64,7 +69,18 @@ namespace AlarmsEventsCloudServ
 
             return listener;
         }
+        
+        private ICommunicationListener CreateAlarmsEventsPubSubListener(StatefulServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<IAesPubSubContract>(
+                listenerBinding: Binding.CreateCustomNetTcp(),
+                address: new EndpointAddress("net.tcp://localhost:20023/AlarmsEventsCloudServ/PublisherService"),
+                serviceContext: context,
+                wcfServiceObject: publisherService
+            );
 
+            return listener;
+        }
         /// <summary>
         /// This is the main entry point for your service replica.
         /// This method executes when this replica of your service becomes primary and has write status.
