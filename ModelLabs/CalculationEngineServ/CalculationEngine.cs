@@ -4,6 +4,7 @@ using CalculationEngineServ.PubSub;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
+using FTN.ServiceContracts.ServiceFabricProxy;
 using FTN.Services.NetworkModelService.DataModel.Wires;
 using ScadaContracts;
 using ScadaContracts.ServiceFabricProxy;
@@ -754,22 +755,24 @@ namespace CalculationEngineServ
                 string message = string.Empty;
 
                 #region getting Generators
+                NetworkModelGDASfProxy networkModelGDASfProxy = new NetworkModelGDASfProxy();
 
                 try
                 {
+
                     // get all generators from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(ModelCode.GENERATOR);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(ModelCode.GENERATOR, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = networkModelGDASfProxy.GetExtentValues(ModelCode.GENERATOR, properties);
+                    resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = networkModelGDASfProxy.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    networkModelGDASfProxy.IteratorClose(iteratorId);
 
                     // add synchronous machines to internal collection
                     internalGenerators.Clear();
@@ -783,7 +786,7 @@ namespace CalculationEngineServ
 
                     Console.WriteLine("Trying again...");
                     CommonTrace.WriteTrace(CommonTrace.TraceError, "Trying again...");
-                    NetworkModelGDAProxy.Instance = null;
+                    //NetworkModelGDAProxy.Instance = null;
                     Thread.Sleep(1000);
                     InitiateIntegrityUpdate();
                 }
@@ -808,16 +811,16 @@ namespace CalculationEngineServ
                     // third get all enenrgy consumers from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(ModelCode.ENERGY_CONSUMER);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(ModelCode.ENERGY_CONSUMER, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = networkModelGDASfProxy.GetExtentValues(ModelCode.ENERGY_CONSUMER, properties);
+                    resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = networkModelGDASfProxy.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    networkModelGDASfProxy.IteratorClose(iteratorId);
 
                     // add energy consumer to internal collection
                     internalEnergyConsumers.Clear();

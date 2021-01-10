@@ -13,6 +13,7 @@ using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
+using FTN.ServiceContracts.ServiceFabricProxy;
 using FTN.Services.NetworkModelService.DataModel.Meas;
 using ModbusClient;
 using ScadaContracts;
@@ -320,33 +321,35 @@ namespace ScadaCommandingService
 
             List<ResourceDescription> retList = new List<ResourceDescription>(5);
             List<ResourceDescription> retListDiscrete = new List<ResourceDescription>(5);
+
+            NetworkModelGDASfProxy networkModelGDASfProxy = new NetworkModelGDASfProxy();
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
                 propertiesDiscrete = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
 
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = networkModelGDASfProxy.GetExtentValues(modelCode, properties);
+                resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = networkModelGDASfProxy.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                networkModelGDASfProxy.IteratorClose(iteratorId);
 
 
-                var iteratorIdDiscrete = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                var iteratorIdDiscrete = networkModelGDASfProxy.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
+                resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorIdDiscrete);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorIdDiscrete);
+                    List<ResourceDescription> rds = networkModelGDASfProxy.IteratorNext(numberOfResources, iteratorIdDiscrete);
                     retListDiscrete.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                    resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorIdDiscrete);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorIdDiscrete);
+                networkModelGDASfProxy.IteratorClose(iteratorIdDiscrete);
 
             }
             catch (Exception e)
@@ -356,7 +359,7 @@ namespace ScadaCommandingService
 
                 Console.WriteLine("Trying again...");
                 CommonTrace.WriteTrace(CommonTrace.TraceError, "Trying again...");
-                NetworkModelGDAProxy.Instance = null;
+                //NetworkModelGDAProxy.Instance = null;
                 Thread.Sleep(1000);
                 InitiateIntegrityUpdate();
                 return false;

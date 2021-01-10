@@ -1,8 +1,10 @@
 ﻿using CalculationEngineContracts;
+using CalculationEngineContracts.ServiceFabricProxy;
 using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
+using FTN.ServiceContracts.ServiceFabricProxy;
 using FTN.Services.NetworkModelService.DataModel.Meas;
 using ModbusClient;
 using ScadaContracts;
@@ -101,7 +103,8 @@ namespace ScadaProcessingSevice
             bool isSuccess = false;
             try
             {
-                isSuccess = CalculationEngineProxy.Instance.OptimisationAlgorithm(energyConsumerActive, generatorsActive, windSpeed, sunlight);
+                CalculationEngineSfProxy calculationEngineSfProxy = new CalculationEngineSfProxy();
+                isSuccess = calculationEngineSfProxy.OptimisationAlgorithm(energyConsumerActive, generatorsActive, windSpeed, sunlight);
             }
             catch (Exception ex)
             {
@@ -131,37 +134,39 @@ namespace ScadaProcessingSevice
 
             List<ResourceDescription> retList = new List<ResourceDescription>(5);
             List<ResourceDescription> retListDiscrete = new List<ResourceDescription>(5);
+            NetworkModelGDASfProxy networkModelGDASfProxy = new NetworkModelGDASfProxy();
+
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCode);
                 propertiesDiscrete = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
 
-                var iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                var iteratorId = networkModelGDASfProxy.GetExtentValues(modelCode, properties);
+                resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = networkModelGDASfProxy.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                networkModelGDASfProxy.IteratorClose(iteratorId);
 
-                var iteratorIdDiscrete = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                var iteratorIdDiscrete = networkModelGDASfProxy.GetExtentValues(modelCodeDiscrete, propertiesDiscrete);
+                resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorIdDiscrete);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorIdDiscrete);
+                    List<ResourceDescription> rds = networkModelGDASfProxy.IteratorNext(numberOfResources, iteratorIdDiscrete);
                     retListDiscrete.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorIdDiscrete);
+                    resourcesLeft = networkModelGDASfProxy.IteratorResourcesLeft(iteratorIdDiscrete);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorIdDiscrete);
+                networkModelGDASfProxy.IteratorClose(iteratorIdDiscrete);
             }
             catch (Exception e)
             {
 
-                NetworkModelGDAProxy.Instance = null;
+                //NetworkModelGDAProxy.Instance = null;
                 Thread.Sleep(1000);
                 InitiateIntegrityUpdate();
 
@@ -819,7 +824,8 @@ namespace ScadaProcessingSevice
 
         private void CheckWhichAreTurnedOff(List<MeasurementUnit> analogs, List<MeasurementUnit> descretes)
         {
-            List<DiscreteCounterModel> dcFromDB = CalculationEngineProxy.InstanceRepository.GetAllDiscreteCounters();
+            CalculationEngineSfProxy calculationEngineSfProxy = new CalculationEngineSfProxy();
+            List<DiscreteCounterModel> dcFromDB = calculationEngineSfProxy.GetAllDiscreteCounters();
             foreach (var item in analogs)
             {
                 var des = descretes.Find(x => x.Gid == item.Gid);
@@ -832,7 +838,7 @@ namespace ScadaProcessingSevice
                         if (itemFromDb.CurrentValue == false)
                         {
                             itemFromDb.CurrentValue = true;
-                            CalculationEngineProxy.InstanceRepository.InsertOrUpdate(itemFromDb);
+                            calculationEngineSfProxy.InsertOrUpdate(itemFromDb);
                         }
                     }
                 }
@@ -842,7 +848,7 @@ namespace ScadaProcessingSevice
                     string name = obj.Discrete.Name;
                     if (itemFromDb == null)
                     {
-                        CalculationEngineProxy.InstanceRepository.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false, Name = name });
+                        calculationEngineSfProxy.InsertOrUpdate(new DiscreteCounterModel() { Gid = item.Gid, Counter = 1, CurrentValue = false, Name = name });
                     }
                     else
                     {
@@ -850,10 +856,10 @@ namespace ScadaProcessingSevice
                         {
                             itemFromDb.CurrentValue = false;
                             itemFromDb.Counter++;
-                            DiscretMaxVal = CalculationEngineProxy.InstanceRepository.GetCounterForGeneratorType();
+                            DiscretMaxVal = calculationEngineSfProxy.GetCounterForGeneratorType();
                             int maxVal = DiscretMaxVal.FirstOrDefault(x => x.Key.Item1 == itemFromDb.Gid).Value;
                             CheckDiscretAlarm(itemFromDb.Counter, maxVal, itemFromDb.Gid, name);
-                            CalculationEngineProxy.InstanceRepository.InsertOrUpdate(itemFromDb);
+                            calculationEngineSfProxy.InsertOrUpdate(itemFromDb);
                         }
                     }
                 }
