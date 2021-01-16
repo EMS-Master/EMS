@@ -28,7 +28,7 @@ namespace TransactionManagerService.ServiceFabricProxy
 
             proxy = new ServicePartitionClient<WcfCommunicationClient<ITransactionContract>>(
                     communicationClientFactory: factory,
-                    serviceUri: new Uri("fabric:/EMS/ScadaProcessingCloudServ"),
+                    serviceUri: new Uri("fabric:/CloudEMS/ScadaProcessingCloudServ"),
                     listenerName: "TransactionPREndpoint");
         }
         public bool Commit()

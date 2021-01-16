@@ -702,7 +702,11 @@ namespace FTN.Services.NetworkModelService
                 DeltaModel deltaModel = new DeltaModel();
                 deltaModel.Time = DateTime.Now;
                 deltaModel.Delta = ObjectToByteArray(delta);
-                nmsContext.DeltaModels.Add(deltaModel);
+                try
+                {
+                    nmsContext.DeltaModels.Add(deltaModel);
+                }
+                catch(Exception e) { }
                 nmsContext.SaveChanges();
 
                 string message = string.Format("Insert new Delta into database successfully finished. ");

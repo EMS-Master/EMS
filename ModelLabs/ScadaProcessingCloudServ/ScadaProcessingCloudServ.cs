@@ -34,14 +34,14 @@ namespace ScadaProcessingCloudServ
             return new List<ServiceInstanceListener>
             {
                 new ServiceInstanceListener(context => this.CreateScadaCRListener(context), "ScadaCREndpoint"),
-                new ServiceInstanceListener(context => this.CreateTransactionCRListener(context), "TransactionCREndpoint")
+                new ServiceInstanceListener(context => this.CreateTransactionPRListener(context), "TransactionPREndpoint")
             };
         }
         private ICommunicationListener CreateScadaCRListener(StatelessServiceContext context)
         {
             var listener = new WcfCommunicationListener<IScadaProcessingContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
-                endpointResourceName: "ScadaPREndpoint",
+                endpointResourceName: "ScadaCREndpoint",
                 serviceContext: context,
                 wcfServiceObject: scadaProcessing
             );
@@ -49,7 +49,7 @@ namespace ScadaProcessingCloudServ
             return listener;
         }
 
-        private ICommunicationListener CreateTransactionCRListener(StatelessServiceContext context)
+        private ICommunicationListener CreateTransactionPRListener(StatelessServiceContext context)
         {
             var listener = new WcfCommunicationListener<ITransactionContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),

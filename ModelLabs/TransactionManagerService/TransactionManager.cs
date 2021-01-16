@@ -133,9 +133,10 @@ namespace TransactionManagerService
                 {
                     try
                     {
-                        transactionCESfProxy.Prepare(ref ceDelta);
+                        
                         transactionCRSfProxy.Prepare(ref scadaDelta);
                         transactionCMDSfProxy.Prepare(ref scadaDelta);
+                        transactionCESfProxy.Prepare(ref ceDelta);
                     }
                     catch (Exception e)
                     {
