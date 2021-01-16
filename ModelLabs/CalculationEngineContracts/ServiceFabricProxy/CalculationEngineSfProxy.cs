@@ -38,7 +38,7 @@ namespace CalculationEngineContracts.ServiceFabricProxy
             proxy2 = new ServicePartitionClient<WcfCommunicationClient<ICalculationEngineRepository>>(
                     communicationClientFactory: factory2,
                     serviceUri: new Uri("fabric:/CloudEMS/CalculationEngineCloudServ"),
-                    listenerName: "CalculationEngineEndpoint");
+                    listenerName: "CalculationEngineRepositoryEndpoint");
         }
 
         public List<DiscreteCounterModel> GetAllDiscreteCounters()
