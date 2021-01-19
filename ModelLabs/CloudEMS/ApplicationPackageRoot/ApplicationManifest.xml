@@ -57,8 +57,8 @@
     </Service>
     <Service Name="CalculationEngineCloudServ" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="CalculationEngineCloudServType" TargetReplicaSetSize="[CalculationEngineCloudServ_TargetReplicaSetSize]" MinReplicaSetSize="[CalculationEngineCloudServ_MinReplicaSetSize]">
-        <!--<UniformInt64Partition PartitionCount="[AlarmsEventsCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
         <!--<UniformInt64Partition PartitionCount="[CalculationEngineCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
+        <!--<UniformInt64Partition PartitionCount="[AlarmsEventsCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
         <SingletonPartition />
       </StatefulService>
     </Service>

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using CommonCloud;
+using CommonCloud.AzureStorage;
 
 namespace CalculationEngineServ
 {
@@ -41,7 +43,11 @@ namespace CalculationEngineServ
         
         public List<DiscreteCounterModel> GetAllDiscreteCounters()
         {
-            var list =  DbManager.Instance.GetDiscreteCounters().ToList();
+            //var list =  DbManager.Instance.GetDiscreteCounters().ToList();
+            CommonCloud.AzureStorage.Entities.DiscreteCounter d = new CommonCloud.AzureStorage.Entities.DiscreteCounter(2,23456,true,3,"naziv2");
+
+            AzureTableStorage.AddTableEntityInDB(d,"UseDevelopmentStorage=true;", "DiscreteCounters");
+            var list = AzureTableStorage.GetAllDiscreteCounters("UseDevelopmentStorage=true;", "DiscreteCounters");
             List<DiscreteCounterModel> returnList = new List<DiscreteCounterModel>();
 
             returnList = list.Select(x => new DiscreteCounterModel()
