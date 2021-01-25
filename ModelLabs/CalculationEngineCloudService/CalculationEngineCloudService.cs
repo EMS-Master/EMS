@@ -34,9 +34,9 @@ namespace CalculationEngineCloudService
             prToce = new ProcessingToCalculation();
             ceToUI = new CeToUI();
             publisherService = new PublisherService();
-            ce = new CalculationEngine();
-            ProcessingToCalculation.CalculationEngine = ce;
-            CeToUI.Ce = ce;
+            //ce = new CalculationEngine(this.Context); //namjestiti konstruktor
+            //ProcessingToCalculation.CalculationEngine = ce;
+            //CeToUI.Ce = ce;
         }
 
         /// <summary>
@@ -53,8 +53,6 @@ namespace CalculationEngineCloudService
             {
                 new ServiceReplicaListener(context => this.CreateCalculationEngineListener(context), "CalculationEngineEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineUIListener(context), "CalculationEngineUIEndpoint"),
-                new ServiceReplicaListener(context => this.CreateCalculationEnginePubSubListener(context), "CalculationEnginePubSub"),
-                
                 //new ServiceReplicaListener(context => this.CreateCalculationEngineTransactionListener(context), "CalculationEngineTransactionEndpoint"),
                 
                 /*ovo ne treba =>*/ //new ServiceReplicaListener(context => this.CreateChooseOptimizationListener(context), "CeChooseOptimizationEndpoint")
@@ -80,7 +78,7 @@ namespace CalculationEngineCloudService
                            serviceContext: context,
                            wcfServiceObject: ceToUI
             );
-            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineUIEndpoint");
+            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineHistoryDataEndpoint");
             return listener;
         }
 

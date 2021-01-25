@@ -23,6 +23,10 @@ namespace UI.ViewModel
         private string combo1;
         private string combo2;
 
+        private AlarmsEventsSubscribeProxy aeSubscribeProxy;
+
+        
+
         private ObservableCollection<AlarmHelper> alarmSummaryQueue = new ObservableCollection<AlarmHelper>();
         private ObservableCollection<string> sourceCombo2 = new ObservableCollection<string>();
 
@@ -48,6 +52,16 @@ namespace UI.ViewModel
         public AlarmSummaryViewModel()
         {
             Title = "Alarm Summary";
+
+            try
+            {
+                aeSubscribeProxy = new AlarmsEventsSubscribeProxy(CallbackAction);
+                aeSubscribeProxy.Subscribe();
+            }
+            catch (Exception e)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Could not connect to Alarm Publisher Service! \n {0}", e.Message);
+            }
 
             try
             {

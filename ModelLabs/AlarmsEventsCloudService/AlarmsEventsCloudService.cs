@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using CloudCommon;
@@ -38,7 +37,7 @@ namespace AlarmsEventsCloudService
         {
             return new List<ServiceReplicaListener>() {
                 new ServiceReplicaListener(context => this.CreateAlarmEventsListener(context), "AlarmsEventsEndpoint"),
-                new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityListener(context), "AesIntegrityEndpoint"),
+                new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityListener(context), "AlarmsEventsIntegrityEndpoint"),
                 /*ovo ne treba =>*/ //new ServiceReplicaListener(context => this.CreateServiceRemotingListener(context), "AlarmsEventsIntegrityAsyncEndpoint")
             };
             // return new ServiceReplicaListener[0];
@@ -47,7 +46,7 @@ namespace AlarmsEventsCloudService
         {
             var listener = new WcfCommunicationListener<IAlarmsEventsContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
-                address: new EndpointAddress("net.tcp://localhost:20023/AlarmsEventsCloudService/"),
+                endpointResourceName: "AlarmsEventsEndpoint",
                 serviceContext: context,
                 wcfServiceObject: alarmsEvents
             );
@@ -59,7 +58,7 @@ namespace AlarmsEventsCloudService
         {
             var listener = new WcfCommunicationListener<IAesIntegirtyContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
-                address: new EndpointAddress("net.tcp://localhost:20023/AlarmsEventsCloudService/IntegrityUpdate"),
+                endpointResourceName: "AlarmsEventsIntegrityEndpoint",
                 serviceContext: context,
                 wcfServiceObject: alarmsEvents
             );

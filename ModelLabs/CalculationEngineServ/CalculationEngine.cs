@@ -71,8 +71,7 @@ namespace CalculationEngineServ
 
             generators = new Dictionary<long, Generator>();
             energyConsumers = new Dictionary<long, EnergyConsumer>();
-            //generatorCurves = new List<GeneratorCurveModel>();
-            generatorCurves = LoadXMLFile.Load().Curves;            
+			generatorCurves = LoadXMLFile.Load().Curves;
 			optimizationModelResults = new Dictionary<long, OptimisationModel>();
 		}
         
@@ -188,6 +187,7 @@ namespace CalculationEngineServ
         {
             Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
+			float powerOfCommandedGen = 0;
 
             Dictionary<long, OptimisationModel> optModelMapNonRenewable = new Dictionary<long, OptimisationModel>();
 			Dictionary<long, OptimisationModel> renewableGenerators = new Dictionary<long, OptimisationModel>();
