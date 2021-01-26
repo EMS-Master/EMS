@@ -41,16 +41,16 @@ namespace CalculationEngineServ
         
         public List<DiscreteCounterModel> GetAllDiscreteCounters()
         {
-            var list =  DbManager.Instance.GetDiscreteCounters().ToList();
+            //var list =  DbManager.Instance.GetDiscreteCounters().ToList();
             List<DiscreteCounterModel> returnList = new List<DiscreteCounterModel>();
 
-            returnList = list.Select(x => new DiscreteCounterModel()
-            {
-                Id = x.Id,
-                Gid = x.Gid,
-                Counter = x.Counter,
-                CurrentValue = x.CurrentValue
-            }).ToList();
+            //returnList = list.Select(x => new DiscreteCounterModel()
+            //{
+            //    Id = x.Id,
+            //    Gid = x.Gid,
+            //    Counter = x.Counter,
+            //    CurrentValue = x.CurrentValue
+            //}).ToList();
 
             return returnList;
         }

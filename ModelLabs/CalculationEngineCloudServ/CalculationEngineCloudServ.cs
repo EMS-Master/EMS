@@ -54,7 +54,19 @@ namespace CalculationEngineCloudServ
                 new ServiceReplicaListener(context => this.CreateCalculationEngineUIListener(context), "CalculationEngineUIEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineTransactionListener(context), "CalculationEngineTransactionEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEnginePubSubListener(context), "CalculationEnginePubSubEndpoint"),
+                new ServiceReplicaListener(context => this.CreateCalculationEngineRepositoryListener(context), "CalculationEngineRepositoryEndpoint")
             };
+        }
+        private ICommunicationListener CreateCalculationEngineRepositoryListener(StatefulServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<ICalculationEngineRepository>(
+                listenerBinding: Binding.CreateCustomNetTcp(),
+                endpointResourceName: "CalculationEngineRepositoryEndpoint",
+                serviceContext: context,
+                wcfServiceObject: processingToCalculation
+            );
+
+            return listener;
         }
         private ICommunicationListener CreateCalculationEngineListener(StatefulServiceContext context)
         {

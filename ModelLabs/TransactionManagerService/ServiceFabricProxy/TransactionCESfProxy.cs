@@ -29,7 +29,8 @@ namespace TransactionManagerService.ServiceFabricProxy
             proxy = new ServicePartitionClient<WcfCommunicationClient<ITransactionContract>>(
                     communicationClientFactory: factory,
                     serviceUri: new Uri("fabric:/CloudEMS/CalculationEngineCloudServ"),
-                    listenerName: "CalculationEngineTransactionEndpoint");
+                    listenerName: "CalculationEngineTransactionEndpoint",
+                    partitionKey: ServicePartitionKey.Singleton); 
         }
         public bool Commit()
         {
