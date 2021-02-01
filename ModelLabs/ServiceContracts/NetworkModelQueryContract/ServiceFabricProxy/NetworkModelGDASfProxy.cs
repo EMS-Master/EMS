@@ -26,7 +26,7 @@ namespace FTN.ServiceContracts.ServiceFabricProxy
             proxy = new ServicePartitionClient<WcfCommunicationClient<INetworkModelGDAContract>>(
                     communicationClientFactory: factory,
                     serviceUri: new Uri("fabric:/CloudEMS/NetworkModelCloudServ"),
-                    listenerName: "NMSEndpoint");
+                    listenerName: "NetworkModelGDAEndpoint");
         }
         public UpdateResult ApplyUpdate(Delta delta)
         {

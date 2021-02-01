@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CalculationEngineServ;
-using CalculationEngineServ.DataBaseModels;
+//using CalculationEngineServ;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
@@ -497,8 +497,8 @@ namespace ScadaCommandingService
 				commandedGeneratorFromDB.CommandingFlag = true;
 				commandedGeneratorFromDB.CommandingValue = value;
 
-				DbManager.Instance.UpdateCommandedGenerator(commandedGeneratorFromDB);
-				DbManager.Instance.SaveChanges();
+				DbManager.Instance.AddCommandedGenerator(commandedGeneratorFromDB);
+				//DbManager.Instance.SaveChanges();
 			}
 
             Console.WriteLine("SendDataToSimulator executed...\n");

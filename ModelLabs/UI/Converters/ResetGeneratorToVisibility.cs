@@ -1,4 +1,5 @@
 ﻿using CalculationEngineServ;
+using CommonCloud.AzureStorage;
 using FTN.ServiceContracts;
 using System;
 using System.Collections.Generic;
@@ -23,8 +24,8 @@ namespace UI.Converters
 
                     //List<CommandedGenerator> gen = new List<CommandedGenerator>();
                     //gen = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag && x.CommandingValue != 0).Select(x => x).ToList();
-                    EmsContext e = new EmsContext();
-                    bool commandingFlag = e.CommandedGenerators.FirstOrDefault(x => x.Gid == generator.Gid).CommandingFlag; //DbManager.Instance.GetCommandedGenerator(generator.Gid).CommandingFlag; //e.CommandedGenerators.FirstOrDefault(x => x.Gid == generator.Gid).CommandingFlag;
+                    //EmsContext e = new EmsContext();
+                    bool commandingFlag = AzureTableStorage.GetAllCommandedGenerators("UseDevelopmentStorage=true;","CommandedGenerators").FirstOrDefault(x => x.Gid == generator.Gid).CommandingFlag; //DbManager.Instance.GetCommandedGenerator(generator.Gid).CommandingFlag; //e.CommandedGenerators.FirstOrDefault(x => x.Gid == generator.Gid).CommandingFlag;
                     if (commandingFlag)
                         return Visibility.Visible;
                     else

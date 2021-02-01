@@ -11,11 +11,12 @@ using FTN.Services.AlarmsEventsService.PubSub;
 using System.Data.SqlClient;
 using System.Data;
 using CalculationEngineService;
-using CalculationEngineServ.DataBaseModels;
+//using CalculationEngineServ.DataBaseModels;
 using CalculationEngineServ;
 using Microsoft.ServiceFabric.Data;
 using EMS.Services.AlarmsEventsService;
 using Microsoft.ServiceFabric.Data.Collections;
+using CommonCloud.AzureStorage.Entities;
 
 namespace FTN.Services.AlarmsEventsService
 {
@@ -219,7 +220,7 @@ namespace FTN.Services.AlarmsEventsService
         {
             bool success = true;
 
-            EmsContext ems = new EmsContext();
+            //EmsContext ems = new EmsContext();
             try
             {
                 Alarm a = new Alarm()
@@ -236,8 +237,8 @@ namespace FTN.Services.AlarmsEventsService
                     CurrentState = alarm.CurrentState
                 };
 
-                ems.Alarms.Add(a);
-                ems.SaveChanges();
+                DbManager.Instance.AddAlarm(a);
+                //ems.SaveChanges();
 
             }
 
@@ -333,7 +334,8 @@ namespace FTN.Services.AlarmsEventsService
                 
                 var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
                 tmpAlarm.CurrentState = string.Format("{0}", State.Cleared);
-                DbManager.Instance.SaveChanges();
+                DbManager.Instance.AddAlarm(tmpAlarm);
+               // DbManager.Instance.SaveChanges();
                 
             }
             catch (Exception e)
@@ -354,9 +356,10 @@ namespace FTN.Services.AlarmsEventsService
                     var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
                     tmpAlarm.AlarmValue = alarm.Value;
                     tmpAlarm.Severity = alarm.Severity;
-                    DbManager.Instance.SaveChanges();                       
-                    
-                }
+                DbManager.Instance.AddAlarm(tmpAlarm);
+                // DbManager.Instance.SaveChanges();                       
+
+            }
                 catch (Exception e)
                 {
                     success = false;
@@ -376,7 +379,8 @@ namespace FTN.Services.AlarmsEventsService
             {
                 var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
                 tmpAlarm.AckState = alarm.AckState;
-                DbManager.Instance.SaveChanges();
+                DbManager.Instance.AddAlarm(tmpAlarm);
+                // DbManager.Instance.SaveChanges();
 
             }
             catch (Exception e)
@@ -396,11 +400,11 @@ namespace FTN.Services.AlarmsEventsService
         {
             List<AlarmHelper> alarms = new List<AlarmHelper>();
 
-            EmsContext ems = new EmsContext();
+           // EmsContext ems = new EmsContext();
 
                 try
                 {
-                    var alarmsdb = ems.Alarms.ToList();
+                    var alarmsdb = DbManager.Instance.GetAlarms(); 
 
                     foreach (var item in alarmsdb)
                     {

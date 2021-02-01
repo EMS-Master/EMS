@@ -297,7 +297,7 @@ namespace UI.ViewModel
         private void AcknowledgeCommandExecute(AlarmHelper alarmHelper)
         {
             AlarmHelper alarmToRemove = new AlarmHelper();
-            EmsContext e = new EmsContext();
+            //EmsContext e = new EmsContext();
             if (alarmHelper == null)
             {
                 return;

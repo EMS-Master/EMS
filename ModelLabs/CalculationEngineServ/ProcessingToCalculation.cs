@@ -1,5 +1,4 @@
 ﻿using CalculationEngineContracts;
-using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 using FTN.Common;
 using System;
@@ -10,6 +9,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using CommonCloud;
 using CommonCloud.AzureStorage;
+using CommonCloud.AzureStorage.Entities;
 
 namespace CalculationEngineServ
 {
@@ -72,10 +72,10 @@ namespace CalculationEngineServ
                 var dc = DbManager.Instance.GetDiscreteCounters().FirstOrDefault(x => x.Id == model.Id);
                 dc.CurrentValue = model.CurrentValue;
                 dc.Counter = model.Counter;
-                DbManager.Instance.UpdateDiscreteCounter(dc);
+                DbManager.Instance.AddDiscreteCounter(dc);
             }
 
-            DbManager.Instance.SaveChanges();
+            //DbManager.Instance.SaveChanges();
         }
 
         public Dictionary<Tuple<long, string>, int> GetCounterForGeneratorType()

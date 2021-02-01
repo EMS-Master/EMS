@@ -71,7 +71,8 @@ namespace NetworkModelCloudServ
         {
             var listener = new WcfCommunicationListener<INetworkModelGDAContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
-                address : new EndpointAddress("net.tcp://localhost:10000/NetworkModelCloudServ/GDA/"), 
+                //address : new EndpointAddress("net.tcp://localhost:10000/NetworkModelCloudServ/GDA/"), 
+                endpointResourceName: "NetworkModelGDAEndpoint",
                 serviceContext: context,
                 wcfServiceObject: gda
             );

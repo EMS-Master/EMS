@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CalculationEngineServ
 {
+    [Serializable]
 	public class GeneratorCurveModels
 	{
 		private List<GeneratorCurveModel> curves = new List<GeneratorCurveModel>(20);

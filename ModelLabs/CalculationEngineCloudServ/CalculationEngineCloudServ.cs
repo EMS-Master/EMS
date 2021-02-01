@@ -85,7 +85,7 @@ namespace CalculationEngineCloudServ
         {
             var listener = new WcfCommunicationListener<ICalculationEngineUIContract>(
                            listenerBinding: Binding.CreateCustomNetTcp(),
-                           address: new EndpointAddress("net.tcp://localhost:20002/CalculationEngineCloudServ/CeToUI"),
+                           address: new EndpointAddress("CalculationEngineUIEndpoint"),
                            serviceContext: context,
                            wcfServiceObject: ceToUI
             );
@@ -108,7 +108,7 @@ namespace CalculationEngineCloudServ
         {
             var listener = new WcfCommunicationListener<ICePubSubContract>(
                            listenerBinding: Binding.CreateCustomNetTcp(),
-                           address: new EndpointAddress("net.tcp://localhost:20002/CalculationEngineCloudServ/CePubSubContract"),
+                           address: new EndpointAddress("CalculationEnginePubSubEndpoint"),
                            serviceContext: context,
                            wcfServiceObject: publisherService
             );

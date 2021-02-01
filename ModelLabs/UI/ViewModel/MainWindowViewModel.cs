@@ -1,6 +1,7 @@
 ﻿using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
+using FTN.ServiceContracts.ServiceFabricProxy;
 using FTN.Services.NetworkModelService.DataModel.Core;
 using FTN.Services.NetworkModelService.DataModel.Meas;
 using FTN.Services.NetworkModelService.DataModel.Wires;
@@ -77,23 +78,23 @@ namespace UI.ViewModel
                 string message = string.Empty;
 
                 List<ResourceDescription> retList = new List<ResourceDescription>(5);
-
+                NetworkModelGDASfProxy nm = new NetworkModelGDASfProxy();
                 #region getting Generator
                 try
                 {
                     // first get all synchronous machines from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = nm.GetExtentValues(modelCodeGenerator, properties);
+                    resourcesLeft = nm.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = nm.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = nm.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    nm.IteratorClose(iteratorId);
 
                 }
                 catch (Exception e)

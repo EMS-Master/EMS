@@ -28,9 +28,10 @@ namespace CalculationEngineServ.GeneticAlgorithm
 		public float MaxValuePerGen;
         public GA(float necessaryEnergy, Dictionary<long, OptimisationModel> optModelMap)
         {
-			EmsContext e = new EmsContext();
+			//EmsContext e = new EmsContext();
+            
 			commandedGeneratrs = new Dictionary<long, OptimisationModel>();
-			CommandedGenGidsAndValues = e.CommandedGenerators.Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
+			CommandedGenGidsAndValues = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
 			this.optModelMap = optModelMap.Where(x => !CommandedGenGidsAndValues.Any(y => y.Key == x.Key)).ToDictionary(param => param.Key, param => param.Value);
 			MaxValuePerGen = 1000000f;
 			foreach(var item in CommandedGenGidsAndValues)

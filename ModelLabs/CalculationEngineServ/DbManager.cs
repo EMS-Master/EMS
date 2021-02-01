@@ -1,4 +1,6 @@
-﻿using CalculationEngineServ.DataBaseModels;
+﻿
+using CommonCloud.AzureStorage;
+using CommonCloud.AzureStorage.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,11 @@ namespace CalculationEngineServ
     {
         private static DbManager instance = null;
 
-        public EmsContext emsContext = null;
+        //public EmsContext emsContext = null;
 
         private DbManager()
         {
-            emsContext = new EmsContext();
+            //emsContext = new EmsContext();
         }
 
         public static DbManager Instance
@@ -31,116 +33,104 @@ namespace CalculationEngineServ
         }
 
         #region Alarms
-        public IQueryable<Alarm> GetAlarms()
+        public List<Alarm> GetAlarms()
         {
-            lock (emsContext)
-            {
-                return emsContext.Alarms;
-            }
+
+            return AzureTableStorage.GetAllAlarms("UseDevelopmentStorage=true;", "Alarms");
+            
         }
 
         public void AddAlarm(Alarm alarm)
         {
-            lock (emsContext)
-            {
-                emsContext.Alarms.Add(alarm);
-            }
+
+            AzureTableStorage.AddTableEntityInDB(alarm,"UseDevelopmentStorage=true;", "Alarms");
+
         }
         #endregion
 
         #region DiscreteCounters
-        public IQueryable<DiscreteCounter> GetDiscreteCounters()
+        public List<DiscreteCounter> GetDiscreteCounters()
         {
-            lock (emsContext)
-            {
-                return emsContext.DiscreteCounters;
-            }
+
+            return AzureTableStorage.GetAllDiscreteCounters("UseDevelopmentStorage=true;", "DiscreteCounters");
+
         }
 
         public void AddDiscreteCounter(DiscreteCounter dc)
         {
-            lock (emsContext)
-            {
-                emsContext.DiscreteCounters.Add(dc);
-            }
+            AzureTableStorage.AddTableEntityInDB(dc,"UseDevelopmentStorage=true;", "DiscreteCounters");
+
         }
 
-        public void UpdateDiscreteCounter(DiscreteCounter dc)
-        {
-            emsContext.Entry(dc).State = System.Data.Entity.EntityState.Modified;
-        }
+        //public void UpdateDiscreteCounter(DiscreteCounter dc)
+        //{
+        //    emsContext.Entry(dc).State = System.Data.Entity.EntityState.Modified;
+        //}
 
 		#endregion
 
 		#region CommandedGenerators
-		public IQueryable<CommandedGenerator> GetCommandedGenerators()
+		public List<CommandedGenerator> GetCommandedGenerators()
 		{
-			lock (emsContext)
-			{
-				return emsContext.CommandedGenerators;
-			}
-		}
+			
+				return AzureTableStorage.GetAllCommandedGenerators("UseDevelopmentStorage=true;", "CommandedGenerators");
+
+        }
 		
 		public CommandedGenerator GetCommandedGenerator(long gid)
 		{
-			lock (emsContext)
-			{
-				return emsContext.CommandedGenerators.FirstOrDefault(x => x.Gid == gid);
-			}
+				return AzureTableStorage.GetAllCommandedGenerators("UseDevelopmentStorage=true;", "CommandedGenerators").FirstOrDefault(x => x.Gid == gid);
+			
 		}
 
 		public void AddCommandedGenerator(CommandedGenerator cg)
 		{
-			lock (emsContext)
-			{
-				emsContext.CommandedGenerators.Add(cg);
-			}
-		}
+            AzureTableStorage.AddTableEntityInDB(cg, "UseDevelopmentStorage=true;", "CommandedGenerators");
+
+        }
 
 		public void AddListCommandedGenerators(List<CommandedGenerator> listCG)
 		{
-			lock(emsContext)
-			{
-				emsContext.CommandedGenerators.AddRange(listCG);
-			}
-		}
+            AzureTableStorage.InsertEntitiesInDB(listCG, "UseDevelopmentStorage=true;", "CommandedGenerators");
 
-		public void UpdateCommandedGenerator(CommandedGenerator cg)
-		{
-			emsContext.Entry(cg).State = System.Data.Entity.EntityState.Modified;
-		}
+        }
+
+		//public void UpdateCommandedGenerator(CommandedGenerator cg)
+		//{
+		//	emsContext.Entry(cg).State = System.Data.Entity.EntityState.Modified;
+		//}
 
 		#endregion
 
 		#region TotalProduction
-		public IQueryable<TotalProduction> GetTotalProductions()
+		public List<TotalProduction> GetTotalProductions()
         {
-            return emsContext.TotalProductions;
+            return AzureTableStorage.GetAllTotalProductions( "UseDevelopmentStorage=true;", "TotalProductions");
         }
 
         public void AddTotalProduction(TotalProduction tot)
         {
-            emsContext.TotalProductions.Add(tot);
+            AzureTableStorage.AddTableEntityInDB(tot, "UseDevelopmentStorage=true;", "TotalProductions");
         }
         #endregion
 
         #region HistoryMeasurements
 
-        public IQueryable<HistoryMeasurement> GetHistoryMeasurements()
+        public List<HistoryMeasurement> GetHistoryMeasurements()
         {
-            return emsContext.HistoryMeasurements;
+            return AzureTableStorage.GetAllHistoryMeasurements("UseDevelopmentStorage=true;", "HistoryMeasurements");
         }
 
         public void AddHistoryMeasurement(HistoryMeasurement hm)
         {
-            emsContext.HistoryMeasurements.Add(hm);
+            AzureTableStorage.AddTableEntityInDB(hm, "UseDevelopmentStorage=true;", "HistoryMeasurements");
         }
 
         #endregion
 
-        public void SaveChanges()
-        {
-            emsContext.SaveChanges();
-        }
+        //public void SaveChanges()
+        //{
+        //    emsContext.SaveChanges();
+        //}
     }
 }

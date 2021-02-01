@@ -1,6 +1,7 @@
-﻿using CalculationEngineServ.DataBaseModels;
+﻿
 using CalculationEngineServ.GeneticAlgorithm;
 using CalculationEngineServ.PubSub;
+using CommonCloud.AzureStorage.Entities;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
@@ -447,7 +448,7 @@ namespace CalculationEngineServ
                     };
                     DbManager.Instance.AddHistoryMeasurement(h);
                 }
-                DbManager.Instance.SaveChanges();
+               // DbManager.Instance.SaveChanges();
 
             }
             catch (Exception e)
@@ -500,7 +501,7 @@ namespace CalculationEngineServ
 				};
 
                 DbManager.Instance.AddTotalProduction(total);
-                DbManager.Instance.SaveChanges();
+                //DbManager.Instance.SaveChanges();
 
                 retVal = true;
             }
@@ -876,7 +877,7 @@ namespace CalculationEngineServ
 		private void FillInitialCommandedGenerators()
 		{
 			List<CommandedGenerator> commandedGenerators = new List<CommandedGenerator>();
-			commandedGenerators = DbManager.Instance.GetCommandedGenerators().ToList();
+			commandedGenerators = DbManager.Instance.GetCommandedGenerators();
 
 
             List<CommandedGenerator>  commandedGenerators1 = generators.Where(x => (x.Value.GeneratorType == GeneratorType.Coal ||
@@ -888,7 +889,7 @@ namespace CalculationEngineServ
 				}).ToList();
 
 				DbManager.Instance.AddListCommandedGenerators(commandedGenerators1);
-				DbManager.Instance.SaveChanges();
+				//DbManager.Instance.SaveChanges();
 			
 		}
 
@@ -1065,8 +1066,8 @@ namespace CalculationEngineServ
 			{
 				commandedGen.CommandingFlag = false;
 				commandedGen.CommandingValue = 0;
-				DbManager.Instance.UpdateCommandedGenerator(commandedGen);
-				DbManager.Instance.SaveChanges();
+				DbManager.Instance.AddCommandedGenerator(commandedGen);
+				//DbManager.Instance.SaveChanges();
 			}	
 		}
 

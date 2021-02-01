@@ -70,6 +70,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Common\3rdPartyLibs\x86\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Azure.Cosmos.Table, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -110,6 +111,10 @@
     <Compile Include="GDA\ResourceIterator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">
+      <Project>{25125418-b9c8-491e-9e99-ec33b3a059f1}</Project>
+      <Name>CommonCloud</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>

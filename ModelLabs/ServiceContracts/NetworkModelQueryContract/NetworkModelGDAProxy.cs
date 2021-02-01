@@ -17,6 +17,17 @@ namespace FTN.ServiceContracts
             {
                 lock (lockObj)
                 {
+                    if (proxy != null)
+                    {
+                        if (!((ICommunicationObject)proxy).State.Equals(CommunicationState.Opened))
+                        {
+                            CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Creating new channel for NetworkModelGDAProxy");
+                            factory = new ChannelFactory<INetworkModelGDAContract>("*");
+                            proxy = factory.CreateChannel();
+                        }
+                    }
+
+
                     if (proxy == null)
                     {
                         factory = new ChannelFactory<INetworkModelGDAContract>("*");
