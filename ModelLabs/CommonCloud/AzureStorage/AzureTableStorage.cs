@@ -148,7 +148,7 @@ namespace CommonCloud.AzureStorage
                 table.Execute(insertOperation);
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }
@@ -220,7 +220,7 @@ namespace CommonCloud.AzureStorage
                     return null;
                 }
             }
-            catch
+            catch(Exception e)
             {
                 return null;
             }

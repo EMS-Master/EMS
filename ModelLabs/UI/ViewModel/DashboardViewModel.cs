@@ -286,7 +286,7 @@ namespace UI.ViewModel
         public DashboardViewModel()
         {
             SubsrcibeToCE(); 
-            ceSubscribeProxy.Optimization();
+            //ceSubscribeProxy.Optimization();
 
             var para = CalculationEngineUIProxy.Instance.GetAlgorithmOptions();
             NumOfIterations = para.Item1;

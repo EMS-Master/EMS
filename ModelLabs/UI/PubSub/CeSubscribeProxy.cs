@@ -49,7 +49,7 @@ namespace UI.PubSub
 
 		public bool Optimization()
 		{
-			return Proxy.Optimization();
+            return true;
 		}
 	}
 }
