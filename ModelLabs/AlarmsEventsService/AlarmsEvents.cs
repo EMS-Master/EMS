@@ -17,13 +17,14 @@ using Microsoft.ServiceFabric.Data;
 using EMS.Services.AlarmsEventsService;
 using Microsoft.ServiceFabric.Data.Collections;
 using CommonCloud.AzureStorage.Entities;
+using AESPubSbuContract;
 
 namespace FTN.Services.AlarmsEventsService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AlarmsEvents : IAlarmsEventsContract, IAesIntegirtyContract
     {
-        private List<AlarmHelper> alarms;
+        private List<AlarmHelper> alarms = new List<AlarmHelper>();
         private PublisherService publisher;
         private IReliableStateManager StateManager;
         private IReliableDictionary<string, AlarmsData> alarmsEventsCache;
@@ -31,7 +32,7 @@ namespace FTN.Services.AlarmsEventsService
        
         private Dictionary<long, bool> isNormalCreated = new Dictionary<long, bool>(10);
         public object alarmLock = new object();
-
+        private AesPublishSfProxy aesPublishSfProxy = new AesPublishSfProxy();
         public AlarmsEvents()
         {
             this.Publisher = new PublisherService();
@@ -50,7 +51,7 @@ namespace FTN.Services.AlarmsEventsService
                 AlarmsData alarmsData = data.HasValue ? data.Value : new AlarmsData();
                 try
                 {
-                    Alarms = alarmsData.Alarms as List<AlarmHelper>;
+                    Alarms = alarmsData.Alarms as List<AlarmHelper> ?? new List<AlarmHelper>();
                 }
                 catch (Exception e)
                 {
@@ -174,13 +175,13 @@ namespace FTN.Services.AlarmsEventsService
                         this.RemoveAlarmFromAlarmsEventsCache(alarm.Gid);
                         //this.Alarms.Add(alarm);
                         this.AddAlarmToAlarmsEventsCache(alarm);
-                        this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                        aesPublishSfProxy.PublishAlarmsEvents(alarm, publishingStatus);
                         this.isNormalCreated[alarm.Gid] = true;
 
                     }
                     else if (!alarm.Type.Equals(AlarmType.NORMAL))
                     {
-                        this.Publisher.PublishAlarmsEvents(alarm, publishingStatus);
+                        aesPublishSfProxy.PublishAlarmsEvents(alarm, publishingStatus);
                     }
 
                     //Console.WriteLine("AlarmsEvents: AddAlarm method");
@@ -223,19 +224,14 @@ namespace FTN.Services.AlarmsEventsService
             //EmsContext ems = new EmsContext();
             try
             {
-                Alarm a = new Alarm()
+                Alarm a = new Alarm(alarm.Gid, alarm.Value, alarm.MinValue, alarm.MaxValue, alarm.TimeStamp)
                 {
-                    Gid = alarm.Gid,
-                    AlarmValue = alarm.Value,
-                    MinValue = alarm.MinValue,
-                    MaxValue = alarm.MaxValue,
-                    AlarmTimeStamp = alarm.TimeStamp,
-                    AckState = alarm.AckState,
-                    AlarmType = alarm.Type,
+                    AckState = (int)alarm.AckState,
+                    AlarmType = (int)alarm.Type,
                     AlarmMessage = alarm.Message,
-                    Severity = alarm.Severity,
+                    Severity = (int)alarm.Severity,
                     CurrentState = alarm.CurrentState
-                };
+            };
 
                 DbManager.Instance.AddAlarm(a);
                 //ems.SaveChanges();
@@ -282,7 +278,7 @@ namespace FTN.Services.AlarmsEventsService
 
                     try
                     {
-                        this.Publisher.PublishStateChange(alarm);
+                        aesPublishSfProxy.PublishStateChange(alarm);
                         string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
                         CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                     }
@@ -313,7 +309,7 @@ namespace FTN.Services.AlarmsEventsService
 
                     try
                     {
-                        this.Publisher.PublishStateChange(alarm);
+                        aesPublishSfProxy.PublishStateChange(alarm);
                         string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
                         CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                     }
@@ -353,9 +349,10 @@ namespace FTN.Services.AlarmsEventsService
             
                 try
                 {
-                    var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
+                    var alarmList = DbManager.Instance.GetAlarms();
+                    var tmpAlarm = alarmList?.FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
                     tmpAlarm.AlarmValue = alarm.Value;
-                    tmpAlarm.Severity = alarm.Severity;
+                    tmpAlarm.Severity = (int)alarm.Severity;
                 DbManager.Instance.AddAlarm(tmpAlarm);
                 // DbManager.Instance.SaveChanges();                       
 
@@ -377,8 +374,8 @@ namespace FTN.Services.AlarmsEventsService
 
             try
             {
-                var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
-                tmpAlarm.AckState = alarm.AckState;
+                var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
+                tmpAlarm.AckState = (int)alarm.AckState;
                 DbManager.Instance.AddAlarm(tmpAlarm);
                 // DbManager.Instance.SaveChanges();
 
@@ -548,7 +545,7 @@ namespace FTN.Services.AlarmsEventsService
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
             }
         }

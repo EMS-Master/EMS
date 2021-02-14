@@ -35,9 +35,8 @@ namespace CommonCloud.AzureStorage.Entities
             Gid = gid;
             CommandingFlag = commandingFlag;
             CommandingValue = commandingValue;
-            RowKey = Id.ToString();
+            RowKey = gid.ToString() +"_" + DateTime.Now.ToString("o");
             PartitionKey = "CommandedGenerator";
-            Timestamp = DateTime.Now;
         }
     }
 }

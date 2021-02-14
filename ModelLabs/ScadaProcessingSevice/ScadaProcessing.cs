@@ -1,4 +1,5 @@
-﻿using CalculationEngineContracts;
+﻿using AlarmsEventsContract.ServiceFabricProxy;
+using CalculationEngineContracts;
 using CalculationEngineContracts.ServiceFabricProxy;
 using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
@@ -39,7 +40,7 @@ namespace ScadaProcessingSevice
         private static Dictionary<Tuple<long, string>, int> DiscretMaxVal;
         private UpdateResult updateResult;
         private ITransactionCallback transactionCallback;
-
+        private AlarmsEventsSfProxy alarmsEventsSfProxy;
 
         public ScadaProcessing()
         {
@@ -56,6 +57,7 @@ namespace ScadaProcessingSevice
             generatorDscretes = new List<DiscreteLocation>();
             generatorDscretesCopy = new List<DiscreteLocation>();
             DiscretMaxVal = new Dictionary<Tuple<long, string>, int>();
+            alarmsEventsSfProxy = new AlarmsEventsSfProxy();
         }
         //data collected from simulator should be passed through 
         //scadaProcessing,from scada, to calculationEngine for optimization
@@ -682,7 +684,7 @@ namespace ScadaProcessingSevice
                             AlarmHelper al = new AlarmHelper();
                             al.Gid = analogLoc.Analog.PowerSystemResource;
                             al.Value = eguVal;
-                            AlarmsEventsProxy.Instance.UpdateStatus(analogLoc, State.Cleared);
+                            alarmsEventsSfProxy.UpdateStatus(analogLoc, State.Cleared);
 
                             Alarm normalAlarm = new Alarm();
                             normalAlarm.AckState = AckState.Unacknowledged;
@@ -746,7 +748,7 @@ namespace ScadaProcessingSevice
                 ah.Severity = SeverityLevel.HIGH;
                 ah.Message = string.Format("Value on input discret signal: {0} higher than maximum expected value", name);
                 ah.Name = name;
-                AlarmsEventsProxy.Instance.AddAlarm(ah);
+                alarmsEventsSfProxy.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on name: {0}", name);
                 Console.WriteLine("Alarm on high raw limit on name: {0}", name);
@@ -775,7 +777,7 @@ namespace ScadaProcessingSevice
                 ah.TimeStamp = DateTime.Now;
                 ah.Message = string.Format("Value on input analog signal: {0} lower than minimum expected value", name);
                 ah.Name = name;
-                AlarmsEventsProxy.Instance.AddAlarm(ah);
+                alarmsEventsSfProxy.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on low raw limit on gid: {0:X}", gid);
                 Console.WriteLine("Alarm on low raw limit on gid: {0}", name);
@@ -800,7 +802,7 @@ namespace ScadaProcessingSevice
                 ah.Message = string.Format("Value on input analog signal: {0} higher than maximum expected value", name);
                 ah.Name = name;
 
-                AlarmsEventsProxy.Instance.AddAlarm(ah);
+                alarmsEventsSfProxy.AddAlarm(ah);
                 retVal = true;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Alarm on high raw limit on gid: {0}", name);
                 Console.WriteLine("Alarm on high raw limit on gid: {0}", name);

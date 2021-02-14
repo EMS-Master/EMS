@@ -26,17 +26,17 @@ namespace CommonCloud.AzureStorage.Entities
         [DataMember]
         private DateTime _alarmTimeStamp;
         [DataMember]
-        private AckState _ackState;
+        private int _ackState;
         [DataMember]
-        private AlarmType _alarmType;
+        private int _alarmType;
         [DataMember]
         private string _alarmMessage;
         [DataMember]
-        private SeverityLevel _severity;
+        private int _severity;
         [DataMember]
         private string _currentState;
         [DataMember]
-        private PublishingStatus _pubStatus;
+        private int _pubStatus;
         [DataMember]
         private string _name;
 
@@ -46,12 +46,12 @@ namespace CommonCloud.AzureStorage.Entities
         public float MinValue { get => _minValue; set => _minValue = value; }
         public float MaxValue { get => _maxValue; set => _maxValue = value; }
         public DateTime AlarmTimeStamp { get => _alarmTimeStamp; set => _alarmTimeStamp = value; }
-        public AckState AckState { get => _ackState; set => _ackState = value; }
-        public AlarmType AlarmType { get => _alarmType; set => _alarmType = value; }
+        public int AckState { get => _ackState; set => _ackState = value; }
+        public int AlarmType { get => _alarmType; set => _alarmType = value; }
         public string AlarmMessage { get => _alarmMessage; set => _alarmMessage = value; }
-        public SeverityLevel Severity { get => _severity; set => _severity = value; }
+        public int Severity { get => _severity; set => _severity = value; }
         public string CurrentState { get => _currentState; set => _currentState = value; }
-        public PublishingStatus PubStatus { get => _pubStatus; set => _pubStatus = value; }
+        public int PubStatus { get => _pubStatus; set => _pubStatus = value; }
         public string Name { get => _name; set => _name = value; }
 
 
@@ -63,9 +63,8 @@ namespace CommonCloud.AzureStorage.Entities
             this.MaxValue = maxValue;
             this.AlarmTimeStamp = timeStamp;
             this.AlarmMessage = "";
-            RowKey = Id.ToString();
+            RowKey = gid.ToString() + "_" + DateTime.Now.ToString("o");
             PartitionKey = "Alarm";
-            Timestamp = DateTime.Now;
         }
 
         public Alarm() { }

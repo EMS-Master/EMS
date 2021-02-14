@@ -1,6 +1,7 @@
 ﻿
 using CalculationEngineServ.GeneticAlgorithm;
 using CalculationEngineServ.PubSub;
+using CEPubSubContract;
 using CommonCloud.AzureStorage.Entities;
 using CommonMeas;
 using FTN.Common;
@@ -25,6 +26,7 @@ namespace CalculationEngineServ
 	public class CalculationEngine : ITransactionContract
     {
 		private PublisherService publisher = null;
+        private CEPublishProxy CePublishProxy = new CEPublishProxy();
         private static List<ResourceDescription> internalGenerators;
         private static List<ResourceDescription> internalGeneratorsCopy;
         private static List<ResourceDescription> internalEnergyConsumers;
@@ -440,12 +442,8 @@ namespace CalculationEngineServ
                 
                 foreach (var item in measurements)
                 {
-                    HistoryMeasurement h = new HistoryMeasurement
-                    {
-                        Gid = item.Gid,
-                        MeasurementTime = item.TimeStamp,
-                        MeasurementValue = item.CurrentValue
-                    };
+                    HistoryMeasurement h = new HistoryMeasurement(item.Gid, item.TimeStamp, item.CurrentValue);
+                   
                     DbManager.Instance.AddHistoryMeasurement(h);
                 }
                // DbManager.Instance.SaveChanges();
@@ -497,8 +495,10 @@ namespace CalculationEngineServ
 					CO2Emission = currentEmissionCO2,
 					TimeOfCalculation = dateTime,
 					TotalCost = totalCost,
-					Profit = profit
-				};
+					Profit = profit,
+                    RowKey = DateTime.Now.ToString("o"),
+                    PartitionKey = "TotalProduction"
+            };
 
                 DbManager.Instance.AddTotalProduction(total);
                 //DbManager.Instance.SaveChanges();
@@ -690,7 +690,7 @@ namespace CalculationEngineServ
                 }
 				
 			}
-			publisher.PublishOptimizationResults(measListUI);
+            CePublishProxy.OptimizationResults(measListUI);
 		}
 
         private void PublishConsumersToUI(List<MeasurementUnit> measurementsFromConsumers)
@@ -721,23 +721,23 @@ namespace CalculationEngineServ
                     measUIList.Add(measUI);
                 }
             }
-            publisher.PublishOptimizationResults(measUIList);
+            CePublishProxy.OptimizationResults(measUIList);
         }
 
         private void PublishWindPercent(float windPercent)
         {
-            publisher.PublishWindPercent(windPercent);
+            CePublishProxy.WindPercentResult(windPercent);
         }
 
         private void PublishRenewableToUI( Tuple<DateTime, float> tupla)
         {
-            publisher.PublishRenewableKW(tupla);
+            CePublishProxy.RenewableResult(tupla);
         }
 
 
         private void PublishCoReductionToUI(Tuple<string, float, float> tupla)
         {
-            publisher.PublishCoReduction(tupla);
+            CePublishProxy.PublishCoReduction(tupla);
         }
         #endregion
 
@@ -880,13 +880,15 @@ namespace CalculationEngineServ
 			commandedGenerators = DbManager.Instance.GetCommandedGenerators();
 
 
-            List<CommandedGenerator>  commandedGenerators1 = generators.Where(x => (x.Value.GeneratorType == GeneratorType.Coal ||
-				x.Value.GeneratorType == GeneratorType.Gas || x.Value.GeneratorType == GeneratorType.Oil) && !commandedGenerators.Any(y => y.Gid == x.Value.GlobalId)).Select(y => new CommandedGenerator()
-				{
-					Gid = y.Value.GlobalId,
-					CommandingFlag = false,
-					CommandingValue = 0
-				}).ToList();
+            List<CommandedGenerator> commandedGenerators1 = generators.Where(x => (x.Value.GeneratorType == GeneratorType.Coal ||
+               x.Value.GeneratorType == GeneratorType.Gas || x.Value.GeneratorType == GeneratorType.Oil) && !commandedGenerators.Any(y => y.Gid == x.Value.GlobalId)).Select(y => new CommandedGenerator()
+               {
+                   Gid = y.Value.GlobalId,
+                   CommandingFlag = false,
+                   CommandingValue = 0,
+                   PartitionKey = "CommandedGenerator",
+                   RowKey = y.Value.GlobalId.ToString() + "_" + DateTime.Now.ToString("o")
+                }).ToList();
 
 				DbManager.Instance.AddListCommandedGenerators(commandedGenerators1);
 				//DbManager.Instance.SaveChanges();
@@ -895,7 +897,7 @@ namespace CalculationEngineServ
 
         private void FillInitialDiscreteCounters()
         {
-            string path = System.IO.Path.GetFullPath("..\\..\\..\\..\\");
+            string path = "C:/Users/barba/Desktop/EMS/ModelLabs/";
 
             XmlDocument doc = new XmlDocument();
             doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");

@@ -29,16 +29,15 @@ namespace CommonCloud.AzureStorage.Entities
         public int Counter { get => counter; set => counter = value; }
         public string Name { get => name; set => name = value; }
 
-        public DiscreteCounter(int id, long gid, bool currentValue, int counter, string name)
+        public DiscreteCounter( long gid, bool currentValue, int counter, string name)
         {
-            Id = id;
+            Id = 1;
             Gid = gid;
             CurrentValue = currentValue;
             Counter = counter;
             Name = name;
-            RowKey = Id.ToString() ;
+            RowKey = gid.ToString() + "_" + DateTime.Now.ToString("o");
             PartitionKey = "DiscreteCounter";
-            Timestamp = DateTime.Now;
         }
 
         public DiscreteCounter()

@@ -26,8 +26,7 @@ namespace CEPubSubContract
             proxy = new ServicePartitionClient<WcfCommunicationClient<ICEPublishContract>>(
                     communicationClientFactory: factory,
                     serviceUri: new Uri("fabric:/CloudEMS/CalculationEngineCloudServ"),
-                    listenerName: "CEPublishEndpoint",
-                    partitionKey: new ServicePartitionKey(0));
+                    listenerName: "CEPublishEndpoint");
         }
 
         public void OptimizationResults(List<MeasurementUI> result)

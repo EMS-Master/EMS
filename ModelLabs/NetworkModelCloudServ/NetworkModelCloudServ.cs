@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading;
@@ -42,6 +43,7 @@ namespace NetworkModelCloudServ
             return new List<ServiceInstanceListener>
             {
                 new ServiceInstanceListener(context=>this.CreateNetworkModelGDAListener(context), "NetworkModelGDAEndpoint"),
+                //new ServiceInstanceListener(context=>this.CreateNetworkModelGDAListener1(context), "NetworkModelGDAEndpoint"),
                 new ServiceInstanceListener(context=>this.CreateNMSTransactionListener(context), "NMSTranscationEndpoint")
             };
         }
@@ -92,5 +94,26 @@ namespace NetworkModelCloudServ
             return listener;
 
         }
+
+        //private ICommunicationListener CreateNetworkModelGDAListener1(StatelessServiceContext context)
+        //{
+        //    //string host = context.NodeContext.IPAddressOrFQDN;
+
+        //    //var endpointConfig = context.CodePackageActivationContext.GetEndpoint("NetworkModelGDAEndpoint");
+        //    //int port = endpointConfig.Port;
+        //    //var scheme = endpointConfig.UriScheme.ToString();
+        //    //var pathSufix = endpointConfig.PathSuffix.ToString();
+
+        //    //string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/NetworkModelService/{3}", scheme, host, port, pathSufix);
+
+        //    var listener = new WcfCommunicationListener<INetworkModelGDAContract>(
+        //                    listenerBinding: Binding.CreateCustomNetTcp(),
+        //                    address: new EndpointAddress("net.tcp://localhost:10000/NetworkModelService/GDA/"),
+        //                    serviceContext: context,
+        //                    wcfServiceObject: new NetworkModelGDA()
+        //    );
+
+        //    return listener;
+        //}
     }
 }

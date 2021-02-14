@@ -66,9 +66,8 @@ namespace ScadaProcessingCloudServ
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            #region ScadaKrunching instantiation
-            bool integrityState = true;
-            //bool integrityState = scadaCR.InitiateIntegrityUpdate();
+            #region ScadaProcessing instantiation
+            bool integrityState = scadaProcessing.InitiateIntegrityUpdate();
 
             if (!integrityState)
             {
@@ -79,7 +78,7 @@ namespace ScadaProcessingCloudServ
                 ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update succeeded.");
             }
 
-            #endregion ScadaKrunching instantiation
+            #endregion ScadaProcessing instantiation
 
             while (true)
             {

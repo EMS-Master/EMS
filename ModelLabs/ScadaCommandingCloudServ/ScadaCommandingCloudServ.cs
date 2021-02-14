@@ -69,9 +69,8 @@ namespace ScadaCommandingCloudServ
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
             #region ScadaCommanding instantiation
-
-            bool integrityState = true;
-            //integrityState=scadaCMD.InitiateIntegrityUpdate();
+            
+            bool integrityState = scadaCMD.InitiateIntegrityUpdate();
 
             if (!integrityState)
             {

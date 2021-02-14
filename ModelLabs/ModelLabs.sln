@@ -120,6 +120,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngineCloudServ"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScadaCloudServ", "ScadaCloudServ\ScadaCloudServ.csproj", "{005AB465-F64F-4318-B248-1558E75D650E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatewayService", "GatewayService\GatewayService.csproj", "{F9A014DC-6F3E-4AC6-98AB-907689BA3028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -613,6 +615,14 @@ Global
 		{005AB465-F64F-4318-B248-1558E75D650E}.Release|x64.ActiveCfg = Release|x64
 		{005AB465-F64F-4318-B248-1558E75D650E}.Release|x64.Build.0 = Release|x64
 		{005AB465-F64F-4318-B248-1558E75D650E}.Release|x86.ActiveCfg = Release|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Debug|x64.ActiveCfg = Debug|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Debug|x64.Build.0 = Debug|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Debug|x86.ActiveCfg = Debug|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Release|Any CPU.ActiveCfg = Release|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Release|x64.ActiveCfg = Release|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Release|x64.Build.0 = Release|x64
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -658,6 +668,7 @@ Global
 		{8D40A95A-2A2D-4948-B6B2-F4EB37F6F9CE} = {4D3E5780-2F61-479C-8787-0E74DDB985A3}
 		{C2775B67-5437-4DFB-98A4-09D56E524404} = {4D3E5780-2F61-479C-8787-0E74DDB985A3}
 		{005AB465-F64F-4318-B248-1558E75D650E} = {4D3E5780-2F61-479C-8787-0E74DDB985A3}
+		{F9A014DC-6F3E-4AC6-98AB-907689BA3028} = {4D3E5780-2F61-479C-8787-0E74DDB985A3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A49E34D3-A7AB-425F-9F7C-BF0EC8716FAC}

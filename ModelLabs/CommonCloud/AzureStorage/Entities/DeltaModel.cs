@@ -31,9 +31,8 @@ namespace CommonCloud.AzureStorage.Entities
             Id = id;
             Time = time;
             Delta = delta;
-            RowKey = Id.ToString();
+            RowKey = DateTime.Now.ToString("o");
             PartitionKey = "DeltaModel";
-            Timestamp = DateTime.Now;
         }
     }
 }

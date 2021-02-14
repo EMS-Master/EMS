@@ -21,15 +21,14 @@ namespace CommonCloud.AzureStorage.Entities
         [DataMember]
         private float _measurementValue;
 
-        public HistoryMeasurement(int id, long gid, DateTime measurementTime, float measurementValue)
+        public HistoryMeasurement( long gid, DateTime measurementTime, float measurementValue)
         {
-            Id = id;
+            Id = 1;
             Gid = gid;
             MeasurementTime = measurementTime;
             MeasurementValue = measurementValue;
-            RowKey = Id.ToString();
+            RowKey = gid.ToString()+ "_" + DateTime.Now.ToString("o");
             PartitionKey = "HistoryMeasurement";
-            Timestamp = DateTime.Now;
         }
 
         public HistoryMeasurement()

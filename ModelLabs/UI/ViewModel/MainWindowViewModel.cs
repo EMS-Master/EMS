@@ -85,16 +85,16 @@ namespace UI.ViewModel
                     // first get all synchronous machines from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
 
-                    iteratorId = nm.GetExtentValues(modelCodeGenerator, properties);
-                    resourcesLeft = nm.IteratorResourcesLeft(iteratorId);
+                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
+                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = nm.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = nm.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
                     }
-                    nm.IteratorClose(iteratorId);
+                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
 
                 }
                 catch (Exception e)

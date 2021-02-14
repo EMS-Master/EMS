@@ -27,18 +27,17 @@ namespace CommonCloud.AzureStorage.Entities
         [DataMember]
         private DateTime _timeOfCalculation;
 
-        public TotalProduction(int id, float totalGeneration, float cO2Reduction, float cO2Emission, float totalCost, float profit, DateTime timeOfCalculation)
+        public TotalProduction(float totalGeneration, float cO2Reduction, float cO2Emission, float totalCost, float profit, DateTime timeOfCalculation)
         {
-            Id = id;
+            Id = 1;
             TotalGeneration = totalGeneration;
             CO2Reduction = cO2Reduction;
             CO2Emission = cO2Emission;
             TotalCost = totalCost;
             Profit = profit;
             TimeOfCalculation = timeOfCalculation;
-            RowKey = Id.ToString();
+            RowKey = DateTime.Now.ToString("o");
             PartitionKey = "TotalProduction";
-            Timestamp = DateTime.Now;
         }
 
 
