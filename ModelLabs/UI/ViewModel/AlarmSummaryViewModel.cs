@@ -8,11 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using UI.Communication;
 using UI.PubSub;
 using UI.View;
 
@@ -24,10 +26,11 @@ namespace UI.ViewModel
         private string combo2;
         private Visibility combo2Visibility = Visibility.Hidden;
         public Visibility Combo2Visibility { get { return combo2Visibility; } set { combo2Visibility = value; OnPropertyChanged(); } }
-
+        private UIAlarmUpdateClient alCli;
         private AlarmsEventsSubscribeProxy aeSubscribeProxy;
+        private UIAesIntegrityClient proxyIntegrity;
 
-        
+
 
         private ObservableCollection<AlarmHelper> alarmSummaryQueue = new ObservableCollection<AlarmHelper>();
         private ObservableCollection<string> sourceCombo2 = new ObservableCollection<string>();
@@ -54,10 +57,12 @@ namespace UI.ViewModel
         public AlarmSummaryViewModel()
         {
             Title = "Alarm Summary";
-
+            alCli = new UIAlarmUpdateClient("UIAlarmUpdateClientEndpoint");
+            proxyIntegrity = new UIAesIntegrityClient("UIAesIntegrityClientEndpoint");
             try
             {
-                aeSubscribeProxy = new AlarmsEventsSubscribeProxy(CallbackAction);
+                var context = new InstanceContext(new AePubSubCallbackService() { CallbackAction = CallbackAction });
+                var aeSubscribeProxy = new UIAlarmsSubscribeClient(context, "UIAlarmsSubscribeClientEndpoint");
                 aeSubscribeProxy.Subscribe();
             }
             catch (Exception e)
@@ -274,7 +279,7 @@ namespace UI.ViewModel
 
         private void IntegirtyUpdate()
         {
-            List<AlarmHelper> integirtyResult = AesIntegrityProxy.Instance.InitiateIntegrityUpdate();
+            List<AlarmHelper> integirtyResult = proxyIntegrity.InitiateIntegrityUpdate();
             
             lock (alarmSummaryLock)
             {
@@ -342,7 +347,7 @@ namespace UI.ViewModel
                 alarmHelper.CurrentState = string.Format("{0} | {1}", state, alarmHelper.AckState.ToString());
                 OnPropertyChanged(nameof(AlarmSummaryQueue));
             }
-            AlarmsEventsProxy.Instance.UpdateAckStatus(alarmHelper);
+            alCli.UpdateAckStatus(alarmHelper);
            
         }
 

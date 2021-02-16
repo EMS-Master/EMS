@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using UI.Communication;
 using UI.Model;
 
 namespace UI.ViewModel
@@ -18,6 +19,8 @@ namespace UI.ViewModel
         private DateTime endTime;
         private PeriodValues selectedPeriod;
         private GraphSample graphSampling;
+        private UICalculationEngineClient proxy;
+
 
         private ICommand selectedPeriodCommand;
         public PeriodValues SelectedPeriod { get => selectedPeriod; set => selectedPeriod = value; }
@@ -39,6 +42,8 @@ namespace UI.ViewModel
             GraphSampling = GraphSample.HourSample;
             GlobalName = name;
             OnPropertyChanged(GlobalName);
+            proxy = new UICalculationEngineClient("CalculationEngineUIEndpoint");
+
         }
 
         private void ShowDataCommandExecute(object obj)
@@ -50,9 +55,9 @@ namespace UI.ViewModel
 
             Generator.Clear();
             if(startTime == DateTime.MinValue || endTime == DateTime.MinValue)
-                measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(this.globalId, DateTime.Now.AddHours(-1), DateTime.Now));
+                measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetHistoryMeasurements(this.globalId, DateTime.Now.AddHours(-1), DateTime.Now));
             else
-                measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(this.globalId, startTime, endTime));
+                measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetHistoryMeasurements(this.globalId, startTime, endTime));
 
 
             if (graphSampling != GraphSample.None)

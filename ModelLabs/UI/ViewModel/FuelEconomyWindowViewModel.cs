@@ -8,6 +8,7 @@ using OxyPlot.Series;
 using CalculationEngineContracts;
 using FTN.Common;
 using System.Windows.Input;
+using UI.Communication;
 
 namespace UI.ViewModel
 {
@@ -19,12 +20,14 @@ namespace UI.ViewModel
         public PlotModel Model { get { return model; } set{  model = value; OnPropertyChanged(); } }
         private ICommand refreshFuelEconomy;
         public ICommand RefreshFuelEconomy => refreshFuelEconomy ?? (refreshFuelEconomy = new RelayCommand(RefreshFuelEconomyCommand));
-
+        private UICalculationEngineClient proxy;
         public FuelEconomyWindowViewModel(long gid, string name, GeneratorType genType)
         {
             globalId = gid;
             Name = name;
-            List<float> points = CalculationEngineUIProxy.Instance.GetPointForFuelEconomy(gid);
+            proxy = new UICalculationEngineClient("CalculationEngineUIEndpoint");
+
+            List<float> points = proxy.GetPointForFuelEconomy(gid);
             Model = new PlotModel { Title = "Name: " + name + "\n Type: " + genType.ToString() };
             Model.Axes.Add(new OxyPlot.Axes.LinearAxis { Position = OxyPlot.Axes.AxisPosition.Bottom, Title = "[%]",
                 MajorGridlineStyle = LineStyle.Dot, MajorGridlineColor = OxyColors.Gray
@@ -87,7 +90,7 @@ namespace UI.ViewModel
 
         public void RefreshFuelEconomyCommand(object obj)
         {
-            List<float> points = CalculationEngineUIProxy.Instance.GetPointForFuelEconomy(globalId);
+            List<float> points = proxy.GetPointForFuelEconomy(globalId);
             var series2 = new LineSeries
             {
                 MarkerType = MarkerType.Cross,

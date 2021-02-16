@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using UI.Communication;
 using UI.Model;
 
 namespace UI.ViewModel
@@ -50,7 +51,7 @@ namespace UI.ViewModel
         private bool isExpandedSeparated = false;
         private bool isExpandedTotalProduction = false;
 
-
+        private UIClientNms uiCli;
         private bool totalProductionForSelectedVisible = false;
         private bool totalProductionGraphVisible = true;
 
@@ -94,7 +95,7 @@ namespace UI.ViewModel
         private List<ResourceDescription> retList;
 
 
-
+        private UICalculationEngineClient proxy;
 
 
 
@@ -319,11 +320,13 @@ namespace UI.ViewModel
         public HistoryViewModel()
         {
             Title = "History";
+            proxy = new UICalculationEngineClient("CalculationEngineUIEndpoint");
+
             startTime = DateTime.Now.AddHours(-1);
             endTime = DateTime.Now;
             GraphSampling = GraphSample.HourSample;
             SelectedPeriod = PeriodValues.Last_Hour;
-
+            uiCli = new UIClientNms("UIClientNmsEndpoint");
             IntegrityUpdateForGenerators();
             IntegrityUpdateForEnergyConsumer();
         }
@@ -343,15 +346,15 @@ namespace UI.ViewModel
             {
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = uiCli.GetExtentValues(modelCodeGenerator, properties);
+                resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                uiCli.IteratorClose(iteratorId);
                 internalGen.AddRange(retList);
 
                 foreach (ResourceDescription rd in internalGen)
@@ -394,15 +397,15 @@ namespace UI.ViewModel
             try
             {
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = uiCli.GetExtentValues(modelCodeGenerator, properties);
+                resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                uiCli.IteratorClose(iteratorId);
                 internalGen.AddRange(retList);
 
                 foreach (ResourceDescription rd in internalGen)
@@ -521,7 +524,7 @@ namespace UI.ViewModel
                 {
                     try
                     {
-                        measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetHistoryMeasurements(keyPair.Key, startTime, endTime));
+                        measurementsFromDb = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetHistoryMeasurements(keyPair.Key, startTime, endTime));
 
 
                         if (measurementsFromDb == null)
@@ -622,14 +625,14 @@ namespace UI.ViewModel
 
            
 
-            TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetTotalProduction(StartTime, EndTime));
+            TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetTotalProduction(StartTime, EndTime));
 
-            TotalProfit = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetProfit(StartTime, EndTime));
-            TotalCost = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetCost(StartTime, EndTime));
+            TotalProfit = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetProfit(StartTime, EndTime));
+            TotalCost = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetCost(StartTime, EndTime));
 
 
-            CoReduction = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetCoReduction(StartTime, EndTime));
-            CoEmission = new ObservableCollection<Tuple<double, DateTime>>(CalculationEngineUIProxy.Instance.GetCoEmission(StartTime, EndTime));
+            CoReduction = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetCoReduction(StartTime, EndTime));
+            CoEmission = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetCoEmission(StartTime, EndTime));
 
             GraphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
             GraphProfit = new ObservableCollection<Tuple<double, DateTime>>();

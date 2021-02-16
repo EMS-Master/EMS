@@ -35,7 +35,7 @@ namespace GatewayService
         {
             return new List<ServiceReplicaListener>
             {
-                new ServiceReplicaListener(context => this.CreateNetworkModelGDAListener(context), "NetworkModelGDAEndpoint"),
+                new ServiceReplicaListener(context => this.CreateNetworkModelGDAListener(context), "UIClientNmsEndpoint"),
             };
         }
         private ICommunicationListener CreateNetworkModelGDAListener(StatefulServiceContext context)
@@ -51,8 +51,8 @@ namespace GatewayService
 
             var listener = new WcfCommunicationListener<INetworkModelGDAContract>(
                             listenerBinding: Binding.CreateCustomNetTcp(),
-                           // address: new EndpointAddress("net.tcp://localhost:10000/NetworkModelService/GDA"),
-                            endpointResourceName: "NetworkModelGDAEndpoint",
+                            address: new EndpointAddress("net.tcp://localhost:52399/GatewayService"),
+                           // endpointResourceName: "UIClientNmsEndpoint",
                             serviceContext: context,
                             wcfServiceObject: new NetworkModelGDA()
             );

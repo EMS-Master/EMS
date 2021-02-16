@@ -1,4 +1,5 @@
 ﻿using CalculationEngineContracts;
+using CalculationEngineContracts.ServiceFabricProxy;
 using FTN.Common;
 using FTN.ServiceContracts;
 using ScadaContracts;
@@ -7,11 +8,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using UI.Communication;
 using UI.Model;
 using UI.PubSub;
 using UI.View;
@@ -68,7 +71,7 @@ namespace UI.ViewModel
         private ICommand changeNumOfIterations;
         public ICommand ChangeNumOfIterations => changeNumOfIterations ?? (changeNumOfIterations = new RelayCommand<object>(ChangeNumOfIterationsExecute));
 
-        private CeSubscribeProxy ceSubscribeProxy;
+        //private CeSubscribeProxy ceSubscribeProxy;
         private string currentProduction;
         private string currentConsumption;
         private WindSpeed w;
@@ -96,9 +99,9 @@ namespace UI.ViewModel
         private ObservableCollection<KeyValuePair<string, float>> generationByTypeList = new ObservableCollection<KeyValuePair<string, float>>() { new KeyValuePair<string, float>("Wind [kW]", 0), new KeyValuePair<string, float>("Solar [kW]", 0), new KeyValuePair<string, float>("Hydro [MW]", 0), new KeyValuePair<string, float>("Coal [kW]", 0), new KeyValuePair<string, float>("Oil [kW]", 0), new KeyValuePair<string, float>("Gas [kW]", 0), };
         private ObservableCollection<KeyValuePair<DateTime, float>> demandList = new ObservableCollection<KeyValuePair<DateTime, float>>();
         private string renwableList;
-        
+        private UIScadaCommandClient proxyScada;
 
-        
+
         private Dictionary<long, bool> gidToBoolMap = new Dictionary<long, bool>();
         private double graphWidth;
         private double graphHeight;
@@ -114,7 +117,7 @@ namespace UI.ViewModel
         private ICommand expandCommand;
 
         public ICommand VisibilityCheckedCommand => visibilityCheckedCommand ?? (visibilityCheckedCommand = new RelayCommand<long>(VisibilityCheckedCommandExecute));
-
+        private UICalculationEngineClient proxy;
         public ICommand VisibilityUncheckedCommand => visibilityUncheckedCommand ?? (visibilityUncheckedCommand = new RelayCommand<long>(VisibilityUncheckedCommandExecute));
 
         private ICommand commandGenMessBox;
@@ -148,7 +151,7 @@ namespace UI.ViewModel
         {
             
                 long gid = (long)obj;
-                ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, true);
+                proxyScada.CommandDiscreteValues(gid, true);
             
                 
 
@@ -156,7 +159,7 @@ namespace UI.ViewModel
         private void DeactivateGenExecute(object obj)
         {
             long gid = (long)obj;
-            ScadaCommandingProxy.Instance.CommandDiscreteValues(gid, false);
+            proxyScada.CommandDiscreteValues(gid, false);
         }
 
         private void CommandGenMessBoxExecute(object obj)
@@ -176,7 +179,7 @@ namespace UI.ViewModel
 				ModelForCheckboxes model = (ModelForCheckboxes)obj;
 				if (model.IsActive)
 				{
-					ScadaCommandingProxy.Instance.CommandAnalogValues(model.Id, model.InputValue);
+                    proxyScada.CommandAnalogValues(model.Id, model.InputValue);
 				}
 			}
         }
@@ -285,16 +288,17 @@ namespace UI.ViewModel
 
         public DashboardViewModel()
         {
-            SubsrcibeToCE(); 
+            SubsrcibeToCE();
             //ceSubscribeProxy.Optimization();
-
-            var para = CalculationEngineUIProxy.Instance.GetAlgorithmOptions();
+             proxy = new UICalculationEngineClient("CalculationEngineUIEndpoint");
+            proxyScada = new UIScadaCommandClient("UIScadaCommandClientEndpoint");
+            var para = proxy.GetAlgorithmOptions();
             NumOfIterations = para.Item1;
             NumOfPuplation = para.Item2;
             ElitsmPercent = para.Item3;
             MutationRate = para.Item4;
 
-            var para2 = CalculationEngineUIProxy.Instance.GetPricePerGeneratorType();
+            var para2 = proxy.GetPricePerGeneratorType();
 
             OilPrice = para2.Item1;
             GasPrice = para2.Item3;
@@ -406,7 +410,9 @@ namespace UI.ViewModel
         {
             try
             {
-                ceSubscribeProxy = new CeSubscribeProxy(CallbackAction);
+                var context = new InstanceContext(new CePubSubCallbackService() { CallbackAction = CallbackAction });
+                //ceSubscribeProxy = new CeSubscribeProxy(CallbackAction);
+                UISubscribeClient ceSubscribeProxy = new UISubscribeClient(context, "UISubscribeClientEndpoint");
                 ceSubscribeProxy.Subscribe();
             }
             catch (Exception e)
@@ -636,13 +642,14 @@ namespace UI.ViewModel
         }
         protected override void OnDispose()
         {
-            ceSubscribeProxy.Unsubscribe();
+            //ceSubscribeProxy.Unsubscribe();
             base.OnDispose();
         }
 
         private void CommandDigitalValues(bool v)
         {
-          //  ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Key, v);
+            //  ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Key, v);
+            //proxyScada.CommandDiscreteValues(M)
         }
         private void ExpandCommandExecute(object obj)
         {
@@ -659,14 +666,14 @@ namespace UI.ViewModel
         {
 
 
-            CalculationEngineUIProxy.Instance.SetAlgorithmOptions(NumOfIterations, NumOfPuplation, ElitsmPercent, MutationRate);
+            proxy.SetAlgorithmOptions(NumOfIterations, NumOfPuplation, ElitsmPercent, MutationRate);
 
 
         }
         private void DefaultParamValuesExecute(object obj)
         {
-            CalculationEngineUIProxy.Instance.SetAlgorithmOptionsDefault();
-            var para = CalculationEngineUIProxy.Instance.GetAlgorithmOptions();
+            proxy.SetAlgorithmOptionsDefault();
+            var para = proxy.GetAlgorithmOptions();
             NumOfIterations = para.Item1;
             NumOfPuplation = para.Item2;
             ElitsmPercent = para.Item3;
@@ -677,8 +684,8 @@ namespace UI.ViewModel
         private void DefaultPriceExecute(object obj)
         {
 
-            CalculationEngineUIProxy.Instance.SetPricePerGeneratorTypeDefault();
-            var para = CalculationEngineUIProxy.Instance.GetPricePerGeneratorType();
+            proxy.SetPricePerGeneratorTypeDefault();
+            var para = proxy.GetPricePerGeneratorType();
 
             OilPrice = para.Item1;
             GasPrice = para.Item3;
@@ -689,12 +696,12 @@ namespace UI.ViewModel
 
         private void ApplyPriceExecute(object obj)
         {
-            CalculationEngineUIProxy.Instance.SetPricePerGeneratorType(OilPrice, CoalPrice, GasPrice);
+            proxy.SetPricePerGeneratorType(OilPrice, CoalPrice, GasPrice);
         }
 
         private void ApplyParamValuesExecute(object obj)
         {
-            CalculationEngineUIProxy.Instance.SetAlgorithmOptions(NumOfIterations, NumOfPuplation, ElitsmPercent, MutationRate);
+            proxy.SetAlgorithmOptions(NumOfIterations, NumOfPuplation, ElitsmPercent, MutationRate);
         }
     }
 }

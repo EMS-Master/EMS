@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using UI.Communication;
 using UI.PubSub;
 
 namespace UI.ViewModel
@@ -21,9 +23,9 @@ namespace UI.ViewModel
         private int resourcesLeft;
         private int resourcesLeft2;
 
-        private CeSubscribeProxy ceSubscribeProxy;
+        //private CeSubscribeProxy ceSubscribeProxy;
 
-
+        private UIClientNms uiCli;
         private List<ModelCode> properties;
         private List<ModelCode> properties2;
 
@@ -50,11 +52,13 @@ namespace UI.ViewModel
 		public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
 
         private TestGDA testGda;
+        private UIScadaCommandClient proxyScada;
+
 
         private void ActivateGenExecute(object obj)
         {
             MeasurementUI model = (MeasurementUI)obj;
-            ScadaCommandingProxy.Instance.CommandDiscreteValues(model.Gid, !model.IsActive);
+            proxyScada.CommandDiscreteValues(model.Gid, !model.IsActive);
         }
         private void CommandGenMessBoxExecute(object obj)
         {
@@ -71,7 +75,7 @@ namespace UI.ViewModel
 			MeasurementUI model = (MeasurementUI)obj;
 			if(model.IsActive)
 			{
-				ScadaCommandingProxy.Instance.CommandAnalogValues(model.Gid, model.CurrentValue);
+				proxyScada.CommandAnalogValues(model.Gid, model.CurrentValue);
 			}
 		}
 
@@ -105,7 +109,10 @@ namespace UI.ViewModel
         public CommandViewModel()
         {
             Title = "Command";
-            testGda = new TestGDA();
+            //testGda = new TestGDA();
+            uiCli = new UIClientNms("UIClientNmsEndpoint");
+            proxyScada = new UIScadaCommandClient("UIScadaCommandClientEndpoint");
+
             SubsrcibeToCE();
             IntegrityUpdate();
         }
@@ -147,23 +154,23 @@ namespace UI.ViewModel
                 properties2 = modelResourcesDesc.GetAllPropertyIds(modelCodeAnalog);
 
 
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
-                iteratorId2 = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeAnalog, properties2);
+                iteratorId = uiCli.GetExtentValues(modelCodeGenerator, properties);
+                iteratorId2 = uiCli.GetExtentValues(modelCodeAnalog, properties2);
 
 
 
 
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
-                resourcesLeft2 = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId2);
+                resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
+                resourcesLeft2 = uiCli.IteratorResourcesLeft(iteratorId2);
 
 
                 //var retExtentValues = testGda.GetExtentValues(ModelCode.ANALOG, properties.ToList());
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 }
 
                 //while (resourcesLeft2 > 0)
@@ -178,7 +185,7 @@ namespace UI.ViewModel
                 //    resourcesLeft2 = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId2);
                 //}
 
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                uiCli.IteratorClose(iteratorId);
                 internalGen.AddRange(retList);
 
                 var descrete = DbManager.Instance.GetDiscreteCounters().ToList();
@@ -199,15 +206,15 @@ namespace UI.ViewModel
 
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeEnergyConsumer, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = uiCli.GetExtentValues(modelCodeEnergyConsumer, properties);
+                resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                uiCli.IteratorClose(iteratorId);
                 internalGen.AddRange(retList);
 
                
@@ -218,8 +225,12 @@ namespace UI.ViewModel
                         continue;
                     }
 
-                    bool active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault().CurrentValue;
-                    EnergyConsumer.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active });
+                    var active = descrete.Where(x => x.Gid == rd.Id).FirstOrDefault();
+                    if (active?.CurrentValue != null)
+                    {
+                        EnergyConsumer.Add(new ModelForCheckboxes() { Id = rd.Id, IsActive = active.CurrentValue });
+                    }
+                    
 
                 }
                 OnPropertyChanged(nameof(EnergyConsumer));
@@ -240,7 +251,12 @@ namespace UI.ViewModel
         {
             try
             {
-                ceSubscribeProxy = new CeSubscribeProxy(CallbackAction);
+                //ceSubscribeProxy = new CeSubscribeProxy(CallbackAction);
+                //ceSubscribeProxy.Subscribe();
+
+                var context = new InstanceContext(new CePubSubCallbackService() { CallbackAction = CallbackAction });
+                //ceSubscribeProxy = new CeSubscribeProxy(CallbackAction);
+                UISubscribeClient ceSubscribeProxy = new UISubscribeClient(context, "UISubscribeClientEndpoint");
                 ceSubscribeProxy.Subscribe();
             }
             catch (Exception e)

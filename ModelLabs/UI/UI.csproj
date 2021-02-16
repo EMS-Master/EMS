@@ -209,6 +209,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Communication\UIAesIntegrityClient.cs" />
+    <Compile Include="Communication\UIAlarmsSubscribeClient.cs" />
+    <Compile Include="Communication\UIAlarmUpdateClient.cs" />
+    <Compile Include="Communication\UICalculationEngineClient.cs" />
+    <Compile Include="Communication\UIClientNms.cs" />
+    <Compile Include="Communication\UIScadaCommandClient.cs" />
+    <Compile Include="Communication\UISubscribeClient.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Converters\AckStateToBoolConverter.cs" />
     <Compile Include="Converters\AckToColorConverter.cs" />

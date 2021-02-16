@@ -189,8 +189,8 @@ namespace UI.ViewModel
               List<ModelCode> retList = new List<ModelCode>();
               foreach (var item in NMSview.PropertiesContainer.Items)
               {
-                  ContentPresenter c = (ContentPresenter)NMSview.PropertiesContainer.ItemContainerGenerator.ContainerFromItem(item);
-                  CheckBox chbox = c.ContentTemplate.FindName("PropCheckBox", c) as CheckBox;
+                  var c = (ContentPresenter)NMSview.PropertiesContainer.ItemContainerGenerator.ContainerFromItem(item);
+                  var chbox = c.ContentTemplate.FindName("PropCheckBox", c) as CheckBox;
                   if (chbox.IsChecked == true)
                   {
                       var propModelCode = (ModelCode)chbox.DataContext;

@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UI.Communication;
 
 namespace UI.View
 {
@@ -23,9 +24,12 @@ namespace UI.View
     /// </summary>
     public partial class DashboardView : UserControl
     {
+        private UICalculationEngineClient proxy;
+
         public DashboardView()
         {
             InitializeComponent();
+            proxy = new UICalculationEngineClient("CalculationEngineUIEndpoint");
         }
 
         private void MenuItemHistory_Click(object sender, RoutedEventArgs e)
@@ -71,7 +75,7 @@ namespace UI.View
             var dataCOntext = menu.DataContext;
             var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
             long gid = v.Key;
-            CalculationEngineUIProxy.Instance.ResetCommandedGenerator(gid);
+            proxy.ResetCommandedGenerator(gid);
         }
     }
 }

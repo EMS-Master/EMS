@@ -44,9 +44,11 @@ namespace AlarmsEventsCloudServ
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
             return new List<ServiceReplicaListener>() {
+                new ServiceReplicaListener(context => this.CreateAlarmEventsListener1(context), "UIAlarmUpdateClientEndpoint"),
                 new ServiceReplicaListener(context => this.CreateAlarmEventsListener(context), "AlarmsEventsEndpoint"),
                 new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityListener(context), "AlarmsEventsIntegrityEndpoint"),
-                new ServiceReplicaListener(context => this.CreateAlarmsEventsPubSubListener(context), "AlarmsEventsPubSubEndpoint"),
+                new ServiceReplicaListener(context => this.CreateAlarmsEventsIntegrityClientListener(context), "UIAesIntegrityClientEndpoint"),
+                new ServiceReplicaListener(context => this.CreateAlarmsEventsPubSubListener(context), "UIAlarmsSubscribeClientEndpoint"),
                 new ServiceReplicaListener(context => this.CreateAlarmsEventsPublishListener(context), "AESPublishEndpoint")
             };
         }
@@ -55,7 +57,21 @@ namespace AlarmsEventsCloudServ
         {
             var listener = new WcfCommunicationListener<IAlarmsEventsContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
+                //address : new EndpointAddress("net.tcp://localhost:52395/AlarmsEventsCloudServ"),
                 endpointResourceName: "AlarmsEventsEndpoint",
+                serviceContext: context,
+                wcfServiceObject: alarmsEvents
+            );
+
+            return listener;
+        }
+
+        private ICommunicationListener CreateAlarmEventsListener1(StatefulServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<IAlarmsEventsContract>(
+                listenerBinding: Binding.CreateCustomNetTcp(),
+                address: new EndpointAddress("net.tcp://localhost:52395/AlarmsEventsCloudServ"),
+                //endpointResourceName: "AlarmsEventsEndpoint",
                 serviceContext: context,
                 wcfServiceObject: alarmsEvents
             );
@@ -73,12 +89,26 @@ namespace AlarmsEventsCloudServ
 
             return listener;
         }
-        
+
+        private ICommunicationListener CreateAlarmsEventsIntegrityClientListener(StatefulServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<IAesIntegirtyContract>(
+                listenerBinding: Binding.CreateCustomNetTcp(),
+                //endpointResourceName: "AlarmsEventsIntegrityEndpoint",
+                address: new EndpointAddress("net.tcp://localhost:52393/AlarmsEventsCloudServ"),
+                serviceContext: context,
+                wcfServiceObject: alarmsEvents
+            );
+
+            return listener;
+        }
+
         private ICommunicationListener CreateAlarmsEventsPubSubListener(StatefulServiceContext context)
         {
             var listener = new WcfCommunicationListener<IAesPubSubContract>(
                 listenerBinding: Binding.CreateCustomNetTcp(),
-                endpointResourceName: "AlarmsEventsPubSubEndpoint",
+                address: new EndpointAddress("net.tcp://localhost:52396/AlarmsEventsCloudServ"),
+                //endpointResourceName: "AlarmsEventsPubSubEndpoint",
                 serviceContext: context,
                 wcfServiceObject: this
             );

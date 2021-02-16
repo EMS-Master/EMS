@@ -35,7 +35,9 @@ namespace ScadaCommandingCloudServ
             return new List<ServiceInstanceListener>
             {
                 new ServiceInstanceListener(context => this.CreateScadaCMDListener(context), "ScadaCMDEndpoint"),
-                new ServiceInstanceListener(context => this.CreateTransactionListener(context), "TransactionEndpoint")
+                new ServiceInstanceListener(context => this.CreateTransactionListener(context), "TransactionEndpoint"),
+                new ServiceInstanceListener(context => this.CreateUICommandListener(context), "UIScadaCommandClientEndpoint")
+
             };
         }
         private ICommunicationListener CreateScadaCMDListener(StatelessServiceContext context)
@@ -43,6 +45,18 @@ namespace ScadaCommandingCloudServ
             var listener = new WcfCommunicationListener<IScadaCommandingContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
                 endpointResourceName: "ScadaCMDEndpoint",
+                serviceContext: context,
+                wcfServiceObject: scadaCMD
+            );
+
+            return listener;
+        }
+        private ICommunicationListener CreateUICommandListener(StatelessServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<IScadaCommandingContract>(
+                listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
+                //endpointResourceName: "ScadaCMDEndpoint",
+                address: new System.ServiceModel.EndpointAddress("net.tcp://localhost:52394/ScadaCommandingCloudServ"),
                 serviceContext: context,
                 wcfServiceObject: scadaCMD
             );

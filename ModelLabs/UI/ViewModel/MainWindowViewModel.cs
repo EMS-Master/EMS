@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UI.Communication;
 
 namespace UI.ViewModel
 {
@@ -28,9 +29,10 @@ namespace UI.ViewModel
         private AlarmSummaryViewModel alarmSummaryViewModel;
         private CommandViewModel commandViewModel;
         private DashboardViewModel dashboardViewModel;
-
+        private UIClientNms uiCli;
         public MainWindowViewModel()
         {
+            uiCli = new UIClientNms("UIClientNmsEndpoint");
             InitiateIntegrityUpdate();
 
             DashboardViewModel = new DashboardViewModel();
@@ -51,7 +53,7 @@ namespace UI.ViewModel
             documents.Add(HistoryViewModel);
             documents.Add(AlarmSummaryViewModel);
             documents.Add(CommandViewModel);
-
+            
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);
         }
@@ -78,23 +80,24 @@ namespace UI.ViewModel
                 string message = string.Empty;
 
                 List<ResourceDescription> retList = new List<ResourceDescription>(5);
-                NetworkModelGDASfProxy nm = new NetworkModelGDASfProxy();
+                // NetworkModelGDASfProxy nm = new NetworkModelGDASfProxy();
+               
                 #region getting Generator
                 try
                 {
                     // first get all synchronous machines from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = uiCli.GetExtentValues(modelCodeGenerator, properties);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    uiCli.IteratorClose(iteratorId);
 
                 }
                 catch (Exception e)
@@ -105,7 +108,7 @@ namespace UI.ViewModel
 
                     Console.WriteLine("Trying again...");
                     CommonTrace.WriteTrace(CommonTrace.TraceError, "Trying again...");
-                    NetworkModelGDAProxy.Instance = null;
+                    //uiCli = null;
                     Thread.Sleep(1000);
                     InitiateIntegrityUpdate();
                 }
@@ -135,16 +138,16 @@ namespace UI.ViewModel
                     // second get all ems fuels from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeSubstation);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeSubstation, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = uiCli.GetExtentValues(modelCodeSubstation, properties);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    uiCli.IteratorClose(iteratorId);
 
                 }
                 catch (Exception e)
@@ -176,16 +179,16 @@ namespace UI.ViewModel
                     // third get all enenrgy consumers from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = uiCli.GetExtentValues(modelCodeDiscrete, properties);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    uiCli.IteratorClose(iteratorId);
                 }
                 catch (Exception e)
                 {
@@ -217,16 +220,16 @@ namespace UI.ViewModel
                     // third get all enenrgy consumers from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeAnalog);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeAnalog, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = uiCli.GetExtentValues(modelCodeAnalog, properties);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    uiCli.IteratorClose(iteratorId);
                 }
                 catch (Exception e)
                 {
@@ -258,16 +261,16 @@ namespace UI.ViewModel
                     // third get all enenrgy consumers from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeEnergyConsumer, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = uiCli.GetExtentValues(modelCodeEnergyConsumer, properties);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    uiCli.IteratorClose(iteratorId);
                 }
                 catch (Exception e)
                 {
@@ -299,16 +302,16 @@ namespace UI.ViewModel
                     // third get all enenrgy consumers from NMS
                     properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGeographicalRegion);
 
-                    iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGeographicalRegion, properties);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    iteratorId = uiCli.GetExtentValues(modelCodeGeographicalRegion, properties);
+                    resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
 
                     while (resourcesLeft > 0)
                     {
-                        List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                        List<ResourceDescription> rds = uiCli.IteratorNext(numberOfResources, iteratorId);
                         retList.AddRange(rds);
-                        resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                        resourcesLeft = uiCli.IteratorResourcesLeft(iteratorId);
                     }
-                    NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                    uiCli.IteratorClose(iteratorId);
                 }
                 catch (Exception e)
                 {

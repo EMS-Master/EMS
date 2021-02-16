@@ -55,7 +55,7 @@ namespace CalculationEngineCloudServ
                 new ServiceReplicaListener(context => this.CreateCalculationEngineListener(context), "CalculationEngineEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineUIListener(context), "CalculationEngineUIEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineTransactionListener(context), "CalculationEngineTransactionEndpoint"),
-                new ServiceReplicaListener(context => this.CreateCESubscribeListener(context), "CESubscribeEndpoint"),
+                new ServiceReplicaListener(context => this.CreateCESubscribeListener(context), "UISubscribeClientEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEnginePublisherListener(context), "CEPublishEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineRepositoryListener(context), "CalculationEngineRepositoryEndpoint")
             };
@@ -88,7 +88,8 @@ namespace CalculationEngineCloudServ
         {
             var listener = new WcfCommunicationListener<ICalculationEngineUIContract>(
                            listenerBinding: Binding.CreateCustomNetTcp(),
-                           endpointResourceName: "CalculationEngineUIEndpoint",
+                           //endpointResourceName: "CalculationEngineUIEndpoint",
+                           address: new EndpointAddress("net.tcp://localhost:52397/CalculationEngineCloudServ"),
                            serviceContext: context,
                            wcfServiceObject: ceToUI
             );
@@ -123,7 +124,8 @@ namespace CalculationEngineCloudServ
         {
             var listener = new WcfCommunicationListener<ICePubSubContract>(
                            listenerBinding: Binding.CreateCustomNetTcp(),
-                           endpointResourceName: "CESubscribeEndpoint",
+                           address: new EndpointAddress("net.tcp://localhost:52398/CalculationEngineCloudServ"),
+                           //endpointResourceName: "CESubscribeEndpoint",
                            serviceContext: context,
                            wcfServiceObject: this
             );

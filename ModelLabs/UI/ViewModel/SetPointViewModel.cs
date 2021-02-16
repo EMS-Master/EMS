@@ -6,12 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using UI.Communication;
 
 namespace UI.ViewModel
 {
     public class SetPointViewModel:ViewModelBase
     {
         public long globalId { get; private set; }
+        private UIScadaCommandClient proxyScada;
+
         public string newValue { get; set; }
 		public float newValueFloat { get; set; }
 
@@ -24,6 +27,8 @@ namespace UI.ViewModel
         {
             globalId = gid;
             globalName = name;
+            proxyScada = new UIScadaCommandClient("UIScadaCommandClientEndpoint");
+
         }
 
         private void CommandGenMessBoxExecute(object obj)
@@ -65,7 +70,7 @@ namespace UI.ViewModel
             //ModelForCheckboxes model = (ModelForCheckboxes)obj;
             //if (model.IsActive)
             //{
-                ScadaCommandingProxy.Instance.CommandAnalogValues(this.globalId,this.newValueFloat);
+                proxyScada.CommandAnalogValues(this.globalId,this.newValueFloat);
             //}
         }
     }
