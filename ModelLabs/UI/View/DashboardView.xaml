@@ -499,7 +499,7 @@
                         <Grid Grid.Column="0"   >
 
 
-                            <MetroChart:PieChart Width="250" Palette="{StaticResource CustomColors2}"  ChartTitle="CO2" ChartSubTitle="Reduction vs Emission [t]"   Foreground="Black" FontSize="12"  >
+                            <!--<MetroChart:PieChart Width="250" Palette="{StaticResource CustomColors2}"  ChartTitle="CO2" ChartSubTitle="Reduction vs Emission [t]"   Foreground="Black" FontSize="12"  >
 
                                 <MetroChart:PieChart.Series>
                                     <MetroChart:ChartSeries
@@ -510,20 +510,15 @@
                                                 ValueMember="Speed" HorizontalAlignment="Center"/>
                                         
                                            </MetroChart:PieChart.Series>
-                                    </MetroChart:PieChart>
+                                    </MetroChart:PieChart>-->
                                    
                             
                         </Grid>
                         <Grid Grid.Column="2"   >
-                            <!--<TextBlock TextWrapping="WrapWithOverflow" >
-					                <Grid >
-                                        <Grid.OpacityMask>
-                                            <VisualBrush Visual="{ Binding ElementName=BorderG2 }"/>
-                                        </Grid.OpacityMask>     
-                                        <Border x:Name="BorderG2" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>-->
+                           
 
 
-                            <MetroChart:PieChart Palette="{StaticResource CustomColors1}" Width="250" ChartTitle="Production" ChartSubTitle="Cost vs Profit [$]"   Foreground="Black" FontSize="12"  >
+                            <!--<MetroChart:PieChart Palette="{StaticResource CustomColors1}" Width="250" ChartTitle="Production" ChartSubTitle="Cost vs Profit [$]"   Foreground="Black" FontSize="12"  >
 
                                         <MetroChart:PieChart.Series>
                                             <MetroChart:ChartSeries
@@ -534,22 +529,15 @@
                                                 ValueMember="Speed" HorizontalAlignment="Center"
                                                 />
                                         </MetroChart:PieChart.Series>
-                                    </MetroChart:PieChart>
-                                        <!--</Grid>
-                            </TextBlock>-->
+                                    </MetroChart:PieChart>-->
+                                      
 
                         </Grid>
                         <Grid Grid.Column="1"  >
 
-                            <!--<Grid  Width="Auto">
-                                <TextBlock TextWrapping="WrapWithOverflow" >
-					                <Grid >
-                                        <Grid.OpacityMask>
-                                            <VisualBrush Visual="{ Binding ElementName=BorderG3 }"/>
-                                        </Grid.OpacityMask>     
-                                        <Border x:Name="BorderG3" CornerRadius="15" Opacity="0.9" Background="#e0e0e0"/>-->
+                           
 
-                            <MetroChart:RadialGaugeChart  HorizontalAlignment="Center" ChartTitle="RENEWABLES [%] " PlotterAreaStyle="{StaticResource RadialGaugeChartPlotterAreaStyle1}" ChartSubTitle="" Margin="10,0,10,0"  Foreground="Black" FontSize="7"  >
+                            <!--<MetroChart:RadialGaugeChart  HorizontalAlignment="Center" ChartTitle="RENEWABLES [%] " PlotterAreaStyle="{StaticResource RadialGaugeChartPlotterAreaStyle1}" ChartSubTitle="" Margin="10,0,10,0"  Foreground="Black" FontSize="7"  >
                                 <MetroChart:RadialGaugeChart.Series>
                                     <MetroChart:ChartSeries
                                                                     Foreground="Orange"
@@ -561,31 +549,13 @@
                                         />
                                 </MetroChart:RadialGaugeChart.Series>
                                
-                            </MetroChart:RadialGaugeChart>
-                                  <!--</Grid>
-                                </TextBlock>
-
-                            </Grid>-->
+                            </MetroChart:RadialGaugeChart>-->
+                                 
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1" Margin="0,100,0,0"  >
-                        <TextBlock  TextWrapping="WrapWithOverflow">
-                                <!--<chartingToolkit:Chart Height="230" Width="550" Title="Total production by generator type" >
-                                   
-                                                <chartingToolkit:Chart.LegendStyle>
-                                                <Style TargetType="Control">
-                                                 <Setter Property="Width" Value="0"/>
-                                                 <Setter Property="Height" Value="0"/>
-                                                </Style>
-                                               </chartingToolkit:Chart.LegendStyle> 
-							            <chartingToolkit:ColumnSeries    FontWeight="Bold"  
-								                                ItemsSource="{Binding GenerationByTypeList, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay, NotifyOnSourceUpdated=True }"
-													            DependentValueBinding="{Binding Path=Value}" 
-													            IndependentValueBinding="{Binding Path=Key}"
-													             Title="Total"> 
-                                    
-							            </chartingToolkit:ColumnSeries>
-                                 </chartingToolkit:Chart>-->   
+                        <!--<TextBlock  TextWrapping="WrapWithOverflow">
+                                
                             <MetroChart:ClusteredColumnChart Palette="{StaticResource CustomColors}" ChartTitle="Total production by generator type" ChartSubTitle="" Width="700"  Foreground="Black" FontSize="14">
                                 <MetroChart:ClusteredColumnChart.Series>
                                     <MetroChart:ChartSeries Background="#e0e0e0"
@@ -597,7 +567,7 @@
                                     </MetroChart:ChartSeries>
                                 </MetroChart:ClusteredColumnChart.Series>
                             </MetroChart:ClusteredColumnChart>
-                        </TextBlock>
+                        </TextBlock>-->
                     </Grid>
                 </Grid>
 

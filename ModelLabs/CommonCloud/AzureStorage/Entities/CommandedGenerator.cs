@@ -19,17 +19,17 @@ namespace CommonCloud.AzureStorage.Entities
         [DataMember]
         private bool _commandingFlag;
         [DataMember]
-        private float _commandingValue;
+        private double _commandingValue;
 
         public int Id { get => _id; set => _id = value; }
         public long Gid { get => _gid; set => _gid = value; }
         public bool CommandingFlag { get => _commandingFlag; set => _commandingFlag = value; }
-        public float CommandingValue { get => _commandingValue; set => _commandingValue = value; }
+        public double CommandingValue { get => _commandingValue; set => _commandingValue = value; }
 
         public CommandedGenerator()
             {}
 
-        public CommandedGenerator(int id, long gid, bool commandingFlag, float commandingValue)
+        public CommandedGenerator(int id, long gid, bool commandingFlag, double commandingValue)
         {
             Id = id;
             Gid = gid;

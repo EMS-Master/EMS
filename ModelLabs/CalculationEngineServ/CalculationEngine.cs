@@ -468,7 +468,7 @@ namespace CalculationEngineServ
                  var dataFromDb = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == gid && x.MeasurementTime >= startTime && x.MeasurementTime <= endTime).ToList();
                 foreach (var item in dataFromDb)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.MeasurementValue, item.MeasurementTime));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.MeasurementValue, item.MeasurementTime));
                 }
                 
             }
@@ -526,7 +526,7 @@ namespace CalculationEngineServ
                 var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.TotalGeneration, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation));
                 }
             }
             catch (Exception e)
@@ -549,7 +549,7 @@ namespace CalculationEngineServ
                 var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.Profit, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation));
                 }
             }
             catch (Exception e)
@@ -572,7 +572,7 @@ namespace CalculationEngineServ
                 var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.CO2Reduction, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.CO2Reduction, item.TimeOfCalculation));
                 }
             }
             catch (Exception e)
@@ -596,7 +596,7 @@ namespace CalculationEngineServ
                 var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.CO2Emission, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.CO2Emission, item.TimeOfCalculation));
                 }
             }
             catch (Exception e)
@@ -618,7 +618,7 @@ namespace CalculationEngineServ
                 var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.TotalCost, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalCost, item.TimeOfCalculation));
                 }
             }
             catch (Exception e)
@@ -641,7 +641,7 @@ namespace CalculationEngineServ
                 var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>(item.TotalGeneration, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation));
                 }
             }
             catch (Exception e)

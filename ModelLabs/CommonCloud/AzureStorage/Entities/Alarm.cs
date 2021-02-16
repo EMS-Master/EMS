@@ -18,11 +18,11 @@ namespace CommonCloud.AzureStorage.Entities
         [DataMember]
         private long _gid;
         [DataMember]
-        private float _alarmValue;
+        private double _alarmValue;
         [DataMember]
-        private float _minValue;
+        private double _minValue;
         [DataMember]
-        private float _maxValue;
+        private double _maxValue;
         [DataMember]
         private DateTime _alarmTimeStamp;
         [DataMember]
@@ -42,9 +42,9 @@ namespace CommonCloud.AzureStorage.Entities
 
         public int Id { get => _id; set => _id = value; }
         public long Gid { get => _gid; set => _gid = value; }
-        public float AlarmValue { get => _alarmValue; set => _alarmValue = value; }
-        public float MinValue { get => _minValue; set => _minValue = value; }
-        public float MaxValue { get => _maxValue; set => _maxValue = value; }
+        public double AlarmValue { get => _alarmValue; set => _alarmValue = value; }
+        public double MinValue { get => _minValue; set => _minValue = value; }
+        public double MaxValue { get => _maxValue; set => _maxValue = value; }
         public DateTime AlarmTimeStamp { get => _alarmTimeStamp; set => _alarmTimeStamp = value; }
         public int AckState { get => _ackState; set => _ackState = value; }
         public int AlarmType { get => _alarmType; set => _alarmType = value; }
@@ -55,7 +55,7 @@ namespace CommonCloud.AzureStorage.Entities
         public string Name { get => _name; set => _name = value; }
 
 
-        public Alarm(long gid, float value, float minValue, float maxValue, DateTime timeStamp)
+        public Alarm(long gid, double value, double minValue, double maxValue, DateTime timeStamp)
         {
             this.Gid = gid;
             this.AlarmValue = value;

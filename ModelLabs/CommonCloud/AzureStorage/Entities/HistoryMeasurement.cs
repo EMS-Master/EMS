@@ -19,9 +19,9 @@ namespace CommonCloud.AzureStorage.Entities
         [DataMember]
         private DateTime _measurementTime;
         [DataMember]
-        private float _measurementValue;
+        private double _measurementValue;
 
-        public HistoryMeasurement( long gid, DateTime measurementTime, float measurementValue)
+        public HistoryMeasurement( long gid, DateTime measurementTime, double measurementValue)
         {
             Id = 1;
             Gid = gid;
@@ -37,6 +37,6 @@ namespace CommonCloud.AzureStorage.Entities
         public int Id { get => _id; set => _id = value; }
         public long Gid { get => _gid; set => _gid = value; }
         public DateTime MeasurementTime { get => _measurementTime; set => _measurementTime = value; }
-        public float MeasurementValue { get => _measurementValue; set => _measurementValue = value; }
+        public double MeasurementValue { get => _measurementValue; set => _measurementValue = value; }
     }
 }

@@ -31,7 +31,7 @@ namespace CalculationEngineServ.GeneticAlgorithm
 			//EmsContext e = new EmsContext();
             
 			commandedGeneratrs = new Dictionary<long, OptimisationModel>();
-			CommandedGenGidsAndValues = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> x.CommandingValue);
+			CommandedGenGidsAndValues = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).ToDictionary(x => x.Gid,x=> (float)x.CommandingValue);
 			this.optModelMap = optModelMap.Where(x => !CommandedGenGidsAndValues.Any(y => y.Key == x.Key)).ToDictionary(param => param.Key, param => param.Value);
 			MaxValuePerGen = 1000000f;
 			foreach(var item in CommandedGenGidsAndValues)

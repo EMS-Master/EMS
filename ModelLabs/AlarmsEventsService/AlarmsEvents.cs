@@ -409,9 +409,9 @@ namespace FTN.Services.AlarmsEventsService
                         {
                             Gid = item.Gid,
                             Severity = (SeverityLevel)item.Severity,
-                            Value = item.AlarmValue,
-                            MinValue = item.MinValue,
-                            MaxValue = item.MaxValue,
+                            Value = (float)item.AlarmValue,
+                            MinValue = (float)item.MinValue,
+                            MaxValue = (float)item.MaxValue,
                             TimeStamp = item.AlarmTimeStamp,
                             CurrentState = item.CurrentState,
                             AckState = (AckState)item.AckState,
