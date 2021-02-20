@@ -35,16 +35,12 @@ namespace CalculationEngineServ
         #region Alarms
         public List<Alarm> GetAlarms()
         {
-
             return AzureTableStorage.GetAllAlarms("UseDevelopmentStorage=true;", "Alarms");
-            
         }
 
         public void AddAlarm(Alarm alarm)
         {
-
             AzureTableStorage.AddTableEntityInDB(alarm,"UseDevelopmentStorage=true;", "Alarms");
-
         }
         #endregion
 
@@ -103,9 +99,10 @@ namespace CalculationEngineServ
 		#endregion
 
 		#region TotalProduction
-		public List<TotalProduction> GetTotalProductions()
+		
+        public List<TotalProduction> GetTotalProductionsForSelectedTime(DateTime startTime, DateTime endTime)
         {
-            return AzureTableStorage.GetAllTotalProductions( "UseDevelopmentStorage=true;", "TotalProductions");
+            return AzureTableStorage.GetAllTotalProductionsForSelectedTime("UseDevelopmentStorage=true;", "TotalProductions", startTime, endTime);
         }
 
         public void AddTotalProduction(TotalProduction tot)
@@ -115,16 +112,17 @@ namespace CalculationEngineServ
         #endregion
 
         #region HistoryMeasurements
-
-        public List<HistoryMeasurement> GetHistoryMeasurements()
-        {
-            return AzureTableStorage.GetAllHistoryMeasurements("UseDevelopmentStorage=true;", "HistoryMeasurements");
-        }
-
+        
         public void AddHistoryMeasurement(HistoryMeasurement hm)
         {
             AzureTableStorage.AddTableEntityInDB(hm, "UseDevelopmentStorage=true;", "HistoryMeasurements");
         }
+
+        public List<HistoryMeasurement> GetAllHistoryMeasurementsForSelectedTime(DateTime startTime, DateTime endTime, long gid)
+        {
+            return AzureTableStorage.GetAllHistoryMeasurementsForSelectedTime("UseDevelopmentStorage=true;", "HistoryMeasurements", startTime, endTime, gid);
+        }
+
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonCloud.AzureStorage.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -90,7 +91,7 @@ namespace CalculationEngineContracts
 
         }
 
-        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+        public List<Tuple<DateTime, double, double, double, double, double>> GetTotalProduction(DateTime startTime, DateTime endTime)
         {
             return proxy.GetTotalProduction(startTime, endTime);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.ServiceFabric.Services.Client;
+﻿using CommonCloud.AzureStorage.Entities;
+using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Communication.Client;
 using Microsoft.ServiceFabric.Services.Communication.Wcf.Client;
 using System;
@@ -68,7 +69,7 @@ namespace CalculationEngineContracts.ServiceFabricProxy
             return proxy.InvokeWithRetry(x => x.Channel.GetProfit(startTime, endTime));
         }
 
-        public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+        public List<Tuple<DateTime, double, double, double, double, double>> GetTotalProduction(DateTime startTime, DateTime endTime)
         {
             return proxy.InvokeWithRetry(x => x.Channel.GetTotalProduction(startTime, endTime));
         }

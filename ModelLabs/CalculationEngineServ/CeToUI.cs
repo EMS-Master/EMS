@@ -1,4 +1,5 @@
 ﻿using CalculationEngineContracts;
+using CommonCloud.AzureStorage.Entities;
 using FTN.Common;
 using System;
 using System.Collections.Generic;
@@ -37,23 +38,38 @@ namespace CalculationEngineServ
 			return retList;
 		}
 
-		public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
-		{
-			List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
+		//public List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime)
+		//{
+		//	List<Tuple<double, DateTime>> retList = new List<Tuple<double, DateTime>>();
 
-			try
-			{
-				retList = ce.ReadTotalProductionsFromDb(startTime, endTime);
-			}
-			catch (Exception ex)
-			{
-				CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
-			}
+		//	try
+		//	{
+		//		retList = ce.ReadTotalProductionsFromDb(startTime, endTime);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+		//	}
 
-			return retList;
-		}
+		//	return retList;
+		//}
 
-		public bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate)
+        public List<Tuple<DateTime, double, double, double, double, double>> GetTotalProduction(DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+               return ce.ReadTotalProductions(startTime, endTime);
+            }
+            catch (Exception ex)
+            {
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "[CeToUI] Error GetTotalProduction {0}", ex.Message);
+            }
+
+            return new List<Tuple<DateTime, double, double, double, double, double>>();
+        }
+
+
+        public bool SetAlgorithmOptions(int iterationCount, int populationCount, int elitisamPct, float mutationRate)
 		{
 			return CalculationEngine.SetAlgorithmParams(iterationCount, populationCount, elitisamPct, mutationRate);
 		}

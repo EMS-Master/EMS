@@ -62,12 +62,13 @@ namespace UI.ViewModel
 
             if (graphSampling != GraphSample.None)
             {
-                DateTime tempStartTime = startTime;
+                DateTime tempStartTime = startTime.ToUniversalTime();
                 DateTime tempEndTime = IncrementTime(tempStartTime);
 
                 double averageProduction = 0;
+                var endUtc = endTime.ToUniversalTime();
 
-                while (tempEndTime <= endTime)
+                while (tempEndTime <= endUtc)
                 {
                     tempData = new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
                     if (tempData != null && tempData.Count != 0)
@@ -81,7 +82,7 @@ namespace UI.ViewModel
 
                     tempStartTime = IncrementTime(tempStartTime);
                     tempEndTime = IncrementTime(tempEndTime);
-                    tempContainer.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime));
+                    tempContainer.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime.ToLocalTime()));
 
                 }
 

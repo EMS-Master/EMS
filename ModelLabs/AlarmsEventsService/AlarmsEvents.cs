@@ -391,63 +391,64 @@ namespace FTN.Services.AlarmsEventsService
 
             return success;
         }
-        
 
-        private List<AlarmHelper> SelectAlarmsFromDatabase()
-        {
-            List<AlarmHelper> alarms = new List<AlarmHelper>();
 
-           // EmsContext ems = new EmsContext();
+        //private List<AlarmHelper> SelectAlarmsFromDatabase()
+        //{
+        //    List<AlarmHelper> alarms = new List<AlarmHelper>();
 
-                try
-                {
-                    var alarmsdb = DbManager.Instance.GetAlarms(); 
+        //   // EmsContext ems = new EmsContext();
 
-                    foreach (var item in alarmsdb)
-                    {
-                        AlarmHelper alarm = new AlarmHelper
-                        {
-                            Gid = item.Gid,
-                            Severity = (SeverityLevel)item.Severity,
-                            Value = (float)item.AlarmValue,
-                            MinValue = (float)item.MinValue,
-                            MaxValue = (float)item.MaxValue,
-                            TimeStamp = item.AlarmTimeStamp,
-                            CurrentState = item.CurrentState,
-                            AckState = (AckState)item.AckState,
-                            PubStatus = (PublishingStatus)item.PubStatus,
-                            Type = (AlarmType)item.AlarmType,
-                            Message = item.AlarmMessage,
+        //        try
+        //        {
+        //            var alarmsdb = DbManager.Instance.GetAlarms(); 
 
-                        };
+        //            foreach (var item in alarmsdb)
+        //            {
+        //                AlarmHelper alarm = new AlarmHelper
+        //                {
+        //                    Gid = item.Gid,
+        //                    Severity = (SeverityLevel)item.Severity,
+        //                    Value = (float)item.AlarmValue,
+        //                    MinValue = (float)item.MinValue,
+        //                    MaxValue = (float)item.MaxValue,
+        //                    TimeStamp = item.AlarmTimeStamp,
+        //                    CurrentState = item.CurrentState,
+        //                    AckState = (AckState)item.AckState,
+        //                    PubStatus = (PublishingStatus)item.PubStatus,
+        //                    Type = (AlarmType)item.AlarmType,
+        //                    Message = item.AlarmMessage,
 
-                        alarms.Add(alarm);
-                    }
+        //                };
 
-                }
-                catch (Exception e)
-                {
-                    string message = string.Format("Failed read alarms from database. {0}", e.Message);
-                    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                    Console.WriteLine(message);
-                }
+        //                alarms.Add(alarm);
+        //            }
 
-            return alarms;
-        }
-        private List<Alarm> SelectDiscretAlarmsFromDatabase()
-        {
-            List<Alarm> discret = new List<Alarm>();
-            List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
-            foreach(var a in alarms)
-            {
-                if (a.AlarmMessage.Contains("discret"))
-                {
-                    discret.Add(a);
-                }
-            }
-            
-            return discret;
-        }
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            string message = string.Format("Failed read alarms from database. {0}", e.Message);
+        //            CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+        //            Console.WriteLine(message);
+        //        }
+
+        //    return alarms;
+        //}
+        //private List<Alarm> SelectDiscretAlarmsFromDatabase()
+        //{
+        //    List<Alarm> discret = new List<Alarm>();
+        //    List<Alarm> alarms = DbManager.Instance.GetAlarms().ToList();
+        //    foreach(var a in alarms)
+        //    {
+        //        if (a.AlarmMessage.Contains("discret"))
+        //        {
+        //            discret.Add(a);
+        //        }
+        //    }
+
+        //    return discret;
+        //}
+
         public async void GetAlarmsFromAlarmsEventsCache()
         {
             try

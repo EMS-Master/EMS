@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonCloud.AzureStorage.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -14,7 +15,7 @@ namespace CalculationEngineContracts
         List<Tuple<double, DateTime>> GetHistoryMeasurements(long gid, DateTime startTime, DateTime endTime);
 
         [OperationContract]
-        List<Tuple<double, DateTime>> GetTotalProduction(DateTime startTime, DateTime endTime);
+        List<Tuple<DateTime, double,double,double,double,double>> GetTotalProduction(DateTime startTime, DateTime endTime);
 
         [OperationContract]
         List<Tuple<double, DateTime>> GetProfit(DateTime startTime, DateTime endTime);

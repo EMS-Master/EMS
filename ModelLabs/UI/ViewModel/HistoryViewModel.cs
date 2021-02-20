@@ -534,12 +534,13 @@ namespace UI.ViewModel
 
                         if (graphSampling != GraphSample.None)
                         {
-                            DateTime tempStartTime = startTime;
+                            DateTime tempStartTime = startTime.ToUniversalTime();
                             DateTime tempEndTime = IncrementTime(tempStartTime);
+                            var endUtc = endTime.ToUniversalTime();
 
                             double averageProduction = 0;
 
-                            while (tempEndTime <= endTime)
+                            while (tempEndTime <= endUtc)
                             {
                                 tempData = new ObservableCollection<Tuple<double, DateTime>>(measurementsFromDb.Where(x => x.Item2 > tempStartTime && x.Item2 < tempEndTime));
 
@@ -555,7 +556,7 @@ namespace UI.ViewModel
                                 tempStartTime = IncrementTime(tempStartTime);
                                 tempEndTime = IncrementTime(tempEndTime);
 
-                                tempContainer.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime));
+                                tempContainer.Add(new Tuple<double, DateTime>(averageProduction, tempStartTime.ToLocalTime()));
                             }
                             GeneratorsContainer.Add(new KeyValuePair<long, ObservableCollection<Tuple<double, DateTime>>>(keyPair.Key, new ObservableCollection<Tuple<double, DateTime>>(tempContainer)));
                             int count = GeneratorsContainer.Count;
@@ -568,7 +569,7 @@ namespace UI.ViewModel
                                 OnPropertyChanged(nameof(Item_1));
                                 OnPropertyChanged(nameof(Item_2));
                             }
-                            else if(count == 1)
+                            else if (count == 1)
                             {
                                 Item_0 = GeneratorsFromNmsName.FirstOrDefault(x => x.Key == GeneratorsContainer[0].Key).Value;
                                 Item_1 = String.Empty;
@@ -623,17 +624,24 @@ namespace UI.ViewModel
             }
             timestamps = timestamps.Distinct().ToList();
 
-           
+            var allProductionData = proxy.GetTotalProduction(StartTime, EndTime);
 
-            TotalProduction = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetTotalProduction(StartTime, EndTime));
+            TotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
+            TotalProfit = new ObservableCollection<Tuple<double, DateTime>>();
+            TotalCost = new ObservableCollection<Tuple<double, DateTime>>();
+            CoReduction = new ObservableCollection<Tuple<double, DateTime>>();
+            CoEmission = new ObservableCollection<Tuple<double, DateTime>>();
 
-            TotalProfit = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetProfit(StartTime, EndTime));
-            TotalCost = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetCost(StartTime, EndTime));
-
-
-            CoReduction = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetCoReduction(StartTime, EndTime));
-            CoEmission = new ObservableCollection<Tuple<double, DateTime>>(proxy.GetCoEmission(StartTime, EndTime));
-
+            foreach (var item in allProductionData)
+            {
+                var localDate = item.Item1.ToLocalTime();
+                TotalProduction.Add(new Tuple<double, DateTime>(item.Item2, localDate));
+                TotalProfit.Add(new Tuple<double, DateTime>(item.Item3, localDate));
+                TotalCost.Add(new Tuple<double, DateTime>(item.Item4, localDate));
+                CoReduction.Add(new Tuple<double, DateTime>(item.Item6, localDate));
+                CoEmission.Add(new Tuple<double, DateTime>(item.Item5, localDate));
+            }
+            
             GraphTotalProduction = new ObservableCollection<Tuple<double, DateTime>>();
             GraphProfit = new ObservableCollection<Tuple<double, DateTime>>();
             GraphCoReduction = new ObservableCollection<Tuple<double, DateTime>>();

@@ -442,7 +442,7 @@ namespace CalculationEngineServ
                 
                 foreach (var item in measurements)
                 {
-                    HistoryMeasurement h = new HistoryMeasurement(item.Gid, item.TimeStamp, item.CurrentValue);
+                    HistoryMeasurement h = new HistoryMeasurement(item.Gid, item.TimeStamp,item.CurrentValue);
                    
                     DbManager.Instance.AddHistoryMeasurement(h);
                 }
@@ -465,7 +465,8 @@ namespace CalculationEngineServ
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
             try
             {
-                 var dataFromDb = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == gid && x.MeasurementTime >= startTime && x.MeasurementTime <= endTime).ToList();
+                //var dataFromDb = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == gid && x.MeasurementTime >= startTime.ToUniversalTime() && x.MeasurementTime <= endTime.ToUniversalTime()).ToList();
+                var dataFromDb = DbManager.Instance.GetAllHistoryMeasurementsForSelectedTime(startTime, endTime, gid);
                 foreach (var item in dataFromDb)
                 {
                     retVal.Add(new Tuple<double, DateTime>((double)item.MeasurementValue, item.MeasurementTime));
@@ -523,10 +524,10 @@ namespace CalculationEngineServ
             
             try
             {
-                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation.ToLocalTime()));
                 }
             }
             catch (Exception e)
@@ -540,16 +541,37 @@ namespace CalculationEngineServ
             return retVal;
         }
 
+        public List<Tuple<DateTime, double, double, double, double, double>> ReadTotalProductions(DateTime startTime, DateTime endTime)
+        {
+            var retList = new List<Tuple<DateTime, double, double, double, double, double>>();
+            try
+            {
+                var list =  DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+                foreach(var item in list)
+                {
+                    retList.Add(new Tuple<DateTime, double, double, double, double, double>(item.TimeOfCalculation, item.TotalGeneration, item.Profit, item.TotalCost, item.CO2Emission, item.CO2Reduction));
+                }
+            }
+            catch (Exception e)
+            {
+                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+                Console.WriteLine(message);
+            }
+
+            return retList;
+        }
+
         public List<Tuple<double, DateTime>> ReadTotalProfitFromDb(DateTime startTime, DateTime endTime)
         {
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation.ToLocalTime()));
                 }
             }
             catch (Exception e)
@@ -569,10 +591,10 @@ namespace CalculationEngineServ
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.CO2Reduction, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.CO2Reduction, item.TimeOfCalculation.ToLocalTime()));
                 }
             }
             catch (Exception e)
@@ -593,10 +615,10 @@ namespace CalculationEngineServ
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.CO2Emission, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.CO2Emission, item.TimeOfCalculation.ToLocalTime()));
                 }
             }
             catch (Exception e)
@@ -615,10 +637,10 @@ namespace CalculationEngineServ
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalCost, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalCost, item.TimeOfCalculation.ToLocalTime()));
                 }
             }
             catch (Exception e)
@@ -638,10 +660,10 @@ namespace CalculationEngineServ
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductions().Where(x => x.TimeOfCalculation >= startTime && x.TimeOfCalculation <= endTime).ToList();
+                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation));
+                    retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation.ToLocalTime()));
                 }
             }
             catch (Exception e)
