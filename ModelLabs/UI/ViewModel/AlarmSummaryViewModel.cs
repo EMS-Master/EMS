@@ -172,6 +172,7 @@ namespace UI.ViewModel
             if (alarm.Type != AlarmType.DOM)
             {
                 alarm.MaxValue = alarm.MaxValue / 1000;
+                alarm.MinValue = alarm.MinValue / 1000;
                 alarm.Value = alarm.Value / 1000;
             }
 

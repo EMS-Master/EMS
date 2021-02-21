@@ -35,7 +35,7 @@ namespace CommonCloud.AzureStorage
             return entities;
         }
 
-        public static List<Alarm> GetAllAlarms(string connectionString, string tableName)
+        public static Alarm GetAlarm(string connectionString, string tableName, long gid, int alarmType, string currentState)
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
 
@@ -46,16 +46,25 @@ namespace CommonCloud.AzureStorage
             CloudTable table = tableClient.GetTableReference(tableName);
 
             TableContinuationToken token = null;
+            //a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString())
+            string filter1 = TableQuery.GenerateFilterConditionForLong("Gid", QueryComparisons.Equal, gid);
+            string filter2 = TableQuery.GenerateFilterConditionForInt("AlarmType", QueryComparisons.Equal, alarmType);
+            //string filter3 = TableQuery.GenerateFilterCondition("CurrentState", QueryComparisons.LessThan, currentState);
+
+            string finalFilter = TableQuery.CombineFilters(filter1, TableOperators.And, filter2);
+
+            var query = new TableQuery<Alarm>().Where(finalFilter);
             List<Alarm> entities = new List<Alarm>();
 
             do
             {
-                var queryResult = table.ExecuteQuerySegmented(new TableQuery<Alarm>(), token);
+                var queryResult = table.ExecuteQuerySegmented(query, token);
                 entities.AddRange(queryResult.Results);
                 token = queryResult.ContinuationToken;
             } while (token != null);
-
-            return entities;
+            
+            entities = entities.Where(x => x.CurrentState.Contains(currentState)).OrderByDescending(x => x.Timestamp).ToList();
+            return entities.FirstOrDefault();
         }
 
         public static List<CommandedGenerator> GetAllCommandedGenerators(string connectionString, string tableName)

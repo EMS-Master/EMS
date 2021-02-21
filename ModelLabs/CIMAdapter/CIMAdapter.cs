@@ -5,6 +5,7 @@ using System.Threading;
 using CIM.Model;
 using CIMParser;
 using FTN.Common;
+using FTN.ESI.SIMES.CIM.CIMAdapter.Communication;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Importer;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Manager;
 using FTN.ServiceContracts;
@@ -15,9 +16,10 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter
 	public class CIMAdapter
 	{
         private NetworkModelGDAProxy gdaQueryProxy = null;
-       
+        private ImporterClient imCli;
 		public CIMAdapter()
 		{
+            imCli = new ImporterClient("ImporterClientEndpoint");
 		}
 
         //private NetworkModelGDAProxy GdaQueryProxy
@@ -64,7 +66,7 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter
 			{
                 //// NetworkModelService->ApplyUpdates
               //  updateResult = GdaQueryProxy.ApplyUpdate(delta).ToString();
-               updateResult = ImporterProxy.Instance.ModelUpdate(delta).ToString();
+               updateResult = imCli.ModelUpdate(delta).ToString();
                
             }
 

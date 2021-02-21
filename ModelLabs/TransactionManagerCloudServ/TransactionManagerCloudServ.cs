@@ -36,6 +36,7 @@ namespace TransactionManagerCloudServ
             return new List<ServiceInstanceListener>
             {
                 new ServiceInstanceListener(context => this.CreateTransactionManagerListener(context), "TransactionManagerEndpoint"),
+                new ServiceInstanceListener(context => this.CreateTransactionManagerListenerImporter(context), "ImporterClientEndpoint"),
                 //new ServiceInstanceListener(context => this.CreateServiceRemotingListener(context), "TransactionManagerAsyncEndpoint")
             };
         }
@@ -65,6 +66,17 @@ namespace TransactionManagerCloudServ
             var listener = new WcfCommunicationListener<IImporterContract>(
                     listenerBinding: Binding.CreateCustomNetTcp(),
                     address: new EndpointAddress("net.tcp://localhost:50000/TransactionManagerCloudServ/Importer"),
+                    serviceContext: context,
+                    wcfServiceObject: new TransactionManager()
+                );
+            return listener;
+        }
+
+        private ICommunicationListener CreateTransactionManagerListenerImporter(StatelessServiceContext context)
+        {
+            var listener = new WcfCommunicationListener<IImporterContract>(
+                    listenerBinding: Binding.CreateCustomNetTcp(),
+                    address: new EndpointAddress("net.tcp://localhost:52392/TransactionManagerCloudServ"),
                     serviceContext: context,
                     wcfServiceObject: new TransactionManager()
                 );

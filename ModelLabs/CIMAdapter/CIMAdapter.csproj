@@ -106,6 +106,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CIMAdapter.cs" />
+    <Compile Include="Communication\ImporterClient.cs" />
+    <Compile Include="Communication\NmsClient.cs" />
     <Compile Include="Importer\ImportHelper.cs" />
     <Compile Include="Importer\PowerTransformerConverter.cs" />
     <Compile Include="Importer\PowerTransformerImporter.cs" />

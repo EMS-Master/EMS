@@ -23,7 +23,7 @@ namespace UI.View
     public partial class ReferenceView : Window, IDisposable
     {
 
-        private TestGDA tgda;
+        private GDA tgda;
         private ObservableCollection<ResourceDescription> resList;
         private ObservableCollection<ModelCode> avaliableProperties;
 
@@ -57,7 +57,7 @@ namespace UI.View
             }
         }
 
-        public ReferenceView(TestGDA tgda, long resGlobalId, Property prop)
+        public ReferenceView(GDA tgda, long resGlobalId, Property prop)
         {
 
             this.tgda = tgda;

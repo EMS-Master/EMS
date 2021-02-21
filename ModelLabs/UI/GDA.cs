@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UI.Communication;
 
 namespace UI
 {
-    public class TestGDA : IDisposable
+    public class GDA : IDisposable
     {
+
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -17,23 +19,8 @@ namespace UI
 
         private ModelResourcesDesc modelResourcesDesc = new ModelResourcesDesc();
         private NetworkModelGDAProxy gdaQueryProxy = null;
-
-        //private NetworkModelGDAProxy GdaQueryProxy
-        //{
-        //    get
-        //    {
-        //        if (gdaQueryProxy != null)
-        //        {
-        //            gdaQueryProxy.Abort();
-        //            gdaQueryProxy = null;
-        //        }
-
-        //        gdaQueryProxy = new NetworkModelGDAProxy("NetworkModelGDAEndpoint");
-        //        gdaQueryProxy.Open();
-
-        //        return gdaQueryProxy;
-        //    }
-        //}
+        private UIClientNms nmsCli = new UIClientNms("UIClientNmsEndpoint"); 
+        
         public ResourceDescription GetValues(long globalId)
         {
             string message = "Getting values method started.";
@@ -48,7 +35,7 @@ namespace UI
                 List<ModelCode> properties = modelResourcesDesc.GetAllPropertyIds((DMSType)type);
 
                 //rd = GdaQueryProxy.GetValues(globalId, properties);
-                rd = NetworkModelGDAProxy.Instance.GetValues(globalId, properties);
+                rd = nmsCli.GetValues(globalId, properties);
 
                 message = "Getting values method successfully finished.";
                 Console.WriteLine(message);
@@ -85,20 +72,20 @@ namespace UI
                 //iteratorId = GdaQueryProxy.GetExtentValues(modelCode, properties);
                 //resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
 
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCode, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCode, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
                     //List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
                     //resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
 
                 //GdaQueryProxy.IteratorClose(iteratorId);
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 message = "Getting extent values method successfully finished.";
                 Console.WriteLine(message);
@@ -136,22 +123,22 @@ namespace UI
                 //int iteratorId = GdaQueryProxy.GetRelatedValues(sourceGlobalId, properties, association);
                 //int resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
 
-                int iteratorId = NetworkModelGDAProxy.Instance.GetRelatedValues(sourceGlobalId, properties, association);
-                int resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                int iteratorId = nmsCli.GetRelatedValues(sourceGlobalId, properties, association);
+                int resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
 
                 //import ids
                 while (resourcesLeft > 0)
                 {
                     //List<ResourceDescription> rds = GdaQueryProxy.IteratorNext(numberOfResources, iteratorId);
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     foreach (var rd in rds)
                     {
                         ids.Add(rd.Id);
                     }
 
                     //resourcesLeft = GdaQueryProxy.IteratorResourcesLeft(iteratorId);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
 
                 //find all properties for each id and call 
@@ -159,12 +146,12 @@ namespace UI
                 {
                     properties = modelResourcesDesc.GetAllPropertyIdsForEntityId(id);
                     //resultRds.Add(GdaQueryProxy.GetValues(id, properties));
-                    resultRds.Add(NetworkModelGDAProxy.Instance.GetValues(id, properties));
+                    resultRds.Add(nmsCli.GetValues(id, properties));
 
                 }
 
                 //GdaQueryProxy.IteratorClose(iteratorId);
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 message = "Getting related values method successfully finished.";
                 Console.WriteLine(message);

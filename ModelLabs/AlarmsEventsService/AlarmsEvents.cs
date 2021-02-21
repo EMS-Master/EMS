@@ -46,7 +46,7 @@ namespace FTN.Services.AlarmsEventsService
 
             using (var tx = this.StateManager.CreateTransaction())
             {
-                ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+                ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData",LockMode.Update);
 
                 AlarmsData alarmsData = data.HasValue ? data.Value : new AlarmsData();
                 try
@@ -327,8 +327,8 @@ namespace FTN.Services.AlarmsEventsService
         {
             bool success = true;
             try{
-                
-                var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
+
+                var tmpAlarm = DbManager.Instance.GetAlarm(alarm.Gid, alarm.AlarmType, State.Active.ToString());//.FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == alarm.AlarmType && a.CurrentState.Contains(State.Active.ToString()));
                 tmpAlarm.CurrentState = string.Format("{0}", State.Cleared);
                 DbManager.Instance.AddAlarm(tmpAlarm);
                // DbManager.Instance.SaveChanges();
@@ -349,8 +349,8 @@ namespace FTN.Services.AlarmsEventsService
             
                 try
                 {
-                    var alarmList = DbManager.Instance.GetAlarms();
-                    var tmpAlarm = alarmList?.FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
+                    var tmpAlarm = DbManager.Instance.GetAlarm(alarm.Gid,(int)alarm.Type,State.Active.ToString());
+                //var tmpAlarm = alarmList;//?.FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
                     tmpAlarm.AlarmValue = alarm.Value;
                     tmpAlarm.Severity = (int)alarm.Severity;
                 DbManager.Instance.AddAlarm(tmpAlarm);
@@ -374,7 +374,7 @@ namespace FTN.Services.AlarmsEventsService
 
             try
             {
-                var tmpAlarm = DbManager.Instance.GetAlarms().FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
+                var tmpAlarm = DbManager.Instance.GetAlarm(alarm.Gid,(int)alarm.Type,State.Active.ToString());//.FirstOrDefault(a => a.Gid == alarm.Gid && a.AlarmType == (int)alarm.Type && a.CurrentState.Contains(State.Active.ToString()));
                 tmpAlarm.AckState = (int)alarm.AckState;
                 DbManager.Instance.AddAlarm(tmpAlarm);
                 // DbManager.Instance.SaveChanges();
@@ -456,7 +456,7 @@ namespace FTN.Services.AlarmsEventsService
                 alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
                 using (ITransaction tx = this.StateManager.CreateTransaction())
                 {
-                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData", LockMode.Update);
 
                     if (data.HasValue)
                     {
@@ -481,7 +481,7 @@ namespace FTN.Services.AlarmsEventsService
                 alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
                 using (ITransaction tx = this.StateManager.CreateTransaction())
                 {
-                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData", LockMode.Update);
 
                     if (data.HasValue)
                     {
@@ -519,7 +519,7 @@ namespace FTN.Services.AlarmsEventsService
                 alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
                 using (ITransaction tx = this.StateManager.CreateTransaction())
                 {
-                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData", LockMode.Update);
 
                     if (data.HasValue)
                     {
@@ -557,7 +557,7 @@ namespace FTN.Services.AlarmsEventsService
                 alarmsEventsCache = await this.StateManager.GetOrAddAsync<IReliableDictionary<string, AlarmsData>>("AlarmsEventsCache");
                 using (ITransaction tx = this.StateManager.CreateTransaction())
                 {
-                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData");
+                    ConditionalValue<AlarmsData> data = await alarmsEventsCache.TryGetValueAsync(tx, "AlarmsData", LockMode.Update);
                     AlarmsData alarmsData = new AlarmsData();
                     if (data.HasValue)
                     {

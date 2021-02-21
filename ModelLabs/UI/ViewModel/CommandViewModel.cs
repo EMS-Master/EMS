@@ -51,7 +51,7 @@ namespace UI.ViewModel
 		private ICommand commandGenMessBox;
 		public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
 
-        private TestGDA testGda;
+        
         private UIScadaCommandClient proxyScada;
 
 

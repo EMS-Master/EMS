@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using CIM.Model;
 using FTN.Common;
+using FTN.ESI.SIMES.CIM.CIMAdapter.Communication;
 using FTN.ESI.SIMES.CIM.CIMAdapter.Manager;
 using FTN.ServiceContracts;
+using FTN.ServiceContracts.ServiceFabricProxy;
 
 namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
 {
@@ -20,7 +22,7 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
 		private Delta delta;
 		private ImportHelper importHelper;
 		private TransformAndLoadReport report;
-
+        private NmsClient nmsCli = new NmsClient("NmsClientEndpoint");
 
 		#region Properties
 		public static PowerTransformerImporter Instance
@@ -163,16 +165,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                 List<ResourceDescription> retList = new List<ResourceDescription>();
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeDiscrete);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeDiscrete, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCodeDiscrete, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 foreach (ResourceDescription res in retList)
                 {
@@ -250,16 +252,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                 List<ResourceDescription> retList = new List<ResourceDescription>();
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeAnalog);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeAnalog, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCodeAnalog, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 foreach (ResourceDescription res in retList)
                 {
@@ -337,16 +339,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                 List<ResourceDescription> retList = new List<ResourceDescription>();
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGenerator);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGenerator, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCodeGenerator, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 foreach (ResourceDescription res in retList)
                 {
@@ -425,16 +427,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                 List<ResourceDescription> retList = new List<ResourceDescription>();
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeEnergyConsumer);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeEnergyConsumer, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCodeEnergyConsumer, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 foreach (ResourceDescription res in retList)
                 {
@@ -514,16 +516,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                 List<ResourceDescription> retList = new List<ResourceDescription>();
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeGeo);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeGeo, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCodeGeo, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 foreach (ResourceDescription res in retList)
                 {
@@ -601,16 +603,16 @@ namespace FTN.ESI.SIMES.CIM.CIMAdapter.Importer
                 List<ResourceDescription> retList = new List<ResourceDescription>();
 
                 properties = modelResourcesDesc.GetAllPropertyIds(modelCodeSubstation);
-                iteratorId = NetworkModelGDAProxy.Instance.GetExtentValues(modelCodeSubstation, properties);
-                resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                iteratorId = nmsCli.GetExtentValues(modelCodeSubstation, properties);
+                resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
 
                 while (resourcesLeft > 0)
                 {
-                    List<ResourceDescription> rds = NetworkModelGDAProxy.Instance.IteratorNext(numberOfResources, iteratorId);
+                    List<ResourceDescription> rds = nmsCli.IteratorNext(numberOfResources, iteratorId);
                     retList.AddRange(rds);
-                    resourcesLeft = NetworkModelGDAProxy.Instance.IteratorResourcesLeft(iteratorId);
+                    resourcesLeft = nmsCli.IteratorResourcesLeft(iteratorId);
                 }
-                NetworkModelGDAProxy.Instance.IteratorClose(iteratorId);
+                nmsCli.IteratorClose(iteratorId);
 
                 foreach (ResourceDescription res in retList)
                 {

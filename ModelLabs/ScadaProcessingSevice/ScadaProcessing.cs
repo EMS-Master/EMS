@@ -653,65 +653,69 @@ namespace ScadaProcessingSevice
         private List<MeasurementUnit> ParseDataToMeasurementUnit(List<AnalogLocation> analogList, byte[] value, int startAddress, ModelCode type)
         {
             List<MeasurementUnit> retList = new List<MeasurementUnit>();
-            foreach (AnalogLocation analogLoc in analogList)
+            lock(analogList)
             {
-                float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
-
-                if (values == null)
+                foreach (AnalogLocation analogLoc in analogList)
                 {
-                    MeasurementUnit measUnit1 = new MeasurementUnit();
-                    measUnit1.Gid = analogLoc.Analog.PowerSystemResource;
-                    measUnit1.MinValue = analogLoc.Analog.MinValue;
-                    measUnit1.MaxValue = analogLoc.Analog.MaxValue;
-                    measUnit1.CurrentValue = 0;
-                    measUnit1.TimeStamp = DateTime.Now;
-                    measUnit1.ScadaAddress = analogLoc.StartAddress;
-                    retList.Add(measUnit1);
-                }
-                else
-                {
-                    float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
-                    float MAX = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MaxValue, 1, 1);
-                    float MIN = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MinValue, 1, 1);
-                    bool alarmEGU = false;
+                    float[] values = ModbusHelper.GetValueFromByteArray<float>(value, analogLoc.LengthInBytes, (analogLoc.StartAddress - 1) * 4);
 
-                    if (type.Equals(ModelCode.GENERATOR))
+                    if (values == null)
                     {
-                        alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource, analogLoc.Analog.Name);
-
-                        if (!alarmEGU)
-                        {
-                            AlarmHelper al = new AlarmHelper();
-                            al.Gid = analogLoc.Analog.PowerSystemResource;
-                            al.Value = eguVal;
-                            alarmsEventsSfProxy.UpdateStatus(analogLoc, State.Cleared);
-
-                            Alarm normalAlarm = new Alarm();
-                            normalAlarm.AckState = AckState.Unacknowledged;
-                            normalAlarm.CurrentState = string.Format("{0}", State.Active);
-                            normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
-                            normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
-                            normalAlarm.AlarmTimeStamp = DateTime.Now;
-                            normalAlarm.Severity = SeverityLevel.NORMAL;
-                            normalAlarm.AlarmValue = eguVal;
-                            normalAlarm.AlarmType = AlarmType.NORMAL;
-                            normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
-                            normalAlarm.MinValue = analogLoc.Analog.MinValue;
-
-                            //AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
-                        }
+                        MeasurementUnit measUnit1 = new MeasurementUnit();
+                        measUnit1.Gid = analogLoc.Analog.PowerSystemResource;
+                        measUnit1.MinValue = analogLoc.Analog.MinValue;
+                        measUnit1.MaxValue = analogLoc.Analog.MaxValue;
+                        measUnit1.CurrentValue = 0;
+                        measUnit1.TimeStamp = DateTime.Now;
+                        measUnit1.ScadaAddress = analogLoc.StartAddress;
+                        retList.Add(measUnit1);
                     }
+                    else
+                    {
+                        float eguVal = convertorHelper.ConvertFromRawToEGUValue(values[0], analogLoc.Analog.MinValue, analogLoc.Analog.MaxValue);
+                        float MAX = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MaxValue, 1, 1);
+                        float MIN = convertorHelper.ConvertFromRawToEGUValue(analogLoc.Analog.MinValue, 1, 1);
+                        bool alarmEGU = false;
 
-                    MeasurementUnit measUnit = new MeasurementUnit();
-                    measUnit.Gid = analogLoc.Analog.PowerSystemResource;
-                    measUnit.MinValue = analogLoc.Analog.MinValue;
-                    measUnit.MaxValue = analogLoc.Analog.MaxValue;
-                    measUnit.CurrentValue = eguVal;
-                    measUnit.TimeStamp = DateTime.Now;
-                    measUnit.ScadaAddress = analogLoc.StartAddress;
-                    retList.Add(measUnit);
+                        if (type.Equals(ModelCode.GENERATOR))
+                        {
+                            alarmEGU = this.CheckForEGUAlarms(eguVal, MIN, MAX, analogLoc.Analog.PowerSystemResource, analogLoc.Analog.Name);
+
+                            if (!alarmEGU)
+                            {
+                                AlarmHelper al = new AlarmHelper();
+                                al.Gid = analogLoc.Analog.PowerSystemResource;
+                                al.Value = eguVal;
+                                alarmsEventsSfProxy.UpdateStatus(analogLoc, State.Cleared);
+
+                                Alarm normalAlarm = new Alarm();
+                                normalAlarm.AckState = AckState.Unacknowledged;
+                                normalAlarm.CurrentState = string.Format("{0}", State.Active);
+                                normalAlarm.Gid = analogLoc.Analog.PowerSystemResource;
+                                normalAlarm.AlarmMessage = string.Format("Value on gid {0} returned to normal state", normalAlarm.Gid);
+                                normalAlarm.AlarmTimeStamp = DateTime.Now;
+                                normalAlarm.Severity = SeverityLevel.NORMAL;
+                                normalAlarm.AlarmValue = eguVal;
+                                normalAlarm.AlarmType = AlarmType.NORMAL;
+                                normalAlarm.MaxValue = analogLoc.Analog.MaxValue;
+                                normalAlarm.MinValue = analogLoc.Analog.MinValue;
+
+                                //AlarmsEventsProxy.Instance.AddAlarm(normalAlarm);
+                            }
+                        }
+
+                        MeasurementUnit measUnit = new MeasurementUnit();
+                        measUnit.Gid = analogLoc.Analog.PowerSystemResource;
+                        measUnit.MinValue = analogLoc.Analog.MinValue;
+                        measUnit.MaxValue = analogLoc.Analog.MaxValue;
+                        measUnit.CurrentValue = eguVal;
+                        measUnit.TimeStamp = DateTime.Now;
+                        measUnit.ScadaAddress = analogLoc.StartAddress;
+                        retList.Add(measUnit);
+                    }
                 }
             }
+            
 
             return retList;
         }

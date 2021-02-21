@@ -33,9 +33,9 @@ namespace CalculationEngineServ
         }
 
         #region Alarms
-        public List<Alarm> GetAlarms()
+        public Alarm GetAlarm(long gid, int type, string state)
         {
-            return AzureTableStorage.GetAllAlarms("UseDevelopmentStorage=true;", "Alarms");
+            return AzureTableStorage.GetAlarm("UseDevelopmentStorage=true;", "Alarms", gid, type,state);
         }
 
         public void AddAlarm(Alarm alarm)

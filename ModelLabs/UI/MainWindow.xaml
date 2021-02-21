@@ -51,9 +51,9 @@
                 <DataTemplate DataType="{x:Type vm:AlarmSummaryViewModel}">
                     <view:AlarmSummaryView Style="{StaticResource AlarmSummaryStyle}" DataContext="{Binding Path = DataContext.AlarmSummaryViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type vm:CommandViewModel}">
+                <!--<DataTemplate DataType="{x:Type vm:CommandViewModel}">
                     <view:CommandView  DataContext="{Binding Path = DataContext.CommandViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                </DataTemplate>
+                </DataTemplate>-->
             </dock:DockingManager.Resources>
             <dock:DockingManager.Theme>
                 <dock:MetroTheme/>

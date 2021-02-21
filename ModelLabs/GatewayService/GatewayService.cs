@@ -36,6 +36,7 @@ namespace GatewayService
             return new List<ServiceReplicaListener>
             {
                 new ServiceReplicaListener(context => this.CreateNetworkModelGDAListener(context), "UIClientNmsEndpoint"),
+                new ServiceReplicaListener(context => this.CreateNetworkModelGDAListenerImporter(context), "NmsClientEndpoint"),
             };
         }
         private ICommunicationListener CreateNetworkModelGDAListener(StatefulServiceContext context)
@@ -53,6 +54,29 @@ namespace GatewayService
                             listenerBinding: Binding.CreateCustomNetTcp(),
                             address: new EndpointAddress("net.tcp://localhost:52399/GatewayService"),
                            // endpointResourceName: "UIClientNmsEndpoint",
+                            serviceContext: context,
+                            wcfServiceObject: new NetworkModelGDA()
+            );
+
+            return listener;
+        }
+
+
+        private ICommunicationListener CreateNetworkModelGDAListenerImporter(StatefulServiceContext context)
+        {
+            // string host = context.NodeContext.IPAddressOrFQDN;
+
+            //var endpointConfig = context.CodePackageActivationContext.GetEndpoint("NetworkModelGDAEndpoint");
+            //int port = endpointConfig.Port;
+            //var scheme = endpointConfig.UriScheme.ToString();
+            //var pathSufix = endpointConfig.PathSuffix.ToString();
+
+            //string uri = string.Format(CultureInfo.InvariantCulture, "{0}://{1}:{2}/NetworkModelService/{3}", scheme, host, port, pathSufix);
+
+            var listener = new WcfCommunicationListener<INetworkModelGDAContract>(
+                            listenerBinding: Binding.CreateCustomNetTcp(),
+                            address: new EndpointAddress("net.tcp://localhost:52391/GatewayService"),
+                            // endpointResourceName: "UIClientNmsEndpoint",
                             serviceContext: context,
                             wcfServiceObject: new NetworkModelGDA()
             );

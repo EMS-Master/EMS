@@ -7,15 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using UI.Communication;
 using UI.View;
 
 namespace UI.ViewModel
 {
     public class NMSViewModel: ViewModelBase
     {
-        private TestGDA testGda;
+        private GDA Gda;
         private NMSView NMSview;
-
+       
         private ObservableCollection<ResourceDescription> resList = new ObservableCollection<ResourceDescription>();
         private ObservableCollection<ModelCode> avaliableProperties;
 
@@ -32,7 +33,8 @@ namespace UI.ViewModel
             Title = "NMS";
             this.NMSview = mainWindow;
             this.NMSview.Loaded += View_Loaded;
-           // ResList = new ObservableCollection<ResourceDescription>();
+            
+            // ResList = new ObservableCollection<ResourceDescription>();
             AvaliableProperties = new ObservableCollection<ModelCode>();
         }
 
@@ -89,7 +91,7 @@ namespace UI.ViewModel
             Console.WriteLine(message);
             CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
 
-            testGda = new TestGDA();
+            Gda = new GDA();
         }
 
         private void FindCommandExecute(string textForFind)
@@ -104,7 +106,7 @@ namespace UI.ViewModel
             {
                 var myProps = modelResourcesDesc.GetAllPropertyIds(ModelCodeHelper.GetTypeFromModelCode(modCode));
                 var mySelected = myProps.Where(x => allSelected.Contains(x));
-                var retExtentValues = testGda.GetExtentValues(modCode, mySelected.ToList());
+                var retExtentValues = Gda.GetExtentValues(modCode, mySelected.ToList());
                 foreach (var res in retExtentValues)
                 {
                     

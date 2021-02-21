@@ -263,7 +263,7 @@
     <Compile Include="SetPointWindow.xaml.cs">
       <DependentUpon>SetPointWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestGDA.cs" />
+    <Compile Include="GDA.cs" />
     <Compile Include="ViewModel\AlarmSummaryViewModel.cs" />
     <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
@@ -461,6 +461,10 @@
     <ProjectReference Include="..\ServiceContracts\NetworkModelQueryContract\NetworkModelGDAContract.csproj">
       <Project>{b726fb71-d295-41ee-9644-b2b0b1bc8911}</Project>
       <Name>NetworkModelGDAContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TransactionContract\TransactionContract.csproj">
+      <Project>{1E99A031-C0FF-416F-9C9B-3575941DF41E}</Project>
+      <Name>TransactionContract</Name>
     </ProjectReference>
     <ProjectReference Include="..\UIContract\UIContract.csproj">
       <Project>{7e06bcf7-f3cb-48c1-9a42-4e62f29c4531}</Project>
