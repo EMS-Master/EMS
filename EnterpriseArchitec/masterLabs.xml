@@ -25,7 +25,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_1</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_1</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Ruma upate</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Ruma</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_2">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -35,7 +35,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_2</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_2</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Beograd_UPDATE</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Beograd</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_3">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -45,7 +45,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_3</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_3</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Zlatiborupdate</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Zlatibor</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_4">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -55,7 +55,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_4</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_4</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP Vranjeupdate1</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Vranje</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_5">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -868,7 +868,7 @@
 		<cim:Measurement.scadaAddress>address_1</cim:Measurement.scadaAddress>
 		<cim:IdentifiedObject.aliasName>Discrete_1</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_1</cim:IdentifiedObject.mRID> 
-		<cim:IdentifiedObject.name>Discrete_1 </cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>Discrete_1</cim:IdentifiedObject.name>
 	</cim:Discrete>
 	<cim:Discrete rdf:ID="Discrete_2">
 		<cim:Discrete.maxValue>1 </cim:Discrete.maxValue>

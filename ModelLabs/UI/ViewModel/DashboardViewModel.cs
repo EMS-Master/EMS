@@ -38,8 +38,8 @@ namespace UI.ViewModel
             }
         }
 
-        private int MAX_DISPLAY_NUMBER = 10;
-        private int MAX_DISPLAY_TOTAL_NUMBER = 20;
+        private int MAX_DISPLAY_NUMBER = 5;
+        private int MAX_DISPLAY_TOTAL_NUMBER = 10;
         private const int NUMBER_OF_ALLOWED_ATTEMPTS = 5; // number of allowed attempts to subscribe to the CE
         private int attemptsCount = 0;
         private double sizeValue;
@@ -449,8 +449,8 @@ namespace UI.ViewModel
                     {
                         if(tupla2.Item1 == "coReduction")
                         {
-                            WindSpeed co = new WindSpeed("Reduction",tupla2.Item2);
-                            WindSpeed co1 = new WindSpeed("Emission", tupla2.Item3);
+                            WindSpeed co = new WindSpeed("Reduction", (float)Math.Round(tupla2.Item2, 2));
+                            WindSpeed co1 = new WindSpeed("Emission", (float)Math.Round(tupla2.Item3,2));
                             
                             if(CoReduction.Count == 0)
                             {
@@ -463,8 +463,8 @@ namespace UI.ViewModel
                             {
                                 App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                                 {
-                                    CoReduction[0].Speed = tupla2.Item2;
-                                    CoReduction[1].Speed = tupla2.Item3;
+                                    CoReduction[0].Speed = co.Speed;// tupla2.Item2;
+                                    CoReduction[1].Speed = co1.Speed;// tupla2.Item3;
                                 });
 
                             }
@@ -474,8 +474,8 @@ namespace UI.ViewModel
                         }
                         else
                         {
-                            WindSpeed co = new WindSpeed("Cost", tupla2.Item2);
-                            WindSpeed co1 = new WindSpeed("Profit", tupla2.Item3);
+                            WindSpeed co = new WindSpeed("Cost", (float)Math.Round(tupla2.Item2, 2));
+                            WindSpeed co1 = new WindSpeed("Profit", (float)Math.Round(tupla2.Item3, 2));
                             
                             if(CostList.Count == 0)
                             {
@@ -488,8 +488,8 @@ namespace UI.ViewModel
                             {
                                 App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                                 {
-                                    CostList[0].Speed = tupla2.Item2;
-                                    CostList[1].Speed = tupla2.Item3;
+                                    CostList[0].Speed = co.Speed; //tupla2.Item2;
+                                    CostList[1].Speed = co1.Speed; // tupla2.Item3;
                                 });
                                 
                             }
@@ -523,7 +523,7 @@ namespace UI.ViewModel
                     {
                         App.Current.Dispatcher.Invoke((Action)delegate
                         {
-                            AddMeasurmentTo(EnergyConsumersContainer, measUIs);
+                            //AddMeasurmentTo(EnergyConsumersContainer, measUIs);
                             CurrentConsumption = measUIs.Sum(x => x.CurrentValue).ToString("0.00");
                             float curC = measUIs.Sum(x => x.CurrentValue);
                             lock (DemandList)
@@ -556,13 +556,25 @@ namespace UI.ViewModel
                             
 
                             CurrentWindProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Wind).Sum(x => x.CurrentValue);
+                            CurrentWindProduction = (float)Math.Round(CurrentWindProduction, 2);
+
                             CurrentSolarProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Solar).Sum(x => x.CurrentValue);
+                            CurrentSolarProduction = (float)Math.Round(CurrentSolarProduction, 2);
+
                             CurrentHydroProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Hydro).Sum(x => x.CurrentValue);
+                            CurrentHydroProduction = (float)Math.Round(CurrentHydroProduction, 2);
+
                             CurrentCoalProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Coal).Sum(x => x.CurrentValue);
+                            CurrentCoalProduction = (float)Math.Round(CurrentCoalProduction, 2);
+
                             CurrentOilProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Oil).Sum(x => x.CurrentValue);
+                            CurrentOilProduction = (float)Math.Round(CurrentOilProduction, 2);
+
                             CurrentGasProduction = measUIs.Where(x => x.GeneratorType == GeneratorType.Gas).Sum(x => x.CurrentValue);
-                        
-                            if(TotalProductionColumnChart.Count == 0)
+                            CurrentGasProduction = (float)Math.Round(CurrentGasProduction, 2);
+
+
+                            if (TotalProductionColumnChart.Count == 0)
                             {
                                 ObservableCollection<ColumChartData> newList = new ObservableCollection<ColumChartData>();
                                 newList.Add(new ColumChartData("Wind [MW]", CurrentWindProduction));

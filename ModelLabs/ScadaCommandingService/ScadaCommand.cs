@@ -440,7 +440,7 @@ namespace ScadaCommandingService
 
         public bool SendDataToSimulator(List<MeasurementUnit> measurements)
         {
-			lock (lockObj)
+			lock (listOfAnalog)
 			{
 				foreach (var item in listOfAnalog)
 				{

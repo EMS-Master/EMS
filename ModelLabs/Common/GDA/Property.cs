@@ -246,7 +246,7 @@ namespace FTN.Common
 			{
 				if (!first.IsCompatibleWith(second.Type))
 				{
-					throw new Exception("Incompatible property types.");
+                    return false;
 				}
 
 				bool result = false;

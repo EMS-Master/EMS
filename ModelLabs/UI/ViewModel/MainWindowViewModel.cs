@@ -44,7 +44,7 @@ namespace UI.ViewModel
 
             HistoryViewModel = new HistoryViewModel() { Title = "History" };
 
-            CommandViewModel = new CommandViewModel() { Title = "Command" };
+            //CommandViewModel = new CommandViewModel() { Title = "Command" };
 
             documents.Add(DashboardViewModel);
             documents.Add(new NMSViewModel(new View.NMSView()) { Title = "NMS" });
@@ -52,7 +52,7 @@ namespace UI.ViewModel
 
             documents.Add(HistoryViewModel);
             documents.Add(AlarmSummaryViewModel);
-            documents.Add(CommandViewModel);
+            //documents.Add(CommandViewModel);
             
 
             this.DockManagerViewModel = new DockManagerViewModel(documents);

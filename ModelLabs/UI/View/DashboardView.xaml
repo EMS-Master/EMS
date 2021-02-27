@@ -173,7 +173,7 @@
                         <chartingToolkit:LineSeries Title="Power"
 												ItemsSource="{Binding Path=Value}"
 												DependentValueBinding="{Binding Path=CurrentValue}"
-												IndependentValueBinding="{Binding Path=TimeStamp.Second}"
+												IndependentValueBinding="{Binding Path=TimeStamp}"
 												IsSelectionEnabled="False"
 												Style="{StaticResource LineSeriesStyle}">
                             <chartingToolkit:LineSeries.DataPointStyle>

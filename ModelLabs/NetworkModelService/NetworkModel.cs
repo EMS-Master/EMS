@@ -699,22 +699,66 @@ namespace FTN.Services.NetworkModelService
         {
             if (MODE == "DATABASE")
             {
+                //NmsContext nmsContext = new NmsContext();
+                //DeltaModel deltaModel = new DeltaModel();
+                //deltaModel.Time = DateTime.Now;
+                //deltaModel.Delta = ObjectToByteArray(delta);
+                //try
+                //{
+                //    AzureBlobStorage.AddBlobEntityInDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta", deltaModel.Delta);
+
+                //    nmsContext.DeltaModels.Add(deltaModel);
+                //}
+                //catch (Exception e) { }
+                //nmsContext.SaveChanges();
+
+                //string message = string.Format("Insert new Delta into database successfully finished. ");
+                //CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                //Console.WriteLine(message);
                 NmsContext nmsContext = new NmsContext();
                 DeltaModel deltaModel = new DeltaModel();
                 deltaModel.Time = DateTime.Now;
                 deltaModel.Delta = ObjectToByteArray(delta);
+                int deltaCount = 0;
+                byte[] deltaCountByteArray;
+                byte[] deltaSerialized;
+                int deltaLength;
+                var oldDelta = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
+                if(oldDelta == null)
+                {
+                    delta.Id = ++deltaCount;
+                    deltaCountByteArray = BitConverter.GetBytes(deltaCount);
+                    deltaSerialized = delta.Serialize();
+                    deltaLength = deltaSerialized.Length;
+                    oldDelta = new byte[4];
+                }
+                else
+                {
+                    deltaCountByteArray = oldDelta.Take(4).ToArray();
+                    deltaCount = BitConverter.ToInt32(deltaCountByteArray, 0);
+                    delta.Id = ++deltaCount;
+                    deltaCountByteArray = BitConverter.GetBytes(deltaCount);
+                    deltaSerialized = delta.Serialize();
+                    deltaLength = deltaSerialized.Length;
+                }
+               
+                
+                Array.Copy(deltaCountByteArray,oldDelta,4);
+                byte[] intBytes = BitConverter.GetBytes(deltaLength);
+             
+                byte[] deltaLenghtByteArray = intBytes;
+
+                oldDelta = oldDelta.Concat(deltaLenghtByteArray).ToArray();
+                oldDelta = oldDelta.Concat(deltaSerialized).ToArray();
+                deltaModel.Delta = oldDelta;
                 try
                 {
                     AzureBlobStorage.AddBlobEntityInDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta", deltaModel.Delta);
 
-                    nmsContext.DeltaModels.Add(deltaModel);
+                    //nmsContext.DeltaModels.Add(deltaModel);
                 }
                 catch (Exception e) { }
-                nmsContext.SaveChanges();
 
-                string message = string.Format("Insert new Delta into database successfully finished. ");
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
-                Console.WriteLine(message);
             }
             else
             {
@@ -799,117 +843,54 @@ namespace FTN.Services.NetworkModelService
         {
             if (MODE == "DATABASE")
             {
-                //string b = "0001000000FFFFFFFF01000000000000000C020000004146544E2E436F6D6D6F6E2C2056657273696F6E3D332E342E302E302C2043756C747572653D6E65757472616C2C205075626C69634B6579546F6B656E3D6E756C6C05010000001046544E2E436F6D6D6F6E2E44656C74610500000002696409696E736572744F707309";
-                //byte[] a = StringToByteArray(b);
-                //AzureBlobStorage.AddBlobEntityInDB("UseDevelopmentStorage=true;", "deltamodels", "NetworkModelData.data", "../NetworkModelData.data");
-                //CommonCloud.AzureStorage.Entities.DeltaModel d = new CommonCloud.AzureStorage.Entities.DeltaModel(2, DateTime.Now, delta);
 
 
-                FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.Read);
-                fs.Seek(0, SeekOrigin.Begin);
-                byte[] deltaSerialized = null;
-                if (fs.Position < fs.Length) // if it is not empty stream
-                {
-                    BinaryReader br = new BinaryReader(fs);
+                //var byteArrayFromBlob = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
 
-                    int deltaCount = br.ReadInt32();
-                    int deltaLength = 0;
-                    
-                   // Delta delta = null;
-
-                    for (int i = 0; i < deltaCount; i++)
-                    {
-                        deltaLength = br.ReadInt32();
-                        deltaSerialized = new byte[deltaLength];
-                        br.Read(deltaSerialized, 0, deltaLength);
-                        //delta = Delta.Deserialize(deltaSerialized);
-                        //result.Add(delta);
-                    }
-
-                    br.Close();
-                }
-
-                fs.Close();
-
-
-                //AzureTableStorage.AddTableEntityInDB(d, "UseDevelopmentStorage=true;", "DeltaModels");
-                AzureBlobStorage.AddBlobEntityInDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta", deltaSerialized);
-
-                var byteArrayFromBlob = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
-
-                Delta delta = null;
-
-                List<Delta> result = new List<Delta>();
-
-                delta = Delta.Deserialize(byteArrayFromBlob);
-                result.Add(delta);
-
-                //if (!File.Exists("../NetworkModelData.data"))
+                //Delta delta = null;
+                //if(byteArrayFromBlob == null)
                 //{
-                //    return result;
-                //}
-
-                //FileStream fs = new FileStream(Config.Instance.ConnectionString, FileMode.OpenOrCreate, FileAccess.Read);
-                //fs.Seek(0, SeekOrigin.Begin);
-
-                //if (fs.Position < fs.Length) // if it is not empty stream
-                //{
-                //    BinaryReader br = new BinaryReader(fs);
-
-                //    int deltaCount = br.ReadInt32();
-                //    int deltaLength = 0;
-                //    byte[] deltaSerialized = null;
-                //    Delta delta = null;
-
-                //    for (int i = 0; i < deltaCount; i++)
-                //    {
-                //        deltaLength = br.ReadInt32();
-                //        deltaSerialized = new byte[deltaLength];
-                //        br.Read(deltaSerialized, 0, deltaLength);
-                //        delta = Delta.Deserialize(deltaSerialized);
-                //        result.Add(delta);
-                //    }
-
-                //    br.Close();
-                //}
-
-                //fs.Close();
-
-                return result;
-
-
-
-                //string message = string.Empty;
-                //List<Delta> result = new List<Delta>();
-                //List<DeltaModel> resultDelta = new List<DeltaModel>();
-                //NmsContext nmsContext = new NmsContext();
-                //try
-                //{
-                //resultDelta = nmsContext.DeltaModels.OrderBy(x => x.Time).ToList();
-                //var del = AzureTableStorage.GetDelta("UseDevelopmentStorage=true;", "DeltaModels");
-                // foreach (var item in resultDelta)
-                //{
-                //  byte[] delta_byte = del.Delta as byte[];
-                // result.Add(ByteArrayToObject(delta_byte) as Delta);
-
-                //  TraceDelta(ByteArrayToObject(delta_byte) as Delta);
-                // }
-                //}
-                //catch (Exception e)
-                //{
-                //    message = string.Format("Failed to read Delta from database. {0}", e.Message);
-                //    CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                //    Console.WriteLine(message);
                 //    return new List<Delta>();
                 //}
 
-                //deltaCount = result.Count;
+                //List<Delta> result = new List<Delta>();
 
-                //message = string.Format("Successfully read {0} Delta from database.", result.Count.ToString());
-                //CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
-                //Console.WriteLine(message);
+                //delta = Delta.Deserialize(byteArrayFromBlob);
+                //result.Add(delta);
 
                 //return result;
+                var byteArrayFromBlob = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
+                if(byteArrayFromBlob == null)
+                {
+                    return new List<Delta>();
+                }
+                List<Delta> result = new List<Delta>();
+                byte[] deltaSerialized = null;
+                if (byteArrayFromBlob.Length > 0) // if it is not empty stream
+                {
+                    var deltaCountByteArray = byteArrayFromBlob.Take(4).ToArray();
+                    int deltaCount = BitConverter.ToInt32(deltaCountByteArray, 0);
+                    int deltaLength = 0;
+                    int totalLength = 4;
+                    Delta delta = null;
+
+                    for (int i = 0; i < deltaCount; i++)
+                    {
+                        var deltaLenghtByteArray = new byte[4];
+                        Array.Copy(byteArrayFromBlob,totalLength, deltaLenghtByteArray,0,4);
+                        
+                        totalLength += 4;
+                        deltaLength = BitConverter.ToInt32(deltaLenghtByteArray, 0);
+                        deltaSerialized = new byte[deltaLength];
+                        Array.Copy(byteArrayFromBlob, totalLength, deltaSerialized,0,deltaLength);
+                        totalLength += deltaLength;
+                        delta = Delta.Deserialize(deltaSerialized);
+                        result.Add(delta);
+                    }
+
+                }
+
+                return result;
 
             }
             else
