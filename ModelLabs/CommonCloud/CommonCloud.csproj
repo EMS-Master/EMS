@@ -216,6 +216,9 @@
     <Compile Include="AzureStorage\Entities\DiscreteCounter.cs" />
     <Compile Include="AzureStorage\Entities\HistoryMeasurement.cs" />
     <Compile Include="AzureStorage\Entities\TotalProduction.cs" />
+    <Compile Include="AzureStorage\Helpers\CommandedGeneratorHelper.cs" />
+    <Compile Include="AzureStorage\Helpers\HistoryMeasurementHelper.cs" />
+    <Compile Include="AzureStorage\Helpers\TotalProductionHelper.cs" />
     <Compile Include="Binding.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

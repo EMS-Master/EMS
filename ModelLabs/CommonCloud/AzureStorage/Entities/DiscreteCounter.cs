@@ -12,21 +12,26 @@ namespace CommonCloud.AzureStorage.Entities
     [Serializable()]
     public class DiscreteCounter : TableEntity
     {
-        [DataMember]
+        //[DataMember]
         private int id;
-        [DataMember]
+        //[DataMember]
         private long gid;
-        [DataMember]
+        //[DataMember]
         private bool currentValue;
-        [DataMember]
+        //[DataMember]
         private int counter;
-        [DataMember]
+        //[DataMember]
         private string name;
 
+        [DataMember]
         public int Id { get => id; set => id = value; }
+        [DataMember]
         public long Gid { get => gid; set => gid = value; }
+        [DataMember]
         public bool CurrentValue { get => currentValue; set => currentValue = value; }
+        [DataMember]
         public int Counter { get => counter; set => counter = value; }
+        [DataMember]
         public string Name { get => name; set => name = value; }
 
         public DiscreteCounter( long gid, bool currentValue, int counter, string name)

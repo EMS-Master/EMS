@@ -13,45 +13,58 @@ namespace CommonCloud.AzureStorage.Entities
     [Serializable()]
     public class Alarm : TableEntity
     {
-        [DataMember]
+        //[DataMember]
         private int _id;
-        [DataMember]
+        //[DataMember]
         private long _gid;
-        [DataMember]
+        //[DataMember]
         private double _alarmValue;
-        [DataMember]
+        //[DataMember]
         private double _minValue;
-        [DataMember]
+        //[DataMember]
         private double _maxValue;
-        [DataMember]
+        //[DataMember]
         private DateTime _alarmTimeStamp;
-        [DataMember]
+        //[DataMember]
         private int _ackState;
-        [DataMember]
+        //[DataMember]
         private int _alarmType;
-        [DataMember]
+        //[DataMember]
         private string _alarmMessage;
-        [DataMember]
+        //[DataMember]
         private int _severity;
-        [DataMember]
+        //[DataMember]
         private string _currentState;
-        [DataMember]
+        //[DataMember]
         private int _pubStatus;
-        [DataMember]
+        //[DataMember]
         private string _name;
 
+        [DataMember]
         public int Id { get => _id; set => _id = value; }
+        [DataMember]
         public long Gid { get => _gid; set => _gid = value; }
+        [DataMember]
         public double AlarmValue { get => _alarmValue; set => _alarmValue = value; }
+        [DataMember]
         public double MinValue { get => _minValue; set => _minValue = value; }
+        [DataMember]
         public double MaxValue { get => _maxValue; set => _maxValue = value; }
+        [DataMember]
         public DateTime AlarmTimeStamp { get => _alarmTimeStamp; set => _alarmTimeStamp = value; }
+        [DataMember]
         public int AckState { get => _ackState; set => _ackState = value; }
+        [DataMember]
         public int AlarmType { get => _alarmType; set => _alarmType = value; }
+        [DataMember]
         public string AlarmMessage { get => _alarmMessage; set => _alarmMessage = value; }
+        [DataMember]
         public int Severity { get => _severity; set => _severity = value; }
+        [DataMember]
         public string CurrentState { get => _currentState; set => _currentState = value; }
+        [DataMember]
         public int PubStatus { get => _pubStatus; set => _pubStatus = value; }
+        [DataMember]
         public string Name { get => _name; set => _name = value; }
 
 

@@ -42,7 +42,10 @@ namespace CommonCloud.AzureStorage
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
                 CloudBlobContainer container = blobClient.GetContainerReference(containerName);
-                container.CreateIfNotExists();
+                if(container == null)
+                {
+                    return null;
+                }
                 CloudBlockBlob blob = container.GetBlockBlobReference(blobName);
                 //string p = "C:\\Users\\barba\\Desktop\\EMS\\ModelLabs\\";
                 //string filename = "NetworkModelData1.data";

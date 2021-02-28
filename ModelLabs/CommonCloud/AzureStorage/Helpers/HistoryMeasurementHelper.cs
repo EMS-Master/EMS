@@ -1,17 +1,15 @@
-﻿using CommonCloud.AzureStorage.Helpers;
-using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonCloud.AzureStorage.Entities
+namespace CommonCloud.AzureStorage.Helpers
 {
     [DataContract]
     [Serializable()]
-    public class HistoryMeasurement : TableEntity
+    public class HistoryMeasurementHelper 
     {
         //[DataMember]
         private int _id;
@@ -22,28 +20,19 @@ namespace CommonCloud.AzureStorage.Entities
         //[DataMember]
         private double _measurementValue;
 
-        public HistoryMeasurement( long gid, DateTime measurementTime, double measurementValue)
+        public HistoryMeasurementHelper(
+            long gid, 
+            DateTime measurementTime, 
+            double measurementValue)
         {
             Id = 1;
             Gid = gid;
             MeasurementTime = measurementTime;
             MeasurementValue = measurementValue;
-            RowKey = gid.ToString()+ "_" + DateTime.Now.ToString("o");
-            PartitionKey = "HistoryMeasurement";
         }
 
-        public HistoryMeasurement()
+        public HistoryMeasurementHelper()
         { }
-
-        public HistoryMeasurement(HistoryMeasurementHelper historyMeasurementHelper)
-        {
-            Id = 1;
-            Gid = historyMeasurementHelper.Gid;
-            MeasurementTime = historyMeasurementHelper.MeasurementTime;
-            MeasurementValue = historyMeasurementHelper.MeasurementValue;
-            RowKey = historyMeasurementHelper.Gid.ToString() + "_" + DateTime.Now.ToString("o");
-            PartitionKey = "HistoryMeasurement";
-        }
 
         [DataMember]
         public int Id { get => _id; set => _id = value; }

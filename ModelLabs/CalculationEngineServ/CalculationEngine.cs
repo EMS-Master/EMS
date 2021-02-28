@@ -1,8 +1,10 @@
 ﻿
+using CalculationEngineContracts.ServiceFabricProxy;
 using CalculationEngineServ.GeneticAlgorithm;
 using CalculationEngineServ.PubSub;
 using CEPubSubContract;
 using CommonCloud.AzureStorage.Entities;
+using CommonCloud.AzureStorage.Helpers;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
@@ -62,11 +64,14 @@ namespace CalculationEngineServ
 
 		public static List<GeneratorCurveModel> generatorCurves;
         public static Dictionary<Tuple<long, string>, int> MaxDiscreteCounter;
+        //private CeRepositoryManagerSfProxy ceRepoProxy;
 		
 		public CalculationEngine()
         {
             SetAlgorithmParamsDefault();
 			SetPricePerGeneratorTypeDefault();
+
+            //ceRepoProxy = new CeRepositoryManagerSfProxy("CeRepositoryManagerEndpoint");
 
 			publisher = new PublisherService();
             internalGenerators = new List<ResourceDescription>();
@@ -201,6 +206,7 @@ namespace CalculationEngineServ
         }
         private Dictionary<long, OptimisationModel> CalculateWithGeneticAlgorithm(Dictionary<long, OptimisationModel> optModelMap, float powerOfConsumers)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
             Dictionary<long, OptimisationModel> optModelMapOptimizied = null;
             float powerOfConsumersWithoutRenewable = powerOfConsumers;
 
@@ -208,7 +214,7 @@ namespace CalculationEngineServ
 			Dictionary<long, OptimisationModel> renewableGenerators = new Dictionary<long, OptimisationModel>();
 
 			renewableConributionKW = optModelMap.Where(x => x.Value.Renewable).Select(y => y.Value.MeasuredValue).Sum();
-			List<long> generatorsCommandedFromUI = DbManager.Instance.GetCommandedGenerators().Where(x => x.CommandingFlag).Select(y => y.Gid).ToList();
+			List<long> generatorsCommandedFromUI = ceRepoProxy.GetGidsForCommandedGenerators();
 			foreach (var item in optModelMap)
             {
                 if (item.Value.Renewable)
@@ -436,17 +442,17 @@ namespace CalculationEngineServ
 
         public bool InsertMeasurementsIntoDb(List<MeasurementUnit> measurements)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
             bool success = true;
             try
             {
                 
                 foreach (var item in measurements)
                 {
-                    HistoryMeasurement h = new HistoryMeasurement(item.Gid, item.TimeStamp,item.CurrentValue);
+                    HistoryMeasurementHelper h = new HistoryMeasurementHelper(item.Gid, item.TimeStamp,item.CurrentValue);
                    
-                    DbManager.Instance.AddHistoryMeasurement(h);
+                    ceRepoProxy.AddHistoryMeasurement(h);
                 }
-               // DbManager.Instance.SaveChanges();
 
             }
             catch (Exception e)
@@ -462,11 +468,12 @@ namespace CalculationEngineServ
 
         public List<Tuple<double, DateTime>> ReadMeasurementsFromDb(long gid, DateTime startTime, DateTime endTime)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
             try
             {
-                //var dataFromDb = DbManager.Instance.GetHistoryMeasurements().Where(x => x.Gid == gid && x.MeasurementTime >= startTime.ToUniversalTime() && x.MeasurementTime <= endTime.ToUniversalTime()).ToList();
-                var dataFromDb = DbManager.Instance.GetAllHistoryMeasurementsForSelectedTime(startTime, endTime, gid);
+                var dataFromDb = ceRepoProxy.GetAllHistoryMeasurementsForSelectedTime(startTime, endTime, gid);
                 foreach (var item in dataFromDb)
                 {
                     retVal.Add(new Tuple<double, DateTime>((double)item.MeasurementValue, item.MeasurementTime));
@@ -485,11 +492,13 @@ namespace CalculationEngineServ
 
         public bool WriteTotalProductionIntoDb(float totalProduction, float totalCost, DateTime dateTime)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
             bool retVal = false;
             
             try
             {
-                TotalProduction total = new TotalProduction()
+                TotalProductionHelper total = new TotalProductionHelper()
 				{
 					TotalGeneration = totalProduction,
 					CO2Reduction = reductionCO2,
@@ -497,12 +506,10 @@ namespace CalculationEngineServ
 					TimeOfCalculation = dateTime,
 					TotalCost = totalCost,
 					Profit = profit,
-                    RowKey = DateTime.Now.ToString("o"),
-                    PartitionKey = "TotalProduction"
+                    
             };
 
-                DbManager.Instance.AddTotalProduction(total);
-                //DbManager.Instance.SaveChanges();
+                ceRepoProxy.AddTotalProduction(total);
 
                 retVal = true;
             }
@@ -518,35 +525,37 @@ namespace CalculationEngineServ
             return retVal;
         }
 		
-        public List<Tuple<double, DateTime>> ReadTotalProductionsFromDb(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+        //public List<Tuple<double, DateTime>> ReadTotalProductionsFromDb(DateTime startTime, DateTime endTime)
+        //{
+        //    List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
             
-            try
-            {
-                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
-                foreach (var item in list)
-                {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation.ToLocalTime()));
-                }
-            }
-            catch (Exception e)
-            {
-                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                Console.WriteLine(message);
-            }
+        //    try
+        //    {
+        //        var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+        //        foreach (var item in list)
+        //        {
+        //            retVal.Add(new Tuple<double, DateTime>((double)item.TotalGeneration, item.TimeOfCalculation.ToLocalTime()));
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+        //        Console.WriteLine(message);
+        //    }
             
 
-            return retVal;
-        }
+        //    return retVal;
+        //}
 
         public List<Tuple<DateTime, double, double, double, double, double>> ReadTotalProductions(DateTime startTime, DateTime endTime)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
             var retList = new List<Tuple<DateTime, double, double, double, double, double>>();
             try
             {
-                var list =  DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+                var list = ceRepoProxy.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach(var item in list)
                 {
                     retList.Add(new Tuple<DateTime, double, double, double, double, double>(item.TimeOfCalculation, item.TotalGeneration, item.Profit, item.TotalCost, item.CO2Emission, item.CO2Reduction));
@@ -564,11 +573,13 @@ namespace CalculationEngineServ
 
         public List<Tuple<double, DateTime>> ReadTotalProfitFromDb(DateTime startTime, DateTime endTime)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+                var list = ceRepoProxy.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
                     retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation.ToLocalTime()));
@@ -587,11 +598,12 @@ namespace CalculationEngineServ
 
         public List<Tuple<double, DateTime>> ReadReductionFromDb(DateTime startTime, DateTime endTime)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+                var list = ceRepoProxy.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
                     retVal.Add(new Tuple<double, DateTime>((double)item.CO2Reduction, item.TimeOfCalculation.ToLocalTime()));
@@ -611,11 +623,13 @@ namespace CalculationEngineServ
 
         public List<Tuple<double, DateTime>> ReadEmissionnFromDb(DateTime startTime, DateTime endTime)
         {
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+                var list = ceRepoProxy.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
                     retVal.Add(new Tuple<double, DateTime>((double)item.CO2Emission, item.TimeOfCalculation.ToLocalTime()));
@@ -634,10 +648,11 @@ namespace CalculationEngineServ
         public List<Tuple<double, DateTime>> ReadCostFromDb(DateTime startTime, DateTime endTime)
         {
             List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
 
             try
             {
-                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
+                var list = ceRepoProxy.GetTotalProductionsForSelectedTime(startTime, endTime);
                 foreach (var item in list)
                 {
                     retVal.Add(new Tuple<double, DateTime>((double)item.TotalCost, item.TimeOfCalculation.ToLocalTime()));
@@ -654,28 +669,29 @@ namespace CalculationEngineServ
             return retVal;
         }
 
-        public List<Tuple<double, DateTime>> ReadProfitFromDb(DateTime startTime, DateTime endTime)
-        {
-            List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+        //public List<Tuple<double, DateTime>> ReadProfitFromDb(DateTime startTime, DateTime endTime)
+        //{
+        //    List<Tuple<double, DateTime>> retVal = new List<Tuple<double, DateTime>>();
+        //    CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy("CeRepositoryManagerEndpoint");
 
-            try
-            {
-                var list = DbManager.Instance.GetTotalProductionsForSelectedTime(startTime, endTime);
-                foreach (var item in list)
-                {
-                    retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation.ToLocalTime()));
-                }
-            }
-            catch (Exception e)
-            {
-                string message = string.Format("Failed read Measurements from database. {0}", e.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceError, message);
-                Console.WriteLine(message);
-            }
+        //    try
+        //    {
+        //        var list = ceRepoProxy.GetTotalProductionsForSelectedTime(startTime, endTime);
+        //        foreach (var item in list)
+        //        {
+        //            retVal.Add(new Tuple<double, DateTime>((double)item.Profit, item.TimeOfCalculation.ToLocalTime()));
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string message = string.Format("Failed read Measurements from database. {0}", e.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceError, message);
+        //        Console.WriteLine(message);
+        //    }
 
 
-            return retVal;
-        }
+        //    return retVal;
+        //}
 
 
         #endregion
@@ -684,7 +700,9 @@ namespace CalculationEngineServ
 
         private void PublishGeneratorsToUI(List<MeasurementUnit> measurementsFromGenerators)
 		{
-			List<MeasurementUI> measListUI = new List<MeasurementUI>();
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
+            List<MeasurementUI> measListUI = new List<MeasurementUI>();
 			foreach (var gens in generators)
 			{
                 if(measurementsFromGenerators.Any(x => x.Gid== gens.Key))
@@ -898,8 +916,10 @@ namespace CalculationEngineServ
 
 		private void FillInitialCommandedGenerators()
 		{
-			List<CommandedGenerator> commandedGenerators = new List<CommandedGenerator>();
-			commandedGenerators = DbManager.Instance.GetCommandedGenerators();
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
+            List<CommandedGeneratorHelper> commandedGenerators = new List<CommandedGeneratorHelper>();
+			commandedGenerators = ceRepoProxy.GetCommandedGenerators();
 
 
             List<CommandedGenerator> commandedGenerators1 = generators.Where(x => (x.Value.GeneratorType == GeneratorType.Coal ||
@@ -912,8 +932,9 @@ namespace CalculationEngineServ
                    RowKey = y.Value.GlobalId.ToString() + "_" + DateTime.Now.ToString("o")
                 }).ToList();
 
-				DbManager.Instance.AddListCommandedGenerators(commandedGenerators1);
-				//DbManager.Instance.SaveChanges();
+            var listComGen = commandedGenerators1.Select(x => new CommandedGeneratorHelper(x)).ToList();
+
+            ceRepoProxy.AddListCommandedGenerators(listComGen);
 			
 		}
 
@@ -1085,13 +1106,14 @@ namespace CalculationEngineServ
 
 		public void ResetCommandedGenerator(long gid)
 		{
-			var commandedGen = DbManager.Instance.GetCommandedGenerator(gid);
+            CeRepositoryManagerSfProxy ceRepoProxy = new CeRepositoryManagerSfProxy();
+
+            var commandedGen = ceRepoProxy.GetCommandedGenerator(gid);
 			if(commandedGen != null)
 			{
 				commandedGen.CommandingFlag = false;
 				commandedGen.CommandingValue = 0;
-				DbManager.Instance.AddCommandedGenerator(commandedGen);
-				//DbManager.Instance.SaveChanges();
+                ceRepoProxy.AddCommandedGenerator(commandedGen);
 			}	
 		}
 

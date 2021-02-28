@@ -200,6 +200,7 @@
   <ItemGroup>
     <Compile Include="CalculationEngine.cs" />
     <Compile Include="CalculationEngineServiceClass.cs" />
+    <Compile Include="CEImplementations\CeRepositoryManager.cs" />
     <Compile Include="CeToUI.cs" />
     <Compile Include="DataBaseModels\Alarm.cs" />
     <Compile Include="DataBaseModels\CommandedGenerator.cs" />

@@ -1,5 +1,4 @@
-﻿using CommonCloud.AzureStorage.Helpers;
-using Microsoft.Azure.Cosmos.Table;
+﻿using CommonCloud.AzureStorage.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +6,11 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonCloud.AzureStorage.Entities
+namespace CommonCloud.AzureStorage.Helpers
 {
     [DataContract]
     [Serializable()]
-    public class TotalProduction : TableEntity
+    public class TotalProductionHelper 
     {
         //[DataMember]
         private int _id;
@@ -28,7 +27,7 @@ namespace CommonCloud.AzureStorage.Entities
         //[DataMember]
         private DateTime _timeOfCalculation;
 
-        public TotalProduction(double totalGeneration, double cO2Reduction, double cO2Emission, double totalCost, double profit, DateTime timeOfCalculation)
+        public TotalProductionHelper(double totalGeneration, double cO2Reduction, double cO2Emission, double totalCost, double profit, DateTime timeOfCalculation)
         {
             Id = 1;
             TotalGeneration = totalGeneration;
@@ -37,25 +36,22 @@ namespace CommonCloud.AzureStorage.Entities
             TotalCost = totalCost;
             Profit = profit;
             TimeOfCalculation = timeOfCalculation;
-            RowKey = DateTime.Now.ToString("o");
-            PartitionKey = "TotalProduction";
         }
 
-        public TotalProduction(TotalProductionHelper totalProductionHelper)
+
+        public TotalProductionHelper()
+        { }
+
+        public TotalProductionHelper(TotalProduction totalProduction)
         {
             Id = 1;
-            TotalGeneration = totalProductionHelper.TotalGeneration;
-            CO2Reduction = totalProductionHelper.CO2Reduction;
-            CO2Emission = totalProductionHelper.CO2Emission;
-            TotalCost = totalProductionHelper.TotalCost;
-            Profit = totalProductionHelper.Profit;
-            TimeOfCalculation = totalProductionHelper.TimeOfCalculation;
-            RowKey = DateTime.Now.ToString("o");
-            PartitionKey = "TotalProduction";
+            TotalGeneration = totalProduction.TotalGeneration;
+            CO2Reduction = totalProduction.CO2Reduction;
+            CO2Emission = totalProduction.CO2Emission;
+            TotalCost = totalProduction.TotalCost;
+            Profit = totalProduction.Profit;
+            TimeOfCalculation = totalProduction.TimeOfCalculation;
         }
-
-        public TotalProduction()
-        { }
 
         [DataMember]
         public int Id { get => _id; set => _id = value; }
