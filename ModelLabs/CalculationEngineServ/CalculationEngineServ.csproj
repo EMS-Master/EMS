@@ -202,6 +202,7 @@
     <Compile Include="CalculationEngineServiceClass.cs" />
     <Compile Include="CEImplementations\CeRepositoryManager.cs" />
     <Compile Include="CeToUI.cs" />
+    <Compile Include="Co2EmissionAndReduction.cs" />
     <Compile Include="DataBaseModels\Alarm.cs" />
     <Compile Include="DataBaseModels\CommandedGenerator.cs" />
     <Compile Include="DataBaseModels\DiscreteCounter.cs" />

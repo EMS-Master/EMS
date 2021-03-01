@@ -1,4 +1,6 @@
-﻿using CalculationEngineServ.DataBaseModels;
+﻿using CalculationEngineContracts.ServiceFabricProxy;
+using CalculationEngineServ.DataBaseModels;
+using CommonMeas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,9 +132,9 @@ namespace CalculationEngineServ.GeneticAlgorithm
 			{
 				optModelMap.Add(item.Key, item.Value);
 			}
-			
 
-            float emCO2 = CalculationEngine.CalculateCO2(optModelMap);
+            Co2EmissionAndReductionSfProxy co2EmissionAndReductionSfProxy = new Co2EmissionAndReductionSfProxy();
+            float emCO2 = co2EmissionAndReductionSfProxy.CalculateCO2(optModelMap);
 
             EmissionCO2 = emCO2;
 

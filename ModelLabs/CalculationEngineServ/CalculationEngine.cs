@@ -275,12 +275,13 @@ namespace CalculationEngineServ
 				isNecessaryEnergyZero = true;
 				CalculateTotalCostWhenNecessaryEnergyIsZero(commandedValues);
 			}
-			
-			//reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
-			reductionCO2 = CalculateCO2ReductionWithBiggestCoeficient(renewableGenerators);
+
+            //reductionCO2 = CalculateCO2WithKyotoProtocol(renewableGenerators);
+            Co2EmissionAndReductionSfProxy co2EmissionAndReductionSfProxy = new Co2EmissionAndReductionSfProxy();
+			reductionCO2 = co2EmissionAndReductionSfProxy.CalculateCO2ReductionWithBiggestCoeficient(renewableGenerators);
 			renewableContributionPrct = (renewableConributionKW * 100) / powerOfConsumers;
 			totalCost = isNecessaryEnergyZero ? totalCost : gaoRenewable.TotalCost;
-			currentEmissionCO2 = CalculateCO2(optModelMap);
+			currentEmissionCO2 = co2EmissionAndReductionSfProxy.CalculateCO2(optModelMap);
 			profit = GetProfit(optModelMap);
 
 			return optModelMap;
@@ -940,7 +941,7 @@ namespace CalculationEngineServ
 
         private void FillInitialDiscreteCounters()
         {
-            string path = "C:/Users/barba/Desktop/EMS/ModelLabs/";
+            string path = "C:/Users/Tamara/Documents/tamara/EMS/ModelLabs/";
 
             XmlDocument doc = new XmlDocument();
             doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");
@@ -961,30 +962,30 @@ namespace CalculationEngineServ
         }
 
 
-        public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
-		{
-			//CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
-			float emCO2 = 0;
-			foreach (var optModel in optModelMap.Values)
-			{
-				emCO2 += optModel.GenericOptimizedValue * optModel.EmissionFactor * 0.001f;
-			}
-			return emCO2;
-		}
+  //      public static float CalculateCO2(Dictionary<long, OptimisationModel> optModelMap)
+		//{
+		//	//CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
+		//	float emCO2 = 0;
+		//	foreach (var optModel in optModelMap.Values)
+		//	{
+		//		emCO2 += optModel.GenericOptimizedValue * optModel.EmissionFactor * 0.001f;
+		//	}
+		//	return emCO2;
+		//}
 
-		public float CalculateCO2WithKyotoProtocol(Dictionary<long, OptimisationModel> optModelMap)
-		{
-			float kyotoCoefficient = 0.008f; //	EU - 0.8%
-			return optModelMap.Values.Sum(x => (x.GenericOptimizedValue/1000f) * kyotoCoefficient);
-		}
+		//public float CalculateCO2WithKyotoProtocol(Dictionary<long, OptimisationModel> optModelMap)
+		//{
+		//	float kyotoCoefficient = 0.008f; //	EU - 0.8%
+		//	return optModelMap.Values.Sum(x => (x.GenericOptimizedValue/1000f) * kyotoCoefficient);
+		//}
 
-        public static float CalculateCO2ReductionWithBiggestCoeficient(Dictionary<long, OptimisationModel> optModelMap)
-        {
-            //CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
-            float reductionCO2 = optModelMap.Values.Sum(x => (x.GenericOptimizedValue)) *0.30f * 0.001f;
+        //public static float CalculateCO2ReductionWithBiggestCoeficient(Dictionary<long, OptimisationModel> optModelMap)
+        //{
+        //    //CO2 Emissions from each fuel (tonnes) = Energy consumption of fuel (kWh) x Emission factor for each fuel (kgCO2/kWh) x 0.001
+        //    float reductionCO2 = optModelMap.Values.Sum(x => (x.GenericOptimizedValue)) *0.30f * 0.001f;
 
-            return reductionCO2;
-        }
+        //    return reductionCO2;
+        //}
 
         public float GetProfit(Dictionary<long, OptimisationModel> allGenerators)
 		{

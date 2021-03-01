@@ -147,10 +147,12 @@
     <Compile Include="ICalculationEngineRepository.cs" />
     <Compile Include="ICalculationEngineUIContract.cs" />
     <Compile Include="ICeRepositoryManager.cs" />
+    <Compile Include="ICo2EmissionAndReduction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFabricProxy\CalculationEngineSfProxy.cs" />
     <Compile Include="ServiceFabricProxy\CalculationEngineUISfProxy.cs" />
     <Compile Include="ServiceFabricProxy\CeRepositoryManagerSfProxy.cs" />
+    <Compile Include="ServiceFabricProxy\Co2EmissionAndReductionSfProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">

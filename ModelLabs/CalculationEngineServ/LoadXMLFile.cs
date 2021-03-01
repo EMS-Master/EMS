@@ -14,8 +14,8 @@ namespace CalculationEngineServ
 		{
 			string message = string.Empty;
 			XmlSerializer serializer = new XmlSerializer(typeof(GeneratorCurveModels));
-			StreamReader reader = new StreamReader(@"C:\Users\barba\Desktop\EMS\ModelLabs\Resources\GeneratorsCurves.xml");
-			var value = serializer.Deserialize(reader);
+            StreamReader reader = new StreamReader(@"C:\Users\Tamara\Documents\tamara\EMS\ModelLabs\Resources\GeneratorsCurves.xml");
+            var value = serializer.Deserialize(reader);
 
 			GeneratorCurveModels curveModel = new GeneratorCurveModels();
 

@@ -35,6 +35,7 @@
     <ProjectReference Include="..\AlarmsEventsCloudServ\AlarmsEventsCloudServ.csproj" />
     <ProjectReference Include="..\CalculationEngineCloudServ\CalculationEngineCloudServ.csproj" />
     <ProjectReference Include="..\CeRepositoryManagerService\CeRepositoryManagerService.csproj" />
+    <ProjectReference Include="..\Co2EmissionAndReductionService\Co2EmissionAndReductionService.csproj" />
     <ProjectReference Include="..\GatewayService\GatewayService.csproj" />
     <ProjectReference Include="..\NetworkModelCloudServ\NetworkModelCloudServ.csproj" />
     <ProjectReference Include="..\ScadaCloudServ\ScadaCloudServ.csproj" />
