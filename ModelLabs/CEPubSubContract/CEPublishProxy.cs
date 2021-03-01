@@ -25,30 +25,63 @@ namespace CEPubSubContract
 
             proxy = new ServicePartitionClient<WcfCommunicationClient<ICEPublishContract>>(
                     communicationClientFactory: factory,
-                    serviceUri: new Uri("fabric:/CloudEMS/CalculationEngineCloudServ"),
+                    serviceUri: new Uri("fabric:/CloudEMS/CePubSubService"),
                     listenerName: "CEPublishEndpoint");
         }
 
         public void OptimizationResults(List<MeasurementUI> result)
         {
-            proxy.InvokeWithRetry(x => x.Channel.OptimizationResults(result));
+            try
+            {
+                proxy.InvokeWithRetry(x => x.Channel.OptimizationResults(result));
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public void PublishCoReduction(Tuple<string, float, float> tupla)
         {
-            proxy.InvokeWithRetry(x => x.Channel.PublishCoReduction(tupla));
+            try
+            {
+                proxy.InvokeWithRetry(x => x.Channel.PublishCoReduction(tupla));
+
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
 
         
 
         public void RenewableResult(Tuple<DateTime, float> renewableKW)
         {
-            proxy.InvokeWithRetry(x => x.Channel.RenewableResult(renewableKW));
+            try
+            {
+                proxy.InvokeWithRetry(x => x.Channel.RenewableResult(renewableKW));
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public void WindPercentResult(float result)
         {
-            proxy.InvokeWithRetry(x => x.Channel.WindPercentResult(result));
+            try
+            {
+                proxy.InvokeWithRetry(x => x.Channel.WindPercentResult(result));
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
       
     }

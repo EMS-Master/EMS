@@ -257,6 +257,7 @@
     <Compile Include="OptimisationModel.cs" />
     <Compile Include="ProcessingToCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubSub\CePubSub.cs" />
     <Compile Include="PubSub\OptimizationEventArgs.cs" />
     <Compile Include="PubSub\PublisherService.cs" />
   </ItemGroup>

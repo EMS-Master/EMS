@@ -23,7 +23,7 @@ namespace CalculationEngineCloudServ
     /// <summary>
     /// An instance of this class is created for each service replica by the Service Fabric runtime.
     /// </summary>
-    internal sealed class CalculationEngineCloudServ : StatefulService, ICEPublishContract, ICePubSubContract
+    internal sealed class CalculationEngineCloudServ : StatefulService
     {
         private CalculationEngine ce;
         private CeToUI ceToUI;
@@ -55,8 +55,8 @@ namespace CalculationEngineCloudServ
                 new ServiceReplicaListener(context => this.CreateCalculationEngineListener(context), "CalculationEngineEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineUIListener(context), "CalculationEngineUIEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineTransactionListener(context), "CalculationEngineTransactionEndpoint"),
-                new ServiceReplicaListener(context => this.CreateCESubscribeListener(context), "UISubscribeClientEndpoint"),
-                new ServiceReplicaListener(context => this.CreateCalculationEnginePublisherListener(context), "CEPublishEndpoint"),
+                //new ServiceReplicaListener(context => this.CreateCESubscribeListener(context), "UISubscribeClientEndpoint"),
+                //new ServiceReplicaListener(context => this.CreateCalculationEnginePublisherListener(context), "CEPublishEndpoint"),
                 new ServiceReplicaListener(context => this.CreateCalculationEngineRepositoryListener(context), "CalculationEngineRepositoryEndpoint")
             };
         }
@@ -108,30 +108,30 @@ namespace CalculationEngineCloudServ
             ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineListenerEndpoint");
             return listener;
         }
-        private ICommunicationListener CreateCalculationEnginePublisherListener(StatefulServiceContext context)
-        {
-            var listener = new WcfCommunicationListener<ICEPublishContract>(
-                           listenerBinding: Binding.CreateCustomNetTcp(),
-                           endpointResourceName: "CEPublishEndpoint",
-                           serviceContext: context,
-                           wcfServiceObject: this 
-            );
-            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineHistoryDataEndpoint");
-            return listener;
-        }
+        //private ICommunicationListener CreateCalculationEnginePublisherListener(StatefulServiceContext context)
+        //{
+        //    var listener = new WcfCommunicationListener<ICEPublishContract>(
+        //                   listenerBinding: Binding.CreateCustomNetTcp(),
+        //                   endpointResourceName: "CEPublishEndpoint",
+        //                   serviceContext: context,
+        //                   wcfServiceObject: this 
+        //    );
+        //    ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineHistoryDataEndpoint");
+        //    return listener;
+        //}
 
-        private ICommunicationListener CreateCESubscribeListener(StatefulServiceContext context)
-        {
-            var listener = new WcfCommunicationListener<ICePubSubContract>(
-                           listenerBinding: Binding.CreateCustomNetTcp(),
-                           address: new EndpointAddress("net.tcp://localhost:52398/CalculationEngineCloudServ"),
-                           //endpointResourceName: "CESubscribeEndpoint",
-                           serviceContext: context,
-                           wcfServiceObject: this
-            );
+        //private ICommunicationListener CreateCESubscribeListener(StatefulServiceContext context)
+        //{
+        //    var listener = new WcfCommunicationListener<ICePubSubContract>(
+        //                   listenerBinding: Binding.CreateCustomNetTcp(),
+        //                   address: new EndpointAddress("net.tcp://localhost:52398/CalculationEngineCloudServ"),
+        //                   //endpointResourceName: "CESubscribeEndpoint",
+        //                   serviceContext: context,
+        //                   wcfServiceObject: this
+        //    );
 
-            return listener;
-        }
+        //    return listener;
+        //}
 
         /// <summary>
         /// This is the main entry point for your service replica.
@@ -140,8 +140,8 @@ namespace CalculationEngineCloudServ
         /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service replica.</param>
         protected override async Task RunAsync(CancellationToken cancellationToken)
         {
-            optimizationResultHandler = new OptimizationResultEventHandler(OptimizationResultHandler);
-            OptimizationResultEvent += optimizationResultHandler;
+            //optimizationResultHandler = new OptimizationResultEventHandler(OptimizationResultHandler);
+            //OptimizationResultEvent += optimizationResultHandler;
 
             bool integrityState = ce.InitiateIntegrityUpdate();
 
@@ -162,149 +162,149 @@ namespace CalculationEngineCloudServ
         }
 
 
-        public delegate void OptimizationResultEventHandler(object sender, OptimizationEventArgs e);
+        //public delegate void OptimizationResultEventHandler(object sender, OptimizationEventArgs e);
 
-        public static event OptimizationResultEventHandler OptimizationResultEvent;
+        //public static event OptimizationResultEventHandler OptimizationResultEvent;
 
-        private ICePubSubCallbackContract callbackCE = null;
-        private OptimizationResultEventHandler optimizationResultHandler = null;
+        //private ICePubSubCallbackContract callbackCE = null;
+        //private OptimizationResultEventHandler optimizationResultHandler = null;
 
-        public static string OptimizationType = "Genetic";
-        // public static Action<OptimizationType> ChangeOptimizationTypeAction;
+        //public static string OptimizationType = "Genetic";
+        //// public static Action<OptimizationType> ChangeOptimizationTypeAction;
 
-        private static List<ICePubSubCallbackContract> clientsToPublishCE = new List<ICePubSubCallbackContract>(4);
+        //private static List<ICePubSubCallbackContract> clientsToPublishCE = new List<ICePubSubCallbackContract>(4);
 
-        private object clientsLockerCE = new object();
+        //private object clientsLockerCE = new object();
 
-        public void OptimizationResultHandler(object sender, OptimizationEventArgs e)
-        {
-            List<ICePubSubCallbackContract> faultetClients = new List<ICePubSubCallbackContract>(4);
+        //public void OptimizationResultHandler(object sender, OptimizationEventArgs e)
+        //{
+        //    List<ICePubSubCallbackContract> faultetClients = new List<ICePubSubCallbackContract>(4);
 
-            foreach (ICePubSubCallbackContract client in clientsToPublishCE)
-            {
-                if ((client as ICommunicationObject).State.Equals(CommunicationState.Opened))
-                {
-                    if (e.Message == "wind percent")
-                        client.WindPercentResult(e.WindPercent);
-                    else if (e.Message == "RenewableKW")
-                        client.RenewableResult(e.RenewableKW);
-                    else if (e.Message == "CoReduction")
-                        client.PublishCoReduction(e.CoReduction);
-                    else
-                        client.OptimizationResults(e.OptimizationResult);
-                }
-                else
-                {
-                    faultetClients.Add(client);
-                }
-            }
+        //    foreach (ICePubSubCallbackContract client in clientsToPublishCE)
+        //    {
+        //        if ((client as ICommunicationObject).State.Equals(CommunicationState.Opened))
+        //        {
+        //            if (e.Message == "wind percent")
+        //                client.WindPercentResult(e.WindPercent);
+        //            else if (e.Message == "RenewableKW")
+        //                client.RenewableResult(e.RenewableKW);
+        //            else if (e.Message == "CoReduction")
+        //                client.PublishCoReduction(e.CoReduction);
+        //            else
+        //                client.OptimizationResults(e.OptimizationResult);
+        //        }
+        //        else
+        //        {
+        //            faultetClients.Add(client);
+        //        }
+        //    }
 
-            lock (clientsLockerCE)
-            {
-                foreach (ICePubSubCallbackContract client in faultetClients)
-                {
-                    clientsToPublishCE.Remove(client);
-                }
-            }
-        }
+        //    lock (clientsLockerCE)
+        //    {
+        //        foreach (ICePubSubCallbackContract client in faultetClients)
+        //        {
+        //            clientsToPublishCE.Remove(client);
+        //        }
+        //    }
+        //}
 
 
 
-        public void OptimizationResults(List<MeasurementUI> result)
-        {
-            OptimizationEventArgs e = new OptimizationEventArgs
-            {
-                OptimizationResult = result,
-                Message = "Optimization result"
-            };
+        //public void OptimizationResults(List<MeasurementUI> result)
+        //{
+        //    OptimizationEventArgs e = new OptimizationEventArgs
+        //    {
+        //        OptimizationResult = result,
+        //        Message = "Optimization result"
+        //    };
 
-            try
-            {
-                // Ovakav nacin radi na VS 2017. Prethodne verzije nemaju kompajler za C#6
-                // pa ne moze da kompajlira ovakav kod
-                //OptimizationResultEvent?.Invoke(this, e);
-                OptimizationResultEvent(this, e);
-            }
-            catch (Exception ex)
-            {
-                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
-                Console.WriteLine(message);
-            }
-        }
+        //    try
+        //    {
+        //        // Ovakav nacin radi na VS 2017. Prethodne verzije nemaju kompajler za C#6
+        //        // pa ne moze da kompajlira ovakav kod
+        //        //OptimizationResultEvent?.Invoke(this, e);
+        //        OptimizationResultEvent(this, e);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+        //        Console.WriteLine(message);
+        //    }
+        //}
 
-        public void WindPercentResult(float result)
-        {
-            OptimizationEventArgs e = new OptimizationEventArgs
-            {
-                WindPercent = result,
-                Message = "wind percent"
-            };
-            try
-            {
-                OptimizationResultEvent(this, e);
-            }
-            catch (Exception ex)
-            {
-                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
-                Console.WriteLine(message);
-            }
-        }
+        //public void WindPercentResult(float result)
+        //{
+        //    OptimizationEventArgs e = new OptimizationEventArgs
+        //    {
+        //        WindPercent = result,
+        //        Message = "wind percent"
+        //    };
+        //    try
+        //    {
+        //        OptimizationResultEvent(this, e);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+        //        Console.WriteLine(message);
+        //    }
+        //}
 
-        public void RenewableResult(Tuple<DateTime, float> renewableKW)
-        {
-            OptimizationEventArgs e = new OptimizationEventArgs
-            {
-                RenewableKW = renewableKW,
-                Message = "RenewableKW"
-            };
-            try
-            {
-                OptimizationResultEvent(this, e);
-            }
-            catch (Exception ex)
-            {
-                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
-                Console.WriteLine(message);
-            }
-        }
+        //public void RenewableResult(Tuple<DateTime, float> renewableKW)
+        //{
+        //    OptimizationEventArgs e = new OptimizationEventArgs
+        //    {
+        //        RenewableKW = renewableKW,
+        //        Message = "RenewableKW"
+        //    };
+        //    try
+        //    {
+        //        OptimizationResultEvent(this, e);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+        //        Console.WriteLine(message);
+        //    }
+        //}
 
-        public void PublishCoReduction(Tuple<string, float, float> tupla)
-        {
-            OptimizationEventArgs e = new OptimizationEventArgs
-            {
-                CoReduction = tupla,
-                Message = "CoReduction"
-            };
-            try
-            {
-                OptimizationResultEvent(this, e);
-            }
-            catch (Exception ex)
-            {
-                string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
-                CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
-                Console.WriteLine(message);
-            }
-        }
+        //public void PublishCoReduction(Tuple<string, float, float> tupla)
+        //{
+        //    OptimizationEventArgs e = new OptimizationEventArgs
+        //    {
+        //        CoReduction = tupla,
+        //        Message = "CoReduction"
+        //    };
+        //    try
+        //    {
+        //        OptimizationResultEvent(this, e);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
+        //        CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
+        //        Console.WriteLine(message);
+        //    }
+        //}
 
-        public void Subscribe()
-        {
-            callbackCE = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
-            clientsToPublishCE.Add(callbackCE);
-        }
+        //public void Subscribe()
+        //{
+        //    callbackCE = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
+        //    clientsToPublishCE.Add(callbackCE);
+        //}
 
-        public void Unsubscribe()
-        {
-            callbackCE = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
-            clientsToPublishCE.Remove(callbackCE);
-        }
+        //public void Unsubscribe()
+        //{
+        //    callbackCE = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
+        //    clientsToPublishCE.Remove(callbackCE);
+        //}
 
-        public bool Optimization()
-        {
-            throw new NotImplementedException();
-        }
+        //public bool Optimization()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

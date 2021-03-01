@@ -1,30 +1,32 @@
-﻿using FTN.ServiceContracts;
+﻿using CEPubSubContract;
+using FTN.Common;
+using FTN.ServiceContracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using System.ServiceModel;
-using FTN.Common;
-using CEPubSubContract;
 
 namespace CalculationEngineServ.PubSub
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class PublisherService : ICePubSubContract
+    public class CePubSub : ICEPublishContract, ICePubSubContract
     {
         public delegate void OptimizationResultEventHandler(object sender, OptimizationEventArgs e);
+
         public static event OptimizationResultEventHandler OptimizationResultEvent;
 
-        private ICePubSubCallbackContract callback = null;
+        private ICePubSubCallbackContract callbackCE = null;
         private OptimizationResultEventHandler optimizationResultHandler = null;
 
-        private static List<ICePubSubCallbackContract> clientsToPublish = new List<ICePubSubCallbackContract>(4);
+        public static string OptimizationType = "Genetic";
+        // public static Action<OptimizationType> ChangeOptimizationTypeAction;
 
-        private object clientsLocker = new object();
-		public static string OptimizationType = "Genetic";
+        private static List<ICePubSubCallbackContract> clientsToPublishCE = new List<ICePubSubCallbackContract>(4);
 
-		public PublisherService()
+        private object clientsLockerCE = new object();
+
+        public CePubSub()
         {
             optimizationResultHandler = new OptimizationResultEventHandler(OptimizationResultHandler);
             OptimizationResultEvent += optimizationResultHandler;
@@ -34,9 +36,9 @@ namespace CalculationEngineServ.PubSub
         {
             List<ICePubSubCallbackContract> faultetClients = new List<ICePubSubCallbackContract>(4);
 
-            foreach(ICePubSubCallbackContract client in clientsToPublish)
+            foreach (ICePubSubCallbackContract client in clientsToPublishCE)
             {
-                if((client as ICommunicationObject).State.Equals(CommunicationState.Opened))
+                if ((client as ICommunicationObject).State.Equals(CommunicationState.Opened))
                 {
                     if (e.Message == "wind percent")
                         client.WindPercentResult(e.WindPercent);
@@ -53,38 +55,33 @@ namespace CalculationEngineServ.PubSub
                 }
             }
 
-            lock (clientsLocker)
+            lock (clientsLockerCE)
             {
-                foreach(ICePubSubCallbackContract client in faultetClients)
+                foreach (ICePubSubCallbackContract client in faultetClients)
                 {
-                    clientsToPublish.Remove(client);
+                    clientsToPublishCE.Remove(client);
                 }
             }
         }
-        public void Subscribe()
-        {
-            callback = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
-            clientsToPublish.Add(callback);
-        }
 
-        public void Unsubscribe()
-        {
-            callback = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
-            clientsToPublish.Remove(callback);
-        }
 
-        public void PublishOptimizationResults(List<MeasurementUI> result)
+
+        public void OptimizationResults(List<MeasurementUI> result)
         {
             OptimizationEventArgs e = new OptimizationEventArgs
             {
                 OptimizationResult = result,
-                Message="optimization result"
+                Message = "Optimization result"
             };
+
             try
             {
+                // Ovakav nacin radi na VS 2017. Prethodne verzije nemaju kompajler za C#6
+                // pa ne moze da kompajlira ovakav kod
+                //OptimizationResultEvent?.Invoke(this, e);
                 OptimizationResultEvent(this, e);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 string message = string.Format("CES does not have any subscribed clinet for publishing new optimization result. {0}", ex.Message);
                 CommonTrace.WriteTrace(CommonTrace.TraceVerbose, message);
@@ -92,7 +89,7 @@ namespace CalculationEngineServ.PubSub
             }
         }
 
-        public void PublishWindPercent(float result)
+        public void WindPercentResult(float result)
         {
             OptimizationEventArgs e = new OptimizationEventArgs
             {
@@ -111,7 +108,7 @@ namespace CalculationEngineServ.PubSub
             }
         }
 
-        public void PublishRenewableKW(Tuple<DateTime, float> renewableKW)
+        public void RenewableResult(Tuple<DateTime, float> renewableKW)
         {
             OptimizationEventArgs e = new OptimizationEventArgs
             {
@@ -129,7 +126,6 @@ namespace CalculationEngineServ.PubSub
                 Console.WriteLine(message);
             }
         }
-
 
         public void PublishCoReduction(Tuple<string, float, float> tupla)
         {
@@ -150,12 +146,16 @@ namespace CalculationEngineServ.PubSub
             }
         }
 
-        public bool Optimization()
-		{
-			OptimizationType = "Genetic";
-			// ChangeOptimizationTypeAction?.Invoke(optimizationType);
-			return true;
-		}
-        
+        public void Subscribe()
+        {
+            callbackCE = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
+            clientsToPublishCE.Add(callbackCE);
+        }
+
+        public void Unsubscribe()
+        {
+            callbackCE = OperationContext.Current.GetCallbackChannel<ICePubSubCallbackContract>();
+            clientsToPublishCE.Remove(callbackCE);
+        }
     }
 }

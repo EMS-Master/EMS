@@ -31,8 +31,8 @@
       <Endpoint Name="CalculationEngineEndpoint" />
       <Endpoint Name="CalculationEngineUIEndpoint" />
       <Endpoint Name="CalculationEngineTransactionEndpoint" />
-      <Endpoint Name="CESubscribeEndpoint" />
-      <Endpoint Name="CEPublishEndpoint" />
+      <!--<Endpoint Name="CESubscribeEndpoint" />-->
+      <!--<Endpoint Name="CEPublishEndpoint" />-->
       <Endpoint Name="CalculationEngineRepositoryEndpoint" />
 
       <!-- This endpoint is used by the replicator for replicating the state of your service.
