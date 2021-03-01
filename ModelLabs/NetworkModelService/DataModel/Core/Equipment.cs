@@ -9,7 +9,9 @@ using FTN.Common;
 
 namespace FTN.Services.NetworkModelService.DataModel.Core
 {
-	public class Equipment : PowerSystemResource
+    [DataContract]
+    [Serializable()]
+    public class Equipment : PowerSystemResource
 	{
         private long equipmentContainer = 0;
 
@@ -17,6 +19,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 		{
 		}
 
+        [DataMember]
         public long EquipmentContainer { get => equipmentContainer; set => equipmentContainer = value; }
 
         public override bool Equals(object obj)

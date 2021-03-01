@@ -148,11 +148,13 @@
     <Compile Include="ICalculationEngineUIContract.cs" />
     <Compile Include="ICeRepositoryManager.cs" />
     <Compile Include="ICo2EmissionAndReduction.cs" />
+    <Compile Include="ICostAndProfitCalculation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFabricProxy\CalculationEngineSfProxy.cs" />
     <Compile Include="ServiceFabricProxy\CalculationEngineUISfProxy.cs" />
     <Compile Include="ServiceFabricProxy\CeRepositoryManagerSfProxy.cs" />
     <Compile Include="ServiceFabricProxy\Co2EmissionAndReductionSfProxy.cs" />
+    <Compile Include="ServiceFabricProxy\CostAndProfitCalculationSfProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">
@@ -162,6 +164,14 @@
     <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
       <Project>{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}</Project>
       <Name>CommonMeas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
+      <Project>{ADE96497-7C11-40B6-AE82-57F956C9F104}</Project>
+      <Name>DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace FTN.Services.NetworkModelService.DataModel.Wires
 {
+    [DataContract]
+    [Serializable()]
     public class RotatingMachine : RegulatingCondEq
     {
         private float ratedS;
@@ -17,6 +20,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
         /// <summary>
         /// Gets or sets RatedS of the entity
         /// </summary>
+       [DataMember]
         public float RatedS
         {
             get { return this.ratedS; }

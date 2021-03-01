@@ -17,7 +17,9 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 		Both = 3,
 	}
 
-	public class IdentifiedObject
+    [DataContract]
+    [Serializable()]
+    public class IdentifiedObject
 	{
 		/// <summary>
 		/// Model Resources Description
@@ -61,6 +63,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         /// <summary>
         /// Gets or sets global id of the entity (identified object).
         /// </summary>			
+        [DataMember]
         public long GlobalId
 		{
 			get
@@ -74,10 +77,11 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets name of the entity (identified object).
-		/// </summary>			
-		public string Name
+        /// <summary>
+        /// Gets or sets name of the entity (identified object).
+        /// </summary>			
+        [DataMember]
+        public string Name
 		{
 			get
 			{				
@@ -90,19 +94,21 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets mrid of the entity (identified object).
-		/// </summary>			
-		public string Mrid
+        /// <summary>
+        /// Gets or sets mrid of the entity (identified object).
+        /// </summary>			
+        [DataMember]
+        public string Mrid
 		{
 			get { return mrid; }
 			set { mrid = value; }
 		}
 
-		/// <summary>
-		/// Gets or sets description of the entity (identified object).
-		/// </summary>			
-		public string AliasName
+        /// <summary>
+        /// Gets or sets description of the entity (identified object).
+        /// </summary>			
+        [DataMember]
+        public string AliasName
 		{
 			get { return aliasName; }
 			set { aliasName= value; }

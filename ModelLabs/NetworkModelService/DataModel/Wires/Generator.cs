@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace FTN.Services.NetworkModelService.DataModel.Wires
 {
+    [DataContract]
+    [Serializable()]
     public class Generator : RotatingMachine
     {
         private float minQ;
@@ -14,10 +17,15 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
         private float x;
         private float y;
 
+        [DataMember]
         public float MinQ { get => minQ; set => minQ = value; }
+        [DataMember]
         public float MaxQ { get => maxQ; set => maxQ = value; }
+        [DataMember]
         public GeneratorType GeneratorType { get => generatorType; set => generatorType = value; }
+        [DataMember]
         public float X { get => x; set => x = value; }
+        [DataMember]
         public float Y { get => y; set => y = value; }
 
         public Generator(long globalId) : base(globalId)

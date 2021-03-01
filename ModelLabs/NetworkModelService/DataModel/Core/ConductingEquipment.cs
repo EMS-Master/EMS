@@ -9,7 +9,9 @@ using FTN.Common;
 
 namespace FTN.Services.NetworkModelService.DataModel.Core
 {
-	public class ConductingEquipment : Equipment
+    [DataContract]
+    [Serializable()]
+    public class ConductingEquipment : Equipment
 	{		
 		
 			

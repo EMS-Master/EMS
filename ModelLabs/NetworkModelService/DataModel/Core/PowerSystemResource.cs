@@ -10,7 +10,9 @@ using FTN.Common;
 
 namespace FTN.Services.NetworkModelService.DataModel.Core
 {
-	public class PowerSystemResource : IdentifiedObject
+    [DataContract]
+    [Serializable()]
+    public class PowerSystemResource : IdentifiedObject
 	{
         private List<long> measurements = new List<long>();
 
@@ -19,6 +21,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 		{
 		}
 
+        [DataMember]
         public List<long> Measurements { get => measurements; set => measurements = value; }
 
         public override bool Equals(object obj)
