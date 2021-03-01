@@ -25,7 +25,7 @@ namespace FTN.Services.AlarmsEventsService
     public class AlarmsEvents : IAlarmsEventsContract, IAesIntegirtyContract
     {
         private List<AlarmHelper> alarms = new List<AlarmHelper>();
-        private PublisherService publisher;
+        private AesPubSub publisher;
         private IReliableStateManager StateManager;
         private IReliableDictionary<string, AlarmsData> alarmsEventsCache;
         private List<AlarmHelper> alarmsFromDatabase;
@@ -35,7 +35,7 @@ namespace FTN.Services.AlarmsEventsService
         private AesPublishSfProxy aesPublishSfProxy = new AesPublishSfProxy();
         public AlarmsEvents()
         {
-            this.Publisher = new PublisherService();
+            this.Publisher = new AesPubSub();
             this.Alarms = new List<AlarmHelper>();
             //alarmsFromDatabase = SelectAlarmsFromDatabase();
         }
@@ -75,7 +75,7 @@ namespace FTN.Services.AlarmsEventsService
             }
         }
 
-        public PublisherService Publisher
+        public AesPubSub Publisher
         {
             get
             {

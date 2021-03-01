@@ -32,6 +32,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AesPubSubService\AesPubSubService.csproj" />
     <ProjectReference Include="..\AlarmsEventsCloudServ\AlarmsEventsCloudServ.csproj" />
     <ProjectReference Include="..\CalculationEngineCloudServ\CalculationEngineCloudServ.csproj" />
     <ProjectReference Include="..\CePubSubService\CePubSubService.csproj" />

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/CloudEMS" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="AesPubSubService_InstanceCount" Value="-1" />
     <Parameter Name="CePubSubService_InstanceCount" Value="-1" />
     <Parameter Name="NmsRepositoryManagerService_InstanceCount" Value="-1" />
     <Parameter Name="CostAndProfitClaculationService_InstanceCount" Value="-1" />

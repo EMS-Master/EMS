@@ -1,4 +1,5 @@
-﻿using CalculationEngineServ.DataBaseModels;
+﻿using AESPubSbuContract;
+using CalculationEngineServ.DataBaseModels;
 using CommonMeas;
 using FTN.Common;
 using FTN.ServiceContracts;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace FTN.Services.AlarmsEventsService.PubSub
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    public class PublisherService : IAesPubSubContract
+    public class AesPubSub : IAesPubSubContract, IAesPublishContract
     {
         public delegate void AlarmEventHandler(object sender, AlarmsEventsEventArgs e);
 
@@ -31,7 +32,7 @@ namespace FTN.Services.AlarmsEventsService.PubSub
 
         private object clientsLocker = new object();
 
-        public PublisherService()
+        public AesPubSub()
         {
             alarmEventHandler = new AlarmEventHandler(AlarmsEventsHandler);
             AlarmEvent += alarmEventHandler;

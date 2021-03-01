@@ -26,18 +26,34 @@ namespace AESPubSbuContract
 
             proxy = new ServicePartitionClient<WcfCommunicationClient<IAesPublishContract>>(
                     communicationClientFactory: factory,
-                    serviceUri: new Uri("fabric:/CloudEMS/AlarmsEventsCloudServ"),
+                    serviceUri: new Uri("fabric:/CloudEMS/AesPubSubService"),
                     listenerName: "AESPublishEndpoint");
         }
 
         public void PublishAlarmsEvents(AlarmHelper alarm, PublishingStatus status)
         {
-            proxy.InvokeWithRetry(x => x.Channel.PublishAlarmsEvents(alarm, status));
+            try
+            {
+                proxy.InvokeWithRetry(x => x.Channel.PublishAlarmsEvents(alarm, status));
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
         public void PublishStateChange(AlarmHelper alarm)
         {
-            proxy.InvokeWithRetry(x => x.Channel.PublishStateChange(alarm));
+            try
+            {
+                proxy.InvokeWithRetry(x => x.Channel.PublishStateChange(alarm));
+
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
     }
 }

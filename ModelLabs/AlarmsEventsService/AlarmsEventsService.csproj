@@ -142,7 +142,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PubSub\AlarmsEventsEventArgs.cs" />
     <Compile Include="PubSub\AlarmUpdateEventArgs.cs" />
-    <Compile Include="PubSub\PublisherService.cs" />
+    <Compile Include="PubSub\AesPubSub.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AESPubSbuContract\AESPubSbuContract.csproj">
