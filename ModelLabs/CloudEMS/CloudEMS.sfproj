@@ -39,6 +39,7 @@
     <ProjectReference Include="..\CostAndProfitClaculationService\CostAndProfitClaculationService.csproj" />
     <ProjectReference Include="..\GatewayService\GatewayService.csproj" />
     <ProjectReference Include="..\NetworkModelCloudServ\NetworkModelCloudServ.csproj" />
+    <ProjectReference Include="..\NmsRepositoryManagerService\NmsRepositoryManagerService.csproj" />
     <ProjectReference Include="..\ScadaCloudServ\ScadaCloudServ.csproj" />
     <ProjectReference Include="..\ScadaCommandingCloudServ\ScadaCommandingCloudServ.csproj" />
     <ProjectReference Include="..\ScadaProcessingCloudServ\ScadaProcessingCloudServ.csproj" />

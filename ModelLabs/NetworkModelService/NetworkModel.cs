@@ -9,6 +9,7 @@ using System.Text;
 using System.Xml;
 using CommonCloud.AzureStorage;
 using FTN.Common;
+using FTN.ServiceContracts.ServiceFabricProxy;
 using FTN.Services.NetworkModelService.DataModel;
 using FTN.Services.NetworkModelService.DataModel.Core;
 using FTN.Services.NetworkModelService.DataModel.Wires;
@@ -699,22 +700,7 @@ namespace FTN.Services.NetworkModelService
         {
             if (MODE == "DATABASE")
             {
-                //NmsContext nmsContext = new NmsContext();
-                //DeltaModel deltaModel = new DeltaModel();
-                //deltaModel.Time = DateTime.Now;
-                //deltaModel.Delta = ObjectToByteArray(delta);
-                //try
-                //{
-                //    AzureBlobStorage.AddBlobEntityInDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta", deltaModel.Delta);
-
-                //    nmsContext.DeltaModels.Add(deltaModel);
-                //}
-                //catch (Exception e) { }
-                //nmsContext.SaveChanges();
-
-                //string message = string.Format("Insert new Delta into database successfully finished. ");
-                //CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
-                //Console.WriteLine(message);
+                NmsRepositoryManagerSfProxy nmsRepositoryManagerSfProxy = new NmsRepositoryManagerSfProxy();
                 NmsContext nmsContext = new NmsContext();
                 DeltaModel deltaModel = new DeltaModel();
                 deltaModel.Time = DateTime.Now;
@@ -723,8 +709,8 @@ namespace FTN.Services.NetworkModelService
                 byte[] deltaCountByteArray;
                 byte[] deltaSerialized;
                 int deltaLength;
-                var oldDelta = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
-                if(oldDelta == null)
+                var oldDelta = nmsRepositoryManagerSfProxy.ReadDelta();
+                if (oldDelta == null)
                 {
                     delta.Id = ++deltaCount;
                     deltaCountByteArray = BitConverter.GetBytes(deltaCount);
@@ -753,7 +739,7 @@ namespace FTN.Services.NetworkModelService
                 deltaModel.Delta = oldDelta;
                 try
                 {
-                    AzureBlobStorage.AddBlobEntityInDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta", deltaModel.Delta);
+                    nmsRepositoryManagerSfProxy.AddDelta(deltaModel.Delta);
 
                     //nmsContext.DeltaModels.Add(deltaModel);
                 }
@@ -843,24 +829,9 @@ namespace FTN.Services.NetworkModelService
         {
             if (MODE == "DATABASE")
             {
-
-
-                //var byteArrayFromBlob = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
-
-                //Delta delta = null;
-                //if(byteArrayFromBlob == null)
-                //{
-                //    return new List<Delta>();
-                //}
-
-                //List<Delta> result = new List<Delta>();
-
-                //delta = Delta.Deserialize(byteArrayFromBlob);
-                //result.Add(delta);
-
-                //return result;
-                var byteArrayFromBlob = AzureBlobStorage.ReadBlobEntityFromDB("UseDevelopmentStorage=true;", "blobcontainer", "blobDelta");
-                if(byteArrayFromBlob == null)
+                NmsRepositoryManagerSfProxy nmsRepositoryManagerSfProxy = new NmsRepositoryManagerSfProxy();
+                var byteArrayFromBlob = nmsRepositoryManagerSfProxy.ReadDelta();
+                if (byteArrayFromBlob == null)
                 {
                     return new List<Delta>();
                 }

@@ -107,6 +107,7 @@
     <Compile Include="NetworkModelService.cs" />
     <Compile Include="NmsContext.cs" />
     <Compile Include="NmsModel\DeltaModel.cs" />
+    <Compile Include="NmsRepositoryManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GDA\ResourceIterator.cs" />
   </ItemGroup>
