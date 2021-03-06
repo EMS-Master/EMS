@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScadaProccessingCloud.cs" />
     <Compile Include="ScadaProcessingCloudServ.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ServiceEventSource.cs" />
@@ -128,9 +129,37 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AlarmsEventsContract\AlarmsEventsContract.csproj">
+      <Project>{A90DA217-6062-4764-9095-DCA6C87E5C3A}</Project>
+      <Name>AlarmsEventsContract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalculationEngineContracts\CalculationEngineContracts.csproj">
+      <Project>{A6DD77D6-80F9-4BA6-83F7-4913C2DF866A}</Project>
+      <Name>CalculationEngineContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalculationEngineServ\CalculationEngineServ.csproj">
+      <Project>{4E67B062-A8D7-4FB8-9487-B0ACE402DF52}</Project>
+      <Name>CalculationEngineServ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">
       <Project>{25125418-b9c8-491e-9e99-ec33b3a059f1}</Project>
       <Name>CommonCloud</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
+      <Project>{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}</Project>
+      <Name>CommonMeas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModbusClient\ModbusClient.csproj">
+      <Project>{9EDAFF9E-7E95-40EE-B797-A5F49BA29E76}</Project>
+      <Name>ModbusClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
+      <Project>{ADE96497-7C11-40B6-AE82-57F956C9F104}</Project>
+      <Name>DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
       <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
@@ -139,6 +168,10 @@
     <ProjectReference Include="..\ScadaProcessingSevice\ScadaProcessingSevice.csproj">
       <Project>{51D89EE9-CC78-4F1B-95A0-AB9AC057A692}</Project>
       <Name>ScadaProcessingSevice</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceContracts\NetworkModelQueryContract\NetworkModelGDAContract.csproj">
+      <Project>{B726FB71-D295-41EE-9644-B2B0B1BC8911}</Project>
+      <Name>NetworkModelGDAContract</Name>
     </ProjectReference>
     <ProjectReference Include="..\TransactionContract\TransactionContract.csproj">
       <Project>{1E99A031-C0FF-416F-9C9B-3575941DF41E}</Project>

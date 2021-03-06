@@ -12,13 +12,13 @@ namespace FTN.Services.AlarmsEventsService
 {
     public class AlarmsEventsService : IDisposable
     {
-        private AlarmsEvents ae = null;
+        //private AlarmsEvents ae = null;
 
         private List<ServiceHost> hosts = null;
 
         public AlarmsEventsService()
         {
-            this.ae = new AlarmsEvents();
+            //this.ae = new AlarmsEvents();
             this.InitializeHosts();
         }
 
@@ -52,7 +52,7 @@ namespace FTN.Services.AlarmsEventsService
         private void InitializeHosts()
         {
             hosts = new List<ServiceHost>();
-            hosts.Add(new ServiceHost(typeof(AlarmsEvents)));
+            //hosts.Add(new ServiceHost(typeof(AlarmsEvents)));
             hosts.Add(new ServiceHost(typeof(AesPubSub)));
           
         }

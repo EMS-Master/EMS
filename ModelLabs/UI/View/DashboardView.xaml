@@ -66,11 +66,11 @@
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Checked">
                                     <i:InvokeCommandAction Command="{Binding DataContext.ActivateGen,RelativeSource={RelativeSource AncestorType=UserControl}}"
-											   CommandParameter="{Binding Key}" />
+											   CommandParameter="{Binding }" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="Unchecked">
                                     <i:InvokeCommandAction Command="{Binding DataContext.DeactivateGen,RelativeSource={RelativeSource AncestorType=UserControl}}"
-											   CommandParameter="{Binding Key}" />
+											   CommandParameter="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </CheckBox>

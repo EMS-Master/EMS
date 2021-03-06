@@ -18,11 +18,11 @@ namespace ScadaProcessingCloudServ
     /// </summary>
     internal sealed class ScadaProcessingCloudServ : StatelessService
     {
-        private ScadaProcessing scadaProcessing;
+        private ScadaProccessingCloud scadaProcessing;
         public ScadaProcessingCloudServ(StatelessServiceContext context)
             : base(context)
         {
-            scadaProcessing = new ScadaProcessing();
+            scadaProcessing = new ScadaProccessingCloud();
         }
 
         /// <summary>
@@ -71,11 +71,11 @@ namespace ScadaProcessingCloudServ
 
             if (!integrityState)
             {
-                ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update failed");
+                ServiceEventSource.Current.ServiceMessage(this.Context, "ScadaProcessing integrity update failed");
             }
             else
             {
-                ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update succeeded.");
+                ServiceEventSource.Current.ServiceMessage(this.Context, "ScadaProcessing integrity update succeeded.");
             }
 
             #endregion ScadaProcessing instantiation

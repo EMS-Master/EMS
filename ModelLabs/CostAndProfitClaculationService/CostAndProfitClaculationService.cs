@@ -18,11 +18,11 @@ namespace CostAndProfitClaculationService
     /// </summary>
     internal sealed class CostAndProfitClaculationService : StatelessService
     {
-        private CostAndProfitCalculation costAndProfitCalculation;
+        private CostAndProfitCalculationCloud costAndProfitCalculation;
         public CostAndProfitClaculationService(StatelessServiceContext context)
             : base(context)
         {
-            costAndProfitCalculation = new CostAndProfitCalculation();
+            costAndProfitCalculation = new CostAndProfitCalculationCloud();
         }
 
         /// <summary>
@@ -59,12 +59,14 @@ namespace CostAndProfitClaculationService
             //       or remove this RunAsync override if it's not needed in your service.
 
             long iterations = 0;
+            ServiceEventSource.Current.ServiceMessage(this.Context, "CostAndProfit");
+
 
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

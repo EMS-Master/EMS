@@ -933,7 +933,7 @@ namespace CalculationEngineServ
                    CommandingFlag = false,
                    CommandingValue = 0,
                    PartitionKey = "CommandedGenerator",
-                   RowKey = y.Value.GlobalId.ToString() + "_" + DateTime.Now.ToString("o")
+                   RowKey = y.Value.GlobalId.ToString() // + "_" + DateTime.Now.ToString("o")
                 }).ToList();
 
             var listComGen = commandedGenerators1.Select(x => new CommandedGeneratorHelper(x)).ToList();

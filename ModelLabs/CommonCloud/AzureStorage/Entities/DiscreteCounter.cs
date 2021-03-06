@@ -41,7 +41,7 @@ namespace CommonCloud.AzureStorage.Entities
             CurrentValue = currentValue;
             Counter = counter;
             Name = name;
-            RowKey = gid.ToString() + "_" + DateTime.Now.ToString("o");
+            RowKey = gid.ToString();// + "_" + DateTime.Now.ToString("o");
             PartitionKey = "DiscreteCounter";
         }
 

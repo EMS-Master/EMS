@@ -18,11 +18,11 @@ namespace Co2EmissionAndReductionService
     /// </summary>
     internal sealed class Co2EmissionAndReductionService : StatelessService
     {
-        private Co2EmissionAndReduction co2;
+        private Co2EmissionAndReductionCloud co2;
         public Co2EmissionAndReductionService(StatelessServiceContext context)
             : base(context)
         {
-            co2 = new Co2EmissionAndReduction();
+            co2 = new Co2EmissionAndReductionCloud();
         }
 
         /// <summary>
@@ -58,13 +58,15 @@ namespace Co2EmissionAndReductionService
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
 
-            long iterations = 0;
+            //long iterations = 0;
+            ServiceEventSource.Current.ServiceMessage(this.Context, "Co2EmissionnReduction");
+
 
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

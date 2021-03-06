@@ -40,7 +40,7 @@ namespace CommonCloud.AzureStorage.Entities
             Gid = gid;
             CommandingFlag = commandingFlag;
             CommandingValue = commandingValue;
-            RowKey = gid.ToString() +"_" + DateTime.Now.ToString("o");
+            RowKey = gid.ToString(); // +"_" + DateTime.Now.ToString("o")
             PartitionKey = "CommandedGenerator";
         }
 
@@ -50,7 +50,7 @@ namespace CommonCloud.AzureStorage.Entities
             Gid = commandedGeneratorHelper.Gid;
             CommandingFlag = commandedGeneratorHelper.CommandingFlag;
             CommandingValue = commandedGeneratorHelper.CommandingValue;
-            RowKey = commandedGeneratorHelper.Gid.ToString() + "_" + DateTime.Now.ToString("o");
+            RowKey = commandedGeneratorHelper.Gid.ToString(); // + "_" + DateTime.Now.ToString("o");
             PartitionKey = "CommandedGenerator";
         }
     }

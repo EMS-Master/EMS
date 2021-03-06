@@ -106,6 +106,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Co2EmissionAndReductionCloud.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Co2EmissionAndReductionService.cs" />
     <Compile Include="Program.cs" />
@@ -129,6 +130,10 @@
     <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">
       <Project>{25125418-B9C8-491E-9E99-EC33B3A059F1}</Project>
       <Name>CommonCloud</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonMeas\CommonMeas.csproj">
+      <Project>{41C8517A-D6F5-4BBF-AF20-DC99A12664E8}</Project>
+      <Name>CommonMeas</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

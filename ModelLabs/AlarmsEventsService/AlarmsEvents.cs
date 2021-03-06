@@ -19,7 +19,7 @@ using Microsoft.ServiceFabric.Data.Collections;
 using CommonCloud.AzureStorage.Entities;
 using AESPubSbuContract;
 
-namespace FTN.Services.AlarmsEventsService
+namespace AlarmsEventsCloudServ
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class AlarmsEvents : IAlarmsEventsContract, IAesIntegirtyContract
@@ -187,6 +187,8 @@ namespace FTN.Services.AlarmsEventsService
                     //Console.WriteLine("AlarmsEvents: AddAlarm method");
                     string message = string.Format("Alarm on Analog Gid: {0} - Value: {1}", alarm.Gid, alarm.Value);
                     CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
+                    //ServiceEventSource.Current.Message("CE - Update model invoked.");
+
                 }
                 catch (Exception ex)
                 {

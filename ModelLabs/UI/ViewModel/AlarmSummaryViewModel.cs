@@ -329,6 +329,7 @@ namespace UI.ViewModel
                             alarm.CurrentState = string.Format("{0} | {1}", alarm.CurrentState.Contains(State.Cleared.ToString()) ? State.Cleared.ToString() : State.Active.ToString(), alarm.AckState.ToString());
                             OnPropertyChanged(nameof(AlarmSummaryQueue));
                             CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Persistent alarm acknowledged");
+                            break;
                         }
                         
                     }

@@ -76,12 +76,13 @@ namespace AesPubSubService
             //       or remove this RunAsync override if it's not needed in your service.
 
             long iterations = 0;
+            ServiceEventSource.Current.ServiceMessage(this.Context, "AesPubSub");
 
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

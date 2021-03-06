@@ -149,17 +149,18 @@ namespace UI.ViewModel
         public WindSpeed WindPcnt { get => windPcnt; set => windPcnt = value; }
         private void ActivateGenExecute(object obj)
         {
-            
-                long gid = (long)obj;
-                proxyScada.CommandDiscreteValues(gid, true);
+            KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
+            if(keyValue.Value[0].IsActive == false)
+                proxyScada.CommandDiscreteValues(keyValue.Key, !keyValue.Value[0].IsActive);
             
                 
 
         }
         private void DeactivateGenExecute(object obj)
         {
-            long gid = (long)obj;
-            proxyScada.CommandDiscreteValues(gid, false);
+            KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
+            if (keyValue.Value[0].IsActive == true)
+                proxyScada.CommandDiscreteValues(keyValue.Key, !keyValue.Value[0].IsActive);
         }
 
         private void CommandGenMessBoxExecute(object obj)

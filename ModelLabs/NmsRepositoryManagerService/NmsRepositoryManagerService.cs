@@ -18,11 +18,11 @@ namespace NmsRepositoryManagerService
     /// </summary>
     internal sealed class NmsRepositoryManagerService : StatelessService
     {
-        private NmsRepositoryManager nmsRepoManager;
+        private NmsRepositoryManagerCloud nmsRepoManager;
         public NmsRepositoryManagerService(StatelessServiceContext context)
             : base(context)
         {
-            nmsRepoManager = new NmsRepositoryManager();
+            nmsRepoManager = new NmsRepositoryManagerCloud();
         }
 
         /// <summary>
@@ -60,12 +60,14 @@ namespace NmsRepositoryManagerService
             //       or remove this RunAsync override if it's not needed in your service.
 
             long iterations = 0;
+            ServiceEventSource.Current.ServiceMessage(this.Context, "NmsRepositoryManager");
+
 
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

@@ -114,11 +114,15 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericDataAccessCloud.cs" />
+    <Compile Include="NetworkModelCloud.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NetworkModelCloudServ.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ResourceIteratorCloud.cs" />
     <Compile Include="ServiceEventSource.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +139,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
+      <Project>{ADE96497-7C11-40B6-AE82-57F956C9F104}</Project>
+      <Name>DataModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetworkModelService\NetworkModelService.csproj">
       <Project>{2630D180-1B68-4E84-AEAC-42EE8C88B50F}</Project>

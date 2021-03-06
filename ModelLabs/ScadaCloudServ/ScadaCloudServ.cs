@@ -15,11 +15,11 @@ namespace ScadaCloudServ
     /// </summary>
     internal sealed class ScadaCloudServ : StatelessService
     {
-        private Scada scada;
+        private ScadaCloud scada;
         public ScadaCloudServ(StatelessServiceContext context)
             : base(context)
         {
-            scada = new Scada();
+            scada = new ScadaCloud();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ScadaCloudServ
         {
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
-
+            ServiceEventSource.Current.ServiceMessage(this.Context, "Collecting data started...");
             scada.StartCollectingData();
         }
     }

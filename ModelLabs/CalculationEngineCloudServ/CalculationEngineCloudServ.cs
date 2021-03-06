@@ -25,19 +25,19 @@ namespace CalculationEngineCloudServ
     /// </summary>
     internal sealed class CalculationEngineCloudServ : StatefulService
     {
-        private CalculationEngine ce;
-        private CeToUI ceToUI;
-        private ProcessingToCalculation processingToCalculation;
+        private CalculationEngineCloud ce;
+        private CeToUICloud ceToUI;
+        private ProcessingToCalculationCloud processingToCalculation;
         private PublisherService publisherService;
 
         public CalculationEngineCloudServ(StatefulServiceContext context)
             : base(context)
         {
-            ce = new CalculationEngine();
-            ceToUI = new CeToUI();
-            processingToCalculation = new ProcessingToCalculation();
-            CeToUI.Ce = ce;
-            ProcessingToCalculation.CalculationEngine = ce;
+            ce = new CalculationEngineCloud();
+            ceToUI = new CeToUICloud();
+            processingToCalculation = new ProcessingToCalculationCloud();
+            CeToUICloud.Ce = ce;
+            ProcessingToCalculationCloud.CalculationEngine = ce;
             publisherService = new PublisherService();
         }
 
@@ -80,6 +80,7 @@ namespace CalculationEngineCloudServ
                 serviceContext: context,
                 wcfServiceObject: processingToCalculation
             );
+            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineRepositoryEndpoint");
 
             return listener;
         }
@@ -93,7 +94,7 @@ namespace CalculationEngineCloudServ
                            serviceContext: context,
                            wcfServiceObject: ceToUI
             );
-            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineHistoryDataEndpoint");
+            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineUIEndpoint");
             return listener;
         }
 
@@ -105,7 +106,7 @@ namespace CalculationEngineCloudServ
                            serviceContext: context,
                            wcfServiceObject: ce
             );
-            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineListenerEndpoint");
+            ServiceEventSource.Current.ServiceMessage(context, "Created listener for CalculationEngineTransactionEndpoint");
             return listener;
         }
         //private ICommunicationListener CreateCalculationEnginePublisherListener(StatefulServiceContext context)

@@ -19,11 +19,11 @@ namespace CeRepositoryManagerService
     /// </summary>
     internal sealed class CeRepositoryManagerService : StatelessService
     {
-        private CeRepositoryManager ceRepoManager;
+        private CeRepositoryManagerCloud ceRepoManager;
         public CeRepositoryManagerService(StatelessServiceContext context)
             : base(context)
         {
-            ceRepoManager = new CeRepositoryManager();
+            ceRepoManager = new CeRepositoryManagerCloud();
         }
 
         /// <summary>
@@ -60,13 +60,13 @@ namespace CeRepositoryManagerService
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
 
-            long iterations = 0;
-
+            //long iterations = 0;
+            ServiceEventSource.Current.ServiceMessage(this.Context, "CeRepositoryManagerService");
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

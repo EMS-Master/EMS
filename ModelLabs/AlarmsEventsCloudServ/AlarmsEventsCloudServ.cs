@@ -26,11 +26,11 @@ namespace AlarmsEventsCloudServ
     {
         //private AesPubSub publisherService;
 
-        private AlarmsEvents alarmsEvents;
+        private AlarmsCloud alarmsEvents;
         public AlarmsEventsCloudServ(StatefulServiceContext context)
             : base(context)
         {
-            alarmsEvents = new AlarmsEvents();
+            alarmsEvents = new AlarmsCloud();
             //publisherService = new AesPubSub();
         }
 
@@ -140,9 +140,9 @@ namespace AlarmsEventsCloudServ
 
             //alarmUpdateHandler = new AlarmUpdateHandler(AlarmsUpdateEventsHandler);
             //AlarmUpdate += alarmUpdateHandler;
-            //alarmsEvents.Instantiate(this.StateManager);
 
-            //ServiceEventSource.Current.ServiceMessage(this.Context, "AES instantiation finished.");
+            alarmsEvents.Instantiate(this.StateManager);
+            ServiceEventSource.Current.ServiceMessage(this.Context, "AES instantiation finished.");
 
             while (true)
             {

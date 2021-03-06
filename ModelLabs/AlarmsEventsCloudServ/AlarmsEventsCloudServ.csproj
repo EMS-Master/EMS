@@ -116,6 +116,7 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlarmsCloud.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AlarmsEventsCloudServ.cs" />
     <Compile Include="Program.cs" />
@@ -140,6 +141,10 @@
       <Project>{2BD3BB4D-9394-4E97-BCA3-36A8C090A60B}</Project>
       <Name>AlarmsEventsService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CalculationEngineServ\CalculationEngineServ.csproj">
+      <Project>{4E67B062-A8D7-4FB8-9487-B0ACE402DF52}</Project>
+      <Name>CalculationEngineServ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonCloud\CommonCloud.csproj">
       <Project>{25125418-b9c8-491e-9e99-ec33b3a059f1}</Project>
       <Name>CommonCloud</Name>
@@ -151,6 +156,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
+      <Project>{ADE96497-7C11-40B6-AE82-57F956C9F104}</Project>
+      <Name>DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

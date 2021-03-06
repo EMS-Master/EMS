@@ -22,16 +22,16 @@ namespace NetworkModelCloudServ
     internal sealed class NetworkModelCloudServ : StatelessService
     {
 
-        private NetworkModel nm = null;
-        private GenericDataAccess gda = null;
+        private NetworkModelCloud nm = null;
+        private GenericDataAccessCloud gda = null;
 
         public NetworkModelCloudServ(StatelessServiceContext context)
             : base(context)
         {
-            gda = new GenericDataAccess();
-            nm = new NetworkModel();
-            GenericDataAccess.NetworkModel = nm;
-            ResourceIterator.NetworkModel = nm;
+            gda = new GenericDataAccessCloud();
+            nm = new NetworkModelCloud();
+            GenericDataAccessCloud.NetworkModel = nm;
+            ResourceIteratorCloud.NetworkModel = nm;
         }
 
         /// <summary>
@@ -57,13 +57,14 @@ namespace NetworkModelCloudServ
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
 
-            long iterations = 0;
+            //long iterations = 0;
+            ServiceEventSource.Current.ServiceMessage(this.Context, "NetworkModelCloudService");
 
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
+                //ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

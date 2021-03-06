@@ -18,11 +18,11 @@ namespace ScadaCommandingCloudServ
     /// </summary>
     internal sealed class ScadaCommandingCloudServ : StatelessService
     {
-        private ScadaCommand scadaCMD;
+        private ScadaCommandCloud scadaCMD;
         public ScadaCommandingCloudServ(StatelessServiceContext context)
             : base(context)
         {
-            scadaCMD = new ScadaCommand();
+            scadaCMD = new ScadaCommandCloud();
         }
 
         /// <summary>
@@ -88,11 +88,11 @@ namespace ScadaCommandingCloudServ
 
             if (!integrityState)
             {
-                ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update failed");
+                ServiceEventSource.Current.ServiceMessage(this.Context, "ScadaCommanding integrity update failed");
             }
             else
             {
-                ServiceEventSource.Current.ServiceMessage(this.Context, "CalculationEngine integrity update succeeded.");
+                ServiceEventSource.Current.ServiceMessage(this.Context, "ScadaCommanding integrity update succeeded.");
             }
 
             #endregion ScadaCommanding instantiation
