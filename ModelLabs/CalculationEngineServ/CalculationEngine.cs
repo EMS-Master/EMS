@@ -944,7 +944,7 @@ namespace CalculationEngineServ
 
         private void FillInitialDiscreteCounters()
         {
-            string path = "C:/Users/Tamara/Documents/tamara/EMS/ModelLabs/";
+            string path = "C:/Users/barba/Desktop/EMS/ModelLabs/";
 
             XmlDocument doc = new XmlDocument();
             doc.Load(path + "ScadaProcessingSevice/MaxValDiscret.xml");

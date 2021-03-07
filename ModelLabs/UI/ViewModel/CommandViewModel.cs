@@ -58,7 +58,7 @@ namespace UI.ViewModel
         private void ActivateGenExecute(object obj)
         {
             MeasurementUI model = (MeasurementUI)obj;
-            proxyScada.CommandDiscreteValues(model.Gid, !model.IsActive);
+            proxyScada.CommandDiscreteValues(model.Gid, !model.IsActive, model.ScadaAddress);
         }
         private void CommandGenMessBoxExecute(object obj)
         {

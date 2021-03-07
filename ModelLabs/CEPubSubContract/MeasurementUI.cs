@@ -18,5 +18,6 @@ namespace FTN.ServiceContracts
 		public bool IsActive { get; set; }
         public string Name { get; set; }
         public GeneratorType GeneratorType { get; set; }
+        public int ScadaAddress { get; set; }
     }
 }

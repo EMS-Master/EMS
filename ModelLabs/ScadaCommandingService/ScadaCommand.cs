@@ -468,7 +468,7 @@ namespace ScadaCommandingService
             return true;
         }
 
-        public bool CommandDiscreteValues(long gid, bool value)
+        public bool CommandDiscreteValues(long gid, bool value, int scadaAddress)
         {
             var discLoc = listOfDiscretes.Find(p => p.Discrete.PowerSystemResource == gid);
 			var anLoc = listOfAnalog.Find(p => p.Analog.PowerSystemResource == gid);

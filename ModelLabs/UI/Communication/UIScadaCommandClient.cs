@@ -20,9 +20,9 @@ namespace UI.Communication
             return Channel.CommandAnalogValues(gid, value);
         }
 
-        public bool CommandDiscreteValues(long gid, bool value)
+        public bool CommandDiscreteValues(long gid, bool value, int scadaAddress)
         {
-            return Channel.CommandDiscreteValues(gid, value);
+            return Channel.CommandDiscreteValues(gid, value, scadaAddress);
         }
 
         public bool SendDataToSimulator(List<MeasurementUnit> measurements)

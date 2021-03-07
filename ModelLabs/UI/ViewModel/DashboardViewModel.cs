@@ -150,8 +150,8 @@ namespace UI.ViewModel
         private void ActivateGenExecute(object obj)
         {
             KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
-            if(keyValue.Value[0].IsActive == false)
-                proxyScada.CommandDiscreteValues(keyValue.Key, !keyValue.Value[0].IsActive);
+            if(keyValue.Value.LastOrDefault().IsActive == false)
+                proxyScada.CommandDiscreteValues(keyValue.Key, true, keyValue.Value[0].ScadaAddress);
             
                 
 
@@ -159,8 +159,8 @@ namespace UI.ViewModel
         private void DeactivateGenExecute(object obj)
         {
             KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
-            if (keyValue.Value[0].IsActive == true)
-                proxyScada.CommandDiscreteValues(keyValue.Key, !keyValue.Value[0].IsActive);
+            if (keyValue.Value.LastOrDefault().IsActive == true)
+                proxyScada.CommandDiscreteValues(keyValue.Key, false, keyValue.Value[0].ScadaAddress);
         }
 
         private void CommandGenMessBoxExecute(object obj)

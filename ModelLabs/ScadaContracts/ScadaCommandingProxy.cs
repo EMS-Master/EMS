@@ -58,9 +58,9 @@ namespace ScadaContracts
             return proxy.SendDataToSimulator(measurements);
         }
 
-        public bool CommandDiscreteValues(long gid, bool value)
+        public bool CommandDiscreteValues(long gid, bool value, int scadaAddress)
         {
-            return proxy.CommandDiscreteValues(gid, value);
+            return proxy.CommandDiscreteValues(gid, value, scadaAddress);
         }
         public bool CommandAnalogValues(long gid, float value)
         {

@@ -478,17 +478,22 @@ namespace ScadaCommandingCloudServ
             return true;
         }
 
-        public bool CommandDiscreteValues(long gid, bool value)
+        public bool CommandDiscreteValues(long gid, bool value, int scadaAddress)
         {
             var discLoc = listOfDiscretes.Find(p => p.Discrete.PowerSystemResource == gid);
             var anLoc = listOfAnalog.Find(p => p.Analog.PowerSystemResource == gid);
             //lock (modbusClient)
             //{
-                if (discLoc != null)
-                {
-                    modbusClient.WriteSingleCoil((ushort)(discLoc.StartAddress - 1), value);
-                    modbusClient.WriteSingleRegister((ushort)((anLoc.StartAddress - 1) * 2), 0f);
-                }
+            if (discLoc != null)
+            {
+                modbusClient.WriteSingleCoil((ushort)(discLoc.StartAddress - 1), value);
+                modbusClient.WriteSingleRegister((ushort)((anLoc.StartAddress - 1) * 2), 0f);
+            }
+            else
+            {
+                modbusClient.WriteSingleCoil((ushort)(scadaAddress - 1), value);
+                modbusClient.WriteSingleRegister((ushort)((scadaAddress - 1) * 2), 0f);
+            }
             //}
 
             Console.WriteLine("[CommandDiscreteValues] executed...\n");

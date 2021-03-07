@@ -34,9 +34,9 @@ namespace ScadaContracts.ServiceFabricProxy
             return proxy.InvokeWithRetry(x => x.Channel.CommandAnalogValues(gid,value));
         }
 
-        public bool CommandDiscreteValues(long gid, bool value)
+        public bool CommandDiscreteValues(long gid, bool value, int scadaAddress)
         {
-            return proxy.InvokeWithRetry(x => x.Channel.CommandDiscreteValues(gid,value));
+            return proxy.InvokeWithRetry(x => x.Channel.CommandDiscreteValues(gid,value, scadaAddress));
         }
 
         public bool SendDataToSimulator(List<MeasurementUnit> measurements)

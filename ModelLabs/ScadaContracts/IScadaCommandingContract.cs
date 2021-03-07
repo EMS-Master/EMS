@@ -14,7 +14,7 @@ namespace ScadaContracts
         [OperationContract]
         bool SendDataToSimulator(List<MeasurementUnit> measurements);
         [OperationContract]
-        bool CommandDiscreteValues(long gid, bool value);
+        bool CommandDiscreteValues(long gid, bool value, int scadaAddress);
         [OperationContract]
         bool CommandAnalogValues(long gid, float value);
     }
