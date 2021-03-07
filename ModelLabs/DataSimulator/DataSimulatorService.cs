@@ -1,4 +1,4 @@
-﻿using ModbusClient;
+﻿using FTN.Common.ModbusSingleInstance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace DataSimulator
 {
 	public class DataSimulatorService
 	{
-		private MdbClient mdbClient;
+		private MdbClientSingleton mdbClient;
 		private Dictionary<int, Tuple<int, int>> insolationRange;
         private Dictionary<int, Tuple<double, double>> consumptionRange;
         private float oldWindSpeed = 5f;
@@ -33,19 +33,19 @@ namespace DataSimulator
 		{
 			try
 			{
-				mdbClient = new MdbClient("localhost", 502);
+				mdbClient = MdbClientSingleton.Instance;
 				if (mdbClient.Connected)
 				{
 					return;
 				}
-				mdbClient.Connect("localhost", 502);
+				mdbClient.Connect();
 			}
 			catch (SocketException e)
 			{
 				Thread.Sleep(2000);
 				ConnectToSimulator();
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				throw;
 			}

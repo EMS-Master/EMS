@@ -45,7 +45,7 @@
 		<cim:Equipment.EquipmentContainer rdf:resource="#Substation_1"/>
 		<cim:IdentifiedObject.aliasName>Generator_3</cim:IdentifiedObject.aliasName>
 		<cim:IdentifiedObject.mRID>Generator_3</cim:IdentifiedObject.mRID>
-		<cim:IdentifiedObject.name>SFNP ZlatiborUpdate</cim:IdentifiedObject.name>
+		<cim:IdentifiedObject.name>SFNP Zlatibor</cim:IdentifiedObject.name>
 	</cim:Generator>
 	<cim:Generator rdf:ID="Generator_4">
 		<cim:Generator.generatorType>solar</cim:Generator.generatorType>
@@ -1322,7 +1322,7 @@
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_19"/> 
 		<cim:Measurement.scadaAddress>address_39</cim:Measurement.scadaAddress>
-		<cim:IdentifiedObject.aliasName>Discrete_39_update</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.aliasName>Discrete_39</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_39</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>TE Kolubara A discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>
@@ -1334,7 +1334,7 @@
 		<cim:Measurement.measurementType> </cim:Measurement.measurementType>
 		<cim:Measurement.PowerSystemResource rdf:resource="#Generator_20"/> 
 		<cim:Measurement.scadaAddress>address_40</cim:Measurement.scadaAddress>
-		<cim:IdentifiedObject.aliasName>Discrete_40_update</cim:IdentifiedObject.aliasName> 
+		<cim:IdentifiedObject.aliasName>Discrete_40</cim:IdentifiedObject.aliasName> 
 		<cim:IdentifiedObject.mRID>Discrete_40</cim:IdentifiedObject.mRID> 
 		<cim:IdentifiedObject.name>TE Kolubara B discrete</cim:IdentifiedObject.name>
 	</cim:Discrete>

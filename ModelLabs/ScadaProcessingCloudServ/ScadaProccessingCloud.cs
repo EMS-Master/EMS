@@ -115,7 +115,7 @@ namespace ScadaProcessingCloudServ
             {
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Successfuly sent items to CE.");
                 Console.WriteLine("Successfuly sent items to CE.");
-                ServiceEventSource.Current.Message("Successfuly sent items to CE.");
+                //ServiceEventSource.Current.Message("Successfuly sent items to CE.");
 
             }
 
@@ -576,19 +576,19 @@ namespace ScadaProcessingCloudServ
 
                 }
 
-                updateResult.Message = "SCADA PR Transaction Prepare finished.";
+                updateResult.Message = "SCADA PROCESSING Transaction Prepare successfully finished.";
                 updateResult.Result = ResultType.Succeeded;
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PR Transaction Prepare finished successfully.");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PROCESSING Transaction Prepare successfully finished.");
                 transactionCallback.Response("OK");
-                ServiceEventSource.Current.Message("SCADA PROCCESSING Transaction Prepare finished successfully.");
+                ServiceEventSource.Current.Message("SCADA PROCESSING Transaction Prepare successfully finished.");
             }
             catch (Exception e)
             {
-                updateResult.Message = "SCADA PR Transaction Prepare finished.";
+                updateResult.Message = "SCADA PROCESSING Transaction Prepare failed.";
                 updateResult.Result = ResultType.Failed;
-                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA PR Transaction Prepare failed. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA PROCESSING Transaction Prepare failed. Message: {0}", e.Message);
                 transactionCallback.Response("ERROR");
-                ServiceEventSource.Current.Message("SCADA PROCCESSING Transaction Prepare failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("SCADA PROCESSING Transaction Prepare failed. Message: {0}", e.Message);
 
             }
 
@@ -629,14 +629,14 @@ namespace ScadaProcessingCloudServ
                 energyConsumerDiscretesCopy.Clear();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PR Transaction: Commit phase successfully finished.");
 
-                ServiceEventSource.Current.Message("SCADA PROCCESSING Transaction: Commit phase successfully finished.");
+                ServiceEventSource.Current.Message("SCADA PROCCESSING Transaction Commit successfully finished.");
                 return true;
             }
             catch (Exception e)
             {
-                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA PR Transaction: Failed to Commit changes. Message: {0}", e.Message);
-                ServiceEventSource.Current.Message("SCADA PR Transaction: Failed to Commit changes. Message: {0}", e.Message);
-
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA PROCCESING Transaction Commit failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("SCADA PROCCESING Transaction Commit failed. Message: {0}", e.Message);
+                
                 return false;
             }
         }
@@ -649,15 +649,15 @@ namespace ScadaProcessingCloudServ
                 generatorDscretesCopy.Clear();
                 energyConsumerAnalogsCopy.Clear();
                 energyConsumerDiscretesCopy.Clear();
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Transaction rollback successfully finished!");
-                ServiceEventSource.Current.Message("Transaction rollback successfully finished!");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA PROCCESING Transaction Rollback successfully finished.");
+                ServiceEventSource.Current.Message("SCADA PROCCESING Transaction Rollback successfully finished.");
 
                 return true;
             }
             catch (Exception e)
             {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction rollback error. Message: {0}", e.Message);
-                ServiceEventSource.Current.Message("Transaction rollback error. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "SCADA PROCCESING Transaction Rollback failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("SCADA PROCCESING Transaction Rollback failed. Message: {0}", e.Message);
 
                 return false;
             }

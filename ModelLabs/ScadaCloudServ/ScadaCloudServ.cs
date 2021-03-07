@@ -40,7 +40,13 @@ namespace ScadaCloudServ
             // TODO: Replace the following sample code with your own logic 
             //       or remove this RunAsync override if it's not needed in your service.
             ServiceEventSource.Current.ServiceMessage(this.Context, "Collecting data started...");
-            scada.StartCollectingData();
+            while (true)
+            {
+                scada.StartCollectingData();
+                cancellationToken.ThrowIfCancellationRequested();
+                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+            }
+
         }
     }
 }

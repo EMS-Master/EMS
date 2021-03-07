@@ -993,7 +993,7 @@ namespace NetworkModelCloudServ
             }
 
             transactionCallback.Response(message);
-            ServiceEventSource.Current.Message(message);
+            ServiceEventSource.Current.Message("NMS Transaction Prepare successfully finished.");
             return applyResult;
         }
 
@@ -1011,12 +1011,15 @@ namespace NetworkModelCloudServ
 
                     networkDataModelCopy.Clear();
                     SaveDelta(deltaToCommit);
+                    ServiceEventSource.Current.Message("NMS Transaction Commit successfully finished.");
                 }
                 return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                ServiceEventSource.Current.Message("NMS Transaction Commit failed. Message: {0}", e.Message);
+
                 return false;
             }
         }
@@ -1026,15 +1029,15 @@ namespace NetworkModelCloudServ
             try
             {
                 networkDataModelCopy.Clear();
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Transaction rollback successfully finished!");
-                string message = string.Format("Transaction rollback successfully finished!");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "NMS Transaction rollback successfully finished!");
+                string message = string.Format("NMS Transaction rollback successfully finished!");
                 ServiceEventSource.Current.Message(message);
                 return true;
             }
             catch (Exception e)
             {
                 CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction rollback error. Message: {0}", e.Message);
-                string message = string.Format("Transaction rollback error. Message: {0}", e.Message);
+                string message = string.Format("NMS Transaction rollback error. Message: {0}", e.Message);
                 ServiceEventSource.Current.Message(message);
                 return false;
             }

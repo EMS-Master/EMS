@@ -16,10 +16,10 @@ namespace ScadaCommandingCloudServ
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class ScadaCommandingCloudServ : StatelessService
+    internal sealed class ScadaCommandingCloudServ : StatefulService
     {
         private ScadaCommandCloud scadaCMD;
-        public ScadaCommandingCloudServ(StatelessServiceContext context)
+        public ScadaCommandingCloudServ(StatefulServiceContext context)
             : base(context)
         {
             scadaCMD = new ScadaCommandCloud();
@@ -29,18 +29,18 @@ namespace ScadaCommandingCloudServ
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
         /// </summary>
         /// <returns>A collection of listeners.</returns>
-        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
+        protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
             //return new ServiceInstanceListener[0];
-            return new List<ServiceInstanceListener>
+            return new List<ServiceReplicaListener>
             {
-                new ServiceInstanceListener(context => this.CreateScadaCMDListener(context), "ScadaCMDEndpoint"),
-                new ServiceInstanceListener(context => this.CreateTransactionListener(context), "TransactionEndpoint"),
-                new ServiceInstanceListener(context => this.CreateUICommandListener(context), "UIScadaCommandClientEndpoint")
+                new ServiceReplicaListener(context => this.CreateScadaCMDListener(context), "ScadaCMDEndpoint"),
+                new ServiceReplicaListener(context => this.CreateTransactionListener(context), "TransactionEndpoint"),
+                new ServiceReplicaListener(context => this.CreateUICommandListener(context), "UIScadaCommandClientEndpoint")
 
             };
         }
-        private ICommunicationListener CreateScadaCMDListener(StatelessServiceContext context)
+        private ICommunicationListener CreateScadaCMDListener(StatefulServiceContext context)
         {
             var listener = new WcfCommunicationListener<IScadaCommandingContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
@@ -51,7 +51,7 @@ namespace ScadaCommandingCloudServ
 
             return listener;
         }
-        private ICommunicationListener CreateUICommandListener(StatelessServiceContext context)
+        private ICommunicationListener CreateUICommandListener(StatefulServiceContext context)
         {
             var listener = new WcfCommunicationListener<IScadaCommandingContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
@@ -64,7 +64,7 @@ namespace ScadaCommandingCloudServ
             return listener;
         }
 
-        private ICommunicationListener CreateTransactionListener(StatelessServiceContext context)
+        private ICommunicationListener CreateTransactionListener(StatefulServiceContext context)
         {
             var listener = new WcfCommunicationListener<ITransactionContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
@@ -99,6 +99,7 @@ namespace ScadaCommandingCloudServ
 
             while (true)
             {
+                scadaCMD.ConnectToSimulator();
                 cancellationToken.ThrowIfCancellationRequested();
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }

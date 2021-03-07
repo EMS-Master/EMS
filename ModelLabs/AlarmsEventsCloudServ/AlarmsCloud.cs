@@ -311,8 +311,8 @@ namespace AlarmsEventsCloudServ
                     try
                     {
                         aesPublishSfProxy.PublishStateChange(alarm);
-                        string message = string.Format("Alarm on Gid: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
-                        //ServiceEventSource.Current.Message(message);
+                        string message = string.Format("Alarm on GID: {0} - Changed status: {1}", alarm.Gid, alarm.CurrentState);
+                        ServiceEventSource.Current.Message(message);
 
                         //CommonTrace.WriteTrace(CommonTrace.TraceInfo, message);
                     }

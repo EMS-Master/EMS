@@ -17,8 +17,12 @@
     <Parameter Name="AlarmsEventsCloudServ_PartitionCount" Value="1" />
     <Parameter Name="AlarmsEventsCloudServ_MinReplicaSetSize" Value="1" />
     <Parameter Name="AlarmsEventsCloudServ_TargetReplicaSetSize" Value="1" />
-    <Parameter Name="ScadaCommandingCloudServ_InstanceCount" Value="1" />
-    <Parameter Name="ScadaProcessingCloudServ_InstanceCount" Value="1" />
+    <Parameter Name="ScadaCommandingCloudServ_MinReplicaSetSize" Value="1" />
+    <Parameter Name="ScadaCommandingCloudServ_PartitionCount" Value="1" />
+    <Parameter Name="ScadaCommandingCloudServ_TargetReplicaSetSize" Value="1" />
+    <Parameter Name="ScadaProcessingCloudServ_MinReplicaSetSize" Value="1" />
+    <Parameter Name="ScadaProcessingCloudServ_PartitionCount" Value="1" />
+    <Parameter Name="ScadaProcessingCloudServ_TargetReplicaSetSize" Value="1" />
     <Parameter Name="TransactionManagerCloudServ_InstanceCount" Value="1" />
     <Parameter Name="NetworkModelCloudServ_InstanceCount" Value="1" />
   </Parameters>

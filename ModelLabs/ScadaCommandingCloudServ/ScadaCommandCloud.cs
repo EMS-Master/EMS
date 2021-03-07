@@ -1,9 +1,9 @@
 ﻿using CalculationEngineServ;
 using CommonMeas;
 using FTN.Common;
+using FTN.Common.ModbusSingleInstance;
 using FTN.ServiceContracts.ServiceFabricProxy;
 using FTN.Services.NetworkModelService.DataModel.Meas;
-using ModbusClient;
 using ScadaContracts;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace ScadaCommandingCloudServ
 {
     public class ScadaCommandCloud : IScadaCommandingContract, ITransactionContract
     {
-        private MdbClient modbusClient;
+        private MdbClientSingleton modbusClient;
         private static List<AnalogLocation> listOfAnalog;
         private static List<AnalogLocation> listOfAnalogCopy;
         private static List<DiscreteLocation> listOfDiscretes;
@@ -48,11 +48,11 @@ namespace ScadaCommandingCloudServ
             modelResourcesDesc = new ModelResourcesDesc();
         }
 
-        private void ConnectToSimulator()
+        public void ConnectToSimulator()
         {
             try
             {
-                modbusClient = new MdbClient("localhost", 502);
+                modbusClient = MdbClientSingleton.Instance;
                 modbusClient.Connect();
             }
             catch (SocketException)
@@ -88,17 +88,17 @@ namespace ScadaCommandingCloudServ
                 }
                 listOfAnalogCopy.Clear();
                 listOfDiscretesCopy.Clear();
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA CMD Transaction: Commit phase successfully finished.");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA COMMANDING Transaction Commit successfully finished.");
                 Console.WriteLine("Number of Analog values: {0}", listOfAnalog.Count);
 
-                ServiceEventSource.Current.Message("SCADA CMD Transaction: Commit phase successfully finished.");
+                ServiceEventSource.Current.Message("SCADA COMMANDING Transaction Commit successfully finished.");
 
                 return true;
             }
             catch (Exception e)
             {
-                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA CMD Transaction: Failed to Commit changes. Message: {0}", e.Message);
-                //ServiceEventSource.Current.Message("SCADA CMD Transaction: Failed to Commit changes. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA COMMANDING Transaction Commit failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("SCADA COMMANDING Transaction Commit failed. Message: {0}", e.Message);
 
                 return false;
             }
@@ -270,20 +270,19 @@ namespace ScadaCommandingCloudServ
 
                 }
 
-                updateResult.Message = "SCADA CMD Transaction Prepare finished.";
+                updateResult.Message = "SCADA COMMANDING Transaction Prepare successfully finished.";
                 updateResult.Result = ResultType.Succeeded;
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA CMD Transaction Prepare finished successfully.");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA COMMANDING Transaction Prepare successfully finished.");
                 transactionCallback.Response("OK");
-                ServiceEventSource.Current.Message(updateResult.Message);
+                ServiceEventSource.Current.Message("SCADA COMMANDING Transaction Prepare successfully finished.");
             }
             catch (Exception e)
             {
-                updateResult.Message = "SCADA CMD Transaction Prepare finished.";
+                updateResult.Message = "SCADA COMMANDING Transaction Prepare failed.";
                 updateResult.Result = ResultType.Failed;
-                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA CMD Transaction Prepare failed. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "SCADA COMMANDING Transaction Prepare failed. Message: {0}", e.Message);
                 transactionCallback.Response("ERROR");
-                ServiceEventSource.Current.Message("SCADA CMD Transaction Prepare failed. Message: {0}", e.Message);
-
+                ServiceEventSource.Current.Message("SCADA COMMANDING Transaction Prepare failed. Message: {0}", e.Message);
             }
 
             return updateResult;
@@ -295,15 +294,15 @@ namespace ScadaCommandingCloudServ
             {
                 listOfAnalogCopy.Clear();
                 listOfDiscretesCopy.Clear();
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Transaction rollback successfully finished!");
-                ServiceEventSource.Current.Message("Transaction rollback successfully finished!");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "SCADA COMMANDING Transaction Rollback successfully finished.");
+                ServiceEventSource.Current.Message("SCADA COMMANDING Transaction Rollback successfully finished.");
 
                 return true;
             }
             catch (Exception e)
             {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "Transaction rollback error. Message: {0}", e.Message);
-                ServiceEventSource.Current.Message("Transaction rollback error. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "SCADA COMMANDING Transaction Rollback failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("SCADA COMMANDING Transaction Rollback failed. Message: {0}", e.Message);
 
                 return false;
             }

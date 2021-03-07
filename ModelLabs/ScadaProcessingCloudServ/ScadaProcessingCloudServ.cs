@@ -16,10 +16,10 @@ namespace ScadaProcessingCloudServ
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
     /// </summary>
-    internal sealed class ScadaProcessingCloudServ : StatelessService
+    internal sealed class ScadaProcessingCloudServ : StatefulService
     {
         private ScadaProccessingCloud scadaProcessing;
-        public ScadaProcessingCloudServ(StatelessServiceContext context)
+        public ScadaProcessingCloudServ(StatefulServiceContext context)
             : base(context)
         {
             scadaProcessing = new ScadaProccessingCloud();
@@ -29,15 +29,15 @@ namespace ScadaProcessingCloudServ
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
         /// </summary>
         /// <returns>A collection of listeners.</returns>
-        protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
+        protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new List<ServiceInstanceListener>
+            return new List<ServiceReplicaListener>
             {
-                new ServiceInstanceListener(context => this.CreateScadaCRListener(context), "ScadaPREndpoint"),
-                new ServiceInstanceListener(context => this.CreateTransactionPRListener(context), "TransactionPREndpoint")
+                new ServiceReplicaListener(context => this.CreateScadaCRListener(context), "ScadaPREndpoint"),
+                new ServiceReplicaListener(context => this.CreateTransactionPRListener(context), "TransactionPREndpoint")
             };
         }
-        private ICommunicationListener CreateScadaCRListener(StatelessServiceContext context)
+        private ICommunicationListener CreateScadaCRListener(StatefulServiceContext context)
         {
             var listener = new WcfCommunicationListener<IScadaProcessingContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),
@@ -49,7 +49,7 @@ namespace ScadaProcessingCloudServ
             return listener;
         }
 
-        private ICommunicationListener CreateTransactionPRListener(StatelessServiceContext context)
+        private ICommunicationListener CreateTransactionPRListener(StatefulServiceContext context)
         {
             var listener = new WcfCommunicationListener<ITransactionContract>(
                 listenerBinding: CommonCloud.Binding.CreateCustomNetTcp(),

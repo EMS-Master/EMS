@@ -133,10 +133,6 @@
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ModbusClient\ModbusClient.csproj">
-      <Project>{9EDAFF9E-7E95-40EE-B797-A5F49BA29E76}</Project>
-      <Name>ModbusClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ScadaContracts\ScadaContracts.csproj">
       <Project>{4009EC13-9CB9-4092-9D3C-834756AF5602}</Project>
       <Name>ScadaContracts</Name>

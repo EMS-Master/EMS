@@ -17,8 +17,12 @@
     <Parameter Name="AlarmsEventsCloudServ_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="AlarmsEventsCloudServ_PartitionCount" DefaultValue="1" />
     <Parameter Name="AlarmsEventsCloudServ_TargetReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="ScadaCommandingCloudServ_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="ScadaProcessingCloudServ_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="ScadaCommandingCloudServ_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ScadaCommandingCloudServ_PartitionCount" DefaultValue="1" />
+    <Parameter Name="ScadaCommandingCloudServ_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ScadaProcessingCloudServ_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ScadaProcessingCloudServ_PartitionCount" DefaultValue="1" />
+    <Parameter Name="ScadaProcessingCloudServ_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="TransactionManagerCloudServ_InstanceCount" DefaultValue="-1" />
     <Parameter Name="NetworkModelCloudServ_InstanceCount" DefaultValue="-1" />
   </Parameters>
@@ -119,8 +123,8 @@
     </Service>
     <Service Name="GatewayService" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="GatewayServiceType" TargetReplicaSetSize="[GatewayService_TargetReplicaSetSize]" MinReplicaSetSize="[GatewayService_MinReplicaSetSize]">
-        <!--<UniformInt64Partition PartitionCount="[AlarmsEventsCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
         <!--<UniformInt64Partition PartitionCount="[CalculationEngineCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
+        <!--<UniformInt64Partition PartitionCount="[AlarmsEventsCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
         <UniformInt64Partition PartitionCount="[GatewayService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>
@@ -140,14 +144,14 @@
       </StatefulService>
     </Service>
     <Service Name="ScadaCommandingCloudServ" ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="ScadaCommandingCloudServType" InstanceCount="[ScadaCommandingCloudServ_InstanceCount]">
+      <StatefulService ServiceTypeName="ScadaCommandingCloudServType" TargetReplicaSetSize="[ScadaCommandingCloudServ_TargetReplicaSetSize]" MinReplicaSetSize="[ScadaCommandingCloudServ_MinReplicaSetSize]">
         <SingletonPartition />
-      </StatelessService>
+      </StatefulService>
     </Service>
     <Service Name="ScadaProcessingCloudServ" ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="ScadaProcessingCloudServType" InstanceCount="[ScadaProcessingCloudServ_InstanceCount]">
+      <StatefulService ServiceTypeName="ScadaProcessingCloudServType" TargetReplicaSetSize="[ScadaProcessingCloudServ_TargetReplicaSetSize]" MinReplicaSetSize="[ScadaProcessingCloudServ_MinReplicaSetSize]">
         <SingletonPartition />
-      </StatelessService>
+      </StatefulService>
     </Service>
     <Service Name="TransactionManagerCloudServ" ServicePackageActivationMode="ExclusiveProcess">
       <StatelessService ServiceTypeName="TransactionManagerCloudServType" InstanceCount="[TransactionManagerCloudServ_InstanceCount]">

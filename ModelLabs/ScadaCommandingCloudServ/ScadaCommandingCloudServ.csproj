@@ -145,10 +145,6 @@
       <Project>{892CBE15-9ED7-4540-81FA-0EAABA592138}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ModbusClient\ModbusClient.csproj">
-      <Project>{9EDAFF9E-7E95-40EE-B797-A5F49BA29E76}</Project>
-      <Name>ModbusClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NetworkModelService\DataModel\DataModel.csproj">
       <Project>{ADE96497-7C11-40B6-AE82-57F956C9F104}</Project>
       <Name>DataModel</Name>

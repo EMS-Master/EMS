@@ -1,5 +1,5 @@
 ﻿using FTN.Common;
-using ModbusClient;
+using FTN.Common.ModbusSingleInstance;
 using ScadaContracts;
 using ScadaContracts.ServiceFabricProxy;
 using System;
@@ -14,8 +14,7 @@ namespace ScadaCloudServ
 {
     public class ScadaCloud : IScadaContract
     {
-
-        private MdbClient mdbClient;
+        private MdbClientSingleton mdbClient;
         private ushort numberOfHoldingRegisters = 82;    //in bytes
         private ushort numberOfCoils = 40;
         private ushort numberOfHRegistersWS = 6;
@@ -29,12 +28,13 @@ namespace ScadaCloudServ
         {
             try
             {
-                mdbClient = new MdbClient("localhost", 502);
+                //mdbClient = new MdbClient("localhost", 502);
+                mdbClient = MdbClientSingleton.Instance;
                 if (mdbClient.Connected)
                 {
                     return;
                 }
-                mdbClient.Connect("localhost", 502);
+                mdbClient.Connect();
             }
             catch (SocketException e)
             {
@@ -49,19 +49,19 @@ namespace ScadaCloudServ
 
         public void StartCollectingData()
         {
-            Thread.Sleep(5000);
-            Task task = new Task(() =>
-            {
-                while (true)
-                {
+            //Thread.Sleep(5000);
+            //Task task = new Task(() =>
+            //{
+            //    while (true)
+            //    {
                     if (mdbClient == null || mdbClient.Connected == false)
                         ConnectToSimulator();
 
                     GetDataFromSimulator();
-                    Thread.Sleep(3000);
-                }
-            });
-            task.Start();
+                    //Thread.Sleep(3000);
+            //    }
+            //});
+            //task.Start();
         }
 
         public bool GetDataFromSimulator()

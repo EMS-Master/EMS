@@ -69,10 +69,6 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip" Condition="'$(Platform)'=='x64'">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdPartyLibs\x64\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip" Condition="'$(Platform)'=='x86'">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdPartyLibs\x86\Ionic.Zip.dll</HintPath>
@@ -103,6 +99,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="GDA\CompareHelper.cs" />
     <Compile Include="GDA\UpdateResult.cs" />
+    <Compile Include="ModbusSingleInstance\MdbClientSingleton.cs" />
     <Compile Include="ModelException\ErrorCode.cs" />
     <Compile Include="ModelException\ModelException.cs" />
     <Compile Include="Trace\CommonTrace.cs" />
@@ -147,7 +144,6 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

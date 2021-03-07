@@ -158,7 +158,9 @@ namespace TransactionManagerService
                 transactionCESfProxy.Rollback();
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "Rollback finished!");
             }
-            Thread.Sleep(5000);
+            //
+
+            Thread.Sleep(1000);
             return updateResult;
         }
 

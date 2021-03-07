@@ -90,13 +90,14 @@ namespace CalculationEngineCloudServ
 
         public bool Optimize(List<MeasurementUnit> measEnergyConsumer, List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
         {
+            ServiceEventSource.Current.Message("Applying optimisation algorithm");
             bool result = false;
             string message = string.Empty;
             Dictionary<long, OptimisationModel> optModelMap = GetOptimizationModelMap(measGenerators, windSpeed, sunlight);
             float powerOfConsumers = CalculateConsumption(measEnergyConsumer);
 
             message = string.Format("Power of consumers: {0}", powerOfConsumers);
-            ServiceEventSource.Current.Message(message);
+            //ServiceEventSource.Current.Message(message);
 
             float consMinusGenRen = powerOfConsumers - GenRenewable;
             List<MeasurementUnit> measurementsOptimized = optModelMap.Select(x => x.Value.measurementUnit).ToList();
@@ -142,7 +143,7 @@ namespace CalculationEngineCloudServ
                         Console.WriteLine("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
 
                         message = string.Format("CE sent {0} optimized MeasurementUnit(s) to SCADACommanding.", measGenerators.Count);
-                        ServiceEventSource.Current.Message(message);
+                        // ServiceEventSource.Current.Message(message);
                         result = true;
                     }
                 }
@@ -158,6 +159,9 @@ namespace CalculationEngineCloudServ
                 CommonTrace.WriteTrace(CommonTrace.TraceError, ex.Message);
                 CommonTrace.WriteTrace(CommonTrace.TraceError, ex.StackTrace);
             }
+
+            //ServiceEventSource.Current.Message("Optimisation ended succesfully...");
+
             return result;
         }
         private Dictionary<long, OptimisationModel> GetOptimizationModelMap(List<MeasurementUnit> measGenerators, float windSpeed, float sunlight)
@@ -392,17 +396,19 @@ namespace CalculationEngineCloudServ
                     }
                 }
 
-                updateResult.Message = "CE Transaction Prepare finished.";
+                updateResult.Message = "CE Transaction Prepare successfully finished.";
                 updateResult.Result = ResultType.Succeeded;
                 CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CETransaction Prepare finished successfully.");
                 transactionCallback.Response("OK");
+                ServiceEventSource.Current.Message("CE Transaction Prepare successfully finished.");
             }
             catch (Exception e)
             {
-                updateResult.Message = "CE Transaction Prepare finished.";
+                updateResult.Message = "CE Transaction Prepare failed. ";
                 updateResult.Result = ResultType.Failed;
                 CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CE Transaction Prepare failed. Message: {0}", e.Message);
                 transactionCallback.Response("ERROR");
+                ServiceEventSource.Current.Message("CE Transaction Prepare failed. Message: {0}", e.Message);
             }
 
             return updateResult;
@@ -426,16 +432,18 @@ namespace CalculationEngineCloudServ
                 }
                 internalEnergyConsumersCopy.Clear();
 
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE Transaction: Commit phase successfully finished.");
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE Transaction Commit successfully finished.");
                 Console.WriteLine("Number of SynchronousMachines values: {0}", internalGenerators.Count);
                 Console.WriteLine("Number of Energy Consumers values: {0}", internalEnergyConsumers.Count);
+                ServiceEventSource.Current.Message("CE Transaction Commit successfully finished.");
 
                 FillData();
                 return true;
             }
             catch (Exception e)
             {
-                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CE Transaction: Failed to Commit changes. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceWarning, "CE Transaction Commit failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("CE Transaction Commit failed. Message: {0}", e.Message);
                 return false;
             }
         }
@@ -445,12 +453,15 @@ namespace CalculationEngineCloudServ
             {
                 internalGeneratorsCopy.Clear();
                 internalEnergyConsumersCopy.Clear();
-                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE Transaction rollback successfully finished!");
+
+                CommonTrace.WriteTrace(CommonTrace.TraceInfo, "CE Transaction Rollback successfully finished.");
+                ServiceEventSource.Current.Message("CE Transaction Rollback successfully finished.");
                 return true;
             }
             catch (Exception e)
             {
-                CommonTrace.WriteTrace(CommonTrace.TraceError, "CE Transaction rollback error. Message: {0}", e.Message);
+                CommonTrace.WriteTrace(CommonTrace.TraceError, "CE Transaction Rollback failed. Message: {0}", e.Message);
+                ServiceEventSource.Current.Message("CE Transaction Rollback failed. Message: {0}", e.Message);
                 return false;
             }
         }
