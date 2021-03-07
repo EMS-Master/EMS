@@ -123,15 +123,15 @@ namespace UI.ViewModel
         private ICommand commandGenMessBox;
         public ICommand CommandGenMessBox => commandGenMessBox ?? (commandGenMessBox = new RelayCommand<object>(CommandGenMessBoxExecute));
 
-        private ICommand activateGen;
-        public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
-        private ICommand deactivateGen;
+        //private ICommand activateGen;
+        //public ICommand ActivateGen => activateGen ?? (activateGen = new RelayCommand<object>(ActivateGenExecute));
+        //private ICommand deactivateGen;
         private ICommand defaultParamValues;
 
         private ICommand defaultPrice;
         private ICommand applyPrice;
 
-        public ICommand DeactivateGen => deactivateGen ?? (deactivateGen = new RelayCommand<object>(DeactivateGenExecute));
+        //public ICommand DeactivateGen => deactivateGen ?? (deactivateGen = new RelayCommand<object>(DeactivateGenExecute));
 
         public ICommand ExpandCommand => expandCommand ?? (expandCommand = new RelayCommand(ExpandCommandExecute));
 
@@ -147,21 +147,21 @@ namespace UI.ViewModel
 
         public WindSpeed W { get => w; set => w = value; }
         public WindSpeed WindPcnt { get => windPcnt; set => windPcnt = value; }
-        private void ActivateGenExecute(object obj)
-        {
-            KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
-            if(keyValue.Value.LastOrDefault().IsActive == false)
-                proxyScada.CommandDiscreteValues(keyValue.Key, true, keyValue.Value[0].ScadaAddress);
+        //private void ActivateGenExecute(object obj)
+        //{
+        //    KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
+        //    if(keyValue.Value.LastOrDefault().IsActive == false)
+        //        proxyScada.CommandDiscreteValues(keyValue.Key, true, keyValue.Value[0].ScadaAddress);
             
                 
 
-        }
-        private void DeactivateGenExecute(object obj)
-        {
-            KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
-            if (keyValue.Value.LastOrDefault().IsActive == true)
-                proxyScada.CommandDiscreteValues(keyValue.Key, false, keyValue.Value[0].ScadaAddress);
-        }
+        //}
+        //private void DeactivateGenExecute(object obj)
+        //{
+        //    KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>> keyValue = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)obj;
+        //    if (keyValue.Value.LastOrDefault().IsActive == true)
+        //        proxyScada.CommandDiscreteValues(keyValue.Key, false, keyValue.Value[0].ScadaAddress);
+        //}
 
         private void CommandGenMessBoxExecute(object obj)
         {

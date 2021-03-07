@@ -25,11 +25,13 @@ namespace UI.View
     public partial class DashboardView : UserControl
     {
         private UICalculationEngineClient proxy;
+        private UIScadaCommandClient proxyScada;
 
         public DashboardView()
         {
             InitializeComponent();
             proxy = new UICalculationEngineClient("CalculationEngineUIEndpoint");
+            proxyScada = new UIScadaCommandClient("UIScadaCommandClientEndpoint");
         }
 
         private void MenuItemHistory_Click(object sender, RoutedEventArgs e)
@@ -76,6 +78,16 @@ namespace UI.View
             var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
             long gid = v.Key;
             proxy.ResetCommandedGenerator(gid);
+        }
+
+        private void GenDigital_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            var dataCOntext = checkBox.DataContext;
+            var v = (KeyValuePair<long, ObservableCollection<FTN.ServiceContracts.MeasurementUI>>)dataCOntext;
+            long gid = v.Key;
+            proxyScada.CommandDiscreteValues(gid, checkBox.IsChecked.Value, 0);
+            //checkBox.IsChecked
         }
     }
 }

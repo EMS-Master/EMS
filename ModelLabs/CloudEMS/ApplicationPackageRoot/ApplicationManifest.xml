@@ -123,8 +123,8 @@
     </Service>
     <Service Name="GatewayService" ServicePackageActivationMode="ExclusiveProcess">
       <StatefulService ServiceTypeName="GatewayServiceType" TargetReplicaSetSize="[GatewayService_TargetReplicaSetSize]" MinReplicaSetSize="[GatewayService_MinReplicaSetSize]">
-        <!--<UniformInt64Partition PartitionCount="[CalculationEngineCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
         <!--<UniformInt64Partition PartitionCount="[AlarmsEventsCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
+        <!--<UniformInt64Partition PartitionCount="[CalculationEngineCloudServ_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />-->
         <UniformInt64Partition PartitionCount="[GatewayService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>

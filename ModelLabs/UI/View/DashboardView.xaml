@@ -38,7 +38,7 @@
                     </Grid.Visibility>
 
                     <StackPanel >
-                        <CheckBox x:Name="GenDigital" Margin="10,13,0,0" >
+                        <CheckBox x:Name="GenDigital" Margin="10,13,0,0" Click="GenDigital_Click">
                             <CheckBox.Visibility>
                                 <MultiBinding Converter="{StaticResource GeneratorTypeToVIsibility}">
                                     <Binding Path="Value"/>
@@ -55,15 +55,14 @@
                                     <Binding Path="Value"/>
                                     <Binding Path="Value[0].IsActive"></Binding>
                                 </MultiBinding>
-
-
                             </CheckBox.IsChecked>
+                            
                             <CheckBox.ToolTip>
                                 <ToolTip>
                                     On/off generator.
                                 </ToolTip>
                             </CheckBox.ToolTip>
-                            <i:Interaction.Triggers>
+                            <!--<i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Checked">
                                     <i:InvokeCommandAction Command="{Binding DataContext.ActivateGen,RelativeSource={RelativeSource AncestorType=UserControl}}"
 											   CommandParameter="{Binding }" />
@@ -72,7 +71,7 @@
                                     <i:InvokeCommandAction Command="{Binding DataContext.DeactivateGen,RelativeSource={RelativeSource AncestorType=UserControl}}"
 											   CommandParameter="{Binding}" />
                                 </i:EventTrigger>
-                            </i:Interaction.Triggers>
+                            </i:Interaction.Triggers>-->
                         </CheckBox>
                     </StackPanel>
 
